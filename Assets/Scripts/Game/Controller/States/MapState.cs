@@ -1,0 +1,194 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class MapState : GameState
+{
+	//consts
+	private const float LOADING_WEIGHT	= 1.0f;
+	private const float LOADING_START	= 80.0f;
+
+	enum SubState
+	{
+		NONE,
+		GO_PROFILE,
+		GO_REGION,
+		GO_KIDPROFILE
+	}
+	//--------------------Public Interface -----------------------
+	
+	public override void enter(GameController p_gameController)
+	{
+		base.enter(p_gameController);
+
+		_setupMap(p_gameController);
+		_setupKidProfile(p_gameController);
+
+		SoundManager.getInstance().play("96", 0, 1, "", null, true);
+
+		GAUtil.logScreen("MapScreen");
+	}
+	
+	public override void update(GameController p_gameController, int p_time)
+	{
+		base.update(p_gameController, p_time);
+
+		if (m_subState != SubState.NONE)
+		{
+			switch (m_subState)
+			{
+			case SubState.GO_PROFILE:
+				_changeToProfile(p_gameController);
+				break;
+			case SubState.GO_REGION:
+				_changeToRegionLanding(p_gameController);
+				break;
+			case SubState.GO_KIDPROFILE:
+				_changeToKidsProfile(p_gameController);
+				break;
+			}
+
+			m_subState = SubState.NONE;
+		}
+	}
+	
+	public override void exit(GameController p_gameController)
+	{
+        UIManager l_ui = p_gameController.getUI();
+		m_mapCanvas.active = false; // DO NOT remove map, but cache map temporarily
+        l_ui.removeScreen(UIScreen.CORNER_PROFILE_INFO);
+		//if( m_removeCornerProfile )
+		//	p_gameController.getUI().removeScreen( UIScreen.CORNER_PROFILE_INFO );
+		SessionHandler.getInstance ().webContentList = null;
+		SessionHandler.getInstance ().bookContentList = null;
+		SessionHandler.getInstance ().bookTable = null;
+		SessionHandler.getInstance ().readingTable = null;
+
+		base.exit(p_gameController);
+	}
+
+	//------------------ Private Implementation ----------------------
+
+	private void _setupMap(GameController p_gameController)
+	{
+		UIManager l_ui = p_gameController.getUI();
+
+		m_mapCanvas = l_ui.findScreen(UIScreen.MAP);
+		if (m_mapCanvas != null)
+		{
+			m_mapCanvas.active = true;
+			m_mapCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+			return;
+		}
+
+		m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
+		m_mapCanvas.enterTransitionEvent += onTransitionEnter;
+		m_mapCanvas.exitTransitionEvent += onTransitionExit;
+
+		UIButton l_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
+		l_entranceButton.addClickCallback(onBackClicked);
+		
+		UILabel l_entranceLabel = l_entranceButton.getView("btnText") as UILabel;
+		l_entranceLabel.text = Localization.getString(Localization.TXT_BUTTON_PROFILES);
+		
+		UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
+		l_jungleButton.addClickCallback(onJungleClicked);
+		UILabel l_jungleLabel = l_jungleButton.getView("locationText") as UILabel;
+		l_jungleLabel.text = Localization.getString(Localization.TXT_BUTTON_JUNGLE);
+		
+		UIButton l_savannaButton = m_mapCanvas.getView("savannaButton") as UIButton;
+		UILabel l_savannaLabel = l_savannaButton.getView("locationText") as UILabel;
+		l_savannaLabel.text = Localization.getString(Localization.TXT_BUTTON_SAVANNAH);
+
+		UIButton l_welcomeButton = m_mapCanvas.getView("infoPanel") as UIButton;
+		l_welcomeButton.addClickCallback(onSpeechClick);
+		
+		UILabel l_jungleHeaderLabel = l_welcomeButton.getView("headerText") as UILabel;
+		l_jungleHeaderLabel.text = Localization.getString(Localization.TXT_LABEL_JUNGLE_HEADER);
+		UILabel l_jungleBodyLabel = l_welcomeButton.getView("bodyText") as UILabel;
+		l_jungleBodyLabel.text = Localization.getString(Localization.TXT_LABEL_JUNGLE_BODY);
+		
+		UIImage l_arrow	= m_mapCanvas.getView( "activeArrow" ) as UIImage;
+		List<Vector3> l_arrowPosList = new List<Vector3>();
+		l_arrowPosList.Add(l_arrow.transform.localPosition);
+		l_arrowPosList.Add(l_arrow.transform.localPosition + new Vector3(0, 50, 0));
+		l_arrowPosList.Add(l_arrow.transform.localPosition);
+		l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
+	}
+
+	private void _setupKidProfile(GameController p_gameController)
+	{
+		UIManager l_ui = p_gameController.getUI();
+		m_cornerProfileCanvas = l_ui.createScreen(UIScreen.CORNER_PROFILE_INFO, false, 11);
+		
+		UIButton l_profilebutton = m_cornerProfileCanvas.getView("profileButton") as UIButton;
+		l_profilebutton.addClickCallback(onProfileButtonClick);		
+	}
+
+	private void _changeToProfile(GameController p_gameController)
+	{
+		p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			
+		m_mapCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
+	}
+
+	private void _changeToRegionLanding(GameController p_gameController)
+	{
+		p_gameController.changeState(ZoodleState.REGION_LANDING);
+
+		m_mapCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
+	}
+
+	//added by joshua
+	private void _changeToKidsProfile(GameController p_gameController)
+	{
+		p_gameController.connectState(ZoodleState.KIDS_PROFILE, ZoodleState.MAP);
+		p_gameController.changeState(ZoodleState.KIDS_PROFILE);
+		
+		m_mapCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
+	}
+
+	//Listeners	
+	private void onFadeFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
+	{
+		UICanvas p_canvas = p_element as UICanvas;
+		p_canvas.active = false;
+		p_canvas.isTransitioning = false;
+	}
+
+	private void onBackClicked(UIButton p_button)
+	{
+		m_subState = SubState.GO_PROFILE;
+	}
+
+	private void onJungleClicked(UIButton p_button)
+	{
+		m_subState = SubState.GO_REGION;
+	}	
+
+	private void onSpeechClick(UIButton p_button)
+	{
+		p_button.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f);
+		p_button.removeAllCallbacks();
+	}
+
+	private void onTransitionEnter(UICanvas p_canvas)
+	{
+		p_canvas.graphicRaycaster.enabled = false;
+	}
+	
+	private void onTransitionExit(UICanvas p_canvas)
+	{
+		p_canvas.graphicRaycaster.enabled = true;
+	}
+
+	//added by joshua
+	private void onProfileButtonClick(UIButton p_button)
+	{
+		m_subState = SubState.GO_KIDPROFILE;
+	}
+
+	private UICanvas m_mapCanvas;
+	private UICanvas m_cornerProfileCanvas;
+	private SubState m_subState = SubState.NONE;
+}

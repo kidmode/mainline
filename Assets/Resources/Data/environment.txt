@@ -1,0 +1,37 @@
+{
+	"active_environment":"gcs_staging",
+	"server_version": 1,
+	"encrypted":"0",
+	
+	"gcs_dev": 
+	{
+		"game_server_host":"http://dev.zoodles.com",
+		"game_server_secure_host":"https://dev.zoodles.com",
+		"game_static_host":"http://dev.zoodles.com",	
+		"game_platform_host":"http://dev.zoodles.com"
+	},	
+		
+	"gcs_staging": 
+	{
+		"game_server_host":"http://staging.zoodles.com",
+		"game_server_secure_host":"https://staging.zoodles.com",
+		"game_static_host":"http://staging.zoodles.com",	
+		"game_platform_host":"http://staging.zoodles.com"
+	},
+	
+	"gcs_prod": 
+	{
+		"game_server_host":"http://www.zoodles.com",
+		"game_server_secure_host":"https://www.zoodles.com",
+		"game_static_host":"http://www.zoodles.com",	
+		"game_platform_host":"http://www.zoodles.com"
+	},
+	
+	"gcs_local": 
+	{
+		"game_server_host":"http://192.168.206.7",
+		"game_server_secure_host":"https://192.168.206.7",
+		"game_static_host":"http://192.168.206.7",
+		"game_platform_host":"http://192.168.206.7"
+	}
+}
