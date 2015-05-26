@@ -78,12 +78,60 @@ public class SettingChildLockState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
+		int l_changedStateName = int.Parse( m_gameController.stateName);
+		if (SessionHandler.getInstance().settingCache.active && 
+		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
+		      l_changedStateName == ZoodleState.DEVICE_OPTIONS_STATE || 
+		       l_changedStateName == ZoodleState.NOTIFICATION_STATE))
+			updateSetting ();
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_childLockCanvas );
 		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_childLockHelpCanvas );
 		p_gameController.getUI().removeScreen( m_cancelLockConfirmCanvas );
+	}
+
+	public void updateSetting()
+	{
+		//update childLock
+		m_requestQueue.reset ();
+		if(m_settingCache.childLockSwitch && !m_settingCache.verifyBirth)
+		{
+			if(m_settingCache.childLockPassword.Length != 4)
+			{
+				//m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_PIN);
+				m_closeButton.active = true;
+				return;
+			}
+			else
+			{
+				m_requestQueue.add(new EnableLockRequest(m_settingCache.childLockPassword));
+				m_requestQueue.add(new UpdateSettingRequest("true"));
+			}
+		}
+		else if( m_settingCache.childLockSwitch && m_settingCache.verifyBirth)
+		{
+			m_requestQueue.add(new CancelLockRequest());
+			m_requestQueue.add(new UpdateSettingRequest("true"));
+		}
+		else if(!m_settingCache.childLockSwitch)
+		{
+			m_requestQueue.add(new UpdateSettingRequest("false"));
+		}
+		//update notifucation
+		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
+		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum));
+		m_requestQueue.request (RequestType.SEQUENCE);
+		//update device option
+		SessionHandler.getInstance().resetSetting ();
+		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
+		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
+		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;
+		PlayerPrefs.SetInt ("master_volume",SessionHandler.getInstance ().masterVolum);
+		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
+		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
+		PlayerPrefs.Save ();
 	}
 	
 	//---------------- Private Implementation ----------------------
@@ -121,6 +169,10 @@ public class SettingChildLockState : GameState
 		m_faqButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
 		m_faqButton.addClickCallback (toFAQScreen);
 
+		UIButton l_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
+		l_overviewButton.enabled = false;
+		m_deviceButton.enabled = true;
+		m_faqButton.enabled = true;
 		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
 		m_childModeButton.addClickCallback (toChildMode);
 
@@ -206,6 +258,23 @@ public class SettingChildLockState : GameState
 		m_settingCache.active = true;
 	}
 
+	private bool checkPin()
+	{
+		if(SessionHandler.getInstance().settingCache.childLockSwitch && !SessionHandler.getInstance().settingCache.verifyBirth && m_pinInputField.text.Length != 4)
+		{
+			m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,true);
+			UILabel l_text = m_childLockHelpCanvas.getView ("dialogContent").getView("Text") as UILabel;
+			l_text.text = Localization.getString(Localization.TXT_STATE_31_PIN);
+			m_childLockHelpCanvas.setOriginalPosition ();
+			m_closeButton.addClickCallback (closeHelpDialog);
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 	private void closeHelpDialogButton(UIButton p_button)
 	{
 		m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,false);
@@ -239,8 +308,11 @@ public class SettingChildLockState : GameState
 		}
 		else
 		{
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			if(checkPin())
+			{
+				m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+				m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			}
 		}
 	}
 
@@ -249,13 +321,16 @@ public class SettingChildLockState : GameState
 		Server.init (ZoodlesConstants.getHost());
 		if(null == p_response.error)
 		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			if(checkPin())
+			{
+				SessionHandler.getInstance ().PremiumJson = p_response.text;
+				m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+				m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			}
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -264,13 +339,16 @@ public class SettingChildLockState : GameState
 		Server.init (ZoodlesConstants.getHost());
 		if(null == p_response.error)
 		{
-			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
+			if(checkPin())
+			{
+				SessionHandler.getInstance ().GemsJson = p_response.text;
+				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
+				m_gameController.changeState (ZoodleState.BUY_GEMS);
+			}
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 	
@@ -284,26 +362,46 @@ public class SettingChildLockState : GameState
 
 	private void closeHelpDialog(UIButton p_button)
 	{
+		UILabel l_text = m_childLockHelpCanvas.getView ("dialogContent").getView("Text") as UILabel;
+		l_text.text = Localization.getString(Localization.TXT_87_LABEL_CONTENT);
 		m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,false);
 		p_button.removeClickCallback (closeHelpDialog);
 		m_childLockHelpCanvas.setOutPosition ();
 		m_helpButton.addClickCallback (showHelpDialog);
 	}
 
+	private void closeNoticeDialog(UIButton p_button)
+	{
+		UILabel l_text = m_childLockHelpCanvas.getView ("dialogContent").getView("Text") as UILabel;
+		l_text.text = Localization.getString(Localization.TXT_87_LABEL_CONTENT);
+		m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,false);
+		p_button.removeClickCallback (closeHelpDialog);
+		m_childLockHelpCanvas.setOutPosition ();
+	}
+
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
-			m_gameController.changeState(ZoodleState.CREATE_CHILD);
+			if(checkPin())
+			{
+				SessionHandler.getInstance().CreateChild = true;
+				m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+				m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
+			}
 		}
 		else
 		{
 			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
-			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			if(checkPin())
+			{
+				SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
+				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			}
 		}
 	}
+
 	private void onOffLock( UIToggle p_toggle, bool p_value )
 	{
 		if( false == p_value )
@@ -348,18 +446,35 @@ public class SettingChildLockState : GameState
 	private void toDeviceScreen(UIButton p_button)
 	{
 		p_button.removeClickCallback (toDeviceScreen);
-		m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
+		if(checkPin())
+		{
+			m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
+		}
+		else
+		{
+			p_button.addClickCallback(toDeviceScreen);
+		}
 	}
 
 	private void toFAQScreen(UIButton p_button)
 	{
 		p_button.removeClickCallback (toFAQScreen);
-		m_gameController.changeState (ZoodleState.FAQ_STATE);
+		if(checkPin())
+		{
+			m_gameController.changeState (ZoodleState.FAQ_STATE);
+		}
+		else
+		{
+			p_button.addClickCallback (toFAQScreen);
+		}
 	}
 
 	private void toChildMode(UIButton p_button)
 	{
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		if(checkPin())
+		{
+			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		}
 	}
 
 	private void toCheckVerifyBirth(UIToggle p_button, bool p_value)
@@ -382,7 +497,14 @@ public class SettingChildLockState : GameState
 	private void toAppInfoPage(UIButton p_button)
 	{
 		p_button.removeClickCallback (toAppInfoPage);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
+		if(checkPin())
+		{
+			m_gameController.changeState (ZoodleState.SETTING_STATE);
+		}
+		else
+		{
+			p_button.addClickCallback (toAppInfoPage);
+		}
 	}
 
 	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
@@ -423,8 +545,11 @@ public class SettingChildLockState : GameState
 
 	private void toPremiumScreen(UIButton p_button)
 	{
-		m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-		m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		if(checkPin())
+		{
+			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		}
 	}
 	
 	private void toBuyGemsScreen(UIButton p_button)
@@ -438,8 +563,11 @@ public class SettingChildLockState : GameState
 		}
 		else
 		{
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
+			if(checkPin())
+			{
+				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
+				m_gameController.changeState (ZoodleState.BUY_GEMS);
+			}
 		}
 	}
 
@@ -448,13 +576,16 @@ public class SettingChildLockState : GameState
 		Server.init (ZoodlesConstants.getHost());
 		if(p_response.error == null)
 		{
-			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
+			if(checkPin())
+			{
+				SessionHandler.getInstance ().GemsJson = p_response.text;
+				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
+				m_gameController.changeState (ZoodleState.BUY_GEMS);
+			}
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 

@@ -6,6 +6,8 @@ public class PromoteLanguagesCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 
 		_setupElement();
 	}
@@ -101,6 +103,33 @@ public class PromoteLanguagesCanvas : UICanvas
 					break;
 			}
 		}
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView("titleText") as UILabel;
+		UILabel l_en = getView("englishToggle").getView("toogleLabel") as UILabel;
+		UILabel l_zhcn = getView("simpChineseToggle").getView("toogleLabel") as UILabel;
+		UILabel l_zhtw = getView("tradChineseToggle").getView("toogleLabel") as UILabel;
+		UILabel l_es = getView("spanishToggle").getView("toogleLabel") as UILabel;
+		UILabel l_ja = getView("japaneseToggle").getView("toogleLabel") as UILabel;
+		UILabel l_ko = getView("koreanToggle").getView("toogleLabel") as UILabel;
+		UILabel l_fr = getView("frenchToggle").getView("toogleLabel") as UILabel;
+		UILabel l_it = getView("italianToggle").getView("toogleLabel") as UILabel;
+		UILabel l_nl = getView("dutchToggle").getView("toogleLabel") as UILabel;
+		UILabel l_de = getView("germanToggle").getView("toogleLabel") as UILabel;
+		
+		l_top.text = Localization.getString( Localization.TXT_62_LABEL_TITLE );
+		l_en.text = Localization.getString( Localization.TXT_62_LABEL_EN );
+		l_zhcn.text = Localization.getString( Localization.TXT_62_LABEL_ZH_CN );
+		l_zhtw.text = Localization.getString( Localization.TXT_62_LABEL_ZH_TW );
+		l_es.text = Localization.getString( Localization.TXT_62_LABEL_ES );
+		l_ja.text = Localization.getString( Localization.TXT_62_LABEL_JA );
+		l_ko.text = Localization.getString( Localization.TXT_62_LABEL_KO );
+		l_fr.text = Localization.getString( Localization.TXT_62_LABEL_FR );
+		l_it.text = Localization.getString( Localization.TXT_62_LABEL_IT );
+		l_nl.text = Localization.getString( Localization.TXT_62_LABEL_NL );
+		l_de.text = Localization.getString( Localization.TXT_62_LABEL_DE );
 	}
 
 	private UIToggle m_englishToggle;

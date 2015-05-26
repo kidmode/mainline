@@ -64,11 +64,11 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();	
 		setInstance(this);
-		Log.d(TAG, "onCreate()");
+//		Log.d(TAG, "onCreate()");
 	}
 
 	public static synchronized App getInstance(Context context) {
-		Log.d(TAG, "getInstance(Context context)");
+//		Log.d(TAG, "getInstance(Context context)");
 		if (sInstance == null) {
 			App appObj = (App)context.getApplicationContext();
 			setInstance(appObj);
@@ -93,12 +93,9 @@ public class App extends Application {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenReceiver, filter);
 
-//		globalTouchDenyIntent = new Intent(this.getApplicationContext(),GlobalTouchDenyService.class);
-//
-//		bindService(globalTouchDenyIntent, mConnection, Context.BIND_AUTO_CREATE);
-//		startService(globalTouchDenyIntent);
-		
-//		Log.v("Zoodles", "starting binding globaltouchdenyintent");
+		globalTouchDenyIntent = new Intent(this.getApplicationContext(),GlobalTouchDenyService.class);
+		bindService(globalTouchDenyIntent, mConnection, Context.BIND_AUTO_CREATE);
+		startService(globalTouchDenyIntent);
 	}
 
 	private GlobalTouchDenyService mTouchDenyService;
@@ -128,16 +125,13 @@ public class App extends Application {
 
 	public void startWatcherLockScreenService() 
 	{
-		Log.v("Zoodles", "startLockSCreenServiceCheck: " + mChildLock.inChildLock() + " " + (!pauseLockScreenService));
 		if (mChildLock.inChildLock() && !pauseLockScreenService) 
 		{
-			Log.v("Zoodles", "In child lock and pause screen service confirmed");
 			synchronized (globalTouchDenyIntent)
 			{
-				Log.v("Zoodles", "Touch deny intent synchronized");
 				if(mTouchDenyBound)
 				{
-					Log.d(TAG, "startWatcherLockScreenService");
+//					Log.d(TAG, "startWatcherLockScreenService");
 					mTouchDenyService.startWatcherTouchDenyService();
 				}
 			}
@@ -146,17 +140,13 @@ public class App extends Application {
 
 	public void stopWatcherLockScreenService() 
 	{
-		Log.v("Zoodles", "Stopping the watcher4' " + !pauseLockScreenService + " " + mChildLock.inChildLock());
 		if (mChildLock.inChildLock() && !pauseLockScreenService) 
 		{
-			Log.v("Zoodles", "Stopping the watcher3'");
 			synchronized (globalTouchDenyIntent)
 			{
-				Log.v("Zoodles", "Stopping the watcher2'");
 				if(mTouchDenyBound)
 				{
-					Log.d(TAG, "stopWatcherLockScreenService");
-					Log.v("Zoodles", "Stopping the watcher'");
+//					Log.d(TAG, "stopWatcherLockScreenService");
 					mTouchDenyService.stopTouchDenyWatcher();
 				}
 			}
@@ -173,7 +163,6 @@ public class App extends Application {
 			{
 				if(mTouchDenyBound)
 				{
-					Log.v("Zoodles", "startLockScreenService: ");
 					mTouchDenyService.startTouchDenyService();
 				}
 			}
@@ -185,7 +174,6 @@ public class App extends Application {
 	 */
 	public void pauseLockScreenService() {
 		if (mChildLock.inChildLock()) {
-			Log.v("Zoodles", "pauseLockScreenService ");
 			pauseLockScreenService = true;
 		}
 	}
@@ -194,11 +182,10 @@ public class App extends Application {
 	 * Stop service that attaches transparent lock UI
 	 */
 	public void stopLockScreenService() {
-		Log.d(TAG, "stopLockScreenService: ");
+//		Log.d(TAG, "stopLockScreenService: ");
 		pauseLockScreenService = false;
 		synchronized (globalTouchDenyIntent){
 			if(mTouchDenyBound){
-				Log.v("Zoodles", "StopLockScreenService ");
 				mTouchDenyService.stopTouchDenyService();
 			}
 		}
@@ -272,11 +259,11 @@ public class App extends Application {
 	    @Override
 	    public void onReceive( Context context, Intent intent ) {
 	    	mScreenLocked = intent.getAction().equals( Intent.ACTION_SCREEN_OFF );
-	    	Log.d( TAG, "mScreenLocked: " + ( mScreenLocked ? "TRUE" : "FALSE" ) );
+//	    	Log.d( TAG, "mScreenLocked: " + ( mScreenLocked ? "TRUE" : "FALSE" ) );
 	    	
 	    	// Don't check for pre-emptions when the screen is off or lockscreen inactive
 	    	if ( mScreenLocked ) {
-	    		Log.d( TAG, "ScreenReceiver: Stopping pre-emption watch." );
+//	    		Log.d( TAG, "ScreenReceiver: Stopping pre-emption watch." );
 	    		App.instance().childLock().stopWatchForPreemption();
 	    	}
 	    	

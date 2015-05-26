@@ -14,6 +14,7 @@ public class UIButton : UIElement
 		m_button.onClick.AddListener( listenerCallbackDispatcher );
 		m_callbacks = new List<ButtonClickCallback>();
 		baseElement = m_button;
+		m_alpha = m_button.colors.normalColor.a;
 
 		DebugUtils.Assert( m_button != null );
 	}
@@ -41,8 +42,11 @@ public class UIButton : UIElement
 		get { return m_button.colors.normalColor.a; }
 		set 
 		{
-			base.alpha = value;
-			_setAlphaOfColorBlock( m_button.colors, value );
+			if (value != m_button.colors.normalColor.a)
+			{
+				base.alpha = value;
+				_setAlphaOfColorBlock( m_button.colors, value );
+			}
 		}
 	}
 

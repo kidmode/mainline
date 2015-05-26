@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,19 +9,19 @@ public class GP_RTM_Room {
 	public GP_RTM_RoomStatus status = GP_RTM_RoomStatus.ROOM_VARIANT_DEFAULT;
 	public long creationTimestamp = 0;
 
-	public List<GP_Partisipant> partisipants = new List<GP_Partisipant>();
+	public List<GP_Participant> participants = new List<GP_Participant>();
 
 
 	public GP_RTM_Room() {
-		partisipants = new List<GP_Partisipant>();
+		participants = new List<GP_Participant>();
 	}
 
-	public void AddPartisipant(GP_Partisipant p) {
-		partisipants.Add(p);
+	public void AddParticipant(GP_Participant p) {
+		participants.Add(p);
 	}
 
-	public GP_Partisipant GetPartisipantById(string id) {
-		foreach(GP_Partisipant p in partisipants) {
+	public GP_Participant GetParticipantById(string id) {
+		foreach(GP_Participant p in participants) {
 			if(p.id.Equals(id)) {
 				return p;
 			}

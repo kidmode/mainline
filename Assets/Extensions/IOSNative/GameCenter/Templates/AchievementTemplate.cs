@@ -12,7 +12,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AchievementTemplate  {
+public class AchievementTemplate  { 
 
 
 
@@ -24,7 +24,7 @@ public class AchievementTemplate  {
 	public float progress {
 		get {
 			if(IOSNativeSettings.Instance.UsePPForAchievements) {
-				return GameCenterManager.getAchievementProgress(id);
+				return GameCenterManager.GetAchievementProgress(id);
 			} else {
 				return _progress;
 			}

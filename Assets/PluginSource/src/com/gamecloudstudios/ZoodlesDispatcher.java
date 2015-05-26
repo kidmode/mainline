@@ -34,11 +34,11 @@ public class ZoodlesDispatcher extends Activity
 		playgroundIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent pi = PendingIntent.getActivity( this.getApplicationContext(), 0, playgroundIntent, 0 );
 
-		Log.v("Zoodles", "starting " + l_packageName + " " + l_activityName);
+//		Log.v("Zoodles", "starting " + l_packageName + " " + l_activityName);
 		
 		NativeAppService.startApp(this, 0, l_packageName, l_activityName, pi, null);
 		
-		Log.v("Zoodles", "Dispatching");
+//		Log.v("Zoodles", "Dispatching");
 	}
 	
 	@Override
@@ -62,12 +62,12 @@ public class ZoodlesDispatcher extends Activity
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) 
 	{
-		Log.v("Zoodles", "window focus changed");
+//		Log.v("Zoodles", "window focus changed");
 	}
 
 	public static void launch(Activity activity) 
 	{
-		Log.v("Zoodles", "launch");
+//		Log.v("Zoodles", "launch");
 /*		
  		if (App.instance().childLock().inChildLock()) {
 			Intent startMain = new Intent(Intent.ACTION_MAIN);

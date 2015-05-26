@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+ 
 public class IOSUIUserNotificationType  {
 
 	public const int Alert = 4;

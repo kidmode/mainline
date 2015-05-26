@@ -6,6 +6,8 @@ public class SetBirthYearCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+
+		SetupLocalizition ();
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 	}
@@ -33,5 +35,22 @@ public class SetBirthYearCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_exit = getView ("backButton").getView("btnText") as UILabel;
+		UILabel l_top = getView ("topicText") as UILabel;
+		UILabel l_notice = getView ("noticeText") as UILabel;
+		UILabel l_forgot = getView ("setBtnText") as UILabel;
+		UILabel l_title = getView ("titleText") as UILabel;
+		UILabel l_content = getView ("contentText") as UILabel;
+		
+		l_exit.text = Localization.getString (Localization.TXT_BUTTON_BACK);
+		l_top.text = Localization.getString (Localization.TXT_25_LABEL_TOP);
+		l_notice.text = Localization.getString (Localization.TXT_25_LABEL_NOTICE);
+		l_forgot.text = Localization.getString (Localization.TXT_25_LABEL_SET);
+		l_title.text = Localization.getString (Localization.TXT_STATE_13_VARIF_FAIL);
+		l_content.text = Localization.getString (Localization.TXT_25_LABEL_FAIL);
 	}
 }

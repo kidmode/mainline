@@ -13,6 +13,11 @@ public class OverviewReadingState : GameState
 		m_requestQueue = new RequestQueue ();
 		
 		m_bookDataTable 			= new Hashtable();
+
+		if( SessionHandler.getInstance ().recordKidList.Count > 0 )
+		{
+			SessionHandler.getInstance ().recordKidList.Clear ();
+		}
 		
 		_setupScreen( p_gameController );
 		_setupElment();
@@ -36,7 +41,6 @@ public class OverviewReadingState : GameState
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
-		
 	}
 	
 	//----------------- Private Implementation -------------------
@@ -59,16 +63,17 @@ public class OverviewReadingState : GameState
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
-		if(null == SessionHandler.getInstance().bookList)
-		{
+//		if(null == SessionHandler.getInstance().bookList)
+//		{
 			m_requestQueue.reset ();
-			m_requestQueue.add(new GetBookRequest(_requestBookListComplete));
+//			m_requestQueue.add(new GetBookRequest(_requestBookListComplete));
+			m_requestQueue.add(new BookListRequest(false, _requestBookListComplete));
 			m_requestQueue.request();
-		}
-		else
-		{
-			loadBookList();
-		}
+//		}
+//		else
+//		{
+//			loadBookList();
+//		}
 	}
 	
 	private void _setupElment()
@@ -222,8 +227,8 @@ public class OverviewReadingState : GameState
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Record A Reading";
-		l_contentLabel.text = "Choose from many recordable books to record a reading for your child. Great for distant family members.";
+		l_titleLabel.text = Localization.getString( Localization.TXT_STATE_64_RECORD_READING );
+		l_contentLabel.text = Localization.getString( Localization.TXT_STATE_64_CHOOSE_FROM );
 		
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -264,7 +269,21 @@ public class OverviewReadingState : GameState
 	}
 	
 	private void _setupRecordAReadingCanvas()
-	{	
+	{
+		UILabel l_loading = m_recordAReadingCanvas.getView ("loadingText") as UILabel;
+		
+		List<Book> l_list = SessionHandler.getInstance ().bookList;
+
+		if( l_list.Count > 0 )
+		{
+			if(null != l_loading)
+			l_loading.active = false;
+		}
+		else
+		{
+			l_loading.text = Localization.getString(Localization.TXT_14_LABEL_INFO);
+			return;
+		}
 		m_requestQueue.reset ();
 
 		List<UIElement> l_canvasList = new List<UIElement> ();
@@ -277,7 +296,6 @@ public class OverviewReadingState : GameState
 		l_canvasList.Add (l_book2);
 		l_canvasList.Add (l_book3);
 		l_canvasList.Add (l_book4);
-		List<Book> l_list = SessionHandler.getInstance ().bookList;
 		
 		UILabel l_bookCountLabel = m_bookListCanvas.getView ("bookCountText") as UILabel;
 
@@ -299,7 +317,10 @@ public class OverviewReadingState : GameState
 			l_buyButton.addClickCallback(onClickBuyBookButton);
 			UIButton l_recordButton = l_element.getView ("recordButton") as UIButton;
 			l_recordButton.addClickCallback(onClickRecordBookButton);
-			
+
+			UILabel l_record = l_element.getView ("buyAppButtonText") as UILabel;
+			l_record.text = Localization.getString(Localization.TXT_LABEL_RECORD);
+
 			if(null == l_book.icon)
 				downLoadBookIcon( l_book, l_element );
 			else
@@ -339,7 +360,6 @@ public class OverviewReadingState : GameState
 			l_buyButton.active = false;
 			l_unlockLabel.active = false;
 			l_recordButton.active = true;
-			l_recordButton.addClickCallback( onRecordButtonCLick );
 		}
 		else
 		{
@@ -371,27 +391,29 @@ public class OverviewReadingState : GameState
 	
 	private void onClickRecordBookButton(UIButton p_button)
 	{
-		m_uiManager.changeScreen (UIScreen.RECORD_START,true);
 		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
+
 		switch(p_button.parent.parent.name)
 		{
 		case "bookOne":
-			SessionHandler.getInstance().currentBook = l_bookList[0];
+			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[0].id] as Book;
 			break;
 		case "bookTwo":
-			SessionHandler.getInstance().currentBook = l_bookList[1];
+			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[1].id] as Book;
 			break;
 		case "bookThree":
-			SessionHandler.getInstance().currentBook = l_bookList[2];
+			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[2].id] as Book;
 			break;
 		case "bookFour":
-			SessionHandler.getInstance().currentBook = l_bookList[3];
+			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[3].id] as Book;
 			break;
 		}
-	}
-	
-	private void onRecordButtonCLick( UIButton p_button )
-	{
+		
+		if( 0 == SessionHandler.getInstance ().currentBook.pageList.Count )
+		{
+			return;
+		}
+		
 		m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
 		m_uiManager.changeScreen (UIScreen.RECORD_START,true);
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -426,7 +448,20 @@ public class OverviewReadingState : GameState
 	
 	private void onRecordBookClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		SessionHandler.getInstance ().currentBook = p_data as Book;
+		SessionHandler.getInstance ().currentBook = m_bookDataTable[(p_data as Book).id] as Book;
+
+		if( 0 == SessionHandler.getInstance ().currentBook.pageList.Count )
+		{
+			return;
+		}
+
+		m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
+		m_uiManager.changeScreen (UIScreen.RECORD_START,true);
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		UIElement l_newPanel = m_recordStartCanvas.getView ("mainPanel");
+		l_pointListIn.Add( l_newPanel.transform.localPosition );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 	}
 	
 	private void onBookClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
@@ -526,9 +561,9 @@ public class OverviewReadingState : GameState
 				l_costGems.text = m_wantedBook.gems.ToString ();
 				l_needGems.text = (m_wantedBook.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
 				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-				l_titleLabel.text = "Need More Gems!";
+				l_titleLabel.text = Localization.getString( Localization.TXT_STATE_64_NEED_MORE_GEMS );
 				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-				l_notice1label.text = "You need more gems to purchase:";
+				l_notice1label.text = Localization.getString( Localization.TXT_STATE_64_YOU_NEED_MORE_GEMS );
 				m_costArea.active = false;
 				m_needMoreArea.active = true;
 			}
@@ -576,6 +611,20 @@ public class OverviewReadingState : GameState
 		foreach( Book l_book in SessionHandler.getInstance().bookList )
 		{
 			m_bookDataTable[l_book.id] = l_book;
+
+			string l_record = LocalSetting.find("User").getString(l_book.id.ToString(), string.Empty);
+			if( !l_record.Equals(string.Empty) )
+			{
+ 				ArrayList l_list = MiniJSON.MiniJSON.jsonDecode(l_record) as ArrayList;
+
+				foreach( object l_id in l_list )
+				{
+					if( l_id.ToString() == SessionHandler.getInstance().currentKid.id.ToString() )
+					{
+						m_recordedBookList.Add( l_book.id );
+					}
+				}
+			}
 		}
 		
 		RequestQueue l_request = new RequestQueue ();
@@ -649,11 +698,11 @@ public class OverviewReadingState : GameState
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -715,7 +764,7 @@ public class OverviewReadingState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString( Localization.TXT_STATE_11_FAIL ),Localization.getString( Localization.TXT_STATE_64_GET_DATA_FAIL ));
 		}
 	}
 	
@@ -773,7 +822,7 @@ public class OverviewReadingState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString( Localization.TXT_STATE_11_FAIL ),Localization.getString( Localization.TXT_STATE_64_GET_DATA_FAIL ));
 		}
 	}
 	
@@ -785,18 +834,69 @@ public class OverviewReadingState : GameState
 		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
 		l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
 		
-		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
-		int l_dataCount = l_data.Count;
-		List<Book> l_list = new List<Book> ();
-		for(int l_i = 0; l_i < l_dataCount; l_i++)
+		Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+		if(l_jsonResponse.ContainsKey("jsonResponse"))
 		{
-			Hashtable l_table = l_data[l_i] as Hashtable;
-			Book l_book = new Book(l_table);
-			l_list.Add(l_book);
-		}
-		SessionHandler.getInstance ().bookList = l_list;
+			Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+			if(l_response.ContainsKey("response"))
+			{
+				Hashtable l_bookData = l_response["response"] as Hashtable;
+				
+				ArrayList l_books = l_bookData["books"] as ArrayList;
 
-		loadBookList ();
+				if( null == SessionHandler.getInstance ().bookList )
+				{
+					int l_dataCount = l_books.Count;
+					List<Book> l_bookList = new List<Book> ();
+					for(int l_i = 0; l_i < l_dataCount; l_i++)
+					{
+						Hashtable l_table = l_books[l_i] as Hashtable;
+						Book l_book = new Book(l_table);
+						l_bookList.Add(l_book);
+					}
+					SessionHandler.getInstance ().bookList = l_bookList;
+				}
+				
+				foreach (object o in l_books)
+				{
+					Book l_book = new Book(o as Hashtable);
+					m_bookDataTable[l_book.id] = l_book;
+
+					string l_record = LocalSetting.find("User").getString(l_book.id.ToString(), string.Empty);
+					if( !l_record.Equals(string.Empty) )
+					{
+						ArrayList l_list = MiniJSON.MiniJSON.jsonDecode(l_record) as ArrayList;
+						
+						foreach( object l_id in l_list )
+						{
+							if( l_id.ToString() == SessionHandler.getInstance().currentKid.id.ToString() )
+							{
+								m_recordedBookList.Add( l_book.id );
+							}
+						}
+					}
+				}
+				
+				ArrayList l_readings = l_bookData["readings"] as ArrayList;
+				foreach (object o in l_readings)
+				{
+					BookReading l_bookReading = new BookReading(o as Hashtable);
+					
+					if( 0 == l_bookReading.readingPageTable.Count )
+					{
+						continue;
+					}
+//					SessionHandler.getInstance().readingTable[l_bookReading.id] = l_bookReading;
+					m_recordedBookList.Add( l_bookReading.bookId );
+				}
+
+				_setupRecordAReadingCanvas();
+			}
+		}
+//		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
+
+//
+//		loadBookList ();
 	}
 	
 	private void _requestReadingListComplete(WWW p_response)

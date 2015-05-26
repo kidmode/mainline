@@ -73,7 +73,7 @@ public class RequestQueue
 
 			if (null != m_request)
 			{
-				m_request.destroy();
+				Server.removeCall(m_request);
 			}
 		}
 
@@ -98,7 +98,21 @@ public class RequestQueue
 		}
 
 		m_total = -1;
-		m_requests = new List<Request>();
+		is_used = false;
+		m_requests.Clear();
+	}
+
+	public void dispose ()
+	{
+		int l_numRequests = m_requests.Count;
+		for (int i = 0; i < l_numRequests; ++i)
+		{
+			Request l_request = m_requests[i];
+			l_request.dispose();
+		}
+		
+		m_total = -1;
+		m_requests.Clear();
 	}
 
 	public void request(RequestType p_type = RequestType.RUSH)
@@ -139,11 +153,16 @@ public class RequestQueue
 		return m_variables[p_name];
 	}
 
-	public bool isCompleted()
+	public bool Completed()
 	{
 		if(m_total == 0)
 		{
+			is_used = true;
 			m_total = -1;
+			return true;
+		}
+		else if(m_total == -1)
+		{
 			return true;
 		}
 		else
@@ -151,6 +170,11 @@ public class RequestQueue
 			return false;
 		}
 		//return (m_total == 0);
+	}
+
+	public bool isCompleted()
+	{
+		return Completed () && is_used;
 	}
 
 //	public void removeRequestCallBack()
@@ -178,6 +202,7 @@ public class RequestQueue
 
 	private List<Request> m_requests = new List<Request>();
 	private int m_total = -1;
+	private bool is_used = false;
 	private RequestType m_type = RequestType.RUSH;
 	private Hashtable m_variables = new Hashtable();
 }
@@ -214,7 +239,6 @@ public class ClientIdRequest : RequestQueue.Request
 			//TODO
 			m_params [ZoodlesConstants.PARAM_FAMILY] = "chrome"; 
 		}
-
 		m_params [ZoodlesConstants.PARAM_SCREEN_WIDTH] = Screen.width;
 		m_params [ZoodlesConstants.PARAM_SCREEN_HEIGHT] = Screen.height;
 		m_params [ZoodlesConstants.PARAM_DENSITY] = (int)Screen.dpi;
@@ -228,18 +252,38 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_DI.Call<string>("getManufacturer");
 		m_params [ZoodlesConstants.PARAM_DEVICE] = l_DI.Call<string>("getDevice");
 		m_params [ZoodlesConstants.PARAM_MODEL] = l_DI.Call<string>("getModel");
-		//
-		_Debug.log(m_params [ZoodlesConstants.PARAM_SCREEN_WIDTH]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_SCREEN_WIDTH]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_SCREEN_HEIGHT]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_DENSITY]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_OS_VERSION]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_BRAND]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_MANUFACTURER]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_DEVICE]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_MODEL]);
-		_Debug.log(m_params [ZoodlesConstants.PARAM_CHANNEL]);
+
+		SessionHandler.getInstance().deviceName = l_DI.Call<string>("getManufacturer");			
+		#else
+
+		string l_os = SystemInfo.operatingSystem;
+		string[] l_osPara = l_os.Split (ZoodlesConstants.BLANK.ToCharArray());
+		if(l_osPara.Length >= 3)
+		{
+			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_osPara[2];
+		}
+		else
+		{
+			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_os;
+		}
+		
+		string l_brand = SystemInfo.deviceModel;
+		string[] l_brandPara = l_brand.Split (ZoodlesConstants.BLANK.ToCharArray());
+		if(l_osPara.Length >= 2)
+		{
+			m_params [ZoodlesConstants.PARAM_BRAND] = l_brandPara[0];
+			m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_brandPara[0];
+		}
+		else
+		{
+			m_params [ZoodlesConstants.PARAM_BRAND] = l_brand;
+			m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_brand;
+		}
+		m_params [ZoodlesConstants.PARAM_DEVICE] = SystemInfo.deviceName;
+		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
+
 		#endif
+
 		m_method = CallMethod.POST;
 	}
 }
@@ -259,6 +303,14 @@ public class SignUpRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = (int)SessionHandler.getInstance().clientId;
 		m_params[ZoodlesConstants.PARAM_EMAIL] = m_name;
 		m_params[ZoodlesConstants.PARAM_PASSWORD] = m_password;
+		if(!string.Empty.Equals(SessionHandler.getInstance().creditCardNum))
+		{
+			m_params[ZoodlesConstants.CREDIT_CARD_NUMBER] = SessionHandler.getInstance().creditCardNum;
+			m_params[ZoodlesConstants.CREDIT_CARD_TYPE] = CreditCardHelper.parseType(m_params[ZoodlesConstants.CREDIT_CARD_NUMBER].ToString());
+			m_params[ZoodlesConstants.CREDIT_CARD_YEAR] = SessionHandler.getInstance().cardYear;
+			m_params[ZoodlesConstants.CREDIT_CARD_MONTH] = SessionHandler.getInstance().cardMonth;
+		}
+
 		m_method = CallMethod.POST;
 	}
 
@@ -304,6 +356,24 @@ public class GetKidListRequest : RequestQueue.Request
 	}
 }
 
+public class GetKidRequest : RequestQueue.Request
+{
+	public GetKidRequest(int p_kidId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_kidId = p_kidId;
+	}
+	
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.REST_KID_URL;
+		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_params[ZoodlesConstants.PARAM_KID_ID] = m_kidId.ToString();
+		m_method = CallMethod.GET;
+	}
+
+	private int m_kidId = -1;
+}
+
 // Get user setting
 public class GetUserSettingRequest : RequestQueue.Request
 {
@@ -321,54 +391,57 @@ public class GetUserSettingRequest : RequestQueue.Request
 	
 	private void _requestComplete(WWW p_response)
 	{
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-		l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
-
-		SessionHandler l_session = SessionHandler.getInstance();
-		if (l_data.ContainsKey ("child_lock"))
+		if(null == p_response.error)
 		{
-			l_session.childLockSwitch = (bool)l_data["child_lock"];
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
+			
+			SessionHandler l_session = SessionHandler.getInstance();
+			if (l_data.ContainsKey ("child_lock"))
+			{
+				l_session.childLockSwitch = (bool)l_data["child_lock"];
+			}
+			if (l_data.ContainsKey ("incoming_calls"))
+			{
+				l_session.allowCall = (bool)l_data["incoming_calls"];
+				#if UNITY_ANDROID && !UNITY_EDITOR
+				if( false == l_session.allowCall )
+					IncomingCallControl.StartBlock();
+				#endif
+			}
+			if (l_data.ContainsKey ("today_tips"))
+				l_session.tip = (bool)l_data["today_tips"];
+			if (l_data.ContainsKey ("push_free_weekly_apps"))
+				l_session.freeWeeklyApp = (bool)l_data["push_free_weekly_apps"];
+			if (l_data.ContainsKey ("push_new_apps_added"))
+				l_session.newAddApp = (bool)l_data["push_new_apps_added"];
+			if (l_data.ContainsKey ("push_smart_selection"))
+				l_session.smartSelect = (bool)l_data["push_smart_selection"];
+			if (l_data.ContainsKey ("music_volume"))
+			{
+				l_session.musicVolum = int.Parse(l_data["music_volume"].ToString());
+				SoundManager.getInstance().musicVolume = (float)l_session.musicVolum/100;
+			}
+			if (l_data.ContainsKey ("effects_volume"))
+			{
+				l_session.effectsVolum = int.Parse(l_data["effects_volume"].ToString());
+				SoundManager.getInstance().effectVolume = (float)l_session.effectsVolum/100;
+			}
+			if (l_data.ContainsKey ("master_volume"))
+			{
+				l_session.masterVolum = int.Parse(l_data["master_volume"].ToString());
+				SoundManager.getInstance().masterVolume = (float)l_session.masterVolum/100;
+			}
+			if (l_data.ContainsKey ("enable_lock_pin"))
+			{
+				l_session.verifyBirth = !(bool)l_data["enable_lock_pin"];
+			}
+			if (l_data.ContainsKey ("lock_pin") && l_data["lock_pin"] != null)
+			{
+				l_session.childLockPassword = l_data["lock_pin"].ToString();
+			}
+			SessionHandler.getInstance ().initSettingCache ();
 		}
-		if (l_data.ContainsKey ("incoming_calls"))
-		{
-			l_session.allowCall = (bool)l_data["incoming_calls"];
-			#if UNITY_ANDROID && !UNITY_EDITOR
-			if( false == l_session.allowCall )
-				IncomingCallControl.StartBlock();
-			#endif
-		}
-		if (l_data.ContainsKey ("today_tips"))
-			l_session.tip = (bool)l_data["today_tips"];
-		if (l_data.ContainsKey ("push_free_weekly_apps"))
-			l_session.freeWeeklyApp = (bool)l_data["push_free_weekly_apps"];
-		if (l_data.ContainsKey ("push_new_apps_added"))
-			l_session.newAddApp = (bool)l_data["push_new_apps_added"];
-		if (l_data.ContainsKey ("push_smart_selection"))
-			l_session.smartSelect = (bool)l_data["push_smart_selection"];
-		if (l_data.ContainsKey ("music_volume"))
-		{
-			l_session.musicVolum = int.Parse(l_data["music_volume"].ToString());
-			SoundManager.getInstance().musicVolume = (float)l_session.musicVolum/100;
-		}
-		if (l_data.ContainsKey ("effects_volume"))
-		{
-			l_session.effectsVolum = int.Parse(l_data["effects_volume"].ToString());
-			SoundManager.getInstance().effectVolume = (float)l_session.effectsVolum/100;
-		}
-		if (l_data.ContainsKey ("master_volume"))
-		{
-			l_session.masterVolum = int.Parse(l_data["master_volume"].ToString());
-			SoundManager.getInstance().masterVolume = (float)l_session.masterVolum/100;
-		}
-		if (l_data.ContainsKey ("enable_lock_pin"))
-		{
-			l_session.verifyBirth = !(bool)l_data["enable_lock_pin"];
-		}
-		if (l_data.ContainsKey ("lock_pin") && l_data["lock_pin"] != null)
-		{
-			l_session.childLockPassword = l_data["lock_pin"].ToString();
-		}
-		SessionHandler.getInstance ().initSettingCache ();
 	}
 }
 
@@ -609,6 +682,7 @@ public class CreateChildRequest : RequestQueue.Request
 		SessionHandler.getInstance ().inputedbirthday = string.Empty;
 		SessionHandler.getInstance ().selectAvatar = null;
 		SessionHandler.getInstance().kidList.Add(l_kid);
+		SessionHandler.getInstance().getSingleKidApplist(l_kid);
 	}
 
 	private string m_name;
@@ -637,14 +711,14 @@ public class ImageRequest : RequestQueue.Request
 // Request an app icon
 public class IconRequest : RequestQueue.Request
 {
-	public IconRequest(App p_app, UIElement p_element, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public IconRequest(App p_app, UIElement p_element = null, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_app = p_app;
 		m_element = p_element;
 		if(null != m_app.iconUrl)
 			m_call = m_app.iconUrl;
-
-		handler += _requestComplete;
+		if(null == p_handler)
+			handler += _requestComplete;
 	}
 	
 	private void _requestComplete(WWW p_response)
@@ -655,6 +729,7 @@ public class IconRequest : RequestQueue.Request
 		}
 		else
 		{
+			m_app.iconDownload = true;
 			m_app.icon = p_response.texture;
 			if(null != m_element)
 			{
@@ -718,7 +793,7 @@ public class DrawingRequest : RequestQueue.Request
 // Request an book icon
 public class BookIconRequest : RequestQueue.Request
 {
-	public BookIconRequest(Book p_book, UIElement p_element, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public BookIconRequest(Book p_book, UIElement p_element = null, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_book = p_book;
 		m_element = p_element;
@@ -759,11 +834,10 @@ public class BookIconRequest : RequestQueue.Request
 // Request an audio
 public class AudioRequest : RequestQueue.Request
 {
-	public AudioRequest( string p_audioPath, int p_bookId, int p_readingId, int p_pageId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public AudioRequest( string p_audioPath, int p_bookId, int p_pageId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_call = p_audioPath;
 		m_bookId = p_bookId;
-		m_readingId = p_readingId;
 		m_pageId = p_pageId;
 
 		handler += _requestComplete;
@@ -777,14 +851,13 @@ public class AudioRequest : RequestQueue.Request
 		{
 			AudioClip l_clip = p_response.GetAudioClip( false, false, AudioType.WAV );
 			
-			AudioSave.Save( m_bookId + "//" + m_readingId + "//" + m_pageId, l_clip );
+			AudioSave.Save( m_bookId + "//" + m_pageId, l_clip );
 			
 			UnityEngine.Object.Destroy(l_clip);
 		}
 	}
 
 	private int m_bookId;
-	private int m_readingId;
 	private int m_pageId;
 }
 
@@ -799,6 +872,11 @@ public class WebContentRequest : RequestQueue.Request
 		m_call = "/api/kids" + ZoodlesConstants.SLASH + SessionHandler.getInstance().currentKid.id + ZoodlesConstants.REST_LINKS_LIST_URL_SUFFIX;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		string l_locale = l_DI.Call<string>("getLanguage");
+		m_params["locale"] = l_locale.Replace ("_","-");
+		#endif
 		m_method = CallMethod.GET;
 	}
 }
@@ -806,17 +884,84 @@ public class WebContentRequest : RequestQueue.Request
 // Book list request
 public class BookListRequest : RequestQueue.Request
 {
-	public BookListRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
-	{}
+	public BookListRequest(bool p_topRequest, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_topRequest = p_topRequest;
+	}
 
 	protected override void init()
 	{
-		m_call = ZoodlesConstants.REST_BOOKS_URL + "/books_for_kid"; 
+//		m_call = ZoodlesConstants.REST_BOOKS_URL + "/books_for_kid"; 
+		m_call = ZoodlesConstants.REST_BOOKS_URL + "/books_and_readings"; 
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;	
-		m_params[ZoodlesConstants.PARAM_KID_ID] = SessionHandler.getInstance().currentKid.id;	
+		m_params[ZoodlesConstants.PARAM_KID_ID] = SessionHandler.getInstance().currentKid.id;
+
+		switch( Application.systemLanguage )
+		{
+		case SystemLanguage.English :
+			m_params["locale"] = "en";
+			break;
+		case SystemLanguage.French :
+			m_params["locale"] = "fr";
+			break;
+		case SystemLanguage.German :
+			m_params["locale"] = "de";
+			break;
+		case SystemLanguage.Spanish :
+			m_params["locale"] = "es";
+			break;
+		case SystemLanguage.Korean :
+			m_params["locale"] = "ko";
+			break;
+		case SystemLanguage.Chinese :
+			#if UNITY_ANDROID && !UNITY_EDITOR
+			AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+			string l_locale = l_DI.Call<string>("getLanguage");
+			
+			switch ( l_locale )
+			{
+			case "zh_CN":
+				m_params["locale"] = "zh-CN";
+				break;
+			case "zh_TW":
+				m_params["locale"] = "zh-TW";
+				break;
+			default :
+				m_params["locale"] = "zh";
+				break;
+			}
+			#else
+			m_params["locale"] = "zh";
+			#endif
+			break;
+		case SystemLanguage.Japanese :
+			m_params["locale"] = "ja";
+			break;
+		case SystemLanguage.Italian :
+			m_params["locale"] = "it";
+			break;
+		case SystemLanguage.Dutch :
+			m_params["locale"] = "nl";
+			break;
+
+		default :
+			m_params["locale"] = "en";
+			break;
+		}
+
+		if( m_topRequest )
+		{
+			m_params["top_request"] = "true";
+		}
+		else
+		{
+			m_params["top_request"] = "false";	
+		}
 		m_method = CallMethod.GET;
 	}
+
+	private bool m_topRequest = false;
 }
 
 // Drawing list request
@@ -949,7 +1094,13 @@ public class SetSubjectsRequest : RequestQueue.Request
 	
 	private void _requestComplete(WWW p_response)
 	{
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+		string l_string = "";
+		
+		l_string = UnicodeDecoder.Unicode(p_response.text);
+		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+		l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
 		
 		Kid l_kidData = new Kid( l_data );
 		l_kidData.requestPhoto();
@@ -984,6 +1135,7 @@ public class SetTimeLimitsRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 }
+
 
 public class SetLanguagesRequest : RequestQueue.Request
 {
@@ -1045,6 +1197,86 @@ public class GetAppByPageRequest : RequestQueue.Request
 	private string m_channel;
 }
 
+//New get app list by page
+public class NewGetAppByPageRequest : RequestQueue.Request
+{
+	public NewGetAppByPageRequest(Kid p_kid, string p_channel,int p_page, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_kid = p_kid;
+		m_channel = p_channel;
+		m_page = p_page;
+		handler += _requestComplete;
+	}
+	
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.REST_APP_RECOMMEND_NEW;
+		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
+		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_kid.age;
+		m_params[ZoodlesConstants.PARAM_PAGE] = m_page;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		string l_locale = l_DI.Call<string>("getLanguage");
+		m_params["locale"] = l_locale.Replace ("_","-");
+		#endif
+		if(null != SessionHandler.getInstance().appOwn)
+			m_params[ZoodlesConstants.PARAM_OWNED_REQUEST] = "false";
+		else
+			m_params[ZoodlesConstants.PARAM_OWNED_REQUEST] = "true";
+		if(null != m_channel)
+			m_params[ZoodlesConstants.PARAM_CHANNEL] = m_channel;
+		m_method = CallMethod.GET;
+	}
+
+	private void _requestComplete(WWW p_response)
+	{
+		if(null == p_response.error)
+		{
+			string l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					Hashtable l_result = l_response["response"] as Hashtable;
+					if(l_result.ContainsKey("app_owned"))
+					{
+						SessionHandler.getInstance().appOwn = l_result["app_owned"] as Hashtable;
+					}
+					if(l_result.ContainsKey("apps"))
+					{
+						ArrayList l_data = l_result["apps"] as ArrayList;
+						int l_dataCount = l_data.Count;
+						Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
+						if(null == m_kid.appList)
+							m_kid.appList = new List<object>();
+						for(int l_i = 0; l_i < l_dataCount; l_i++)
+						{
+							Hashtable l_table = l_data[l_i] as Hashtable;
+							App l_app = new App(l_table);
+							if(null != l_table)
+							{
+								l_app.own = l_appOwn.ContainsKey(l_app.id.ToString());
+							}
+							m_kid.appList.Add(l_app);
+						}
+						//SessionHandler.getInstance().getAppIconByKid(m_kid);
+					}
+				}
+			}
+
+		}
+	}
+	
+	private string m_IsFirst;
+	private Kid m_kid;
+	private int m_page;
+	private string m_channel;
+}
+
 // get app list
 public class GetAppRequest : RequestQueue.Request
 {
@@ -1061,6 +1293,11 @@ public class GetAppRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
 		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_age;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		string l_locale = l_DI.Call<string>("getLanguage");
+		m_params["locale"] = l_locale.Replace ("_","-");
+		#endif
 		if(null != m_channel)
 			m_params[ZoodlesConstants.PARAM_CHANNEL] = m_channel;
 		m_method = CallMethod.GET;
@@ -1084,7 +1321,7 @@ public class GetAppRequest : RequestQueue.Request
 			}
 			l_list.Add(l_app);
 		}
-		SessionHandler.getInstance ().appList = l_list;
+		//SessionHandler.getInstance ().appList = l_list;
 	}
 	
 	private int m_age;
@@ -1094,38 +1331,67 @@ public class GetAppRequest : RequestQueue.Request
 // get book list
 public class GetBookRequest : RequestQueue.Request
 {
-	public GetBookRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public GetBookRequest(string p_pageRequest, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		handler += _requestComplete;
+		m_pageRequest = p_pageRequest;
 	}
 	
 	protected override void init()
 	{
 		m_call = ZoodlesConstants.REST_BOOKS_URL + "/book_list";
-
+		if(!(null == m_pageRequest || string.Empty.Equals(m_pageRequest)))
+			m_params[ZoodlesConstants.PARAM_APP_PAGES] = m_pageRequest;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		string l_locale = l_DI.Call<string>("getLanguage");
+		m_params["locale"] = l_locale.Replace ("_","-");
+		#endif
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_method = CallMethod.GET;
 	}
 	
 	private void _requestComplete(WWW p_response)
 	{
-		string l_string = "";
-
-		l_string = UnicodeDecoder.Unicode(p_response.text);
-		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-		l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
-
-		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
-		int l_dataCount = l_data.Count;
-		List<Book> l_list = new List<Book> ();
-		for(int l_i = 0; l_i < l_dataCount; l_i++)
+		if(null == p_response.error)
 		{
-			Hashtable l_table = l_data[l_i] as Hashtable;
-			Book l_book = new Book(l_table);
-			l_list.Add(l_book);
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					Hashtable l_bookData = l_response["response"] as Hashtable;
+					ArrayList l_own = l_bookData["owned"] as ArrayList;
+					ArrayList l_unown = l_bookData["unowned"] as ArrayList;
+					int l_dataCount = l_own.Count;
+					List<Book> l_list = new List<Book> ();
+					for(int l_i = 0; l_i < l_dataCount; l_i++)
+					{
+						Hashtable l_table = l_own[l_i] as Hashtable;
+						Book l_book = new Book(l_table);
+						l_list.Add(l_book);
+					}
+					l_dataCount = l_unown.Count;
+					for(int l_i = 0; l_i < l_dataCount; l_i++)
+					{
+						Hashtable l_table = l_unown[l_i] as Hashtable;
+						Book l_book = new Book(l_table);
+						l_list.Add(l_book);
+					}
+					SessionHandler.getInstance ().bookList = l_list;
+				}
+			}
+			//SessionHandler.getInstance ().getBookIcon();
 		}
-		SessionHandler.getInstance ().bookList = l_list;
 	}
+
+	private string m_pageRequest;
 }
 
 // get drawing list
@@ -1212,16 +1478,11 @@ public class BuyBookRequest : RequestQueue.Request
 	{
 		UIImage l_lockImage = p_element.getView ("lockImage") as UIImage;
 		UIButton l_buyButton = p_element.getView ("buyBookButton") as UIButton;
-		UIButton l_recordButton = p_element.getView ("recordButton") as UIButton;
 		UILabel l_unlockLabel = p_element.getView ("unlockText") as UILabel;
 		
 		l_lockImage.active = false;
 		l_buyButton.active = false;
 		l_unlockLabel.active = false;
-		if( l_recordButton != null )
-		{
-			l_recordButton.active = true;
-		}
 	}
 
 	private UICanvas m_confirmCanvas;
@@ -1661,9 +1922,12 @@ public class SendPinRequest : RequestQueue.Request
 //Get top recommend app request.
 public class GetTopRecommandRequest : RequestQueue.Request
 {
-	public GetTopRecommandRequest(string p_channel, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public GetTopRecommandRequest(string p_channel,Kid p_kid, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_channel = p_channel;
+		m_kid = p_kid;
+		if(null == p_handler)
+			handler += _requestComplete;
 	}
 	
 	protected override void init()
@@ -1671,14 +1935,36 @@ public class GetTopRecommandRequest : RequestQueue.Request
 		m_call = ZoodlesConstants.GET_TOP_RECOMMEND_APP;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params [ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
-		m_params[ZoodlesConstants.PARAM_KID_AGE] = SessionHandler.getInstance().currentKid.age;
+		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_kid.age;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		string l_locale = l_DI.Call<string>("getLanguage");
+		m_params["locale"] = l_locale.Replace ("_","-");
+		#endif
 		if(null != m_channel)
 			m_params[ZoodlesConstants.PARAM_CHANNEL] = m_channel;
 		m_method = CallMethod.GET;
 	}
 
+	private void _requestComplete(WWW p_response)
+	{
+		if(null == p_response.error && !"null".Equals(p_response.text))
+		{
+			string l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			Hashtable l_hashTable = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			App l_app = new App(l_hashTable);
+			if(l_hashTable.ContainsKey("owned"))
+			{
+				l_app.own = (bool)l_hashTable["owned"];
+			}
+			m_kid.topRecommendedApp = l_app;
+		}
+	}
 	private string m_channel;
+	private Kid m_kid;
 }
+
 
 // create a child
 public class EditChildRequest : RequestQueue.Request
@@ -1702,14 +1988,20 @@ public class EditChildRequest : RequestQueue.Request
 	
 	private void _requestComplete(WWW p_response)
 	{
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+		string l_string = "";
+		
+		l_string = UnicodeDecoder.Unicode(p_response.text);
+		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+		l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
 		Kid l_kid = new Kid(l_data);
 		if (null == SessionHandler.getInstance ().selectAvatar || string.Empty.Equals (SessionHandler.getInstance ().selectAvatar))
 			l_kid.kid_photo = SessionHandler.getInstance ().currentKid.kid_photo;
 		else
 			l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
 		List<Kid> l_list = SessionHandler.getInstance ().kidList;
-		if (null == l_list)
+		if (null != l_list)
 		{
 			int l_count = l_list.Count;
 			for(int l_i = 0; l_i < l_count; l_i++)
@@ -1717,16 +2009,37 @@ public class EditChildRequest : RequestQueue.Request
 				Kid l_currentKid = l_list[l_i] as Kid;
 				if(l_currentKid.id == l_kid.id)
 				{
-					SessionHandler.getInstance().kidList[l_i] = l_kid;
+					SessionHandler.getInstance().kidList[l_i].name = l_kid.name;
+					SessionHandler.getInstance().kidList[l_i].birthday = l_kid.birthday;
+					SessionHandler.getInstance().kidList[l_i].kid_photo = l_kid.kid_photo;
+					string birthday = l_kid.birthday;
+					
+					int l_age = 0;
+					DateTime l_date = DateTime.Parse (birthday);
+					l_age = DateTime.Now.Year - l_date.Year;
+					DateTime l_now = DateTime.Now;
+					
+					if( l_now.Month < l_date.Month )
+					{
+						l_age--;
+					}
+					else if( l_now.Month == l_date.Month && l_now.Day < l_date.Day )
+					{
+						l_age--;
+					}
+					SessionHandler.getInstance().kidList[l_i].age = l_age;
+					
+					SessionHandler.getInstance ().currentKid = SessionHandler.getInstance().kidList[l_i];
+					SessionHandler.getInstance ().getSingleKidApplist (SessionHandler.getInstance ().currentKid);
+					break;
 				}
 			}
 		}
-		SessionHandler.getInstance ().currentKid = l_kid;
 		SessionHandler.getInstance ().inputedChildName = string.Empty;
 		SessionHandler.getInstance ().inputedbirthday = string.Empty;
 		SessionHandler.getInstance ().selectAvatar = null;
 	}
-	
+
 	private string m_name;
 	private string m_birthday;
 }
@@ -1862,4 +2175,91 @@ public class PaymentRequest : RequestQueue.Request
 	private string m_cardNumber;
 	private string m_cardMonth;
 	private string m_cardYear;
+}
+
+public class PremiumDetailsRequest : RequestQueue.Request
+{
+	public PremiumDetailsRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{}
+	
+	protected override void init()
+	{
+		m_call = "/api/subscriptions/premium_detail";
+		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_method = CallMethod.GET;
+	}
+}
+
+public class CheckFreePremiumRequest : RequestQueue.Request
+{
+	public CheckFreePremiumRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{}
+	
+	protected override void init()
+	{
+		m_call = "/api/clients/check_free_premium";
+		m_params [ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
+		m_method = CallMethod.GET;
+	}
+}
+
+public class PurchaseGemsRequest : RequestQueue.Request
+{
+	public PurchaseGemsRequest(string p_package, string p_orderId, string p_SKU, string p_purchaseToken, string p_developerPayload, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_orderId = p_orderId;
+		m_SKU = p_SKU;
+		m_purchaseToken = p_purchaseToken;
+		m_developerPayload = p_developerPayload;
+	}
+
+	protected override void init()
+	{
+		m_call = "/api/purchase/check_purchase_gem";
+		m_params[ZoodlesConstants.IAB_PACKAGE] = m_package;
+		m_params[ZoodlesConstants.IAB_ORDER_ID] = m_orderId;
+		m_params[ZoodlesConstants.IAB_SKU] = m_SKU;
+		m_params[ZoodlesConstants.IAB_PURCHASE_TOKEN] = m_purchaseToken;
+		m_params[ZoodlesConstants.IAB_DEVELOPER_PAYLOAD] = m_developerPayload;
+		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_method = CallMethod.POST;
+	}
+
+	private string m_package = "";
+	private string m_orderId = "";
+	private string m_SKU = "";
+	private string m_purchaseToken = "";
+	private string m_developerPayload = "";
+}
+
+public class CheckAccountRequest : RequestQueue.Request
+{
+	public CheckAccountRequest(string p_username, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_username = p_username;
+	}
+
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.CHECK_USERNAME;
+		m_params [ZoodlesConstants.PARAM_EMAIL] = m_username;
+	}
+
+	private string m_username;
+}
+
+public class GetBookByIdRequest : RequestQueue.Request
+{
+	public GetBookByIdRequest(int p_id,RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_bookId = p_id;
+	}
+	
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.REST_BOOKS_URL+"/"+m_bookId;
+		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+	}
+	
+	private int m_bookId;
 }

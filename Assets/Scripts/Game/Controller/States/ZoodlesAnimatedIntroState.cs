@@ -14,7 +14,7 @@ public class ZoodlesAnimatedIntroState : GameState
 	{
 		base.enter(p_gameController);
 		
-		Application.targetFrameRate = 60;
+		Application.targetFrameRate = 30;
 		m_isFinished = false;
 		m_hasPlayedSound = false;
 		m_timeFinished = 0;

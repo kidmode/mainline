@@ -23,9 +23,17 @@ public class LoadingEntranceState : GameState
 		_setupScreen( p_gameController.getUI() );
       
 		KidMode.setKidsModeActive(true);
+		SessionHandler.getInstance().resetKidCache();
+
+		m_triggerNextScreen = false;
+
+		RequestQueue l_request = new RequestQueue ();
+		l_request.add (new GetKidRequest(SessionHandler.getInstance().currentKid.id, onRequestComplete));
+		l_request.request ();
 
 		m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
-		l_game.StartCoroutine( _tweenFillBar( 1.0f, 1.25f ) );
+
+		l_game.user.contentCache.startRequests();
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
@@ -108,22 +116,41 @@ public class LoadingEntranceState : GameState
 		m_loadingLabel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f, onLoadingFadeInFinish );
 	}
 	
-	private IEnumerator _tweenFillBar( float p_filledAmount, float p_duration )
+	private void onRequestComplete(WWW p_response)
 	{
-		float l_time = 0;
-		while( l_time < p_duration )
+		if (p_response.error != null)
+			m_gameController.changeState(ZoodleState.SERVER_ERROR);
+		else
 		{
-			//float l_fillAmount = Mathf.Lerp( 0, p_filledAmount, l_time / p_duration );
+			string l_string = "";
 			
-			l_time += Time.deltaTime;
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Kid l_currentKid = new Kid(l_data);
+			l_currentKid.requestPhoto();
 			
-			yield return new WaitForEndOfFrame();
+			SessionHandler.getInstance().currentKid = l_currentKid;
+			
+			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
+			for (int i = 0; i < l_kidList.Count; ++i)
+			{
+				if (l_kidList[i].id == l_currentKid.id)
+				{
+					if(null != l_kidList[i].appList)
+						l_currentKid.appList = l_kidList[i].appList;
+					if(null != l_kidList[i].topRecommendedApp)
+						l_currentKid.topRecommendedApp = l_kidList[i].topRecommendedApp;
+					l_kidList[i] = l_currentKid;
+					break;
+				}
+			}
 		}
 
 		m_triggerNextScreen = true;
-		yield return null;
 	}
-
 
 	//Private variables
 	private bool m_triggerNextScreen = false;

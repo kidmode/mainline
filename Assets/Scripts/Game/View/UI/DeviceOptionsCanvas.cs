@@ -6,6 +6,9 @@ public class DeviceOptionsCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+		
+		SetupLocalizition ();
+
 		m_sliderArea = getView ("sliderArea");
 		m_allowIncomingCall = getView ("smartSelect");
 		m_displayHelpFulTips = getView ("addApp");
@@ -43,6 +46,29 @@ public class DeviceOptionsCanvas : UICanvas
 		m_sliderArea.active = true;
 		m_allowIncomingCall.active = true;
 		m_displayHelpFulTips.active = true;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView("topText") as UILabel;
+		UILabel l_master = getView("masterText") as UILabel;
+		UILabel l_music = getView("musicText") as UILabel;
+		UILabel l_effects = getView("effectsText") as UILabel;
+		UILabel l_call = getView("AllowCallButton").getView("titleText") as UILabel;
+		UILabel l_tips = getView("tipButton").getView("titleText") as UILabel;
+		UILabel l_refresh = getView("refreshButton").getView("purchaseBtnText") as UILabel;
+		UILabel l_update = getView("noticePanel").getView("noticeText") as UILabel;
+		UILabel l_close = getView("noticePanel").getView("closelText") as UILabel;
+		
+		l_top.text = Localization.getString( Localization.TXT_49_LABEL_TOP );
+		l_master.text = Localization.getString( Localization.TXT_49_LABEL_MASTER );
+		l_music.text = Localization.getString( Localization.TXT_49_LABEL_MUSIC );
+		l_effects.text = Localization.getString( Localization.TXT_49_LABEL_EFFECTS );
+		l_call.text = Localization.getString( Localization.TXT_49_LABEL_CALL );
+		l_tips.text = Localization.getString( Localization.TXT_49_LABEL_TIPS );
+		l_refresh.text = Localization.getString( Localization.TXT_49_LABEL_REFRESH );
+		l_update.text = Localization.getString( Localization.TXT_49_LABEL_UPDATE);
+		l_close.text = Localization.getString( Localization.TXT_49_LABEL_CLOSE );
 	}
 
 	private UIElement m_sliderArea;

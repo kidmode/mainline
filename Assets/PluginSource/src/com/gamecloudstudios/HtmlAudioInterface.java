@@ -21,7 +21,7 @@ public class HtmlAudioInterface
 	@JavascriptInterface
 	public void playSound(String p_url, String p_isLooping, String p_volume)
 	{		
-		Log.v("sound request", p_url + " " + p_volume + " " + p_isLooping);
+//		Log.v("sound request", p_url + " " + p_volume + " " + p_isLooping);
 		boolean l_isLooping = p_isLooping.equals("true");
 		float l_volume = Float.parseFloat(p_volume);
 		

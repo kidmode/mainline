@@ -9,26 +9,13 @@ public class VideoActivityCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
-		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
-
-        UILabel l_allVideosLabel = getView("allContentLabel") as UILabel;
-        l_allVideosLabel.text = Localization.getString(Localization.TXT_TAB_ALL_VIDEOS);
-
-        //UILabel l_featuredVideoLabel = getView("featuredLabel") as UILabel;
-        //l_featuredVideoLabel.text = Localization.getString(Localization.TXT_LABEL_FEATURED_VIDEOS);
-
-        //UILabel l_videoLabel = getView("contentLabel") as UILabel;
-        //l_videoLabel.text = Localization.getString(Localization.TXT_LABEL_VIDEOS);
-
-        UILabel l_favorateLabel = getView("favorateLabel") as UILabel;
-        l_favorateLabel.text = Localization.getString(Localization.TXT_TAB_FAVORITES);
-
-
-        UIToggle l_favorateTab = getView("favorateTab") as UIToggle;
-        l_favorateTab.addValueChangedCallback(onFeaturedToggled);
-
-        UIToggle l_allContentTab = getView("allContentTab") as UIToggle;
-        l_allContentTab.addValueChangedCallback(onAllToggled);
+//		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+		
+		UIToggle l_favorateTab = getView("favorateTab") as UIToggle;
+		l_favorateTab.addValueChangedCallback(onFeaturedToggled);
+		
+		UIToggle l_allContentTab = getView("allContentTab") as UIToggle;
+		l_allContentTab.addValueChangedCallback(onAllToggled);
 
         m_videoSwipeList = getView("allContentScrollView") as UISwipeList;
 
@@ -37,8 +24,12 @@ public class VideoActivityCanvas : UICanvas
 
 		m_videoInfo = getView("info") as UILabel;
 		m_videoFavorateInfo = getView("favoriteInfo") as UILabel;
+		
+		m_emptyTexture = new Texture2D (1, 1);
 
 		_setupList();
+
+		SetupLocalizition ();
 	}
 	
 	public override void enteringTransition()
@@ -103,7 +94,7 @@ public class VideoActivityCanvas : UICanvas
 
 		if( l_info.icon == null )
 		{
-			l_rawImage.setTexture( new Texture2D(1, 1) );
+			l_rawImage.setTexture( m_emptyTexture );
 		}
 		else
 		{
@@ -130,10 +121,29 @@ public class VideoActivityCanvas : UICanvas
         m_videoFavorateSwipeList.redraw();
 	}
 
+	private void SetupLocalizition()
+	{		
+		UILabel l_allVideosLabel 	= getView("allContentLabel") as UILabel;
+		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_infoLabel 		= getView("info") as UILabel;
+		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
+		UILabel l_headerLabel 		= getView("header") as UILabel;
+
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allVideosLabel.text 		= Localization.getString(Localization.TXT_TAB_ALL_VIDEOS);
+//		l_infoLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_INFO);
+//		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
+		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_headerLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_HEADER);
+	}
+
     private UISwipeList     m_videoSwipeList;
     private UISwipeList     m_videoFavorateSwipeList;
 	private UILabel			m_videoFavorateInfo;
 	private UILabel 		m_videoInfo;
 
 	private List< Button > 	m_buttonList;
+	
+	private Texture2D m_emptyTexture;
 }

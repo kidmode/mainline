@@ -33,6 +33,7 @@ public class UIScreen
 	public const int DASHBOARD_COMMON 			= 26;
 	public const int APP_INFO		 			= 27;
 	public const int LEFT_MENU 					= 28;
+
 	public const int PLAN_DEATILS				= 30;
 	public const int CANCEL_SUB					= 31;
 	public const int ERROR						= 32;
@@ -53,7 +54,9 @@ public class UIScreen
 	public const int COMMON_DIALOG				= 47;
 	public const int FAQ_SCREEN					= 48;
 	public const int DEVICE_OPTIONS_SCREEN		= 49;
+
 	public const int KIDS_PROFILE	 	 		= 51;
+
 	public const int PROFILE_ACTIVE	 	 		= 54;
 	public const int DASHBOARD_CONTROLLER 		= 55;
 	public const int DASHBOARD_INFO 			= 56;
@@ -97,9 +100,16 @@ public class UIScreen
 	public const int TELL_FRIEND 				= 94;
 	public const int CONNECTION_ERROR			= 95;
 	public const int ADD_FRIEND					= 96;
-
 	public const int PAYWALL 					= 97;
 	public const int DASHBOARD_READING 			= 98;
+	public const int CREATE_CHILD_NEW 			= 99;
+	public const int SIGN_IN_FREE 				= 100;
+	public const int PANEL_MARKETING_SCREEN 	= 101;
+	public const int SIGN_UP_AFTER_INPUT_CREDITCARD = 102;
+	public const int TRIAL_MESSAGE 				= 103;
+	public const int CONGRATURATION				= 104;
+	public const int PREMIUM_ELIGIBLE 			= 105;
+	public const int PAY_GEMS_COMFIRM			= 106;
 }
 
 
@@ -149,6 +159,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.BUY_GEMS,					SCREEN_DIRECTORY + "Upsell/UpsellGemsScreen"   );
 		m_directoryMap.Add( UIScreen.PAYMENT,					SCREEN_DIRECTORY + "Upsell/UpsellPaymentScreen");
 		m_directoryMap.Add( UIScreen.PAY_CONFIRM,				SCREEN_DIRECTORY + "Upsell/PaymentConfirmation");
+		m_directoryMap.Add( UIScreen.PAY_GEMS_COMFIRM,			SCREEN_DIRECTORY + "Upsell/PaymentGemsConfirmation");
 		m_directoryMap.Add( UIScreen.THANK,						SCREEN_DIRECTORY + "DashBoard/Setting/Dialog/ThankDialogScreen");
 		m_directoryMap.Add( UIScreen.SIGN_OUT,					SCREEN_DIRECTORY + "DashBoard/Setting/Dialog/SignOutScreen");
 		m_directoryMap.Add( UIScreen.SENT_FEED_BACK,			SCREEN_DIRECTORY + "DashBoard/Setting/Dialog/SendFeedbackScreen");
@@ -172,7 +183,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.PROMOTE_LANGUAGES,			SCREEN_DIRECTORY + "DashBoard/Profile/Controls/PromoteLanguagesScreen");
 		m_directoryMap.Add( UIScreen.TIME_LIMITS,				SCREEN_DIRECTORY + "DashBoard/Profile/Controls/TimeLimitsScreen");
 		m_directoryMap.Add( UIScreen.VIOLENCE_FILTERS,			SCREEN_DIRECTORY + "DashBoard/Profile/Controls/ViolenceFiltersScreen");
-		m_directoryMap.Add( UIScreen.SIGIN_UP_UPSELL,			SCREEN_DIRECTORY + "CreatAccountUpSellScreen");
+		m_directoryMap.Add( UIScreen.SIGIN_UP_UPSELL,			SCREEN_DIRECTORY + "CreateAccountUpSellScreen");
 		m_directoryMap.Add( UIScreen.UPSELL_CONGRATURATION,		SCREEN_DIRECTORY + "UpsellCongratulationScreen");
 		m_directoryMap.Add( UIScreen.STAR_CHART,				SCREEN_DIRECTORY + "DashBoard/Profile/StarChart/StarChartScreen");
 		m_directoryMap.Add( UIScreen.RECOMMENDED_APP,			SCREEN_DIRECTORY + "DashBoard/Profile/Overview/RecommendedAppScreen");
@@ -208,7 +219,14 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 		m_directoryMap.Add( UIScreen.PAYWALL,					SCREEN_DIRECTORY + "DashBoard/PremiumPaywallScreen");
 		m_directoryMap.Add( UIScreen.DASHBOARD_READING,			SCREEN_DIRECTORY + "DashBoard/Profile/Overview/RecordAReadingScreen");
-}
+		m_directoryMap.Add( UIScreen.CREATE_CHILD_NEW,			SCREEN_DIRECTORY + "NewCreateChildScreen"      );
+		m_directoryMap.Add( UIScreen.SIGN_IN_FREE,				SCREEN_DIRECTORY + "SignInFreeScreen");
+		m_directoryMap.Add( UIScreen.TRIAL_MESSAGE,				SCREEN_DIRECTORY + "TrialMessageScreen");
+		m_directoryMap.Add( UIScreen.PANEL_MARKETING_SCREEN,	SCREEN_DIRECTORY + "PanelMarketingScreen"      );
+		m_directoryMap.Add( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD,	SCREEN_DIRECTORY + "SetAccountScreen"  );
+		m_directoryMap.Add( UIScreen.CONGRATURATION,			SCREEN_DIRECTORY + "CongraturationScreen"  );
+		m_directoryMap.Add( UIScreen.PREMIUM_ELIGIBLE,			SCREEN_DIRECTORY + "PremiumEligibleScreen"  );
+	}
 
 	public Dictionary<int,string> getDirectoryMap()
 	{
@@ -224,12 +242,16 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.SPLASH_BACKGROUND:	return new SplashBackCanvas() 		as UICanvas;
 			case UIScreen.PROFILE_SELECTION:	return new ProfileCanvas() 			as UICanvas;
 			case UIScreen.ENTRANCE:				return new EntranceCanvas() 		as UICanvas;
+			case UIScreen.LOADING_ENTRANCE:		return new LoadingEntranceCanvas() 	as UICanvas;
 			case UIScreen.CORNER_PROFILE_INFO:	return new CornerProfileCanvas() 	as UICanvas;
+			case UIScreen.MAP:					return new MapCanvas() 				as UICanvas;
+			case UIScreen.REGION_LANDING:		return new RegionLandingCanvas() 	as UICanvas;
 			case UIScreen.ACTIVITY_PANEL:		return new ActivityPanelCanvas() 	as UICanvas;
 			case UIScreen.VIDEO_ACTIVITY:		return new VideoActivityCanvas() 	as UICanvas;
 			case UIScreen.GAME_ACTIVITY:		return new GameActivityCanvas() 	as UICanvas;
 			case UIScreen.BOOK_ACTIVITY:		return new BookActivityCanvas() 	as UICanvas;
 			case UIScreen.ZOODLES_INTRO:		return new ZoodlesIntroCanvas() 	as UICanvas;
+			case UIScreen.PAINT_ACTIVITY:		return new PaintActivityCanvas() 	as UICanvas;
 			case UIScreen.SET_ACCOUNT: 			return new SetAccountCanvas()   	as UICanvas;
 			case UIScreen.BOOK_READER:		    return new BookReaderCanvas() 	    as UICanvas;
 			case UIScreen.BOOK_PAGE:		    return new BookPageCanvas() 	    as UICanvas;
@@ -255,6 +277,8 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.THANK:		   		return new ThankCanvas()	  	  	  as UICanvas;
 			case UIScreen.SIGN_OUT:		   		return new SignOutConfirmCanvas()	  as UICanvas;
 			case UIScreen.SENT_FEED_BACK:  		return new SentFeedBackCanvas()	  	  as UICanvas;
+			case UIScreen.HOME_RESET:  			return new ResetHomeCanvas()	  	  as UICanvas;
+			case UIScreen.HOME_REQUEST:  		return new RequestHomeCanvas()	  	  as UICanvas;
 			case UIScreen.CHILD_LOCK_SCREEN:  	return new ChildLockCanvas()	  	  as UICanvas;
 			case UIScreen.NOTIFICATION:  		return new SettingNotificationCanvas() as UICanvas;
 			case UIScreen.SETTING_COMMON:  		return new SettingCommonCanvas()  	  as UICanvas;
@@ -265,6 +289,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.PROFILE_ACTIVE: 		return new ProfileActivityCanvas() 		as UICanvas;
 			case UIScreen.DASHBOARD_CONTROLLER: return new DashBoardControllerCanvas() 	as UICanvas;
 			case UIScreen.DASHBOARD_INFO: 		return new DashBoardProfileInfoCanvas() as UICanvas;
+			case UIScreen.SIGN_IN_UPSELL: 		return new SignInUpSellCanvas() 		as UICanvas;
 			case UIScreen.DASHBOARDL_PROGRESS: 	return new OverallProgressCanvas() 		as UICanvas;
 			case UIScreen.TIME_SPEND: 			return new TimeSpendCanvas() 			as UICanvas;
 			case UIScreen.PROMOTE_SUBJECTS: 	return new PromoteSubjectsCanvas() 		as UICanvas;
@@ -291,6 +316,9 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.RECORD_START: 		return new RecordStartCanvas() 			as UICanvas;
 			case UIScreen.RECORD_AGAIN: 		return new RecordAgainCanvas() 			as UICanvas;
 			case UIScreen.RECORD_FINISH: 		return new RecordFinishCanvas() 		as UICanvas;
+			case UIScreen.CONGRATS: 			return new CongratsCanvas() 			as UICanvas;
+			case UIScreen.PROFILE_VIEW: 		return new ProfileViewCanvas() 			as UICanvas;
+			
 			case UIScreen.CHILD_LOCK_HELP: 		return new ChildLockHelpCanvas() 		as UICanvas;
 
 			case UIScreen.FAQ_DIALOG: 			return new FAQDialogCanvas() 			as UICanvas;
@@ -304,6 +332,15 @@ public class ZoodlesScreenFactory : IScreenFactory
 			
 			case UIScreen.PAYWALL: 				return new PaywallCanvas() 				as UICanvas;
 			case UIScreen.DASHBOARD_READING: 	return new RecordAReadingCanvas() 		as UICanvas;
+
+			case UIScreen.CREATE_CHILD_NEW: 	return new CreateChildCanvas() 			as UICanvas;
+			case UIScreen.SIGN_IN_FREE: 		return new SignInFreeCanvas() 			as UICanvas;
+			case UIScreen.TRIAL_MESSAGE: 		return new TrialMessageCanvas() 		as UICanvas;
+			case UIScreen.PANEL_MARKETING_SCREEN: return new PanelMarkingScreenCanvas() as UICanvas;
+			case UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD: return new SignUpAfterInoutCreditCardCanvas() as UICanvas;
+			case UIScreen.CONGRATURATION:		 return new CongratulationCanvas() 		as UICanvas;
+			case UIScreen.PREMIUM_ELIGIBLE:		 return new PremiumEligibleCanvas() 	as UICanvas;
+
 		}
 		return new UICanvas();
 	}

@@ -65,7 +65,7 @@ public class GotoParentDashboardState: GameState
 				}
 				else
 				{
-					setErrorMessage(p_gameController, "error"," Pin inexistence. Please reLogin.");
+					setErrorMessage(p_gameController,Localization.getString( Localization.TXT_STATE_1_ERROR ),Localization.getString( Localization.TXT_STATE_64_PIN_ERROR ));
 				}
 			}
 			else

@@ -38,7 +38,8 @@ public class BookReaderState : GameState {
 		
 		_setupElements();
 		
-		_loadFirstPage();
+//		_loadFirstPage();
+		_loadPage (0);
 		
 		SoundManager.getInstance().stopMusic();
 
@@ -65,8 +66,15 @@ public class BookReaderState : GameState {
 			int l_nextState = p_gameController.getConnectedState(ZoodleState.BOOK_ACTIVITY);
 			if (l_nextState != 0)
 			{
-				p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
-				p_gameController.changeState( ZoodleState.CONGRATS_STATE );
+				if(l_nextState == ZoodleState.OVERVIEW_BOOK)
+				{
+					p_gameController.changeState( l_nextState );
+				}
+				else
+				{
+					p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
+					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
+				}
 			}
 		}
 
@@ -79,7 +87,7 @@ public class BookReaderState : GameState {
 				if( m_length > m_currentPageAudio.length )
 				{
 					m_isRunning = false;
-					m_statusLabel.text = "Finish";
+					m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_FINISH);
 					m_timeSlider.value = 1;
 				}
 			}
@@ -87,10 +95,10 @@ public class BookReaderState : GameState {
 		else
 		{
 			if(!m_isPlayed 
-			   && null != m_bookReading
+//			   && null != m_bookReading
 			   && null != m_book
 			   && null != currentPage
-			   && File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav") )
+			   && File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav") )
 			{
 				m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
 			}
@@ -111,16 +119,16 @@ public class BookReaderState : GameState {
 		
 		SessionHandler.getInstance ().recordKidList = null;
 
-		for( int i = 0; i < m_book.pageList.Count; i++ )
-		{
-			if(null != m_book
-			   	&& null != m_bookReading
-			   	&& null != m_book.pageList
-				&& File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + m_book.pageList[i].id + ".wav"))
-			{
-				File.Delete(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + m_book.pageList[i].id + ".wav");
-			}
-		}
+//		for( int i = 0; i < m_book.pageList.Count; i++ )
+//		{
+//			if(null != m_book
+//			   	&& null != m_bookReading
+//			   	&& null != m_book.pageList
+//				&& File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + m_book.pageList[i].id + ".wav"))
+//			{
+//				File.Delete(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + m_book.pageList[i].id + ".wav");
+//			}
+//		}
 
 		GAUtil.logVisit("Book", m_duration);
 	}
@@ -148,6 +156,9 @@ public class BookReaderState : GameState {
 		get
 		{
 			if( currentPage == null )
+				return null;
+
+			if( m_bookReading == null )
 				return null;
 
 			return m_bookReading.readingPageTable[currentPage.id] as BookReadingPage;
@@ -188,17 +199,17 @@ public class BookReaderState : GameState {
 		
 		
 		m_timeSlider.value = 0;
-		m_statusLabel.text = "Loading";
+		m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_LOADING);
 		
 		_loadCurrentPageContent();
-		if(m_bookReading != null)
-		{
-			_loadCurrentAudio ();
-		}
-		else
-		{
-			m_statusLabel.text = "Not Recorded";
-		}
+//		if(m_bookReading != null)
+//		{
+		_loadCurrentAudio ();
+//		}
+//		else
+//		{
+//			m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_NOTRECORDED);
+//		}
 		_setPageContent();
 	}
 	
@@ -208,23 +219,24 @@ public class BookReaderState : GameState {
 
 		pageIndex = p_index;
 		m_timeSlider.value = 0;
-		m_statusLabel.text = "Loading";
+		m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_LOADING);
 		m_isPlayed = false;
 
-		if( m_bookReading != null )
+
+		if( File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav") )
 		{
-			if( File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav") )
-			{
-				m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
-			}
-			else
-			{
-				_loadCurrentAudio ();
-			}
+			m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
 		}
 		else
 		{
-			m_statusLabel.text = "Not Recorded";
+			if( m_bookReading != null )
+			{
+				_loadCurrentAudio ();
+			}
+			else
+			{
+				m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_NOTRECORDED);
+			}
 		}
 
 		_loadCurrentPageContent();
@@ -250,16 +262,16 @@ public class BookReaderState : GameState {
 			yield break;
 		}
 
-		if( null == currentBookReadingPage )
-		{
-			_Debug.logError( "No BookReadingPage for current page" );
-			yield break;
-		}
+//		if( null == currentBookReadingPage )
+//		{
+//			_Debug.logError( "No BookReadingPage for current page" );
+//			yield break;
+//		}
 		
-		if( File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav") )
+		if( File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav") )
 		{
 			setInputEnable(false);
-			WWW l_localAudio = new WWW("file:///" + Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav");
+			WWW l_localAudio = new WWW("file:///" + Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav");
 			yield return l_localAudio;
 			setInputEnable(true);
 			if( pageIndex <= 0 )
@@ -283,13 +295,13 @@ public class BookReaderState : GameState {
 
 		if (m_currentPageAudio == null)
 		{
-			m_statusLabel.text = "Loading";
+			m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_LOADING);
 			_Debug.logError("Audio Clip for page: " + p_index + " is null!");
 			yield break;
 		}
 		
 		m_timeSlider.value = 0;
-		m_statusLabel.text = "Playing";
+		m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_PLAYING);
 		m_isRunning = true;
 		m_length = 0;
 		m_totalLength = m_currentPageAudio.length;
@@ -311,7 +323,7 @@ public class BookReaderState : GameState {
 		m_length = 0;
 		m_totalLength = 0;
 		m_timeSlider.value = 1;
-		m_statusLabel.text = "Finish";
+		m_statusLabel.text = Localization.getString(Localization.TXT_STATE_10_FINISH);
 	}
 	
 	private void _loadCurrentPageContent( )
@@ -322,15 +334,15 @@ public class BookReaderState : GameState {
 
 	private void _loadCurrentAudio( )
 	{
-		if(File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav"))
+		if(File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav"))
 		{
-			File.Delete(Application.persistentDataPath + "//" +  m_book.id + "//" + m_bookReading.id + "//" + currentPage.id + ".wav");
+			File.Delete(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav");
 		}
 		
 		string l_url    = currentBookReadingPage.audioUrl;
 		_Debug.log("URL: " + l_url);
 		RequestQueue l_queue = new RequestQueue();
-		l_queue.add(new AudioRequest(l_url, m_book.id, m_bookReading.id, currentPage.id));
+		l_queue.add(new AudioRequest(l_url, m_book.id, currentPage.id));
 		l_queue.request(RequestType.RUSH);
 	}
 	

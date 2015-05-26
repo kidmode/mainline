@@ -37,30 +37,55 @@ public class SignInState : GameState
 			break;
 		case SubState.LOADING:
 			m_signInCanvas.active = false;
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 2);
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 3);
 			m_subState = SubState.NONE;
 			break;
 		}
 
 		if (m_loginSuccess)
 		{
+			m_loginSuccess = false;
 			if (SessionHandler.getInstance().hasPin)
 			{
 				if (LocalSetting.find("User").getBool("UserTry",true))
 				{
-					if (null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
+					if( SessionHandler.getInstance().token.isCurrent() )
 					{
-						p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+						if( SessionHandler.getInstance().token.isPremium() )
+						{
+							if (null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
+							{
+								p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+							}
+							else
+							{
+								m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+								p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
+							}
+						}
+						else
+						{
+							m_queue.reset();
+							m_queue.add( new PremiumDetailsRequest( onGetDetailsComplete ) );
+							m_queue.request( RequestType.SEQUENCE );
+						}
 					}
 					else
 					{
-						m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-						p_gameController.changeState(ZoodleState.CREATE_CHILD);
+						m_messageText		 = m_trialMessageCanvas.getView ("messageText") as UILabel;
+						m_messageText.text = Localization.getString (Localization.TXT_103_LABEL_EXPIRED);
+						m_continueText.text = Localization.getString (Localization.TXT_103_BUTTON_NOTHANKS);
+
+						UIElement l_panel = m_trialMessageCanvas.getView( "mainPanel" );
+						List<Vector3> l_pointListIn = new List<Vector3>();
+						l_pointListIn.Add( l_panel.transform.localPosition );
+						l_pointListIn.Add( l_panel.transform.localPosition + new Vector3( 0, 800, 0 ));
+						l_panel.tweener.addPositionTrack( l_pointListIn, 0f );
 					}
 				}
 				else
 				{
-					p_gameController.changeState(ZoodleState.SIGN_UP_UPSELL);
+					p_gameController.changeState(ZoodleState.SIGN_IN_FREE);
 				}
 			}
 			else
@@ -87,8 +112,9 @@ public class SignInState : GameState
 	{
 		base.exit(p_gameController);
 
-		p_gameController.getUI().removeScreen(UIScreen.SIGN_IN);
-		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreenImmediately(UIScreen.SIGN_IN);
+		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreenImmediately(UIScreen.TRIAL_MESSAGE);
 	}
 	
 	//---------------- Private Implementation ----------------------
@@ -101,7 +127,8 @@ public class SignInState : GameState
 			m_signInButtonBackgroundCanvas = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND, true, -1) as SplashBackCanvas;
 			m_signInButtonBackgroundCanvas.setDown();
 		}
-		
+
+		m_trialMessageCanvas = p_uiManager.createScreen(UIScreen.TRIAL_MESSAGE, false, 2);
 		m_signInCanvas = p_uiManager.createScreen(UIScreen.SIGN_IN, true, 1);
 		
 		m_backButton = m_signInCanvas.getView("exitButton") as UIButton;
@@ -120,10 +147,85 @@ public class SignInState : GameState
 		m_closeDialogButton = m_dialog.getView ("closeMark") as UIButton;
 		m_closeDialogButton.addClickCallback (closeDialog);
 
+		m_subscriptionButton = m_trialMessageCanvas.getView ("subscriptionButton") 	as UIButton;
+		m_continueButton	 = m_trialMessageCanvas.getView ("continueButton") 		as UIButton;
+		m_exitButton		 = m_trialMessageCanvas.getView ("exitButton") 			as UIButton;
+		m_messageText		 = m_trialMessageCanvas.getView ("messageText") 		as UILabel;
+		m_continueText		 = m_trialMessageCanvas.getView ("continueText") 		as UILabel;
+
+		m_subscriptionButton.addClickCallback ( onSubscriptionClick );
+		m_continueButton.addClickCallback ( onContinueClick );
+		m_exitButton.addClickCallback ( onContinueClick );
+
 		#if UNITY_ANDROID
 		m_addressText = m_signInCanvas.getView("emailAddressText") as UILabel;
 		m_passwordText = m_signInCanvas.getView("passwordText") as UILabel;
 		#endif
+	}
+
+	private void onGetDetailsComplete(WWW p_response)
+	{
+		if( null == p_response.error )
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
+
+			int l_trialDays = (int)((double)l_data["trial_days"]);
+
+			m_messageText.text = string.Format(Localization.getString (Localization.TXT_103_LABEL_TRIALDAY),l_trialDays);
+			m_continueText.text = Localization.getString (Localization.TXT_103_BUTTON_CONTINUE_TRIAL);
+
+			
+			UIElement l_panel = m_trialMessageCanvas.getView( "mainPanel" );
+			List<Vector3> l_pointListIn = new List<Vector3>();
+			l_pointListIn.Add( l_panel.transform.localPosition );
+			l_pointListIn.Add( l_panel.transform.localPosition + new Vector3( 0, 800, 0 ));
+			l_panel.tweener.addPositionTrack( l_pointListIn, 0f );
+		}
+	}
+
+	private void onSubscriptionClick(UIButton p_button)
+	{
+		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
+		{
+			Server.init (ZoodlesConstants.getHttpsHost());
+			m_queue.reset ();
+			m_queue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
+			m_queue.request ( RequestType.SEQUENCE );
+		}
+		else
+		{
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+		}
+	}
+	
+	private void viewPremiumRequestComplete(WWW p_response)
+	{
+		Server.init (ZoodlesConstants.getHost());
+		if(null == p_response.error)
+		{
+			SessionHandler.getInstance ().PremiumJson = p_response.text;
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+		}
+		else
+		{
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
+		}
+	}
+	
+	private void onContinueClick(UIButton p_button)
+	{
+		if (null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
+		{
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+		}
+		else
+		{
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
+		}
 	}
 
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
@@ -148,20 +250,62 @@ public class SignInState : GameState
 		m_signInButton.addClickCallback (toCreateChildrenScreen);
 	}
 
-	private void getClientIdComplete(WWW p_response)
+//	private void getClientIdComplete(WWW p_response)
+//	{
+//		if(p_response.error == null)
+//		{
+//			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+//
+//			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
+////			SessionHandler.getInstance ().clientId = 1203;
+//		}
+//		else
+//		{
+//			m_queue.reset();
+//			invokeDialog("Login Failed","Please retry your password.");
+//		}
+//	}
+	private void checkUsernameRequestComplete(WWW p_response)
 	{
-		if(p_response.error == null)
+		if(null == p_response.error)
 		{
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-
-			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
-//			SessionHandler.getInstance ().clientId = 1203;
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					Hashtable l_bookData = l_response["response"] as Hashtable;
+					if(l_bookData.ContainsKey("validate"))
+					{
+						bool l_validate = (bool)l_bookData["validate"];
+						if(l_validate)
+						{
+							invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_USERNAME));
+						}
+						else
+						{
+							m_queue.reset ();
+							m_queue.add(new LoginRequest(m_account.text.Trim(),m_password.text,loginRequestComplete));
+							m_queue.request(RequestType.SEQUENCE);
+						}
+					}
+					else
+					{
+						invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
+					}
+				}
+			}
+			else
+			{
+				invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
+			}
 		}
 		else
 		{
-			m_queue.reset();
-			invokeDialog("Login Failed","Please retry your password.");
+			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
 		}
+
 	}
 
 	private void loginRequestComplete(WWW p_response)
@@ -171,7 +315,7 @@ public class SignInState : GameState
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 			if(l_data.ContainsKey("jsonResponse"))
 			{
-				invokeDialog("Login Failed","Please retry your password.");
+				invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
 			}
 			else
 			{
@@ -182,7 +326,7 @@ public class SignInState : GameState
 				int l_vpc = l_data.ContainsKey("vpc_level") ? int.Parse(l_data["vpc_level"].ToString()) : 0;
 				//on trial
 				bool l_tried = l_data.ContainsKey ("is_tried") && null != l_data ["is_tried"] ? (bool)l_data ["is_tried"] : true;
-				SessionHandler.getInstance().username = m_account.text;
+				SessionHandler.getInstance().username = m_account.text.Trim();
 				SessionHandler.getInstance().token.setToken(l_secret, l_premium,l_tried,l_current,l_vpc);
 				SessionHandler.getInstance().hasPin = l_data.ContainsKey("has_pin") && "true".Equals(l_data["has_pin"].ToString());
 				SessionHandler.getInstance().pin = l_data.ContainsKey("pin")&& null != l_data["pin"] ? int.Parse(l_data["pin"].ToString()) : -1;
@@ -208,26 +352,43 @@ public class SignInState : GameState
 		}
 		else
 		{
-			invokeDialog("Login Failed","Please retry your password.");
+			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
 		}
 
 	}
 	private void allRequestComplete(WWW p_response)
 	{
-		List<Kid> l_kidList = new List<Kid>();
-		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
-		foreach(object o in l_data)
+		if(null == p_response.error)
 		{
-			Kid l_kid = new Kid( o as Hashtable );
-			l_kid.requestPhoto();
-			l_kidList.Add( l_kid );
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			
+			List<Kid> l_kidList = new List<Kid>();
+			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as ArrayList;
+			foreach(object o in l_data)
+			{
+				Kid l_kid = new Kid( o as Hashtable );
+				l_kid.requestPhoto();
+				l_kidList.Add( l_kid );
+			}
+			
+			SessionHandler.getInstance().kidList = l_kidList;
+			if (l_kidList.Count > 0)
+			{
+				SessionHandler.getInstance().getAllKidApplist();
+				SessionHandler.getInstance().currentKid = l_kidList[0];
+				SessionHandler.getInstance().getBooklist();
+			}
+			
+			m_loginSuccess = true;
 		}
-		
-		SessionHandler.getInstance().kidList = l_kidList;
-		if (l_kidList.Count > 0)
-			SessionHandler.getInstance().currentKid = l_kidList[0];
-
-		m_loginSuccess = true;
+		else
+		{
+			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_95_LABEL_TITLE));
+		}
 	}
 
 	private void onTitleTweenFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
@@ -250,17 +411,17 @@ public class SignInState : GameState
 	private void toCreateChildrenScreen(UIButton p_button)
 	{
 		p_button.removeClickCallback(toCreateChildrenScreen);
-		if (!IsMatch (ZoodlesConstants.EMAIL_REGULAR_STRING,m_account.text)) 
+		if (!IsMatch (ZoodlesConstants.EMAIL_REGULAR_STRING,m_account.text.Trim())) 
 		{
-			invokeDialog("Login failed","Please enter valid email address");
+			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_EMAIL));
 			return;
 		}
 		m_subState = SubState.LOADING;
 		if (m_queue == null)
 			m_queue = new RequestQueue();
 		m_queue.reset ();
-		m_queue.add(new ClientIdRequest(getClientIdComplete));
-		m_queue.add(new LoginRequest(m_account.text,m_password.text,loginRequestComplete));
+//		m_queue.add(new ClientIdRequest(getClientIdComplete));
+		m_queue.add(new CheckAccountRequest(m_account.text.Trim(),checkUsernameRequestComplete));
 		m_queue.request(RequestType.SEQUENCE);
 	}
 	
@@ -272,7 +433,13 @@ public class SignInState : GameState
 	private UIButton 	m_backButton;
 	private UIButton 	m_signInButton;
 	private UIButton 	m_closeDialogButton;
-	
+	private UIButton 	m_subscriptionButton;
+	private UIButton 	m_continueButton;
+	private UIButton 	m_exitButton;
+	private UILabel 	m_messageText;
+	private UILabel 	m_continueText;
+
+	private UICanvas 	m_trialMessageCanvas;
 	private UICanvas    m_signInCanvas;
 	private SplashBackCanvas	m_signInButtonBackgroundCanvas;
 	

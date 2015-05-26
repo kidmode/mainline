@@ -16,6 +16,8 @@ public class CornerProfileCanvas : UICanvas
 	public override void update()
 	{
 		base.update();
+
+		m_childAvatar.setTexture( m_kid.kid_photo );
 	}
 	
 	public override void dispose( bool p_deep )
@@ -35,8 +37,7 @@ public class CornerProfileCanvas : UICanvas
 	{
 		if (m_kid == null)
 			return;
-		
-		//added by joshua
+
 		m_childAvatar.setTexture( m_kid.kid_photo );
 		
 		m_childNameLabel.text 	= m_kid.name;

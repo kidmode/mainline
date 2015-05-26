@@ -8,7 +8,7 @@
 
 using UnityEngine;
 using System.Collections;
-
+ 
 public class BaseIOSFeaturePreview : MonoBehaviour {
 
 	protected GUIStyle style;

@@ -24,6 +24,8 @@ public class OverviewProgressState : GameState {
 	public override void exit (GameController p_gameController)
 	{
 		base.exit (p_gameController);
+
+		m_requestQueue.dispose ();
 		
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
@@ -134,8 +136,8 @@ public class OverviewProgressState : GameState {
 
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Overall Progress";
-		l_contentLabel.text = "Monitor how your kids are spending their time by subject.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_46_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_46_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -246,11 +248,11 @@ public class OverviewProgressState : GameState {
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -312,7 +314,7 @@ public class OverviewProgressState : GameState {
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -343,7 +345,7 @@ public class OverviewProgressState : GameState {
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 

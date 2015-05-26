@@ -7,6 +7,8 @@ public class AppListCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 	}
 
 	public override void update ()
@@ -27,5 +29,12 @@ public class AppListCanvas : UICanvas
 	public override void exitingTransition ()
 	{
 		base.exitingTransition ();
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView ("titleArea").getView("Text") as UILabel;
+		
+		l_top.text = Localization.getString (Localization.TXT_72_LABEL_TITLE);
 	}
 }

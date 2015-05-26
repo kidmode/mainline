@@ -26,9 +26,12 @@ public class Kid : System.Object
 
 	public void requestPhoto()
 	{
-		kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
-		if( photo != null )
-			Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+		if (!m_photoRequested)
+		{
+			kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
+			if( photo != null )
+				Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+		}
 	}
 
     public void print()
@@ -210,6 +213,7 @@ public class Kid : System.Object
 	public int		videoWatchedCount			{ get; set; }
 	public int		gamePlayedCount				{ get; set; }
 	public App		topRecommendedApp			{ get; set; }
+	public List<object> appList					{ get; set; }
 
     public ViolenceRating maxViolence           { get; set; }
 
@@ -217,7 +221,11 @@ public class Kid : System.Object
 
 	private void _requestPhotoComplete( WWW p_www )
 	{
-		kid_photo = p_www.texture;
+		if (p_www.error == null && p_www.texture.width != 8 && p_www.texture.height != 8)
+		{
+			kid_photo = p_www.texture;
+			m_photoRequested = true;
+		}
 	}	
 
 	public void dispose()
@@ -228,6 +236,8 @@ public class Kid : System.Object
 			kid_photo = null;
 		}
 	}
+
+	private bool m_photoRequested = false;
 }
 
 

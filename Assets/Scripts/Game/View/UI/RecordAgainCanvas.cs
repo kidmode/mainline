@@ -7,6 +7,13 @@ public class RecordAgainCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_message = getView ("contentText") as UILabel;
+		l_message.text =  Localization.getString (Localization.TXT_81_LABEL_MESSAGE);
 	}
 
 	public override void update ()

@@ -8,6 +8,8 @@ public class AddAppCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 
 		m_btnBgIcon = Resources.Load ( "GUI/2048/common/buttons/bt_dash_red_up" ) as Texture2D;
 		m_btnIcon = Resources.Load ( "GUI/2048/common/icon/icon_delete" ) as Texture2D;
@@ -114,16 +116,23 @@ public class AddAppCanvas : UICanvas
 
 		if( l_app.isAdded )
 		{
-			l_message.text = "Added";
+			l_message.text = Localization.getString (Localization.TXT_74_LABEL_ADDED);
 			l_buttonBgIcon.setTexture( m_btnBgIcon );
 			l_buttonIcon.setTexture( m_btnIcon );
 		}
 		else
 		{
-			l_message.text = "";
+			l_message.text = string.Empty;
 			l_buttonBgIcon.setTexture( m_normalBtnBgIcon );
 			l_buttonIcon.setTexture( m_normalBtnIcon );
 		}
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView ("titleImage").getView("titleText") as UILabel;
+		
+		l_top.text = Localization.getString (Localization.TXT_74_LABEL_TITLE);
 	}
 
 	private Texture2D m_btnBgIcon;

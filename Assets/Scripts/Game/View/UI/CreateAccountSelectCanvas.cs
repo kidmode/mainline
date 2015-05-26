@@ -8,14 +8,13 @@ public class CreateAccountSelectCanvas : UICanvas
 		base.init( p_gameObject );
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+		SetupLocalizition ();
 	}
 	
 	public override void update()
 	{
 		base.update();
 	}
-	
-	
 	
 	public override void dispose( bool p_deep )
 	{
@@ -34,5 +33,12 @@ public class CreateAccountSelectCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_play = getView ("playLabel") as UILabel;
+		
+		l_play.text = Localization.getString (Localization.TXT_17_LABEL_PLAY);
 	}
 }

@@ -12,7 +12,7 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 
 	public void SaveToGalalry() {
 		AndroidCamera.instance.OnImageSaved += OnImageSaved;
-		AndroidCamera.instance.SaveImageToGalalry(helloWorldTexture);
+		AndroidCamera.instance.SaveImageToGallery(helloWorldTexture);
 
 	}
 
@@ -35,6 +35,11 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 		AndroidCamera.instance.GetImageFromCamera();
 	}
 
+
+	public void CheckForTV() {
+		TVAppController.DeviceTypeChecked += OnDeviceTypeChecked;
+		TVAppController.instance.CheckForATVDevice();
+	}
 
 
 	public void CheckAppInstalation() {
@@ -82,6 +87,11 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 
 
 
+	void OnDeviceTypeChecked () {
+		AN_PoupsProxy.showMessage("Check for a TV Device Result" , TVAppController.instance.IsRuningOnTVDevice.ToString());
+		TVAppController.DeviceTypeChecked -= OnDeviceTypeChecked;
+	}
+
 
 
 	void OnPackageCheckResult (AN_PackageCheckResult res) {
@@ -104,9 +114,14 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 
 	private void OnImagePicked(AndroidImagePickResult result) {
 		Debug.Log("OnImagePicked");
-		if(result.IsSucceeded) {
-			image.GetComponent<Renderer>().material.mainTexture = result.image;
+		if (result.IsSucceeded) {
+			AN_PoupsProxy.showMessage ("Image Pick Rsult", "Succeeded");
+			image.GetComponent<Renderer> ().material.mainTexture = result.image;
+		} else {
+			AN_PoupsProxy.showMessage ("Image Pick Rsult", "Failed");
 		}
+
+
 
 		AndroidCamera.instance.OnImagePicked -= OnImagePicked;
 	}
@@ -122,6 +137,8 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 			AN_PoupsProxy.showMessage("Failed", "Image save to gallery failed");
 			SA_StatusBar.text =  "Image save to gallery failed";
 		}
+
+
 
 	}
 

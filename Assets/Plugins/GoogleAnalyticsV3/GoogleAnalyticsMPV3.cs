@@ -138,7 +138,7 @@ public class GoogleAnalyticsMPV3 {
     // Add random z to avoid caching
     string newUrl = url + "&z=" + UnityEngine.Random.Range(0, 500);
     if (GoogleAnalyticsV3.belowThreshold(logLevel, GoogleAnalyticsV3.DebugMode.VERBOSE)) {
-      Debug.Log(newUrl);
+//      Debug.Log(newUrl);
     }
     GoogleAnalyticsV3.getInstance().StartCoroutine(this.HandleWWW(new WWW(newUrl)));
   }
@@ -154,7 +154,7 @@ public class GoogleAnalyticsMPV3 {
       if (request.responseHeaders.ContainsKey("STATUS")) {
         if (request.responseHeaders["STATUS"] == "HTTP/1.1 200 OK") {
           if (GoogleAnalyticsV3.belowThreshold(logLevel, GoogleAnalyticsV3.DebugMode.INFO)) {
-            Debug.Log("Successfully sent Google Analytics hit.");
+//            Debug.Log("Successfully sent Google Analytics hit.");
           }
         } else {
           if (GoogleAnalyticsV3.belowThreshold(logLevel, GoogleAnalyticsV3.DebugMode.WARNING)) {
@@ -235,7 +235,7 @@ public class GoogleAnalyticsMPV3 {
 
     if(!String.IsNullOrEmpty(url)){
       if (GoogleAnalyticsV3.belowThreshold(logLevel, GoogleAnalyticsV3.DebugMode.VERBOSE)) {
-        Debug.Log("Added custom variables to hit.");
+//        Debug.Log("Added custom variables to hit.");
       }
     }
     return url;

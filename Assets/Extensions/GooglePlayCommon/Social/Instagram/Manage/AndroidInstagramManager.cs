@@ -32,7 +32,7 @@ public class AndroidInstagramManager : SA_Singleton<AndroidInstagramManager> {
 		string bytesString = System.Convert.ToBase64String (val);
 
 
-		AndroidNative.InstagramPostImage(bytesString, message);
+		AN_SocialSharingProxy.InstagramPostImage(bytesString, message);
 
 	}
 

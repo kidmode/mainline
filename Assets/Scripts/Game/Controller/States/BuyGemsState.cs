@@ -13,6 +13,7 @@ public class BuyGemsState : GameState
 	{
 		base.enter(p_gameController);
 
+		KidMode.setKidsModeActive(false);
 		_init();
 	}
 	
@@ -23,6 +24,7 @@ public class BuyGemsState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
+		Server.init (ZoodlesConstants.getHost());
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_buyGemsCanvas );
 	}
@@ -40,7 +42,10 @@ public class BuyGemsState : GameState
 		{
 			_Debug.log("Initialize Billing...");
 			AndroidInAppPurchaseManager.ActionBillingSetupFinished += _onBillingSetupFinished;
-			AndroidInAppPurchaseManager.instance.loadStore();
+			AndroidInAppPurchaseManager.instance.addProduct("com.zoodles.v2.good");
+			AndroidInAppPurchaseManager.instance.addProduct("com.zoodles.v2.better");
+			AndroidInAppPurchaseManager.instance.addProduct("com.zoodles.v2.best");
+			AndroidInAppPurchaseManager.instance.loadStore("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0LIs6pbEcpZg8SNG6CtRIXJP2rJhy2ZrAVWNSHo+9X/PtpprmTI0pk/Vh9uq9GbR9sMfiSnKZEJM78XLVaGwHM7cjcR9lfWVyE1mbpLZweAUo+iPDKPc4kgmd7HqgW27W+ZDISHTVwsU0gwd0syRvNKdfIiv3/3xwl/qdIlkChdQE2dAeWI5pPTsBIrkUkgs6Pwq8VMZStA1qFu0vwWBAt1Tn3pLD4OwGMnoI9q6va6IVgM9tpNOPeAnRwz91RWpjX1LkVjObDWnbt9TpQrsdn9PCb2cOXl8kJMr+KbFEeXjyGRitXf7hiF7nMkYagqwwijxGCHXnl6Tl2uRfYxmpQIDAQAB");
 		}
 #elif UNITY_IPHONE
 		_setupScreen(m_gameController.getUI());
@@ -60,7 +65,7 @@ public class BuyGemsState : GameState
 			AndroidInAppPurchaseManager.ActionRetrieveProducsFinished += _onRetrieveProductsFinished;
 		}
 		else
-			_invokeError("Error", "Initialize store failed. Please try again.");
+			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_INIT));
 	}
 
 	private void _onRetrieveProductsFinished(BillingResult p_result)
@@ -71,20 +76,25 @@ public class BuyGemsState : GameState
 
 		if (p_result.isSuccess)
 		{
+			AndroidInAppPurchaseManager.ActionProductPurchased += _onProductPurchased;
+			AndroidInAppPurchaseManager.ActionProductConsumed += _onProductConsumed;
+
 			_Debug.log("Product count: " + AndroidInAppPurchaseManager.instance.inventory.products.Count);
 			foreach (GoogleProductTemplate l_tpl in AndroidInAppPurchaseManager.instance.inventory.products)
 			{
 				_Debug.log(l_tpl.title);
 				_Debug.log(l_tpl.originalJson);
+				if (AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(l_tpl.SKU))
+				{
+					AndroidInAppPurchaseManager.instance.consume(l_tpl.SKU);
+				}
 			}
 
-			AndroidInAppPurchaseManager.ActionProductPurchased += _onProductPurchased;
-			AndroidInAppPurchaseManager.ActionProductConsumed += _onProductConsumed;
 			_setupScreen(m_gameController.getUI());
 			m_inited = true;
 		}
 		else
-			_invokeError("Error", "Initialize store failed. Please try again.");
+			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_INIT));
 	}
 
 	private void _onProductPurchased(BillingResult p_result)
@@ -97,7 +107,7 @@ public class BuyGemsState : GameState
 			AndroidInAppPurchaseManager.instance.consume(l_purchase.SKU);
 		}
 		else
-			_invokeError("Error", "Purchase product failed. Please try again later.");
+			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
 	}
 
 	private void _onProductConsumed(BillingResult p_result)
@@ -107,16 +117,61 @@ public class BuyGemsState : GameState
 		if (p_result.isSuccess)
 		{
 			GooglePurchaseTemplate l_purchase = p_result.purchase;
-			_Debug.log(l_purchase.packageName);
-			_Debug.log(l_purchase.signature);
-			_Debug.log(l_purchase.originalJson);
-			// TODO: Send request to server to validate the receipt and pay the product to the user
-			m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+			_Debug.log("---------------Product Info -----------------------");
+			_Debug.log("package: " + l_purchase.packageName);
+			_Debug.log("orderId: " + l_purchase.orderId);
+			_Debug.log("token: " + l_purchase.token);
+			_Debug.log("signature: " + l_purchase.signature);
+			_Debug.log("payload: " + l_purchase.developerPayload);
+			_Debug.log("json: " + l_purchase.originalJson);
+			_Debug.log("---------------------------------------------------");
+
+			// Send request to server to validate the receipt and pay the product to the user
+			Server.init (ZoodlesConstants.getHttpsHost());
+			RequestQueue l_queue = new RequestQueue();
+			l_queue.add(new PurchaseGemsRequest(l_purchase.packageName, l_purchase.orderId, l_purchase.SKU, l_purchase.token, l_purchase.developerPayload, _onPurchaseRequestComplete));
+			l_queue.request(RequestType.RUSH);
 		}
 		else
-			_invokeError("Error", "Consumed product failed. Please try again later.");
+			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_CONSUMED));
 	}
-#endif
+	#endif
+	private void _onPurchaseRequestComplete(WWW p_response)
+	{
+		_Debug.log("result: " + p_response.text);
+		if(null == p_response.error && !"null".Equals(p_response.text))
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
+			if(null != l_data && l_data.ContainsKey("error") && "false".Equals(l_data["error"].ToString()))
+			{
+				if(l_data.ContainsKey("gems"))
+				{
+					int l_gemsCount = int.Parse(l_data["gems"].ToString());
+					SessionHandler.getInstance().currentKid.gems = l_gemsCount;
+					List<Kid> l_kidList = SessionHandler.getInstance().kidList;
+					foreach(Kid l_k in l_kidList)
+					{
+						l_k.gems = l_gemsCount;
+					}
+					m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
+				}
+				else
+				{
+					_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
+				}
+			}
+			else
+			{
+				_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
+			}
+		}
+		else
+		{
+			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
+		}
+	}
+
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
@@ -166,42 +221,64 @@ public class BuyGemsState : GameState
 			Hashtable l_better = l_response["better"] as Hashtable;
 			Hashtable l_best = l_response["best"] as Hashtable;
 
-			l_goodPlanLabel.text = l_good["gems"].ToString() + " Gems for $" + double.Parse(l_good["amount"].ToString()).ToString("N");
-			l_betterPlanLabel.text = l_better["gems"].ToString() + " Gems for $" + double.Parse(l_better["amount"].ToString()).ToString("N");
-			l_bestPlanLabel.text = l_best["gems"].ToString() + " Gems for $" + double.Parse(l_best["amount"].ToString()).ToString("N");
+			l_goodPlanLabel.text = l_good["gems"].ToString() + Localization.getString(Localization.TXT_STATE_20_GEMS) + double.Parse(l_good["amount"].ToString()).ToString("N");
+			l_betterPlanLabel.text = l_better["gems"].ToString() + Localization.getString(Localization.TXT_STATE_20_GEMS) + double.Parse(l_better["amount"].ToString()).ToString("N");
+			l_bestPlanLabel.text = l_best["gems"].ToString() + Localization.getString(Localization.TXT_STATE_20_GEMS) + double.Parse(l_best["amount"].ToString()).ToString("N");
 		}
 	}
 	
 	private void goBack( UIButton p_button )
 	{
+		p_button.removeClickCallback ( goBack );
 		int l_state = m_gameController.getConnectedState ( ZoodleState.BUY_GEMS );
 		m_gameController.changeState (l_state);
 	}
 
 	private void gotoGoodPayment( UIButton p_button )
 	{
+		string l_returnJson = SessionHandler.getInstance ().GemsJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode (l_returnJson) as Hashtable;
+		Hashtable l_jsonResponse = l_data["jsonResponse"] as Hashtable;
+		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
+		Hashtable l_good = l_response["good"] as Hashtable;
+		m_gameController.board.write("gems", l_good["gems"].ToString());
+
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 #elif UNITY_ANDROID
-		AndroidInAppPurchaseManager.instance.purchase("org.bestlogic.purchasez.item01");
+		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.good");
 #endif
 	}
 
 	private void gotoBetterPayment( UIButton p_button )
 	{
+		string l_returnJson = SessionHandler.getInstance ().GemsJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode (l_returnJson) as Hashtable;
+		Hashtable l_jsonResponse = l_data["jsonResponse"] as Hashtable;
+		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
+		Hashtable l_better = l_response["better"] as Hashtable;
+		m_gameController.board.write("gems", l_better["gems"].ToString());
+		
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 #elif UNITY_ANDROID
-		AndroidInAppPurchaseManager.instance.purchase("org.bestlogic.purchasez.item02");
+		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.better");
 #endif
 	}
 
 	private void gotoBestPayment( UIButton p_button )
 	{
+		string l_returnJson = SessionHandler.getInstance ().GemsJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode (l_returnJson) as Hashtable;
+		Hashtable l_jsonResponse = l_data["jsonResponse"] as Hashtable;
+		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
+		Hashtable l_best = l_response["best"] as Hashtable;
+		m_gameController.board.write("gems", l_best["gems"].ToString());
+		
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 #elif UNITY_ANDROID
-		AndroidInAppPurchaseManager.instance.purchase("android.test.purchased");
+		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.best");
 #endif
 	}
 
@@ -217,7 +294,6 @@ public class BuyGemsState : GameState
 	}
 
 	//Private variables
-
 	
 	private UICanvas    m_buyGemsCanvas;
 	private UICanvas	m_signInButtonBackgroundCanvas;

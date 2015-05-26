@@ -7,6 +7,8 @@ public class LeftMenuCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+
+		SetupLocalizition ();
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
@@ -58,7 +60,7 @@ public class LeftMenuCanvas : UICanvas
 		List< System.Object > infoData = new List< System.Object >();
 		List<Kid> l_kidList = SessionHandler.getInstance ().kidList;
 		Kid l_creatKid = new Kid ();
-		l_creatKid.name = "Add A Child";
+		l_creatKid.name = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
 		l_creatKid.kid_photo = Resources.Load("GUI/2048/common/icon/icon_profile_add") as Texture2D;
 		infoData.Add (l_creatKid);
 		if (null != l_kidList)
@@ -124,6 +126,21 @@ public class LeftMenuCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_profiles = getView ("profileButton").getView("Text") as UILabel;
+		UILabel l_settings = getView ("settingButton").getView("Text") as UILabel;
+		UILabel l_try = getView ("premiumButton").getView("Text") as UILabel;
+		UILabel l_gems = getView ("buyGemsButton").getView("Text") as UILabel;
+		UILabel l_close = getView ("closeButton").getView("Text") as UILabel;
+
+		l_profiles.text = Localization.getString (Localization.TXT_28_LABEL_PROFILES);
+		l_settings.text = Localization.getString (Localization.TXT_28_LABEL_SETTINGS);
+		l_try.text = Localization.getString (Localization.TXT_28_LABEL_TRY);
+		l_gems.text = Localization.getString (Localization.TXT_28_LABEL_GEMS);
+		l_close.text = Localization.getString (Localization.TXT_28_LABEL_CLOSE);
 	}
 
 	private bool 		isAllChildShow = false;

@@ -100,12 +100,14 @@ public class CallServerState : GameState
 		Server.init (ZoodlesConstants.getHost());
 
 		if(null != m_webRequest)
-			m_webRequest.destroy ();
+		{
+			Server.removeCall(m_webRequest);
+		}
 
 		int l_count = m_webRequests.Count;
 		for(int l_i = 0; l_i <l_count; l_i++)
 		{
-			m_webRequests[l_i].destroy();
+			Server.removeCall(m_webRequests[l_i]);
 		}
 
 		SessionHandler.getInstance ().callList = null;
@@ -130,7 +132,7 @@ public class CallServerState : GameState
 		l_errorMessage.text = "Please wait..";
 
 		UIImage l_background = m_errorCanvas.getView ("bodyBG") as UIImage;
-		l_background.tweener.addAlphaTrack(0, 1, 1.0f);
+		l_background.tweener.addAlphaTrack(0, 1, 0.1f);
 
 		UIButton l_quitButton = m_errorCanvas.getView ("quitButton") as UIButton;
 		l_quitButton.active = false;

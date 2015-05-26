@@ -97,7 +97,7 @@ public class DashBoardStarChartState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -109,8 +109,8 @@ public class DashBoardStarChartState : GameState
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Assessment Star Chart";
-		l_contentLabel.text = "Our unique adaptive learning environment determines and measures your child's proficiency in the US Common Core education standards.\r\nPremium Feature.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_43_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_43_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -175,7 +175,7 @@ public class DashBoardStarChartState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -285,11 +285,11 @@ public class DashBoardStarChartState : GameState
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{

@@ -12,6 +12,15 @@ public class ChildLockHelpCanvas : UICanvas
 
 		m_dialog = getView ("dialog") as UIElement;
 		m_dialogMovePosition = 800;
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_childLockTitle = getView ("dialogTitle").getView("Text") as UILabel;
+		l_childLockTitle.text = Localization.getString (Localization.TXT_87_LABEL_TITLE);
+		UILabel l_content = getView ("dialogContent").getView("Text") as UILabel;
+		l_content.text = Localization.getString (Localization.TXT_87_LABEL_CONTENT);
 	}
 	
 	public override void update()

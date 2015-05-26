@@ -260,7 +260,7 @@ public class ChildLock {
 		ensurePackageManager(appContext);
 		ComponentName component = new ComponentName(
 				appContext.getPackageName(), ZoodlesHome.class.getName());
-		Log.v(TAG, "Enabling Zoodles HOME");
+//		Log.v(TAG, "Enabling Zoodles HOME");
 		mPm.setComponentEnabledSetting(component,
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);
@@ -304,7 +304,7 @@ public class ChildLock {
 		ensurePackageManager(appContext);
 		ComponentName component = new ComponentName(
 				appContext.getPackageName(), ZoodlesHome.class.getName());
-		Log.v(TAG, "Disabling Zoodles HOME");
+//		Log.v(TAG, "Disabling Zoodles HOME");
 		mPm.setComponentEnabledSetting(component,
 				PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
 				PackageManager.DONT_KILL_APP);
@@ -355,7 +355,7 @@ public class ChildLock {
 	 */
 	public void sendHomeIntent(Activity activity) {
 		Intent i = buildHomeIntent();
-		Log.d(TAG, "Sending Home intent");
+//		Log.d(TAG, "Sending Home intent");
 		activity.startActivity(i);
 	}
 
@@ -446,7 +446,7 @@ public class ChildLock {
 		}
 		CharSequence appName = mPm
 				.getApplicationLabel(mInfo.activityInfo.applicationInfo);
-		Log.d(TAG, "Current home app is: " + appName);
+//		Log.d(TAG, "Current home app is: " + appName);
 
 		return appName.toString();
 	}
@@ -472,7 +472,7 @@ public class ChildLock {
 		}
 
 		CharSequence activityName = mInfo.activityInfo.toString();
-		Log.d(TAG, "Current home activity is: " + activityName);
+//		Log.d(TAG, "Current home activity is: " + activityName);
 
 		return activityName.toString();
 	}

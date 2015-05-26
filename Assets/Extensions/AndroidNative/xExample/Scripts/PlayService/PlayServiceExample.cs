@@ -88,11 +88,13 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 		GooglePlayManager.instance.addEventListener (GooglePlayManager.SCORE_REQUEST_RECEIVED, OnScoreUpdated);
 
 
+	
 
-		GooglePlayManager.instance.addEventListener (GooglePlayManager.SEND_GIFT_RESULT_RECEIVED, OnGiftResult);
-		GooglePlayManager.instance.addEventListener (GooglePlayManager.PENDING_GAME_REQUESTS_DETECTED, OnPendingGiftsDetected);
-		GooglePlayManager.instance.addEventListener (GooglePlayManager.GAME_REQUESTS_ACCEPTED, OnGameRequestAccepted);
+		GooglePlayManager.ActionSendGiftResultReceived += OnGiftResult;
+		GooglePlayManager.ActionPendingGameRequestsDetected += OnPendingGiftsDetected;
+		GooglePlayManager.ActionGameRequestsAccepted += OnGameRequestAccepted;
 
+	
 		GooglePlayManager.ActionOAuthTokenLoaded += ActionOAuthTokenLoaded;
 		GooglePlayManager.ActionAvailableDeviceAccountsLoaded += ActionAvailableDeviceAccountsLoaded;
 
@@ -119,9 +121,9 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 			GooglePlayManager.instance.removeEventListener (GooglePlayManager.ACHIEVEMENT_UPDATED, OnAchievementUpdated);
 			GooglePlayManager.instance.removeEventListener (GooglePlayManager.SCORE_SUBMITED, OnScoreSubmited);
 			
-			GooglePlayManager.instance.removeEventListener (GooglePlayManager.SEND_GIFT_RESULT_RECEIVED, OnGiftResult);
-			GooglePlayManager.instance.removeEventListener (GooglePlayManager.PENDING_GAME_REQUESTS_DETECTED, OnPendingGiftsDetected);
-			GooglePlayManager.instance.removeEventListener (GooglePlayManager.GAME_REQUESTS_ACCEPTED, OnGameRequestAccepted);
+			GooglePlayManager.ActionSendGiftResultReceived -= OnGiftResult;
+			GooglePlayManager.ActionPendingGameRequestsDetected -= OnPendingGiftsDetected;
+			GooglePlayManager.ActionGameRequestsAccepted -= OnGameRequestAccepted;
 			
 			GooglePlayManager.ActionAvailableDeviceAccountsLoaded -= ActionAvailableDeviceAccountsLoaded;
 			GooglePlayManager.ActionOAuthTokenLoaded -= ActionOAuthTokenLoaded;
@@ -428,22 +430,20 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 		SA_StatusBar.text = "ConnectionResul:  " + result.code.ToString();
 	}
 
-	private void OnGiftResult(CEvent e) {
-		GooglePlayGiftRequestResult result = e.data as GooglePlayGiftRequestResult;
+	void OnGiftResult (GooglePlayGiftRequestResult result) {
 		SA_StatusBar.text = "Gift Send Result:  " + result.code.ToString();
+		AN_PoupsProxy.showMessage("Gfit Send Complete", "Gift Send Result: " + result.code.ToString());
 	}
 
-	private void OnPendingGiftsDetected(CEvent e) {
+	void OnPendingGiftsDetected (List<GPGameRequest> gifts) {
 		AndroidDialog dialog = AndroidDialog.Create("Pending Gifts Detected", "You got few gifts from your friends, do you whant to take a look?");
-		dialog.addEventListener(BaseEvent.COMPLETE, OnPromtGiftDialogClose);
+		dialog.OnComplete += OnPromtGiftDialogClose;
 	}
+	
 
-	private void OnPromtGiftDialogClose(CEvent e) {
-		//removing listner
-		(e.dispatcher as AndroidDialog).removeEventListener(BaseEvent.COMPLETE, OnPromtGiftDialogClose);
-		
+	private void OnPromtGiftDialogClose(AndroidDialogResult res) {
 		//parsing result
-		switch((AndroidDialogResult)e.data) {
+		switch(res) {
 		case AndroidDialogResult.YES:
 			GooglePlayManager.instance.ShowRequestsAccepDialog();
 			break;
@@ -452,14 +452,13 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 		}
 	}
 
-
-
-	private void OnGameRequestAccepted(CEvent e) {
-		List<GPGameRequest> gifts = e.data as List<GPGameRequest>;
+	void OnGameRequestAccepted (List<GPGameRequest> gifts) {
 		foreach(GPGameRequest g in gifts) {
 			AN_PoupsProxy.showMessage("Gfit Accepted", g.playload + " is excepted");
 		}
 	}
+
+
 
 
 	private void ActionAvailableDeviceAccountsLoaded(List<string> accounts) {

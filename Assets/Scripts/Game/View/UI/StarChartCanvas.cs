@@ -7,6 +7,8 @@ public class StarChartCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 
 		m_starIcon = Resources.Load( "GUI/2048/common/icon/icon_star_rating" ) as Texture2D;
 		m_noStarIcon = Resources.Load( "GUI/2048/common/bgCards/bg_star_rating" ) as Texture2D;
@@ -115,6 +117,29 @@ public class StarChartCanvas : UICanvas
 			UIImage l_starFive = l_starList.getView("starFive") as UIImage;
 			l_starFive.setTexture( m_noStarIcon );
 		}
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView ("titleText") as UILabel;
+		
+		l_top.text = Localization.getString (Localization.TXT_67_LABEL_TITLE);
+
+		UILabel l_math = getView("mathToggle").getView("Text") as UILabel;
+		UILabel l_reading = getView("readingToggle").getView("Text") as UILabel;
+		UILabel l_science = getView("scienceToggle").getView("Text") as UILabel;
+		UILabel l_social = getView("socialToggle").getView("Text") as UILabel;
+		UILabel l_cognitive = getView("cognitiveToggle").getView("Text") as UILabel;
+		UILabel l_creative = getView("creativeToggle").getView("Text") as UILabel;
+		UILabel l_life = getView("lifeSkillsToggle").getView("Text") as UILabel;
+
+		l_math.text = Localization.getString( Localization.TXT_COURSE_MATH );
+		l_reading.text = Localization.getString( Localization.TXT_COURSE_READING );
+		l_science.text = Localization.getString( Localization.TXT_COURSE_SCIENCE );
+		l_social.text = Localization.getString( Localization.TXT_COURSE_SOCIAL );
+		l_cognitive.text = Localization.getString( Localization.TXT_COURSE_COGNITIVE );
+		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
+		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
 	}
 	
 	private Texture2D m_starIcon;

@@ -31,6 +31,7 @@ public class WebRequest : object
 	private float m_timeout = 60.0f;
 	
 	private int m_status = (int)WebRequestStatus.InProgress;
+	private bool m_isDestroyed;
 
     private CallMethod m_callMethod;
 
@@ -42,6 +43,7 @@ public class WebRequest : object
 		m_callback      = p_callback;
 		
 		m_time          = 0;
+		m_isDestroyed 	= false;
 
         m_param         = p_postData;
         m_callMethod    = p_callMethod;
@@ -58,7 +60,7 @@ public class WebRequest : object
 			return;
 
 		m_time += p_time;
-		
+
 		if( null == m_www )
 		{
 			string l_url = "";
@@ -69,7 +71,7 @@ public class WebRequest : object
 			else
 				l_url = m_server.url + m_call;
 #if UNITY_EDITOR
-			Debug.Log(l_url);
+//			Debug.Log(l_url);
 #endif
 
 			if( m_form != null )
@@ -91,12 +93,12 @@ public class WebRequest : object
 				else
 				{
 					#if UNITY_EDITOR
-					Debug.Log(m_www.text);
+//					Debug.Log(m_www.text);
 					#endif
 					m_status = (int)WebRequestStatus.Finished;
 				}
 				m_callback( m_www );
-				m_server.removeCall( this );
+				Server.removeCall( this );
 			}
 		}
 		
@@ -132,11 +134,21 @@ public class WebRequest : object
 		}
 	}
 
+	public bool isDestroyed
+	{
+		get
+		{
+			return m_isDestroyed;
+		}
+	}
+
 
 
 //---------------------- Private Implementation --------------------
 	private void _setupGET()
 	{
+		if (m_call.StartsWith ("@absolute:"))
+						return;
 		if( null != m_param && m_param.Keys.Count > 0 )
 		{
 			int l_count = m_param.Keys.Count - 1;
@@ -176,6 +188,7 @@ public class WebRequest : object
 		{
 			m_www.Dispose();
 			m_call = null;
+			m_isDestroyed = true;
 		}
 	}
     //private Dictionary< string, string > _setupGET( )

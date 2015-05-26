@@ -16,13 +16,19 @@ public class UniWebViewCustomViewActivity extends Activity
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	UniWebViewCustomViewActivity.customViewActivity = this;
-    	currentFullScreenClient.ToggleFullScreen(this);
+    	if (null != currentFullScreenClient)
+    	{
+    		currentFullScreenClient.ToggleFullScreen(this);
+    	}
 	}
 
 	@Override
 	public void onBackPressed() {
         if (android.os.Build.VERSION.SDK_INT <= 11) {
-            currentFullScreenClient.onHideCustomView();
+        	if (null != currentFullScreenClient)
+        	{
+        		currentFullScreenClient.onHideCustomView();
+        	}
         }
 		this.finish();
 	}

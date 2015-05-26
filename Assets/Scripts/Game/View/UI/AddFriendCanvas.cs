@@ -9,6 +9,17 @@ public class AddFriendCanvas : UICanvas
 		base.init( p_gameObject );
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_titleText = getView ("titleText") as UILabel;
+		l_titleText.text = Localization.getString (Localization.TXT_96_LABEL_MESSAGE);
+		UILabel l_emailText = getView ("content").getView ("bgImage").getView("Text") as UILabel;
+		l_emailText.text = Localization.getString (Localization.TXT_96_LABEL_EMAIL_ADDRESS);
+		UILabel l_addFriendText = getView ("AddFriendlText") as UILabel;
+		l_addFriendText.text = Localization.getString (Localization.TXT_96_BUTTON_ADD_FRIEND);
 	}
 	
 	public override void update()

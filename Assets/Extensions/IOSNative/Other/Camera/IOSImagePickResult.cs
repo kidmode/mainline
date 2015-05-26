@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class IOSImagePickResult : ISN_Result {
-
+	 
 
 	private Texture2D _image = null;
 

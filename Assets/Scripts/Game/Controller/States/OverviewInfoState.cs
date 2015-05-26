@@ -16,20 +16,47 @@ public class OverviewInfoState : GameState {
 			m_uiManager.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 		}
 		m_app = SessionHandler.getInstance ().currentKid.topRecommendedApp;
+		canLoadTopRecommandApp = true;
 		m_getTopRecommendAppRequestQueue = new RequestQueue ();
 		_setupScreen( p_gameController );
 		_setupElment();
+		turnOffChildLock();
 	}
 
+	private void turnOffChildLock()
+	{
+		KidMode.setKidsModeActive(false);	
+	}
+	//private float l_time = 0.0f;
 	public override void update (GameController p_gameController, int p_time)
 	{
 		base.update (p_gameController, p_time);
+		//l_time += Time.deltaTime;
+		if(null != SessionHandler.getInstance().currentKid.topRecommendedApp && canLoadTopRecommandApp)
+		{
+			canLoadTopRecommandApp = false;
+			m_app = SessionHandler.getInstance().currentKid.topRecommendedApp;
+			if( 0 != m_app.id )
+			{
+				m_topRecommendAppArea.active = true;
+				_setupSignleApp(m_topRecommendAppArea,m_app);
+				loadAppDetail();
+			}
+			else
+			{
+				m_topRecommendAppArea.active = false;
+				
+				UILabel l_emptyText = m_dashboardInfoCanvas.getView("emptyText") as UILabel;
+				l_emptyText.text = Localization.getString(Localization.TXT_STATE_50_EMPTY);
+			}
+
+		}
 	}
 
 	public override void exit (GameController p_gameController)
 	{
 		base.exit (p_gameController);
-
+		m_requestQueue.dispose ();
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
@@ -129,24 +156,26 @@ public class OverviewInfoState : GameState {
 
 		m_topRecommendAppArea = m_dashboardInfoCanvas.getView ("app") as UIButton;
 		m_topRecommendAppArea.addClickCallback (showAppDetail);
+
 		if (null == m_app)
 		{
 			m_topRecommendAppArea.active = false;
-			m_getTopRecommendAppRequestQueue.reset();
-			m_getTopRecommendAppRequestQueue.add(new GetAppOwnRequest());
-			m_getTopRecommendAppRequestQueue.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,getTopRecommendRequestComplete));
-			m_getTopRecommendAppRequestQueue.request(RequestType.SEQUENCE);
+
+			UILabel l_emptyText = m_dashboardInfoCanvas.getView("emptyText") as UILabel;
+			l_emptyText.text = Localization.getString(Localization.TXT_LABEL_LOADING);
+			if(SessionHandler.getInstance().appRequest.isCompleted())
+			{
+				m_getTopRecommendAppRequestQueue.reset();
+				m_getTopRecommendAppRequestQueue.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,SessionHandler.getInstance().currentKid,getTopRecommendRequestComplete));
+				m_getTopRecommendAppRequestQueue.request(RequestType.SEQUENCE);
+			}
 		}
-		else
-		{
-			_setupSignleApp(m_topRecommendAppArea,m_app);
-			loadAppDetail();
-		}
+
 	}
 
 	private void editProfile(UIButton p_button)
 	{
-		SessionHandler.getInstance ().inputedChildName = SessionHandler.getInstance ().currentKid.wholeName;
+		SessionHandler.getInstance ().inputedChildName = SessionHandler.getInstance ().currentKid.name;
 		SessionHandler.getInstance ().inputedbirthday = SessionHandler.getInstance ().currentKid.birthday;
 		SessionHandler.getInstance ().selectAvatar = string.Empty;
 		SessionHandler.getInstance ().CreateChild = false;
@@ -166,9 +195,9 @@ public class OverviewInfoState : GameState {
 				l_costGems.text = m_app.gems.ToString ();
 				l_needGems.text = (m_app.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
 				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-				l_titleLabel.text = "Need More Gems!";
+				l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
 				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-				l_notice1label.text = "You need more gems to purchase:";
+				l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
 				m_costArea.active = false;
 				m_needMoreArea.active = true;
 			}
@@ -243,7 +272,7 @@ public class OverviewInfoState : GameState {
 		
 		AndroidJavaObject jo_intent = new AndroidJavaObject("android.content.Intent", jo_view, l_uri);
 		
-		AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>("createChooser", jo_intent, "Choose An Market");
+		AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>("createChooser", jo_intent, Localization.getString(Localization.TXT_STATE_45_MARKET));
 		
 		l_joActivity.Call("startActivity", jo_chooser );
 		
@@ -264,6 +293,10 @@ public class OverviewInfoState : GameState {
 
 	private void loadAppDetail()
 	{
+		if(null == m_appDetailsCanvas)
+		{
+			return;
+		}
 		UILabel l_appCostText = m_appDetailsCanvas.getView("appCostText") as UILabel;
 		UIButton l_buyAppButton = m_appDetailsCanvas.getView("buyAppButton") as UIButton;
 		UILabel l_appFreeText = m_appDetailsCanvas.getView("appFreeText") as UILabel;
@@ -297,7 +330,7 @@ public class OverviewInfoState : GameState {
 			l_appFreeText.active = false;
 			l_buyAppButton.active = true;
 			UILabel l_text = l_buyAppButton.getView( "Text" ) as UILabel;
-			l_text.text = "Install";
+			l_text.text = Localization.getString(Localization.TXT_STATE_45_INSTALL);
 		}
 		
 		resetSubjectColor ();
@@ -380,13 +413,51 @@ public class OverviewInfoState : GameState {
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
-		l_titleLabel.text = "Confirm Purchase";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
-		l_notice1label.text = "You are purchasing:";
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
 		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
 		l_notice1label2.text = p_app.name;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
 		l_priceLabel.text = p_app.gems.ToString ();
+	}
+
+	private void iconRequestComplete(WWW p_response)
+	{
+		if(null != p_response.error)
+		{
+			_Debug.log(p_response);
+		}
+		else
+		{
+			App l_app = SessionHandler.getInstance().currentKid.topRecommendedApp;
+			l_app.iconDownload = true;
+			l_app.icon = p_response.texture;
+			if(null != m_topRecommendAppArea)
+			{
+				UIImage l_image = m_topRecommendAppArea.getView("appImage") as UIImage;
+				
+				if( null == l_image )
+				{
+					return;
+				}
+				
+				l_image.setTexture(p_response.texture);
+			}
+
+			if(null != m_appDetailsCanvas)
+			{
+				UIImage l_image = m_appDetailsCanvas.getView("appImage") as UIImage;
+				
+				if( null == l_image )
+				{
+					return;
+				}
+				
+				l_image.setTexture(p_response.texture);
+			}
+
+		}
 	}
 
 	private void _setupSignleApp(UIElement p_element, App p_app)
@@ -400,8 +471,19 @@ public class OverviewInfoState : GameState {
 		if(null == p_app.icon)
 		{
 			m_getTopRecommendAppRequestQueue.reset();
-			m_getTopRecommendAppRequestQueue.add(new IconRequest(p_app,p_element));
+			m_getTopRecommendAppRequestQueue.add(new IconRequest(p_app,p_element,iconRequestComplete));
 			m_getTopRecommendAppRequestQueue.request();
+		}
+		else
+		{
+			UIImage l_image = p_element.getView("appImage") as UIImage;
+			
+			if( null == l_image )
+			{
+				return;
+			}
+			
+			l_image.setTexture(p_app.icon);
 		}
 		if(p_app.gems == 0)
 		{
@@ -440,8 +522,10 @@ public class OverviewInfoState : GameState {
 		Token l_token = SessionHandler.getInstance ().token;
 		if( l_token.isPremium() || l_token.isCurrent() )
 		{
-			l_appCostText.active = false;
-			l_appFreeText.active = false;
+			if(null != l_appCostText)
+				l_appCostText.active = false;
+			if(null != l_appFreeText)
+				l_appFreeText.active = false;
 		}
 
 		Dictionary< string, int > l_subjects = p_app.subjects;
@@ -496,7 +580,7 @@ public class OverviewInfoState : GameState {
 			l_lifeSkillsColor.active = true;
 		}
 
-		if(null != p_element)
+		if(null != p_element && null != p_element.gameObject)
 			p_element.active = true;
 	}
 
@@ -506,16 +590,14 @@ public class OverviewInfoState : GameState {
 		{
 			string l_string = UnicodeDecoder.Unicode(p_response.text);
 			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			App l_app = new App(MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable);
+			Hashtable l_hashTable = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			App l_app = new App(l_hashTable);
+			if(l_hashTable.ContainsKey("owned"))
+			{
+				l_app.own = (bool)l_hashTable["owned"];
+			}
 			SessionHandler.getInstance().currentKid.topRecommendedApp = l_app;
 			m_app = l_app;
-			Hashtable l_table = SessionHandler.getInstance().appOwn;
-			if(null != l_table)
-			{
-				SessionHandler.getInstance().currentKid.topRecommendedApp.own = l_table.ContainsKey(l_app.id.ToString());
-			}
-			_setupSignleApp(m_topRecommendAppArea,SessionHandler.getInstance().currentKid.topRecommendedApp);
-			loadAppDetail();
 		}
 	}
 
@@ -618,11 +700,11 @@ public class OverviewInfoState : GameState {
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -685,7 +767,7 @@ public class OverviewInfoState : GameState {
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -730,4 +812,5 @@ public class OverviewInfoState : GameState {
 	private RequestQueue m_getTopRecommendAppRequestQueue;
 
 	private bool 		canMoveLeftMenu;
+	private bool 		canLoadTopRecommandApp;
 }

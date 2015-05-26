@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class WebViewState : GameState
@@ -8,6 +9,8 @@ public class WebViewState : GameState
 		NONE,
 		GO_CONGRATS
 	}
+
+	string m_text = "";
 
 	public override void enter(GameController p_gameController)
 	{
@@ -21,14 +24,74 @@ public class WebViewState : GameState
 		UIButton l_button = l_screen.getView("backButton") as UIButton;
 		l_button.addClickCallback(_clickBack);
 
-		_setupWebView("Prefabs/Web/YoutubeWebview", l_screen.scaleFactor);
-		m_webView.Load(SessionHandler.getInstance().currentContent.url);
+		float l_inset = calculateInset(l_button);
+		TextAsset l_asset = Resources.Load( "Data/removeFullScreenButton" ) as TextAsset;
+		m_text = (l_asset).text;
+		string l_url = getURL();
+
+		m_isLoaded = false;
+		_setupWebView("Prefabs/Web/YoutubeWebview", l_inset);
+		m_webView.OnLoadComplete += HandleOnLoadComplete;
+		m_webView.OnLoadBegin += HandleOnLoadBegin;
+		m_webView.Load(l_url);
 		m_webView.Show();
 
 		m_linkId = SessionHandler.getInstance().currentContent.id;
 		m_duration = 0;
 
 		GAUtil.logScreen("WebViewScreen");
+	}
+
+	void HandleOnLoadBegin (UniWebView webView, string loadingUrl)
+	{
+		string l_url = getURL();
+		if (loadingUrl != l_url)
+		{
+			webView.Stop();
+//			m_webView.Load(l_url);
+		}
+	}
+
+	private string getURL()
+	{
+		string l_url = SessionHandler.getInstance().currentContent.url;
+
+		int l_indexOfParams = l_url.LastIndexOf("&");
+		if (l_indexOfParams != -1)
+		{
+			l_url = l_url.Substring(0, l_indexOfParams);
+		}
+		//Process youtube to add parameters
+		if (l_url.Contains("youtube"))
+		{
+			if (l_url.Contains("?"))
+			{
+				l_url = l_url + "&fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+			}
+			else
+			{
+				l_url = l_url + "?fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+			}
+		}
+
+		return l_url;
+	}
+
+	public void HandleOnLoadComplete (UniWebView webView, bool success, string errorMessage)
+	{
+		m_webView.AddJavaScript (m_text);
+		m_webView.EvaluatingJavaScript ("disableFullScreen()");
+		m_isLoaded = true;
+	}
+
+	private float calculateInset(UIElement p_topBar)
+	{
+		RectTransform l_transform = (RectTransform) p_topBar.transform;		
+		float l_scale = p_topBar.canvas.scaleFactor;
+		float l_offset = Screen.height - l_transform.position.y;
+		float l_height = l_transform.rect.height * l_scale;
+		float l_inset = l_height + (2 * l_offset);
+		return l_inset;
 	}
 
 	public override void update(GameController p_gameController, int p_time)
@@ -68,13 +131,21 @@ public class WebViewState : GameState
 		if (p_type == 1)
 		{
 			if (m_webView != null)
-				m_webView.Reload();
+			{
+				if (m_isLoaded)
+				{
+					KidMode.showWebViews();
+				}
+				else
+				{
+					m_webView.Reload();
+				}
+			}
 		}
-		
 		return true;
 	}
 
-	private void _setupWebView(string p_webViewPrefab, float p_scale)
+	private void _setupWebView(string p_webViewPrefab, float p_inset)
 	{
 		GameObject l_webViewPrefab = Resources.Load(p_webViewPrefab) as GameObject;
 		if (l_webViewPrefab == null)// || Application.platform != RuntimePlatform.Android )
@@ -86,7 +157,7 @@ public class WebViewState : GameState
 			return;
 
 		//m_webView.insets = new UniWebViewEdgeInsets((int)(90.0f * p_scale), 0, 0, 0);
-		m_webView.insets = new UniWebViewEdgeInsets(0, 0, 0, 0);
+		m_webView.insets = new UniWebViewEdgeInsets((int)p_inset, 0, 0, 0);
 		m_webView.SetUseWideViewPort(false);
 		m_webView.OnReceivedKeyCode += _onBackKeyCode;
 		m_webView.OnWebViewShouldClose 	+= _onShouldCloseView;
@@ -120,12 +191,19 @@ public class WebViewState : GameState
 	private GameObject	m_webObj;
 	private UniWebView	m_webView;
 	protected SubState m_subState = SubState.NONE;
+	private bool m_isLoaded;
 	private int m_linkId = -1;
 	protected int m_duration = 0;
 }
 
 public class VideoViewState : WebViewState
 {
+	public override void enter(GameController p_gameController)
+	{
+		base.enter(p_gameController);
+
+
+	}
 	public override void update(GameController p_gameController, int p_time)
 	{
 		base.update(p_gameController, p_time);
@@ -154,6 +232,15 @@ public class VideoViewState : WebViewState
 
 public class GameViewState : WebViewState
 {
+	public override void enter(GameController p_gameController)
+	{
+		base.enter(p_gameController);
+		
+		Screen.autorotateToPortrait = true;
+		Screen.autorotateToPortraitUpsideDown = true;
+		Screen.orientation = ScreenOrientation.AutoRotation;
+	}
+
 	public override void update(GameController p_gameController, int p_time)
 	{
 		base.update(p_gameController, p_time);
@@ -175,6 +262,11 @@ public class GameViewState : WebViewState
 	public override void exit(GameController p_gameController)
 	{
 		GAUtil.logVisit("Game", m_duration);
+
+		Screen.autorotateToPortrait = false;
+		Screen.autorotateToPortraitUpsideDown = false;
+		Screen.orientation = ScreenOrientation.Landscape;
+		Screen.orientation = ScreenOrientation.AutoRotation;
 
 		base.exit(p_gameController);
 	}

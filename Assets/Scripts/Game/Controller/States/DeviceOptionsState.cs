@@ -17,7 +17,7 @@ public class DeviceOptionsState : GameState
 //		#endif 
 		m_settingCache = SessionHandler.getInstance ().settingCache;
 		m_requestQueue = new RequestQueue ();
-
+		exitState = false;
 		_setupScreen( p_gameController.getUI() );
 	}
 	
@@ -28,6 +28,15 @@ public class DeviceOptionsState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
+		int l_changedStateName = int.Parse( m_gameController.stateName);
+		if (SessionHandler.getInstance().settingCache.active && 
+		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
+		  l_changedStateName == ZoodleState.NOTIFICATION_STATE || 
+		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE))
+		{
+			exitState = true;
+			updateSetting ();
+		}
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
@@ -68,6 +77,12 @@ public class DeviceOptionsState : GameState
 		m_generalButton.addClickCallback (toGeneral);
 		m_FAQButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
 		m_FAQButton.addClickCallback (toFAQ);
+
+		UIButton l_deviceOptionButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
+		l_deviceOptionButton.enabled = false;
+		m_generalButton.enabled = true;
+		m_FAQButton.enabled = true;
+
 		m_musicVolumeSlider = m_deviceOptionCanvas.getView ("musicVolumeSlider") as UISlider;
 		m_masterVolumeSlider = m_deviceOptionCanvas.getView ("masterVolumeSlider") as UISlider;
 		m_effectsVolumeSlider = m_deviceOptionCanvas.getView ("effectsVolumeSlider") as UISlider;
@@ -79,7 +94,7 @@ public class DeviceOptionsState : GameState
 		m_noticeLabel = m_lodaing.getView ("noticeText") as UILabel;
 		m_closeButton = m_lodaing.getView ("closeButton") as UIButton;
 		m_closeButton.active = false;
-		m_noticeLabel.text = "Loading...";
+		m_noticeLabel.text = Localization.getString(Localization.TXT_LABEL_LOADING);
 		m_closeButton.addClickCallback (closeNoticeDialog);
 		m_refreshButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
 		m_refreshButton.addClickCallback (toRefreshContent);
@@ -163,8 +178,8 @@ public class DeviceOptionsState : GameState
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Device Options";
-		l_contentLabel.text = "Master Volume: limits the maximum volume of the app.\r\nAllow Incoming Calls: when checked will allow phone to receive incoming calls while in Kid Mode.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_31_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_31_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -172,7 +187,7 @@ public class DeviceOptionsState : GameState
 	private void closeNoticeDialog(UIButton p_button)
 	{
 		m_refreshButton.addClickCallback (toRefreshContent);
-		m_noticeLabel.text = "Loading...";
+		m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_LOADING);
 		p_button.active = false;
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		l_pointListIn.Add( m_lodaing.transform.localPosition );
@@ -206,19 +221,31 @@ public class DeviceOptionsState : GameState
 
 	private void toRefreshContent(UIButton p_button)
 	{
-		p_button.removeAllCallbacks ();
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( m_lodaing.transform.localPosition );
-		l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, 800, 0 ));
-		m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+		int l_changedStateName = int.Parse( m_gameController.stateName);
+		if (SessionHandler.getInstance ().settingCache.active && 
+						!(l_changedStateName == ZoodleState.SETTING_STATE || 
+						l_changedStateName == ZoodleState.NOTIFICATION_STATE || 
+						l_changedStateName == ZoodleState.CHILD_LOCK_STATE))
+		{
+			updateSetting ();
+			p_button.removeAllCallbacks ();
+			List<Vector3> l_pointListIn = new List<Vector3>();
+			l_pointListIn.Add( m_lodaing.transform.localPosition );
+			l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, 800, 0 ));
+			m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+		}
+	}
+
+	public void updateSetting()
+	{
 		//update childLock
 		m_requestQueue.reset ();
 		if(m_settingCache.childLockSwitch && !m_settingCache.verifyBirth)
 		{
 			if(m_settingCache.childLockPassword.Length != 4)
 			{
-				m_noticeLabel.text = "The lenght of PIN must be 4. ";
-				m_closeButton.active = true;
+				//m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_PIN);
+				//m_closeButton.active = true;
 				return;
 			}
 			else
@@ -238,7 +265,7 @@ public class DeviceOptionsState : GameState
 		}
 		//update notifucation
 		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
-		m_requestQueue.add (new UpdateDeviceOptionRequest(m_allowCall?"true":"false",m_allowTip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum,updateDeviceRequestComplete));
+		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum,updateDeviceRequestComplete));
 		m_requestQueue.request (RequestType.SEQUENCE);
 		//update device option
 		SessionHandler.getInstance().resetSetting ();
@@ -253,6 +280,7 @@ public class DeviceOptionsState : GameState
 	
 	private void toPremiumScreen(UIButton p_button)
 	{
+		updateSetting ();
 		m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
 		m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
 	}
@@ -260,13 +288,15 @@ public class DeviceOptionsState : GameState
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			updateSetting ();
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
+			updateSetting ();
 			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
 			SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
 			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
@@ -382,8 +412,13 @@ public class DeviceOptionsState : GameState
 
 	private void updateDeviceRequestComplete(WWW p_response)
 	{
-		m_noticeLabel.text = "Update was successful!";
-		m_closeButton.active = true;
+		if(!exitState)
+		{
+			if(null != m_noticeLabel)
+				m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_UPDATE);
+			if(null != m_closeButton)
+				m_closeButton.active = true;
+		}
 	}
 
 	private void viewGemsRequestComplete(WWW p_response)
@@ -397,7 +432,7 @@ public class DeviceOptionsState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -439,4 +474,5 @@ public class DeviceOptionsState : GameState
 //	private bool 		m_changeState = true;
 //	#endif
 	private bool 		canMoveLeftMenu = true;
+	private bool 		exitState = false;
 }

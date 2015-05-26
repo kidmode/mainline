@@ -52,6 +52,8 @@ public class UIElement : System.Object
 		tweener 	= new Tweener( this );
 		m_children 	= new List<UIElement>();
 
+		m_alpha		= 1.0f;
+
 		setupChildren( this );
 	}
 	
@@ -59,15 +61,19 @@ public class UIElement : System.Object
 	{
 		get 
 		{ 
-			return 1.0f; 
+			return m_alpha; 
 		}
 		set 
 		{
-			int l_numChildren = m_children.Count;
-			for (int i = 0; i < l_numChildren; ++i)
+			m_alpha = value;
+			if (null != m_children)
 			{
-				UIElement l_child = m_children[i];
-				l_child.alpha = value;
+				int l_numChildren = m_children.Count;
+				for (int i = 0; i < l_numChildren; ++i)
+				{
+					UIElement l_child = m_children[i];
+					l_child.alpha = value;
+				}
 			}
 		}
 	}
@@ -81,7 +87,13 @@ public class UIElement : System.Object
 	public bool active
 	{
 		get { return gameObject.activeSelf; 	}
-		set { gameObject.SetActive( value ); 	}
+		set 
+		{
+			if (gameObject.activeSelf != value)
+			{
+				gameObject.SetActive(value); 	
+			}
+		}
 	}
 	
 	public float u
@@ -423,6 +435,11 @@ public class UIElement : System.Object
 			l_type = UIType.toggleGroup;
 		}
 
+		if(p_gameObject.tag.Equals("ComboBox"))
+		{
+			l_type = UIType.comboBox;
+		}
+
 		return l_type;
 	}
 	
@@ -465,6 +482,9 @@ public class UIElement : System.Object
 		case UIType.inputField:
 			l_element = new UIInputField();
 			break;
+		case UIType.comboBox:
+			l_element = new UIComboBox();
+			break;
 		default:
 			l_element = new UIElement();
 			break;
@@ -476,6 +496,7 @@ public class UIElement : System.Object
 	
 	private Behaviour m_baseElement; 
 	private List<UIElement> m_children;
+	protected float m_alpha;
 }
 
 public enum UIType
@@ -492,5 +513,6 @@ public enum UIType
 	slider,
 	canvas,
 	movieclip,
-	inputField
+	inputField,
+	comboBox
 }

@@ -65,10 +65,13 @@ public class ZoodleState
 	public const int GOTO_PARENT_DASHBOARD = 63;
 	public const int OVERVIEW_READING 	= 64;
 	public const int PLAN_PAYMENT		= 65;
-
 	public const int REGION_VIDEO 		= 66;
 	public const int REGION_GAME 		= 67;
 	public const int REGION_FUN 		= 68;
+	public const int CREATE_CHILD_NEW 	= 69;
+	public const int SIGN_IN_FREE 		= 70;
+	public const int CONGRATURATION		= 71;
+	public const int PAY_GEMS_CONFIRM	= 72;
 }
 
 public class ZoodlesStateFactory : IGameStateFactory
@@ -139,6 +142,10 @@ public class ZoodlesStateFactory : IGameStateFactory
 		p_gameController.addState( ZoodleState.REGION_GAME,			new RegionGameState()			);
 		p_gameController.addState( ZoodleState.REGION_VIDEO,		new RegionVideoState()			);
 		p_gameController.addState( ZoodleState.REGION_FUN,			new RegionFunState()			);
+		p_gameController.addState( ZoodleState.CREATE_CHILD_NEW,	new CreateChildState() 			);
+		p_gameController.addState( ZoodleState.SIGN_IN_FREE,		new SignInFreeState() 			);
+		p_gameController.addState( ZoodleState.CONGRATURATION,		new CongraturationsState() 		);
+		p_gameController.addState( ZoodleState.PAY_GEMS_CONFIRM,	new PayGemsConfirmState()		);
 	}
 
 	public int initialState

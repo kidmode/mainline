@@ -44,12 +44,20 @@ public class Server : object
 		return l_webRequest;
 	}
 
+	private static int MAX_CONNECTIONS = 4;
 	public static void update( float p_deltaTime )
 	{
-		for (int i = m_instance.m_calls.Count - 1; i >= 0; i--)
+		int i = m_instance.m_calls.Count - 1;
+		if (i >= MAX_CONNECTIONS) i = MAX_CONNECTIONS - 1;
+		for ( ; i >= 0; i--)
 		{
             WebRequest l_call = m_instance.m_calls[i] as WebRequest;
             l_call.update(p_deltaTime);
+
+			if (l_call.isDestroyed)
+			{
+				Server.removeCall(l_call);
+			}
 		}
 	}
 	
@@ -58,7 +66,7 @@ public class Server : object
 		m_instance.m_calls.Add(p_request);;
 	}
 	
-	public void removeCall( WebRequest p_request )
+	public static void removeCall( WebRequest p_request )
 	{
         m_instance.m_calls.Remove(p_request);
 	}

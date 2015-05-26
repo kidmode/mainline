@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class GameController 
 {
+	public const int UNDEFINED_STATE = -999;
+
 	private GameState m_state;
 	private string m_stateName;
 	
@@ -13,6 +15,8 @@ public class GameController
 	private Game m_game;	
 	private UIManager m_uiManager;
 	private IGameStateFactory m_gameStateFactory;
+
+	private GameStateBoard m_board;
 	
 	public GameController( Game p_game, IScreenFactory p_screenFactory, 
 	                      IGameStateFactory p_gameStateFactory ) 
@@ -26,6 +30,8 @@ public class GameController
 		//Create states table
 		m_states        = new Dictionary< int, GameState >();
 		m_connectStates = new Dictionary< int, int >();
+
+		m_board = new GameStateBoard();
 		
 		m_gameStateFactory = p_gameStateFactory;
 		m_gameStateFactory.addStates( this );
@@ -55,11 +61,11 @@ public class GameController
 	
 	public void changeState( int p_stateType )
 	{
+		m_stateName = p_stateType.ToString();
 		if (null != m_state)
 			m_state.exit(this);
 
 		m_state = m_states[ p_stateType ];
-		m_stateName = p_stateType.ToString();
 
 		if (null != m_state)
 			m_state.enter(this);
@@ -95,6 +101,11 @@ public class GameController
 	{
 		get { return m_game; }
 	}
+
+	public GameStateBoard board
+	{
+		get { return m_board; }
+	}
 	
 	public UIManager getUI()
 	{
@@ -108,8 +119,10 @@ public class GameController
 	
 	public int getConnectedState( int p_stateType )
 	{
-		if (!m_connectStates.ContainsKey (p_stateType))
-			return -999;
+		if (!m_connectStates.ContainsKey(p_stateType))
+		{
+			return UNDEFINED_STATE;
+		}
 		else
 		{
 			int l_state = m_connectStates[ p_stateType ];

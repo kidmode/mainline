@@ -34,7 +34,7 @@ public class KidsProfileState : GameState
 		_setupElements();
 
 		RequestQueue l_request = new RequestQueue ();
-		l_request.add (new GetKidListRequest (onRequestComplete));
+		l_request.add (new GetKidRequest(SessionHandler.getInstance().currentKid.id, onRequestComplete));
 		l_request.request ();
 
 		GAUtil.logScreen("KidsProfileScreen");
@@ -59,44 +59,36 @@ public class KidsProfileState : GameState
 			m_gameController.changeState(ZoodleState.SERVER_ERROR);
 		else
 		{
-			List<Kid> l_kidList = new List<Kid>();
-			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
-			foreach(object o in l_data)
-			{
-				Kid l_kid = new Kid( o as Hashtable );
-				l_kid.requestPhoto();
-				l_kidList.Add( l_kid );
-			}
+			string l_string = "";
 			
-			int l_kidId = -1;
-			if(SessionHandler.getInstance().currentKid != null)
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Kid l_currentKid = new Kid(l_data);
+			l_currentKid.requestPhoto();
+
+			SessionHandler.getInstance().currentKid = l_currentKid;
+
+			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
+			for (int i = 0; i < l_kidList.Count; ++i)
 			{
-				l_kidId = SessionHandler.getInstance().currentKid.id;
-			}
-			
-			SessionHandler.getInstance().kidList = l_kidList;
-			if (l_kidList.Count > 0)
-				SessionHandler.getInstance().currentKid = l_kidList[0];
-			
-			if( -1 == l_kidId )
-			{
-				return;
-			}
-			else
-			{
-				foreach( Kid l_kid in l_kidList )
+				if (l_kidList[i].id == l_currentKid.id)
 				{
-					if( l_kidId == l_kid.id )
-					{
-						SessionHandler.getInstance().currentKid = l_kid;
-					}
+					if(null != l_kidList[i].appList)
+						l_currentKid.appList = l_kidList[i].appList;
+					if(null != l_kidList[i].topRecommendedApp)
+						l_currentKid.topRecommendedApp = l_kidList[i].topRecommendedApp;
+					l_kidList[i] = l_currentKid;
+					break;
 				}
 			}
-			
+
 			if( null != m_kidsProfileCanvas )
 			{
 				//			m_kidsProfileCanvas.refreshInfo ();
-				m_profileActivityCanvas._setupList ();
+				m_profileActivityCanvas.SetupLocalizition ();
 				m_infoSwipeList.active = true;
 			}
 		}

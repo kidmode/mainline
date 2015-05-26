@@ -103,7 +103,12 @@ public class SocialPlatfromSettingsEditor : Editor {
 
 	public static bool IsInstalled {
 		get {
+
+			#if UNITY_3_5 || UNITY_4_0 || UNITY_4_1	|| UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 			if(FileStaticAPI.IsFileExists(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "androidnative.jar") && FileStaticAPI.IsFileExists(PluginsInstalationUtil.IOS_DESTANATION_PATH + "MGInstagram.h")) {
+			#else
+			if(FileStaticAPI.IsFileExists(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "androidnative.jar")) {
+			#endif
 				return true;
 			} else {
 				return false;
@@ -254,17 +259,30 @@ public class SocialPlatfromSettingsEditor : Editor {
 		AN_ManifestTemplate Manifest =  AN_ManifestManager.GetManifest();
 		AN_ApplicationTemplate application =  Manifest.ApplicationTemplate;
 		AN_ActivityTemplate launcherActivity = application.GetLauncherActivity();
+
+		AN_ActivityTemplate AndroidNativeProxy = application.GetOrCreateActivityWithName("com.androidnative.AndroidNativeProxy");
+		AndroidNativeProxy.SetValue("android:launchMode", "singleTask");
+		AndroidNativeProxy.SetValue("android:label", "@string/app_name");
+		AndroidNativeProxy.SetValue("android:configChanges", "fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen");
+		AndroidNativeProxy.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar");
+
+
+		if(launcherActivity.Name == "com.androidnative.AndroidNativeBridge") {
+			launcherActivity.SetName("com.unity3d.player.UnityPlayerNativeActivity");
+		}
 	
 		
 		////////////////////////
 		//TwitterAPI
 		////////////////////////
+
+
 		foreach(KeyValuePair<int, AN_ActivityTemplate> entry in application.Activities) {
 			//TODO get intents array
 			AN_ActivityTemplate act = entry.Value;
 			AN_PropertyTemplate intent = act.GetIntentFilterWithName("android.intent.action.VIEW");
 			if(intent != null) {
-				AN_PropertyTemplate data = intent.GetPropertyWithTag("data");
+				AN_PropertyTemplate data = intent.GetOrCreatePropertyWithTag("data");
 				if(data.GetValue("android:scheme") == "oauth") {
 					act.RemoveProperty(intent);
 				}
@@ -272,9 +290,9 @@ public class SocialPlatfromSettingsEditor : Editor {
 		} 
 
 		if(SocialPlatfromSettings.Instance.TwitterAPI) {
-			if(launcherActivity != null) {
+			if(AndroidNativeProxy != null) {
 
-				AN_PropertyTemplate intent_filter = launcherActivity.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
+				AN_PropertyTemplate intent_filter = AndroidNativeProxy.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
 				intent_filter.GetOrCreatePropertyWithName("category", "android.intent.category.DEFAULT");
 				intent_filter.GetOrCreatePropertyWithName("category", "android.intent.category.BROWSABLE");
 				AN_PropertyTemplate data = intent_filter.GetOrCreatePropertyWithTag("data");
@@ -282,12 +300,13 @@ public class SocialPlatfromSettingsEditor : Editor {
 				data.SetValue("android:host", PlayerSettings.bundleIdentifier);
 			} 
 		} else {
-			if(launcherActivity != null) {
-				AN_PropertyTemplate intent_filter = launcherActivity.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
-				launcherActivity.RemoveProperty(intent_filter);
+			if(AndroidNativeProxy != null) {
+				AN_PropertyTemplate intent_filter = AndroidNativeProxy.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
+				AndroidNativeProxy.RemoveProperty(intent_filter);
 			}
 		}
-		
+
+
 		////////////////////////
 		//FB API
 		////////////////////////
@@ -432,25 +451,34 @@ public class SocialPlatfromSettingsEditor : Editor {
 				}
 					
 			}
+
+			if(GUILayout.Button("Reset Settings",  GUILayout.Width(160))) {
+				ResetSettings();
+			}
 				
 			GUI.enabled = true;
+
+
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space();
 				
 				
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.Space();
-			if(GUILayout.Button("Reset Settings",  GUILayout.Width(160))) {
-				ResetSettings();
-			}
+			
 				
 			if(GUILayout.Button("Load Example Settings",  GUILayout.Width(160))) {
 				LoadExampleSettings();
 			}
 				
+
+			if(GUILayout.Button("Reinstall",  GUILayout.Width(160))) {
+				PluginsInstalationUtil.Android_UpdatePlugin();
+				UpdateVersionInfo();
 				
-			EditorGUILayout.EndHorizontal();
+			}
 				
+			EditorGUILayout.EndHorizontal();	
 		}
 	}
 

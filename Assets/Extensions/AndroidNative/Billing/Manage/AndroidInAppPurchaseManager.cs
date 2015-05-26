@@ -69,7 +69,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 	public void retrieveProducDetails() {
 		_IsProductRetrievingInProcess = true;
-		AndroidNative.retrieveProducDetails ();
+		AN_BillingProxy.RetrieveProducDetails();
 	}
 
 
@@ -81,7 +81,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 	public void purchase(string SKU, string DeveloperPayload) {
 		_processedSKU = SKU;
-		AndroidNative.purchase (SKU, DeveloperPayload);
+		AN_BillingProxy.Purchase (SKU, DeveloperPayload);
 	}
 
 
@@ -93,12 +93,12 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 	public void subscribe(string SKU, string DeveloperPayload) {
 		_processedSKU = SKU;
-		AndroidNative.subscribe (SKU, DeveloperPayload);
+		AN_BillingProxy.Subscribe (SKU, DeveloperPayload);
 	}
 
 	public void consume(string SKU) {
 		_processedSKU = SKU;
-		AndroidNative.consume (SKU);
+		AN_BillingProxy.Consume (SKU);
 	}
 
 
@@ -128,7 +128,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 			ids += _productsIds[i];
 		}
 
-		AndroidNative.connectToBilling (ids, base64EncodedPublicKey);
+		AN_BillingProxy.Connect (ids, base64EncodedPublicKey);
 	}
 
 

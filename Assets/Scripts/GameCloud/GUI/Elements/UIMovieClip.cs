@@ -9,6 +9,7 @@ public class UIMovieClip: UIElement
 	{
 		base.init (p_gameObject);
 		m_movieclip = p_gameObject.GetComponent<GAFMovieClip>();
+		m_alpha = 0.0f;
 		this.alpha = 1.0f;
 	}
 
@@ -57,14 +58,17 @@ public class UIMovieClip: UIElement
 		}
 		set 
 		{
-			base.alpha = value;
-
-			List<Material> l_materials = m_movieclip.resource.materials;
-			int l_numMaterials = l_materials.Count;
-			for (int i = 0; i < l_numMaterials; ++i)
+			if (value != base.alpha)
 			{
-				Material l_material = l_materials[i];
-				l_material.SetFloat("_Alpha", value);
+				base.alpha = value;
+
+				List<Material> l_materials = m_movieclip.resource.materials;
+				int l_numMaterials = l_materials.Count;
+				for (int i = 0; i < l_numMaterials; ++i)
+				{
+					Material l_material = l_materials[i];
+					l_material.SetFloat("_Alpha", value);
+				}
 			}
 		}
 	}

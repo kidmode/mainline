@@ -17,10 +17,10 @@ public class CongratsState : GameState
 
 		m_screen = l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;
 		UILabel l_info = m_screen.getView("zpInfo") as UILabel;
-		l_info.text = "5 Zoodles Points";
+		l_info.text = Localization.getString(Localization.TXT_STATE_49_ZP);
 
 		UILabel l_requestInfo = m_screen.getView("requestInfo") as UILabel;
-		l_requestInfo.text = "Uploading Data";
+		l_requestInfo.text = Localization.getString(Localization.TXT_STATE_49_UPLOADING);
 
 		m_loadingBarImg = m_screen.getView("loadingBarSprite") as UIImage;
 
@@ -99,7 +99,7 @@ public class CongratsState : GameState
 			m_requested = true;
 
 			UILabel l_requestInfo = m_screen.getView("requestInfo") as UILabel;
-			l_requestInfo.text = "tap to continue";
+			l_requestInfo.text = Localization.getString(Localization.TXT_STATE_49_CONTINUE);
 		}
 	}
 

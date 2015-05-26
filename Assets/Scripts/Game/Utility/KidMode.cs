@@ -13,6 +13,15 @@ public class KidMode
 		jo.Call("_setKidsModeActive", l_args); 
 		#endif
 	}
+
+	public static void showWebViews()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		jo.Call("_showAllWebViews"); 
+		#endif
+	}
 	
 	public static bool incomingCallsEnabled()
 	{
@@ -218,5 +227,17 @@ public class KidMode
 		}
 		#endif
 		return l_list;
+	}
+
+	public static bool hasFlashInstalled ()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		bool l_hasRequestFinished = jo.Call<bool>("_hasFlashInstalled"); 
+		return l_hasRequestFinished;
+		#else
+		return false;
+		#endif
 	}
 }

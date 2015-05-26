@@ -26,6 +26,7 @@ public class CreateChildProfileState : GameState
 			m_queue = new RequestQueue();
 
 		m_subState = SubState.NONE;
+		m_queue.reset ();
 
 		_setupScreen(p_gameController.getUI());
 
@@ -143,7 +144,7 @@ public class CreateChildProfileState : GameState
 			m_confirmDeleteButton.addClickCallback(toDeleteChild);
 			m_cancelDeleteButton.addClickCallback(toCancelDeleteChild);
 			m_loadingLabel = m_createChildCanvas.getView("LoadingText") as UILabel;
-			m_loadingLabel.text = "Loading...";
+			m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_LOADING);
 			m_closeDialogButton = m_createChildCanvas.getView("closeButton") as UIButton;
 			m_closeDialogButton.addClickCallback(toCancelDeleteChild);
 			m_closeDialogButton.active = false;
@@ -197,9 +198,9 @@ public class CreateChildProfileState : GameState
 		else
 		{
 			m_backButton.addClickCallback(toBackOverview);
-			m_noticeText.text = "Now, edit your child's profile.";
+			m_noticeText.text = Localization.getString(Localization.TXT_STATE_13_EDIT);
 			UILabel l_buttonText = m_createProfileButton.getView("createProfileText") as UILabel;
-			l_buttonText.text = "Save";
+			l_buttonText.text = Localization.getString(Localization.TXT_STATE_13_SAVE);
 		}
 
 #if UNITY_ANDROID
@@ -225,12 +226,12 @@ public class CreateChildProfileState : GameState
 		SessionHandler.getInstance().inputedChildName = "";
 		SessionHandler.getInstance().inputedbirthday = "";
 		m_subState = SubState.GO_PREVIOUS;
-		if(-999 == m_gameController.getConnectedState (int.Parse (m_gameController.stateName)))
+		int l_state = m_gameController.getConnectedState (int.Parse (m_gameController.stateName));
+		if(-999 == l_state)
 			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
 		else
 		{
-			int m_state = m_gameController.getConnectedState (int.Parse (m_gameController.stateName));
-			m_gameController.changeState (m_state);
+			m_gameController.changeState (l_state);
 		}
 	}
 	
@@ -263,7 +264,7 @@ public class CreateChildProfileState : GameState
 		{
 			if(SessionHandler.getInstance().kidList.Count <= 1)
 			{
-				m_loadingLabel.text = "You must have at least one child";
+				m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_MIN);
 				m_closeDialogButton.active = true;
 			}
 			else
@@ -295,7 +296,7 @@ public class CreateChildProfileState : GameState
 		}
 		else
 		{
-			m_loadingLabel.text = "Delete child fail.Please retry.";
+			m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_DELETE_FAIL);
 			m_closeDialogButton.active = true;
 		}
 	}
@@ -405,25 +406,25 @@ public class CreateChildProfileState : GameState
 
 	private bool checkData()
 	{
-		if (string.Empty.Equals (m_childFirstName.text) && string.Empty.Equals (m_childLastName.text))
+		if (string.Empty.Equals (m_childFirstName.text))
 		{
-			setErrorMessage(m_gameController,"Verification fail","Child's first name or last name cannot be empty.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_EMPTY_NAME));
 			return false;
 		}
 		else
 		{
-			if(m_childFirstName.text.Length + m_childLastName.text.Length > 63)
+			if(m_childFirstName.text.Length + m_childLastName.text.Length > 32)
 			{
-				setErrorMessage(m_gameController,"Verification fail","The lenght of child's name must be less than 64.");
+				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_LENGTH_NAME));
 				return false;
 			}
 
 			if (string.Empty.Equals(m_childBirthYear.text) || string.Empty.Equals(m_childBirthMonth.text))
 			{
 				if(string.Empty.Equals(m_childBirthYear.text))
-					setErrorMessage(m_gameController,"Verification fail","Year cannot be empty.");
+					setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_EMPTY_YEAR));
 				else
-					setErrorMessage(m_gameController,"Verification fail","Month cannot be empty.");
+					setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_EMPTY_MONTH));
 
 				return false;
 			}
@@ -444,7 +445,7 @@ public class CreateChildProfileState : GameState
 					}
 					else
 					{
-						setErrorMessage(m_gameController,"Verification fail","Year must be 4 digit or last 2 digit.");
+						setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_COUNT_YEAR));
 						return false;
 					}
 					string l_birthday = combineBirthdayString(l_birthYear,m_childBirthMonth.text,"01");
@@ -455,7 +456,7 @@ public class CreateChildProfileState : GameState
 						//kid doesn't born
 						if (DateTime.Compare(DateTime.Now,l_date) < 0)
 						{
-							setErrorMessage(m_gameController,"Verification fail","Cannot create account for the unborn kid.");
+							setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_UNBORN));
 							return false;
 						}
 						int l_age = 0;
@@ -472,13 +473,13 @@ public class CreateChildProfileState : GameState
 						}
 						if(l_age > 11)
 						{
-							setErrorMessage(m_gameController,"Verification fail","Your Kid must be less than 11 years old.");
+							setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_11_YEAR));
 							return false;
 						}
 					}
 					else
 					{
-						setErrorMessage(m_gameController,"Verification fail","The date is not correct.");
+						setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_DATE_ERROR));
 						return false;
 					}
 					m_birthday = l_birthday;
@@ -486,7 +487,7 @@ public class CreateChildProfileState : GameState
 				}
 				else
 				{
-					setErrorMessage(m_gameController,"Verification fail","Date must be a number.");
+					setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_13_VARIF_FAIL),Localization.getString(Localization.TXT_STATE_13_DATE_NUM));
 					return false;
 				}
 			}
@@ -507,7 +508,7 @@ public class CreateChildProfileState : GameState
 			{
 				if (l_count >= 6) 
 				{
-					setErrorMessage(m_gameController,"Create kid failed","At most, six children accounts are available.");
+					setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_13_CREATE_FAIL), Localization.getString(Localization.TXT_STATE_13_MAX));
 					return;
 				}
 				if (null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))

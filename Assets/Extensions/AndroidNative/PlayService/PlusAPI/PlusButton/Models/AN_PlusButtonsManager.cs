@@ -22,7 +22,9 @@ public class AN_PlusButtonsManager : SA_Singleton<AN_PlusButtonsManager> {
 	void OnApplicationPause(bool IsPaused) {
 		if(!IsPaused) {
 			foreach(AN_PlusButton b in buttons) {
-				b.Refresh();
+				if (b != null && b.IsShowed) {
+					b.Refresh();
+				}
 			}
 
 			Debug.Log("+1 buttons refreshed");
@@ -34,8 +36,10 @@ public class AN_PlusButtonsManager : SA_Singleton<AN_PlusButtonsManager> {
 		int id = System.Convert.ToInt32(data);
 
 		foreach(AN_PlusButton b in buttons) {
-			if(b.ButtonId.Equals(id)) {
-				b.FireClickAction();
+			if(b != null) {
+				if(b.ButtonId.Equals(id)) {
+					b.FireClickAction();
+				}
 			}
 		}
 	}

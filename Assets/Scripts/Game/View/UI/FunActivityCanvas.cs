@@ -50,17 +50,10 @@ public class FunActivityCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
-		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
+		SetupLocalizition ();
 
-        UILabel l_allContentLabel   = getView("allContentLabel") as UILabel;
-        l_allContentLabel.text      = Localization.getString( Localization.TXT_TAB_ALL_ACTIVITY );
-
-        UILabel l_booksLabel        = getView("tabLabel") as UILabel;
-        l_booksLabel.text           = Localization.getString(Localization.TXT_LABEL_ACTIVITIES);
-
-        UILabel l_favorateLabel     = getView("favorateLabel") as UILabel;
-        l_favorateLabel.text        = Localization.getString(Localization.TXT_TAB_FAVORITES);
+//		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
         m_funActivitySwipeList      = getView( "allContentScrollView" ) as UISwipeList;
 
@@ -118,8 +111,11 @@ public class FunActivityCanvas : UICanvas
 		{
 			l_titleLabel.active = false;
 
-			UIRawImage l_rawImage = p_element.getView("icon") as UIRawImage;
-			l_rawImage.texture = l_info.icon;
+			UIImage l_rawImage = p_element.getView("icon") as UIImage;
+			if( null != l_info.icon )
+			{
+				l_rawImage.setTexture( l_info.icon );
+			}
 		}
 
 //        l_titleLabel.text = l_info.title;
@@ -145,6 +141,14 @@ public class FunActivityCanvas : UICanvas
         //m_bookFavorateSwipeList.redraw();
 	}
 
+	private void SetupLocalizition()
+	{
+		UILabel l_allContentLabel   = getView("allContentLabel") as UILabel;
+		UILabel l_new = getView ("title").getView("title") as UILabel;
+
+		l_allContentLabel.text      = Localization.getString( Localization.TXT_TAB_ALL_ACTIVITY );
+		l_new.text        			= Localization.getString(Localization.TXT_33_LABEL_NEW);
+	}
 
 
     private UISwipeList     m_funActivitySwipeList;

@@ -29,7 +29,14 @@ public class ErrorState : GameState
 			int l_lastState = m_gameController.getConnectedState(ZoodleState.ERROR_STATE);
 			if(l_lastState != ZoodleState.NO_STATE)
 			{
-				m_gameController.changeState(l_lastState);
+				if(l_lastState == ZoodleState.INITIALIZE_GAME)
+				{
+					Application.Quit();
+				}
+				else
+				{
+					m_gameController.changeState(l_lastState);
+				}
 			}
 		}
 	}
@@ -71,7 +78,7 @@ public class ErrorState : GameState
 		l_errorMessage.text = l_handler.errorMessage;
 
 		UIImage l_background = m_errorCanvas.getView ("bodyBG") as UIImage;
-		l_background.tweener.addAlphaTrack(0, 1, 1.0f, setCallbacks);
+		l_background.tweener.addAlphaTrack(0, 1, 0.1f, setCallbacks);
 	}
 
 	private void setCallbacks(UIElement p_element, Tweener.TargetVar p_targetVar)

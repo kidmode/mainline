@@ -42,6 +42,7 @@ public class BookInfo : object
 		if (null != icon)
 		{
 			GameObject.Destroy(icon);
+			icon = null;
 		}
 		disposed = true;
 		disposeRequest();
@@ -80,37 +81,27 @@ public class BookActivityCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
-		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
-
-
-        UILabel l_allContentLabel   = getView("allContentLabel") as UILabel;
-        l_allContentLabel.text      = Localization.getString(Localization.TXT_TAB_ALL_BOOKS);
-
-       // UILabel l_featuredBookLabel = getView("featuredLabel") as UILabel;
-       // l_featuredBookLabel.text    = Localization.getString(Localization.TXT_LABEL_FEATURED_BOOKS);
-
-        UILabel l_booksLabel        = getView("tabLabel") as UILabel;
-        l_booksLabel.text           = Localization.getString(Localization.TXT_LABEL_BOOKS);
-
-        UILabel l_favorateLabel     = getView("favorateLabel") as UILabel;
-        l_favorateLabel.text        = Localization.getString(Localization.TXT_TAB_FAVORITES);
-
+//		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
         UIToggle l_favorateTab      = getView("favorateTab") as UIToggle;
         l_favorateTab.addValueChangedCallback( onFeaturedToggled );
 
         UIToggle l_allContentTab    = getView("allContentTab") as UIToggle;
         l_allContentTab.addValueChangedCallback( onAllToggled );
-
         
         m_bookSwipeList             = getView( "allContentScrollView" ) as UISwipeList;
 
         m_bookFavorateSwipeList     = getView( "favorateScrollView" )   as UISwipeList;
         m_bookFavorateSwipeList.active = false;
 
-		m_bookFavorateInfo = getView("info") as UILabel;
+		m_bookFavorateInfo = getView("favoriteInfo") as UILabel;
+		m_bookInfo = getView("info") as UILabel;
+		
+		m_emptyTexture = new Texture2D (1, 1);
 
 		_setupList();
+		
+		SetupLocalizition ();
 
 		m_lockIcon = Resources.Load ( "GUI/2048/common/icon/icon_lock" ) as Texture2D;
 		m_playIcon = Resources.Load ( "GUI/800/common/button/icon_play" ) as Texture2D;
@@ -121,7 +112,6 @@ public class BookActivityCanvas : UICanvas
 	{
 		base.update();
 	}
-	
 	
 	public override void enteringTransition(  )
 	{
@@ -140,9 +130,7 @@ public class BookActivityCanvas : UICanvas
 		base.dispose( p_deep );
 
 	}
-	
-	
-	
+
 	//----------------- Private Implementation -------------------
 	
 	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
@@ -159,6 +147,7 @@ public class BookActivityCanvas : UICanvas
             m_bookSwipeList.active          = false;
 			m_bookFavorateSwipeList.active 	= true;
 			m_bookFavorateInfo.active = (m_bookFavorateSwipeList.getData().Count <= 0);
+			m_bookInfo.active = false;
         }
     }
 
@@ -168,6 +157,8 @@ public class BookActivityCanvas : UICanvas
         {
             m_bookSwipeList.active          = true;
             m_bookFavorateSwipeList.active  = false;
+			m_bookInfo.active = (m_bookSwipeList.getData().Count <= 0);
+			m_bookFavorateInfo.active = false;
         }
     }
 
@@ -218,7 +209,7 @@ public class BookActivityCanvas : UICanvas
 
 		if( l_info.icon == null )
 		{
-			l_rawImage.setTexture( new Texture2D(1, 1) );
+			l_rawImage.setTexture( m_emptyTexture );
 		}
 		else
 		{
@@ -237,16 +228,33 @@ public class BookActivityCanvas : UICanvas
         m_bookFavorateSwipeList.redraw();
 	}
 
-
+	private void SetupLocalizition()
+	{		
+		UILabel l_allContentLabel   = getView("allContentLabel") as UILabel;
+		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_infoLabel 		= getView("info") as UILabel;
+		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
+		UILabel l_headerLabel 		= getView("header") as UILabel;
+		
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allContentLabel.text    	= Localization.getString(Localization.TXT_TAB_ALL_BOOKS);
+//		l_infoLabel.text 			= Localization.getString(Localization.TXT_14_LABEL_INFO);
+//		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_14_LABEL_FAVORITE);
+		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_headerLabel.text 			= Localization.getString(Localization.TXT_14_LABEL_HEADER);
+	}
 
     private UISwipeList     m_bookSwipeList;
 	private UISwipeList     m_bookFavorateSwipeList;
 	private UILabel			m_bookFavorateInfo;
+	private UILabel			m_bookInfo;
 
 	private List< Button > 	m_buttonList;
 
 	private Texture2D		m_playIcon;
 	private Texture2D		m_lockIcon;
 	private Texture2D		m_recordableIcon;
-
+	
+	private Texture2D 		m_emptyTexture;
 }

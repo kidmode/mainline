@@ -8,6 +8,8 @@ public class ChildLockCanvas : UICanvas
 	{
 		base.init( p_gameObject );
 		
+		SetupLocalizition ();
+		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 		m_dialog = getView ("dialog") as UIElement;
 		m_dialogMovePosition = 891;
@@ -50,6 +52,23 @@ public class ChildLockCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_title = getView("Title") as UILabel;
+		UILabel l_titleLock = getView("childLockCheckButton").getView("titleText") as UILabel;
+		UILabel l_notice = getView("noticeLabel") as UILabel;
+		UILabel l_titleBirth = getView("verifyBirthButton").getView("titleText") as UILabel;
+		UILabel l_feature = getView("featureText") as UILabel;
+		UILabel l_buy = getView("buyText") as UILabel;
+		
+		l_title.text = Localization.getString( Localization.TXT_44_LABEL_TITLE );
+		l_titleLock.text = Localization.getString( Localization.TXT_44_LABEL_TITLE_LOCK );
+		l_notice.text = Localization.getString( Localization.TXT_44_LABEL_NOTICE );
+		l_titleBirth.text = Localization.getString( Localization.TXT_44_LABEL_TITLE_BIRTH );
+		l_feature.text = Localization.getString( Localization.TXT_44_LABEL_FEATURE );
+		l_buy.text = Localization.getString( Localization.TXT_44_LABEL_BUY );
 	}
 
 	private UIElement m_dialog;

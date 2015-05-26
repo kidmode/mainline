@@ -132,8 +132,8 @@ public class ControlSiteState : GameState
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Add Your Sites";
-		l_contentLabel.text = "Please select the sites you want your kid to be able play inside Kid Mode.\r\nPremium Feature.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_60_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_60_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -194,8 +194,8 @@ public class ControlSiteState : GameState
 		{
 			SessionHandler.getInstance().CreateChild = true;
 
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -258,7 +258,7 @@ public class ControlSiteState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -339,7 +339,7 @@ public class ControlSiteState : GameState
 
 	private void onSiteButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
-		p_list.removeClickListener ( "controlButton", onSiteButtonClicked );
+//		p_list.removeClickListener ( "controlButton", onSiteButtonClicked );s
 		SiteInfo l_siteInfo = p_data as SiteInfo;
 		
 		for( int i = 0; i < m_siteInfoList.Count; i++ )
@@ -390,7 +390,7 @@ public class ControlSiteState : GameState
 		}
 		
 		m_addSiteCanvas.setData( l_dataList );
-		m_siteSwipeList.removeClickListener ( "controlButton", onSiteButtonClicked );
+//		m_siteSwipeList.removeClickListener ( "controlButton", onSiteButtonClicked );
 		m_siteSwipeList.active = true;
 	}
 
@@ -440,7 +440,7 @@ public class ControlSiteState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 

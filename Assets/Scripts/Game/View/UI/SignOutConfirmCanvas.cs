@@ -8,6 +8,8 @@ public class SignOutConfirmCanvas : UICanvas
 	{
 		base.init( p_gameObject );
 		
+		SetupLocalizition ();
+		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
 		m_dialog = getView ("dialog") as UIElement;
@@ -52,6 +54,19 @@ public class SignOutConfirmCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_title = getView("dialogTitle").getView("Text") as UILabel;
+		UILabel l_content = getView("dialogContent").getView("Text") as UILabel;
+		UILabel l_no = getView("cancelButton").getView("cancelBtnText") as UILabel;
+		UILabel l_yes = getView("affirmButton").getView("affirmBtnText") as UILabel;
+		
+		l_title.text = Localization.getString( Localization.TXT_40_LABEL_TITLE );
+		l_content.text = Localization.getString( Localization.TXT_40_LABEL_CONTENT );
+		l_no.text = Localization.getString( Localization.TXT_40_LABEL_NO );
+		l_yes.text = Localization.getString( Localization.TXT_40_LABEL_YES );
 	}
 
 	private UIElement m_dialog;

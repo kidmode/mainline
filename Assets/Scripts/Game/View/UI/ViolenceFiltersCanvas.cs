@@ -6,6 +6,8 @@ public class ViolenceFiltersCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 
 		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -77,6 +79,31 @@ public class ViolenceFiltersCanvas : UICanvas
 				m_levelFourToggle.isOn = true;
 				break;
 		}
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView("titleText") as UILabel;
+		UILabel l_titleLevel1 = getView("levelOneToggle").getView("toogleLabel") as UILabel;
+		UILabel l_titleLevel2 = getView("levelTwoToggle").getView("toogleLabel") as UILabel;
+		UILabel l_titleLevel3 = getView("levelThreeToggle").getView("toogleLabel") as UILabel;
+		UILabel l_titleLevel4 = getView("levelFourToggle").getView("toogleLabel") as UILabel;
+		UILabel l_titleLevel0 = getView("levelZeroToggle").getView("toogleLabel") as UILabel;
+		UILabel l_contentLevel1 = getView("levelOneToggle").getView("contentLabel") as UILabel;
+		UILabel l_contentLevel2 = getView("levelTwoToggle").getView("contentLabel") as UILabel;
+		UILabel l_contentLevel3 = getView("levelThreeToggle").getView("contentLabel") as UILabel;
+		UILabel l_contentLevel4 = getView("levelFourToggle").getView("contentLabel") as UILabel;
+		
+		l_top.text = Localization.getString( Localization.TXT_64_LABEL_TITLE );
+		l_titleLevel1.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL1 );
+		l_titleLevel2.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL2 );
+		l_titleLevel3.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL3 );
+		l_titleLevel4.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL4 );
+		l_titleLevel0.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL0 );
+		l_contentLevel1.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL1 );
+		l_contentLevel2.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL2 );
+		l_contentLevel3.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL3 );
+		l_contentLevel4.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL4 );
 	}
 	
 	private UIToggle m_levelZeroToggle;

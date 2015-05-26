@@ -10,6 +10,7 @@ public class UIImage : UIElement
 		m_image = p_gameObject.GetComponent<Image>();
 		m_resourcesSprite = m_image.sprite;
 		baseElement = m_image;
+		m_alpha = m_image.color.a;
 	}
 
 	public void setTexture(string p_path)
@@ -40,6 +41,8 @@ public class UIImage : UIElement
 	
 	public void setTexture(Texture2D p_texture)
 	{
+		if (null == p_texture)
+				return;
 		if (null == m_sprite
 		    || m_sprite.texture != p_texture)
 		{
@@ -75,12 +78,15 @@ public class UIImage : UIElement
 		get { return m_image.color.a; }
 		set 
 		{ 
-			base.alpha 		= value;
-			Color l_color 	= m_image.color;
-			l_color.a 		= value;
+			if (value != base.alpha)
+			{
+				base.alpha 		= value;
+				Color l_color 	= m_image.color;
+				l_color.a 		= value;
 
-			m_image.color 	= l_color;
-			m_image.SetAllDirty();
+				m_image.color 	= l_color;
+				m_image.SetAllDirty();
+			}
 		}
 	}
 

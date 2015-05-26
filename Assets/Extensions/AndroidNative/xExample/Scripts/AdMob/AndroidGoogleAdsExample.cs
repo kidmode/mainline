@@ -51,8 +51,9 @@ public class AndroidGoogleAdsExample : MonoBehaviour {
 	// INITIALIZE
 	//--------------------------------------
 
-	void Start() {
 
+
+	void Start() {
 
 		AndroidAdMobController.instance.Init(MY_BANNERS_AD_UNIT_ID);
 

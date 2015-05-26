@@ -27,6 +27,7 @@ public class UpsellSplashState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
+		m_requestQueue.dispose ();
 		p_gameController.getUI().removeScreen( m_upsellSplashCanvas );
 	}
 
@@ -34,7 +35,6 @@ public class UpsellSplashState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
-
 		m_backScreen = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
 		if (m_backScreen == null)
 		{
@@ -59,6 +59,7 @@ public class UpsellSplashState : GameState
 
 	private void gotoDashBoard( UIButton p_button )
 	{
+		p_button.removeClickCallback( gotoDashBoard );
 		if(SessionHandler.getInstance().childLockSwitch)
 		{
 			if (0 != SessionHandler.getInstance ().pin) 
@@ -67,7 +68,7 @@ public class UpsellSplashState : GameState
 			}
 			else
 			{
-				setErrorMessage(m_gameController,"error","Pin inexistence. Please reLogin.");
+				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_1_ERROR),Localization.getString(Localization.TXT_STATE_1_PIN));
 			}
 		}
 		else
@@ -107,7 +108,7 @@ public class UpsellSplashState : GameState
 	}
 
 	private void gotoGetGems( UIButton p_button )
-	{	
+	{
 		p_button.removeClickCallback (gotoGetGems);
 		string l_returnJson = SessionHandler.getInstance ().GemsJson;
 

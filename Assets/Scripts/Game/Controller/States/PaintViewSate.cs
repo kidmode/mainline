@@ -116,7 +116,7 @@ public class PaintViewSate : GameState
 		else
 		{
 			m_loadingLabel.active = true;
-			m_loadingLabel.text = "Load fail";
+			m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
 		}
 		m_artImage.active = true;
 		m_drawingList [m_currentIndex] = m_currentDrawing;
@@ -230,6 +230,11 @@ public class PaintViewSate : GameState
 
 	private void onYesButtonClick( UIButton p_button )
 	{
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( m_confirmDialog.transform.localPosition );
+		l_pointListOut.Add( m_confirmDialog.transform.localPosition - new Vector3( 0, 800, 0 ));
+		m_confirmDialog.tweener.addPositionTrack( l_pointListOut, 0f );
+
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		l_pointListIn.Add( m_messagePanel.transform.localPosition );
 		l_pointListIn.Add( m_messagePanel.transform.localPosition + new Vector3( 0, 800, 0 ));

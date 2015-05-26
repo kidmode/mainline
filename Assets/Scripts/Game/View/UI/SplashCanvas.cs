@@ -14,6 +14,7 @@ public class SplashCanvas : UICanvas
 
         m_starParticles = GameObject.Find("starParticles").particleSystem;
         DebugUtils.Assert(m_starParticles != null);
+		SetupLocalizition ();
 	}
 
 	public override void update()
@@ -23,8 +24,6 @@ public class SplashCanvas : UICanvas
         if (m_inTransition)
             _updateParticleAlpha();
 	}
-
-
 
 	public override void dispose( bool p_deep )
 	{
@@ -50,13 +49,15 @@ public class SplashCanvas : UICanvas
             m_starParticles.enableEmission = false;
 	}
 
-
-
 	private void _updateParticleAlpha()
 	{
-		Color l_col = m_starParticles.renderer.material.GetColor( "_TintColor" );
-		l_col.a = alpha;
-		m_starParticles.renderer.material.SetColor( "_TintColor", l_col );
+		if (null != m_starParticles)
+		{
+			Material l_material = m_starParticles.renderer.material;
+			Color l_col = l_material.GetColor( "_TintColor" );
+			l_col.a = alpha;
+			l_material.SetColor( "_TintColor", l_col );
+		}
 	}
 
 	//-- Private Implementation --
@@ -66,10 +67,19 @@ public class SplashCanvas : UICanvas
 		l_canvas.isTransitioning = false;
 	}
 
+	private void SetupLocalizition()
+	{
+		UILabel l_loading = getView ("loadingLabel") as UILabel;
+		UILabel l_welcome = getView ("welcomeLabel") as UILabel;
+		UILabel l_made = getView ("madeLabel") as UILabel;
+		UILabel l_tap = getView ("tapLabel") as UILabel;
 
-
+		l_loading.text = Localization.getString (Localization.TXT_1_LABEL_LOADING);
+		l_welcome.text = Localization.getString (Localization.TXT_1_LABEL_WELCOME);
+		l_made.text = Localization.getString (Localization.TXT_1_LABEL_MADE_FOR);
+		l_tap.text = Localization.getString (Localization.TXT_1_LABEL_TAP);
+	}
 
     private bool m_inTransition = false;
     private ParticleSystem m_starParticles;
-
 }

@@ -112,6 +112,23 @@ public class CreditCardHelper
 		else if (new Regex(@"^6(?:011|5[0-9]{2})[0-9]{12}").IsMatch(p_cardNumber))
 			return "discover";
 		else
-			return "visa";
+			return string.Empty;
 	}
+}
+
+public class GameStateBoard
+{
+	public void write(string p_key, object p_value)
+	{
+		m_storage.Add(p_key, p_value);
+	}
+
+	public object read(string p_key)
+	{
+		object l_value = m_storage[p_key];
+		m_storage.Remove(p_key);
+		return l_value;
+	}
+
+	private Hashtable m_storage = new Hashtable();
 }

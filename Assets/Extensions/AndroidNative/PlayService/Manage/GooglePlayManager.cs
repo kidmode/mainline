@@ -36,8 +36,8 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 
 	//Actions
-	public static Action<GP_GamesResult> ActionSoreSubmited 							= delegate {};
-	public static Action<GP_GamesResult> ActionSoreUpdatedd								= delegate {};
+	public static Action<GP_GamesResult> ActionScoreSubmited 							= delegate {};
+	public static Action<GP_GamesResult> ActionPlayerScoreUpdated						= delegate {};
 	public static Action<GooglePlayResult> ActionLeaderboardsLoaded 					= delegate {};
 	public static Action<GooglePlayResult> ActionFriendsListLoaded 						= delegate {};
 	public static Action<GP_GamesResult> ActionAchievementUpdated 						= delegate {};
@@ -327,12 +327,17 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 	}
 
-	[Obsolete("loadConnectedPlayers is deprecated, please use LoadConnectedPlayers instead.")]
+	[Obsolete("loadConnectedPlayers is deprecated, please use LoadFriends instead.")]
 	public void loadConnectedPlayers() {
-		LoadConnectedPlayers();
+		LoadFriends();
 	}
 
+	[Obsolete("LoadConnectedPlayers is deprecated, please use LoadFriends instead.")]
 	public void LoadConnectedPlayers() {
+		LoadFriends();
+	}
+
+	public void LoadFriends() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 		AN_GMSGeneralProxy.loadConnectedPlayers ();
 	}
@@ -719,7 +724,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 		}
 
-		ActionSoreUpdatedd(result);
+		ActionPlayerScoreUpdated(result);
 		dispatch (SCORE_UPDATED, result);
 	}
 
@@ -735,7 +740,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		GP_GamesResult result = new GP_GamesResult (storeData [0]);
 		result.leaderboardId = storeData [1];
 
-		ActionSoreSubmited(result);
+		ActionScoreSubmited(result);
 		dispatch (SCORE_SUBMITED, result);
 
 	}
@@ -872,6 +877,42 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 
 	//--------------------------------------
+	// UTILS
+	//--------------------------------------
+	
+	public static GP_Participant ParseParticipanData(string[] data, int index ) {
+		GP_Participant participant =  new GP_Participant(data[index], data[index + 1], data[index + 2], data[index + 3], data[index + 4], data[index + 5]);
+
+		bool hasResult = Convert.ToBoolean(data[index + 6]);
+		if(hasResult) {
+			GP_ParticipantResult r =  new GP_ParticipantResult(data, index + 7);
+			participant.SetResult(r);
+		}
+
+		return participant;
+	}
+
+
+
+	public static List<GP_Participant>  ParseParticipantsData(string[] data, int index ) {
+
+		List<GP_Participant> Participants =  new List<GP_Participant>();
+	
+		for(int i = index; i < data.Length; i += 11) {
+			if(data[i] == AndroidNative.DATA_EOF) {
+				break;
+			}
+
+			GP_Participant p = ParseParticipanData(data, i);
+			Participants.Add(p);
+
+		}
+
+		return Participants;
+	}
+
+
+	//--------------------------------------
 	// PRIVATE METHODS
 	//--------------------------------------
 
@@ -880,5 +921,9 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 			_players.Add(p.playerId, p);
 		}
 	}
+
+
+
+
 
 }

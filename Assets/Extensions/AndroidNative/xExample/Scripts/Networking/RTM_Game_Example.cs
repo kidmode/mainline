@@ -21,7 +21,8 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 
 
 	public DefaultPreviewButton[] ConnectionDependedntButtons;
-	public SA_PartisipantUI[] patrisipants;
+	public SA_PartisipantUI[] patricipants;
+	public SA_FriendUI[] friends;
 
 
 	private Texture defaulttexture;
@@ -33,10 +34,9 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 		defaulttexture = avatar.GetComponent<Renderer>().material.mainTexture;
 		
 		//listen for GooglePlayConnection events
-		GooglePlayRTM.ActionInvitationReceived += OnInvite;
+		GooglePlayInvitationManager.ActionInvitationReceived += OnInvite;
+		GooglePlayInvitationManager.ActionInvitationAccepted += ActionInvitationAccepted;
 		GooglePlayRTM.ActionRoomCreated += OnRoomCreated;
-
-
 
 		GooglePlayConnection.instance.addEventListener (GooglePlayConnection.PLAYER_CONNECTED, OnPlayerConnected);
 		GooglePlayConnection.instance.addEventListener (GooglePlayConnection.PLAYER_DISCONNECTED, OnPlayerDisconnected);
@@ -71,12 +71,25 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 	}
 
 
+	/*
+	private static int ROLE_FARMER = 0x1; // 001 in binary
+	private static int ROLE_ARCHER = 0x2; // 010 in binary
+	private static int ROLE_WIZARD = 0x4; // 100 in binary
+
+
+	private static int TRACK_1 = 1; // 100 in binary
+	private static int TRACK_2 = 2; // 100 in binary
+*/
+
 	private void findMatch() {
+/*
+		GooglePlayRTM.instance.SetExclusiveBitMask (ROLE_WIZARD);
+		GooglePlayRTM.instance.SetVariant (TRACK_1);
+*/
 		int minPlayers = 1;
 		int maxPlayers = 2;
-		int bitMask = 0;
-		
-		GooglePlayRTM.instance.FindMatch(minPlayers, maxPlayers, bitMask);
+
+		GooglePlayRTM.instance.FindMatch(minPlayers, maxPlayers);
 	}
 
 	private void InviteFriends() {
@@ -103,21 +116,21 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 
 
 
-	private void DrawPartisipants() {
+	private void DrawParticipants() {
 
 		UpdateGameState("Room State: " + GooglePlayRTM.instance.currentRoom.status.ToString());
-		parisipants.text = "Total Room Partisipants: " + GooglePlayRTM.instance.currentRoom.partisipants.Count;
+		parisipants.text = "Total Room Participants: " + GooglePlayRTM.instance.currentRoom.participants.Count;
 			
 
 
-		foreach(SA_PartisipantUI p in patrisipants) {
+		foreach(SA_PartisipantUI p in patricipants) {
 			p.gameObject.SetActive(false);
 		}
 		
 		int i = 0;
-		foreach(GP_Partisipant p in GooglePlayRTM.instance.currentRoom.partisipants) {
-			patrisipants[i].gameObject.SetActive(true);
-			patrisipants[i].SetPartisipant(p);
+		foreach(GP_Participant p in GooglePlayRTM.instance.currentRoom.participants) {
+			patricipants[i].gameObject.SetActive(true);
+			patricipants[i].SetParticipant(p);
 			i++;
 		}
 	
@@ -129,7 +142,7 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 	}
 
 	void FixedUpdate() {
-		DrawPartisipants();
+		DrawParticipants();
 
 		if(GooglePlayRTM.instance.currentRoom.status!= GP_RTM_RoomStatus.ROOM_VARIANT_DEFAULT && GooglePlayRTM.instance.currentRoom.status!= GP_RTM_RoomStatus.ROOM_STATUS_ACTIVE) {
 			showRoomButton.EnabledButton();
@@ -195,6 +208,29 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 	private void OnPlayerConnected() {
 		SA_StatusBar.text = "Player Connected";
 		playerLabel.text = GooglePlayManager.instance.player.name;
+
+		GooglePlayInvitationManager.instance.RegisterInvitationListener();
+
+
+		GooglePlayManager.ActionFriendsListLoaded +=  OnFriendListLoaded;
+		GooglePlayManager.instance.LoadFriends();
+	}
+
+	void OnFriendListLoaded (GooglePlayResult result) {
+		Debug.Log("OnFriendListLoaded: " + result.message);
+		GooglePlayManager.ActionFriendsListLoaded -=  OnFriendListLoaded;
+
+		if(result.isSuccess) {
+			Debug.Log("Friends Load Success");
+
+			int i = 0;
+			foreach(string fId in GooglePlayManager.instance.friendsList) {
+				if(i < 3) {
+					friends[i].SetFriendId(fId);
+				}
+				i++;
+			}
+		}
 	}
 	
 	private void OnConnectionResult(CEvent e) {
@@ -205,11 +241,30 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 	}
 
 	private string inviteId;
-	private void OnInvite(string invitationId) {
+	private void OnInvite(GP_Invite invitation) {
 
-		inviteId = invitationId;
-		AndroidDialog dialog =  AndroidDialog.Create("Invite", "You have new invite from firend", "Start Playing", "Open Inbox");
+		if (invitation.InvitationType != GP_InvitationType.INVITATION_TYPE_REAL_TIME) {
+			return;
+		}
+
+		inviteId = invitation.Id;
+
+		AndroidDialog dialog =  AndroidDialog.Create("Invite", "You have new invite from: " + invitation.Participant.DisplayName, "Manage Manually", "Open Google Inbox");
 		dialog.OnComplete += OnInvDialogComplete;
+	}
+
+	void ActionInvitationAccepted (GP_Invite invitation) {
+
+		Debug.Log("ActionInvitationAccepted called");
+
+		if (invitation.InvitationType != GP_InvitationType.INVITATION_TYPE_REAL_TIME) {
+			return;
+		}
+
+
+		Debug.Log("Starting The Game");
+		//make sure you have prepared your scene to start the game before you accepting the invite. Room join even will be triggered
+		GooglePlayRTM.instance.AcceptInvitation(invitation.Id);
 	}
 
 	private void OnRoomCreated(GP_GamesStatusCodes code) {
@@ -225,7 +280,8 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 		//parsing result
 		switch(result) {
 		case AndroidDialogResult.YES:
-			GooglePlayRTM.instance.AcceptInviteToRoom(inviteId);
+			AndroidDialog dialog =  AndroidDialog.Create("Manage Invite", "Would you like to accept this invite?", "Accept", "Decline");
+			dialog.OnComplete += OnInvManageDialogComplete;
 			break;
 		case AndroidDialogResult.NO:
 			GooglePlayRTM.instance.OpenInvitationInBoxUI();
@@ -234,9 +290,23 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 		}
 	}
 
+	private void OnInvManageDialogComplete(AndroidDialogResult result) {
+		switch(result) {
+		case AndroidDialogResult.YES:
+			GooglePlayRTM.instance.AcceptInvitation(inviteId);
+			break;
+		case AndroidDialogResult.NO:
+			GooglePlayRTM.instance.DeclineInvitation(inviteId);
+			break;
+		}
+	}
+
+
+
+
 
 	private void OnGCDataReceived(GP_RTM_Network_Package package) {
-		#if (UNITY_ANDROID && !UNITY_EDITOR) || SA_DEBUG_MODE
+		#if (UNITY_ANDROID && !UNITY_EDITOR ) || SA_DEBUG_MODE
 
 		
 		System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
@@ -246,7 +316,7 @@ public class RTM_Game_Example : AndroidNativeExampleBase {
 		string name = package.participantId;
 
 	
-		GP_Partisipant p =  GooglePlayRTM.instance.currentRoom.GetPartisipantById(package.participantId);
+		GP_Participant p =  GooglePlayRTM.instance.currentRoom.GetParticipantById(package.participantId);
 		if(p != null) {
 			GooglePlayerTemplate player = GooglePlayManager.instance.GetPlayerById(p.playerId);
 			if(player != null) {

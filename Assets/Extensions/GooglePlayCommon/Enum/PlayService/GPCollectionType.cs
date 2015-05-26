@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
- 
+//https://developer.android.com/reference/com/google/android/gms/games/leaderboard/LeaderboardVariant.html#COLLECTION_PUBLIC
 
 using UnityEngine;
 using System.Collections;

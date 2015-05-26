@@ -37,8 +37,11 @@ import android.os.PowerManager;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.ValueCallback;
 import android.webkit.CookieManager;
@@ -53,6 +56,8 @@ import java.util.List;
 import android.os.Handler;
 import android.provider.Settings;
 import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
 
 @SuppressLint("NewApi")
 public class AndroidPlugin extends AndroidNativeBridge
@@ -126,7 +131,7 @@ public class AndroidPlugin extends AndroidNativeBridge
 	{
 		super.onPause();
 		ShowAllWebViewDialogs(false);
-
+		
 		CookieSyncManager manager = CookieSyncManager.getInstance();
 		if (manager != null)
 		{
@@ -136,6 +141,16 @@ public class AndroidPlugin extends AndroidNativeBridge
 		if (m_tryRelock)
 		{
 			updateLockTaskOnResume();
+		}
+
+		if (App.instance().childLock().inChildLock())
+		{
+			if (null == m_screenLock)
+			{
+				m_screenLock = new ScreenLock(this);
+			}
+
+			m_screenLock.handleAppResume(false);
 		}
 
 		m_isInForeground = false;
@@ -148,6 +163,17 @@ public class AndroidPlugin extends AndroidNativeBridge
 		super.onStop();
 		m_exitHint = true;
 		checkForPreemption();
+
+		if (App.instance().childLock().inChildLock())
+		{
+			if (null == m_screenLock)
+			{
+				m_screenLock = new ScreenLock(this);
+			}
+
+			m_screenLock.handleAppResume(false);
+		}
+
 	}
 
 	@Override
@@ -162,13 +188,23 @@ public class AndroidPlugin extends AndroidNativeBridge
 			manager.startSync();
 		}
 
+		if (App.instance().childLock().inChildLock())
+		{
+			if (null == m_screenLock)
+			{
+				m_screenLock = new ScreenLock(this);
+			}
+
+			m_screenLock.handleAppResume(true);
+		}
+
 		App l_app = App.instance();
 		ChildLock l_childLock = l_app.childLock();
 		if (App.instance().childLock().inChildLock())
 		{
-			// l_app.stopLockScreenService();
-			// l_app.stopWatcherLockScreenService();
-			// l_app.startWatcherLockScreenService();
+			l_app.stopLockScreenService();
+			l_app.stopWatcherLockScreenService();
+			l_app.startWatcherLockScreenService();
 
 			l_childLock.startWatchForPreemption();
 			l_childLock.allowedAppStopped();
@@ -854,10 +890,10 @@ public class AndroidPlugin extends AndroidNativeBridge
 
 			m_screenLock.closeStatusBar(this);
 		}
-
+		
 		// Closes all system windows, including the power menu and status bar on
 		// window focus.
-
+		//
 		// if (!hasFocus && App.instance().childLock().inChildLock())
 		// {
 		// Intent closeDialog = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -877,6 +913,12 @@ public class AndroidPlugin extends AndroidNativeBridge
 	public void _setKidsModeActive(boolean p_isActive)
 	{
 		final boolean l_isActive = p_isActive;
+		final AndroidPlugin l_this = this;
+
+		App l_app = App.instance();
+		l_app.stopLockScreenService();
+		l_app.stopWatcherLockScreenService();
+
 		runSafelyOnUiThread(new Runnable()
 		{
 			@Override
@@ -884,6 +926,8 @@ public class AndroidPlugin extends AndroidNativeBridge
 			{
 				Log.v("Zoodles", "kidsmodeActive:" + l_isActive);
 				App l_app = App.instance();
+				l_app.stopLockScreenService();
+				l_app.stopWatcherLockScreenService();
 				ChildLock l_childLock = l_app.childLock();
 
 				if (l_isActive)
@@ -891,12 +935,15 @@ public class AndroidPlugin extends AndroidNativeBridge
 					// startKidExperience();
 					l_childLock.startWatchForPreemption();
 					l_childLock.setupHomeReplacement(App.instance());
+					l_this.overrideStatusBarTouch();
+					l_app.startWatcherLockScreenService();
 				}
 				else
 				{
 					l_childLock.stopWatchForPreemption();
 					l_childLock.removeHomeReplacement(App.instance());
 					l_childLock.setInChildLock(false);
+					l_this.releaseStatusBarTouch();
 				}
 			}
 		});
@@ -910,7 +957,7 @@ public class AndroidPlugin extends AndroidNativeBridge
 		 * m_kidModeActive = false; } } }
 		 */
 	}
-
+	
 	@SuppressLint("NewApi")
 	public void lockTask()
 	{
@@ -922,11 +969,9 @@ public class AndroidPlugin extends AndroidNativeBridge
 	{
 		try
 		{
-			// Log.v("Zoodles", "try updatelocktaskonresume");
 			if (m_kidModeActive && m_isLockPaused)
 			{
 				m_tryRelock = true;
-				Log.v("Zoodles", "try updatelocktaskonresume");
 				startLockTask();
 				m_isLockPaused = false;
 				m_tryRelock = false;
@@ -934,15 +979,12 @@ public class AndroidPlugin extends AndroidNativeBridge
 		}
 		catch (Exception e)
 		{
-			Log.v("Zoodles", "Exception thrown by startLockTask");
-
 			ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
 			List<RunningTaskInfo> l_tasks = activityManager.getRunningTasks(10);
 
 			for (int i = 0; i < l_tasks.size(); ++i)
 			{
 				RunningTaskInfo l_task = l_tasks.get(i);
-				Log.v("ZoodlesToptask", " " + l_task.topActivity);
 			}
 		}
 	}
@@ -975,6 +1017,13 @@ public class AndroidPlugin extends AndroidNativeBridge
 		return m_requestFinished;
 	}
 
+	public boolean _hasFlashInstalled()
+	{
+		App l_app = App.instance();
+		DeviceInfo l_di = l_app.deviceInfo();
+		return l_di.hasFlashInstalled();
+	}
+
 	// Use this when the home application is unset.
 	// This will send a home intent to prompt the user to pick a home.
 	public void _requestHomeButton()
@@ -992,12 +1041,14 @@ public class AndroidPlugin extends AndroidNativeBridge
 				Activity l_activity = UnityPlayer.currentActivity;
 				l_childLock.setupHomeReplacement(l_app);
 				l_childLock.setInChildLock(false);
+				l_app.stopLockScreenService();
+				l_app.stopWatcherLockScreenService();
 				App.instance().childLock().sendHomeIntent(l_activity, 0);
 				m_requestIntentSent = true;
 			}
 		});
 	}
-	
+
 	public boolean _incomingCallsEnabled()
 	{
 		App l_app = App.instance();
@@ -1005,7 +1056,7 @@ public class AndroidPlugin extends AndroidNativeBridge
 		boolean l_incomingCallsEnabled = l_preferences.incomingCallsEnabled();
 		return l_incomingCallsEnabled;
 	}
-	
+
 	public int _exitAction()
 	{
 		App l_app = App.instance();
@@ -1129,14 +1180,11 @@ public class AndroidPlugin extends AndroidNativeBridge
 		packages = pm.getInstalledApplications(0);
 		for (ApplicationInfo packageInfo : packages)
 		{
-			// Log.v("Zoodles", "package name:" + packageInfo.packageName);
 			if (packageInfo.packageName.equals(targetPackage))
 			{
-				Log.v("Zoodles", "targetPackage found:" + targetPackage);
 				return true;
 			}
 		}
-		Log.v("Zoodles", "targetPackage not found:" + targetPackage);
 		return false;
 	}
 
@@ -1335,12 +1383,12 @@ public class AndroidPlugin extends AndroidNativeBridge
 				{
 					ActivityManager.RunningTaskInfo topTask = runningTasks.get(0);
 					String topPackageName = topTask.topActivity.getPackageName();
-					Log.v("Zoodles", "running top package:" + topPackageName);
+//					Log.v("Zoodles", "running top package:" + topPackageName);
 					if (topPackageName != null)
 					{
 						if (isKidmodeTopTask() && m_exitHint == false)
 						{
-							Log.d("Zoodles", "busting an infinite relaunch loop.");
+//							Log.d("Zoodles", "busting an infinite relaunch loop.");
 							return;
 						}
 
@@ -1350,7 +1398,7 @@ public class AndroidPlugin extends AndroidNativeBridge
 							String l_whiteListPackage = m_whiteList.get(i);
 							if (topPackageName.startsWith(l_whiteListPackage))
 							{
-								Log.d("Zoodles", "Whitelisted package detected preempted this app.");
+//								Log.d("Zoodles", "Whitelisted package detected preempted this app.");
 								return;
 							}
 						}
@@ -1360,13 +1408,13 @@ public class AndroidPlugin extends AndroidNativeBridge
 				// Yes, we legitimately have been pre-empted. So assert
 				// ourselves
 				// back to the top of the system task stack.
-				Log.v("Zoodles", "relaunch");
+//				Log.v("Zoodles", "relaunch");
 				relaunchActivity();
 			}
 			else
 			{
 				// End any game play session that might be in progress.
-				Log.d("Zoodles", "checkForPreemption ending game session");
+//				Log.d("Zoodles", "checkForPreemption ending game session");
 
 				// End any game session and log it.
 				// The child can get right back in from the multitasking/history
@@ -1481,7 +1529,7 @@ public class AndroidPlugin extends AndroidNativeBridge
 			List<ResolveInfo> appList = mPackageManager.queryIntentActivities(mainIntent, 0);
 			for (ResolveInfo info : appList)
 			{
-				Log.v("Zoodles", "PNM:" + info.activityInfo.processName + " PKGNM:" + info.activityInfo.packageName + " activity:" + getActivity(info.activityInfo.packageName));
+//				Log.v("Zoodles", "PNM:" + info.activityInfo.processName + " PKGNM:" + info.activityInfo.packageName + " activity:" + getActivity(info.activityInfo.packageName));
 
 			}
 		}
@@ -1526,6 +1574,10 @@ public class AndroidPlugin extends AndroidNativeBridge
 
 	public void startApp(String p_packageName)
 	{
+		App l_app = App.instance();
+		l_app.stopLockScreenService();
+		l_app.stopWatcherLockScreenService();
+
 		PackageManager l_packageManager = this.getPackageManager();
 		Intent l_launchIntent = l_packageManager.getLaunchIntentForPackage(p_packageName);
 		String l_activityName = l_launchIntent.getComponent().getClassName();
@@ -1594,20 +1646,20 @@ public class AndroidPlugin extends AndroidNativeBridge
 
 		for (ActivityManager.RunningAppProcessInfo process : processes)
 		{
-			Log.v("Zoodles", "process component Running:" + process.processName + " " + process.importance + " " + process.IMPORTANCE_FOREGROUND);
+//			Log.v("Zoodles", "process component Running:" + process.processName + " " + process.importance + " " + process.IMPORTANCE_FOREGROUND);
 			String[] packages = process.pkgList;
 			for (int i = 0; i < packages.length; i++)
 			{
-				Log.v("Zoodles", "Package Running:" + packages[i]);
+//				Log.v("Zoodles", "Package Running:" + packages[i]);
 			}
 		}
 
-		Log.v("Zoodles", "==========================");
+//		Log.v("Zoodles", "==========================");
 
 		final List<ActivityManager.RunningTaskInfo> recentTasks = activityManager.getRunningTasks(100);
 		for (ActivityManager.RunningTaskInfo task : recentTasks)
 		{
-			Log.v("Zoodles", "Activity Running:" + task.baseActivity);
+//			Log.v("Zoodles", "Activity Running:" + task.baseActivity);
 		}
 
 	}
@@ -1638,6 +1690,75 @@ public class AndroidPlugin extends AndroidNativeBridge
 
 		Log.v("Zoodles", "Unable to find the app in question.");
 		return -1;
+	}
+
+	public void overrideStatusBarTouch()
+	{
+		WindowManager manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
+
+		WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
+		localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+		localLayoutParams.gravity = Gravity.TOP;
+		localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+
+		// this is to enable the notification to recieve touch events
+				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+
+				// Draws over status bar
+				WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+		localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+		localLayoutParams.height = getStatusBarHeight();
+		localLayoutParams.format = PixelFormat.TRANSPARENT;
+
+		mHiddenView = new View(this);
+
+		/*
+		 * final View l = findViewById(R.id.game_exit_header_left); final View r
+		 * = findViewById(R.id.game_exit_header_right); final View i =
+		 * findViewById(R.id.game_exit_icon);
+		 */
+		/*
+		 * if (l != null && r != null && i != null) { // The z-back-bar exists
+		 * mHiddenView.setOnTouchListener(new View.OnTouchListener() {
+		 * 
+		 * @Override public boolean onTouch(View v, MotionEvent event) { if
+		 * (event.getAction() == MotionEvent.ACTION_UP) { int x = (int)
+		 * event.getRawX(); int y = (int) event.getRawY(); int[] loc = new
+		 * int[2]; Rect rl, rr, ri;
+		 * 
+		 * l.getLocationOnScreen(loc); rl = new Rect(loc[0], loc[1], loc[0] +
+		 * l.getWidth(), loc[1] + l.getHeight()); r.getLocationOnScreen(loc); rr
+		 * = new Rect(loc[0], loc[1], loc[0] + r.getWidth(), loc[1] +
+		 * r.getHeight()); i.getLocationOnScreen(loc); ri = new Rect(loc[0],
+		 * loc[1], loc[0] + i.getWidth(), loc[1] + i.getHeight());
+		 * 
+		 * if (rl.contains(x, y)) { l.performClick(); } else if (rr.contains(x,
+		 * y)) { r.performClick(); } else if (ri.contains(x, y)) {
+		 * i.performClick(); } }
+		 * 
+		 * return false; } }); }
+		 */
+		manager.addView(mHiddenView, localLayoutParams);
+	}
+
+	protected View mHiddenView;
+
+	public void releaseStatusBarTouch()
+	{
+		WindowManager manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
+		manager.removeView(mHiddenView);
+	}
+
+	public int getStatusBarHeight()
+	{
+		int result = 0;
+		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0)
+		{
+			result = getResources().getDimensionPixelSize(resourceId);
+		}
+		return result;
 	}
 
 	public static boolean m_inChildLock = false;

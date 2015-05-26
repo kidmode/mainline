@@ -8,15 +8,15 @@ public class ProfileActivityCanvas : UICanvas
 	{
 		base.init (p_gameObject);
 
+		SetupLocalizition();
+		
 		m_panel = getView( "panel" );
 
 		List<Vector3> l_pointList = new List<Vector3>();
 		l_pointList.Add( m_panel.transform.localPosition - new Vector3( 0, 800, 0) );
 		l_pointList.Add( m_panel.transform.localPosition );
 		
-		m_panel.tweener.addPositionTrack( l_pointList, 0.3f );
-
-		_setupList();
+		m_panel.tweener.addPositionTrack (l_pointList, 0.3f);
 	}
 
 	public override void update ()
@@ -54,7 +54,7 @@ public class ProfileActivityCanvas : UICanvas
 		l_titleText.text = l_profile.titleString;
 
 		UILabel l_levelLabel = l_image.getView ("levelText") as UILabel;
-		if( l_titleText.text.Equals("Zoodles Points") )
+		if( l_titleText.text.Equals(Localization.getString( Localization.TXT_54_LABEL_ZP )) )
 		{
 			l_levelLabel.active = true;
 			l_levelLabel.text = SessionHandler.getInstance().currentKid.level.ToString();
@@ -68,8 +68,12 @@ public class ProfileActivityCanvas : UICanvas
 		l_contentText.text = l_profile.contentString;
 	}
 
-	public void _setupList()
+	public void SetupLocalizition()
 	{
+		UILabel l_top = getView("titleArea").getView("Text") as UILabel;
+		
+		l_top.text = Localization.getString( Localization.TXT_54_LABEL_TOP );
+
 		string l_imagePath = "GUI/2048/common/icon/";
 
 		UISwipeList l_swipeList = getView( "profileSwipeList" ) as UISwipeList;
@@ -78,10 +82,10 @@ public class ProfileActivityCanvas : UICanvas
 
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 
-		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_star_rating", "Zoodles Points", l_kid.stars.ToString("N0") ) );
-		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_gems", "Gems", l_kid.gems.ToString("N0") ) );
-		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_videos", "Videos Watched", l_kid.videoWatchedCount.ToString("N0") ) );
-		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_games", "Games Played", l_kid.gamePlayedCount.ToString("N0") ) );
+		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_star_rating", Localization.getString( Localization.TXT_54_LABEL_ZP ), l_kid.stars.ToString("N0") ) );
+		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_gems", Localization.getString( Localization.TXT_54_LABEL_GEMS ), l_kid.gems.ToString("N0") ) );
+		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_videos", Localization.getString( Localization.TXT_54_LABEL_VIDEOS ), l_kid.videoWatchedCount.ToString("N0") ) );
+		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_games", Localization.getString( Localization.TXT_54_LABEL_GAMES ), l_kid.gamePlayedCount.ToString("N0") ) );
 
 		l_swipeList.setData( l_infoData );
 		l_swipeList.setDrawFunction( onListDraw );

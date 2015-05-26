@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-
+ 
 //Attach the script to the empty gameobject on your sceneS
 public class iAdIOSInterstitial : MonoBehaviour {
 

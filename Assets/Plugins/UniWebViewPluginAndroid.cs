@@ -8,7 +8,7 @@ public class UniWebViewPlugin {
 	private static AndroidJavaClass webView;
 
 	public static void Init(string name, int top, int left, int bottom, int right) {
-		Debug.Log("Unity Init");
+//		Debug.Log("Unity Init");
 		if (Application.platform == RuntimePlatform.Android) {
 			webView = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
 

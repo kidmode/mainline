@@ -48,12 +48,12 @@ public class ProfileViewState : GameState
 		m_finishButton = m_profileViewCanvas.getView ("finishButton") as UIButton;
 		m_backButton = m_profileViewCanvas.getView ("backButton") as UIButton;
 		List<Kid> l_kidList = SessionHandler.getInstance ().kidList;
-		if(l_kidList.Count > 0)
+		if(null != l_kidList && l_kidList.Count > 0)
 		{
 			Kid l_newCreatedKid = l_kidList [l_kidList.Count - 1];
 			m_profileImage.setTexture (l_newCreatedKid.kid_photo);
 			m_kidName.text = l_newCreatedKid.name;
-			m_topicText.text = l_newCreatedKid.name + "'s Profile Created.";
+			m_topicText.text = l_newCreatedKid.name + Localization.getString(Localization.TXT_STATE_54_CREATED);
 		}
 		m_addChildButton.addClickCallback (toCreateKidScreen);
 		m_finishButton.addClickCallback (toProfileSelectScreen);
@@ -65,7 +65,7 @@ public class ProfileViewState : GameState
 	{
 		p_button.removeClickCallback (toCreateKidScreen);
 		SessionHandler.getInstance().CreateChild = true;
-		m_gameController.changeState (ZoodleState.CREATE_CHILD);
+		m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 	}
 
 	private void toProfileSelectScreen(UIButton p_button)

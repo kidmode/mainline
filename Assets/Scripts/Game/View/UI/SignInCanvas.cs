@@ -6,6 +6,7 @@ public class SignInCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+		SetupLocalizition ();
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 	}
@@ -33,5 +34,20 @@ public class SignInCanvas : UICanvas
 	{
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_exit = getView ("exitButton").getView("btnText") as UILabel;
+		UILabel l_top = getView ("topicText") as UILabel;
+		UILabel l_email = getView ("emailAddressText") as UILabel;
+		UILabel l_password = getView ("passwordText") as UILabel;
+		UILabel l_signIn = getView ("signInBtnText") as UILabel;
+		
+		l_exit.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+		l_top.text = Localization.getString (Localization.TXT_21_LABEL_TOP);
+		l_email.text = Localization.getString (Localization.TXT_21_LABEL_EMAIL);
+		l_password.text = Localization.getString (Localization.TXT_21_LABEL_PASSWORD);
+		l_signIn.text = Localization.getString (Localization.TXT_21_LABEL_SIGNIN);
 	}
 }

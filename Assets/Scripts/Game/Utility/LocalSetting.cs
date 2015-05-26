@@ -30,7 +30,6 @@ public class LocalSetting
 			m_table[p_key] = p_value;
 			m_dirty = true;
 		}
-
 		_save();
 	}
 

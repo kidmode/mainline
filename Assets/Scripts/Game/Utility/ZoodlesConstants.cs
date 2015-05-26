@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ZoodlesConstants 
@@ -37,6 +37,7 @@ public class ZoodlesConstants
 	public const string REST_CLIENT_ID_URL			        = "/api/clients";
 	public const string REST_LOCALE_URL			            = "/api/locale";
 	public const string REST_KIDS_URL				        = "/api/kids/kid_list";
+	public const string REST_KID_URL				        = "/api/kids/kid_show";
 	public const string REST_PARENT_URL				        = "/api/parent/kids";
 	public const string REST_LOGIN_URL				        = "/api/token";
 	public const string REST_NEW_LOGIN_URL				    = "/api/user/signin";
@@ -49,6 +50,7 @@ public class ZoodlesConstants
 	public const string REST_READINGS					    = "/api/readings";
 	public const string REST_APP_APPROVED     			    = "/api/apps";
 	public const string REST_APP_RECOMMENDATIONS		    = "/api/apps/recommendations";
+	public const string REST_APP_RECOMMEND_NEW		  		= "/api/apps/recommended_apps_new";
 	public const string REST_APP_REVIEW      			    = "/api/apps/reviews";
 	public const string REST_APP_ALLOWED      			    = "/api/apps/allowed";
 	public const string REST_EXPERIMENT_URL      		    = "/api/experiments";
@@ -117,6 +119,7 @@ public class ZoodlesConstants
 	public const string GET_TOP_RECOMMEND_APP				= "/api/apps/top_app";
 	public const string SEND_PIN							= "/api/pin/send_forgot_pin";
 	public const string SEND_TELL_FRIEND_EMAIL				= "/api/send_emails/tell_friend";
+	public const string CHECK_USERNAME						= "/api/user/check_email";
 
 	
 	//////////////////////////////////////////////////////////////////////
@@ -181,11 +184,13 @@ public class ZoodlesConstants
 	public const string PARAM_APPS							= "apps";
 	public const string PARAM_APP_ID						= "advertiser_app_id";
 	public const string PARAM_APP_INCLUDE_PROMOS			= "include_promos";
+	public const string PARAM_APP_PAGES						= "include_pages";
 	public const string PARAM_APP_NAME						= "name";
 	public const string PARAM_APP_PACKAGE					= "packages";
 	public const string PARAM_APP_PACKAGE_NAME				= "package_name";
 	public const string PARAM_KID_AGE						= "age";
 	public const string PARAM_PAGE							= "page";
+	public const string PARAM_OWNED_REQUEST					= "owned_request";
 	public const string PARAM_LANGUAGE						= "language";
 	public const string PARAM_COUNTRY						= "country";
 	
@@ -237,6 +242,17 @@ public class ZoodlesConstants
 	public const string TO									= "to";
 	public const string OPTIONAL_MESSAGE					= "optional_message";
 
+	public const string CREDIT_CARD_NUMBER					= "creditcard[number]";
+	public const string CREDIT_CARD_TYPE					= "creditcard[type]";
+	public const string CREDIT_CARD_MONTH					= "creditcard[month]";
+	public const string CREDIT_CARD_YEAR					= "creditcard[year]";
+
+	public const string IAB_PACKAGE							= "package_name";
+	public const string IAB_ORDER_ID						= "billing_id";
+	public const string IAB_SKU								= "product_id";
+	public const string IAB_PURCHASE_TOKEN					= "purchase_token";
+	public const string IAB_DEVELOPER_PAYLOAD				= "developer_payload";
+	
 	//////////////////////////////////////////////////////////////////////
 	// REST API Form parameter values
 	//////////////////////////////////////////////////////////////////////
@@ -325,11 +341,14 @@ public class ZoodlesConstants
 	/////////////////////////////////////////////////////////////////
 	public const string USER_NAME			= "UserName";
 	public const string USER_PIN			= "UserPin";
+	public const string CHILD_LOCK_PASSWORD = "UserLockPassword";
 	public const string USER_EXIST			= "UserExist";
 	public const string USER_TOKEN			= "UserToken";
 	public const string USER_PREMIUM		= "UserPremium";
 	public const string USER_TRY			= "UserTry";
 	public const string USER_CURRENT		= "UserCurrent";
+	public const string USER_VERIFY_BIRTHYEAR = "UserVerifyBirthYear";
+	public const string USER_CHILDLOCK_SWITCH = "UserChildLockSwitch";
 
 	/////////////////////////////////////////////////////////////////
 	// Symbol

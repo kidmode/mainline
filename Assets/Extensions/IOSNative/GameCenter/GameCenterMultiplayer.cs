@@ -6,7 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
+ 
 
 using UnityEngine;
 using System;
@@ -75,7 +75,7 @@ public class GameCenterMultiplayer : EventDispatcher {
 	}
 
 	//--------------------------------------
-	//  Pear - To - Pear
+	//  Peer - To - Peer
 	//--------------------------------------
 
 

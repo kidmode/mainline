@@ -9,6 +9,8 @@ public class UpsellCongratulationCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+		
+		SetupLocalizition ();
 
         tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 
@@ -56,9 +58,10 @@ public class UpsellCongratulationCanvas : UICanvas
 	{
 		if(null != m_starParticles)
 		{
-			Color l_col = m_starParticles.renderer.material.GetColor( "_TintColor" );
+			Material l_material = m_starParticles.renderer.material;
+			Color l_col = l_material.GetColor( "_TintColor" );
 			l_col.a = alpha;
-			m_starParticles.renderer.material.SetColor( "_TintColor", l_col );
+			l_material.SetColor( "_TintColor", l_col );
 		}
 	}
 
@@ -68,9 +71,17 @@ public class UpsellCongratulationCanvas : UICanvas
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
 	}
-
-
-
+	
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView ("topicText") as UILabel;
+		UILabel l_notice = getView ("noticeText") as UILabel;
+		UILabel l_continue = getView ("continueButton").getView ("Text") as UILabel;
+		
+		l_top.text = Localization.getString (Localization.TXT_66_LABEL_TOP);
+		l_notice.text = Localization.getString (Localization.TXT_66_LABEL_NOTICE);
+		l_continue.text = Localization.getString (Localization.TXT_66_LABEL_CONTINUE);
+	}
 
     private bool m_inTransition = false;
     private ParticleSystem m_starParticles;

@@ -17,10 +17,19 @@ public class OverviewAppState : GameState
 
 		m_uiManager = m_gameController.getUI();
 	 	m_currentPage = 1;
+		m_isLoaded = false;
 		m_requestQueue = new RequestQueue();
 		m_getAppRequestQueue = new RequestQueue();
 		m_getIconRequestQueue = new RequestQueue();
-		m_currentAppList =new List<object>();
+		m_iconRequests = new List<RequestQueue>();
+
+//		foreach (Kid l_k in SessionHandler.getInstance ().kidList)
+//		{
+//			if(l_k.id == SessionHandler.getInstance ().currentKid.id)
+//				m_currentAppList = l_k.appList == null? new List<object>():l_k.appList;
+//		}
+
+		m_currentAppList = SessionHandler.getInstance().currentKid.appList == null? new List<object>():SessionHandler.getInstance().currentKid.appList;
 		_setupScreen(p_gameController);
 		_setupElment();
 	}
@@ -31,9 +40,10 @@ public class OverviewAppState : GameState
 
 		if (isLoadApp)
 		{
-			if (m_currentAppList.Count > 0)
+			if ( m_isLoaded )
 			{
 				isLoadApp = false;
+				m_isLoaded = false;
 				_setupRecommendedAppCanvas();
 			}
 		}
@@ -45,6 +55,8 @@ public class OverviewAppState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		base.exit(p_gameController);
+		disposeIconRequests();
+		m_getIconRequestQueue.dispose ();
 		m_uiManager.removeScreen(UIScreen.CONFIRM_DIALOG);
 		m_uiManager.removeScreen(UIScreen.APP_DETAILS);
 		m_uiManager.removeScreen(UIScreen.APP_LIST);
@@ -56,6 +68,18 @@ public class OverviewAppState : GameState
 	}
 
 	//----------------- Private Implementation -------------------
+
+	private void disposeIconRequests()
+	{
+		int l_numRequests = m_iconRequests.Count;
+		for (int i = 0; i < l_numRequests; ++i)
+		{
+			RequestQueue l_queue = m_iconRequests[i];
+			l_queue.dispose();
+		}
+		m_iconRequests.Clear();
+		m_iconRequests = null;
+	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
@@ -145,8 +169,10 @@ public class OverviewAppState : GameState
 		//Create an empty list for set up swipeList.
 		List<System.Object> l_list = new List<System.Object>();
 		m_appList.setData (l_list);
-
-		loadAppList ();
+		if((null == m_currentAppList || m_currentAppList.Count == 0) && SessionHandler.getInstance().appRequest.isCompleted())
+			loadAppList ();
+		else
+			loadAppListImmediate();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -173,8 +199,8 @@ public class OverviewAppState : GameState
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Recommended Apps";
-		l_contentLabel.text = "Zoodles recommends fun, educational games for your kid from a library that is constantly refreshed so your child never gets bored.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_50_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_50_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -210,9 +236,9 @@ public class OverviewAppState : GameState
 				l_costGems.text = m_detailsApp.gems.ToString ();
 				l_needGems.text = (m_detailsApp.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
 				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-				l_titleLabel.text = "Need More Gems!";
+				l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
 				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-				l_notice1label.text = "You need more gems to purchase:";
+				l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
 				m_costArea.active = false;
 				m_needMoreArea.active = true;
 			}
@@ -266,7 +292,7 @@ public class OverviewAppState : GameState
 			}
 			else
 			{
-				setErrorMessage(m_gameController,"Download fail","Please contact customer service.");
+				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_50_FAIL),Localization.getString(Localization.TXT_STATE_50_CONTACT));
 			}
 
 			installApp( l_app.packageName );
@@ -289,7 +315,7 @@ public class OverviewAppState : GameState
 		
 		AndroidJavaObject jo_intent = new AndroidJavaObject("android.content.Intent", jo_view, l_uri);
 		
-		AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>("createChooser", jo_intent, "Choose An Market");
+		AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>("createChooser", jo_intent, Localization.getString(Localization.TXT_STATE_45_MARKET));
 		
 		l_joActivity.Call("startActivity", jo_chooser );
 		
@@ -325,9 +351,9 @@ public class OverviewAppState : GameState
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
-		l_titleLabel.text = "Confirm Purchase";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
-		l_notice1label.text = "You are purchasing:";
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
 		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
 		l_notice1label2.text = p_app.name;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
@@ -384,11 +410,11 @@ public class OverviewAppState : GameState
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -426,6 +452,20 @@ public class OverviewAppState : GameState
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
 	private void _setupRecommendedAppCanvas()
 	{
+		UILabel l_loading = m_recommendedAppCanvas.getView ("loadingText") as UILabel;
+
+		List<System.Object> l_list = m_currentAppList;
+		
+		if( m_currentAppList.Count > 0 )
+		{
+			l_loading.active = false;
+		}
+		else
+		{
+			l_loading.text = Localization.getString(Localization.TXT_STATE_50_EMPTY);
+			return;
+		}
+
 		List<UIElement> l_canvasList = new List<UIElement> ();
 		UIElement l_app1 = m_recommendedAppCanvas.getView ("appOne") as UIElement;
 		UIElement l_app2 = m_recommendedAppCanvas.getView ("appTwo") as UIElement;
@@ -435,7 +475,6 @@ public class OverviewAppState : GameState
 		l_canvasList.Add (l_app2);
 		l_canvasList.Add (l_app3);
 		l_canvasList.Add (l_app4);
-		List<System.Object> l_list = m_currentAppList;
 
 		int l_count = l_list.Count >= 4 ? 4 : l_list.Count;
 		for(int l_i = 0; l_i < l_count; l_i++)
@@ -460,10 +499,28 @@ public class OverviewAppState : GameState
 		UILabel l_appCostText = p_element.getView("appCostText") as UILabel;
 		UILabel l_appFreeText = p_element.getView("appFreeText") as UILabel;
 		UILabel l_sponsoredText = p_element.getView("sponsoredText") as UILabel;
+		UILabel l_subjectsText = p_element.getView ("subjectText") as UILabel;
+
+		l_appFreeText.text = Localization.getString (Localization.TXT_56_LABEL_FREE);
+		if( null != l_sponsoredText )
+		{
+			l_sponsoredText.text = Localization.getString (Localization.TXT_56_LABEL_SPONSORED);
+		}
+		l_subjectsText.text = Localization.getString (Localization.TXT_56_LABEL_SUBJECTS);
+
+		Token l_token = SessionHandler.getInstance ().token;
+		Boolean l_canShowCosts = true;
+		if( l_token.isPremium() || l_token.isCurrent() )
+		{
+			l_canShowCosts = false;
+			l_appCostText.active = false;
+			l_appFreeText.active = false;
+		}
+
 		if(p_app.gems == 0)
 		{
 			l_appCostText.active = false;
-			l_appFreeText.active = true;
+			l_appFreeText.active = true && l_canShowCosts;
 			if(null != l_sponsoredText)
 				l_sponsoredText.active = true;
 		}
@@ -482,16 +539,9 @@ public class OverviewAppState : GameState
 				l_appFreeText.active = false;
 				if(null != l_sponsoredText)
 					l_sponsoredText.active = false;
-				l_appCostText.active = true;
+				l_appCostText.active = true && l_canShowCosts;
 				l_appCostText.text = p_app.gems.ToString();
 			}
-		}
-
-		Token l_token = SessionHandler.getInstance ().token;
-		if( l_token.isPremium() || l_token.isCurrent() )
-		{
-			l_appCostText.active = false;
-			l_appFreeText.active = false;
 		}
 
 		if(null == p_app.icon)
@@ -652,6 +702,8 @@ public class OverviewAppState : GameState
 			m_appList.addValueChangeListener(onListToEnd);
 		}
 		m_appList.addClickListener ("Prototype",onAppClick);
+
+		m_isLoaded = true;
 	}
 
 	private void onListToEnd(Vector2 p_value)
@@ -660,12 +712,16 @@ public class OverviewAppState : GameState
 		{
 			m_appList.removeValueChangeListener(onListToEnd);
 
-			if(m_currentAppList.Count % 10 == 0)
+			if(m_currentAppList.Count % 10 == 0 && m_getAppRequestQueue.Completed())
 			{
 				m_currentPage++;
 				m_getAppRequestQueue.reset ();
-				m_getAppRequestQueue.add ( new GetAppByPageRequest(SessionHandler.getInstance().currentKid.age,"google",m_currentPage,getAppListComplete));
+				m_getAppRequestQueue.add ( new GetAppByPageRequest(SessionHandler.getInstance().currentKid.age,"google",m_currentAppList.Count/10 + 1,getAppListComplete));
 				m_getAppRequestQueue.request ();
+			}
+			else
+			{
+				m_appList.addValueChangeListener(onListToEnd);
 			}
 		}
 	}
@@ -755,13 +811,17 @@ public class OverviewAppState : GameState
 		}
 
 		Token l_token = SessionHandler.getInstance ().token;
+		UILabel l_text = l_buyAppButton.getView( "Text" ) as UILabel;
 		if( l_token.isPremium() || l_token.isCurrent() )
 		{
 			l_appCostText.active = false;
 			l_appFreeText.active = false;
 			l_buyAppButton.active = true;
-			UILabel l_text = l_buyAppButton.getView( "Text" ) as UILabel;
-			l_text.text = "Install";
+			l_text.text = Localization.getString (Localization.TXT_70_LABEL_INSTALL);
+		}
+		else
+		{
+			l_text.text = Localization.getString (Localization.TXT_70_LABEL_BUY);
 		}
 		
 		resetSubjectColor ();
@@ -771,9 +831,8 @@ public class OverviewAppState : GameState
 		UILabel l_violence = m_appDetailsCanvas.getView("violenceLevelText") as UILabel;
 		UILabel l_age = m_appDetailsCanvas.getView("ageText") as UILabel;
 		UIImage l_icon = m_appDetailsCanvas.getView ("appImage") as UIImage;
-		UIButton l_buyButton = m_appDetailsCanvas.getView ("buyAppButton") as UIButton;
-		l_buyButton.removeClickCallback (buyApp);
-		l_buyButton.addClickCallback (buyApp);
+		l_buyAppButton.removeClickCallback (buyApp);
+		l_buyAppButton.addClickCallback (buyApp);
 		
 		l_description.text = p_app.description;
 		l_violence.text = p_app.violence.ToString();
@@ -792,7 +851,12 @@ public class OverviewAppState : GameState
 
 	private void downLoadAppIcon(UIElement p_element, App p_app)
 	{
-		m_getIconRequestQueue.add (new IconRequest(p_app,p_element));
+		RequestQueue l_queue = new RequestQueue();
+		l_queue.add(new IconRequest(p_app,p_element));
+		l_queue.request(RequestType.SEQUENCE);
+		m_iconRequests.Add(l_queue);
+
+		//m_getIconRequestQueue.add (new IconRequest(p_app,p_element));
 		p_app.iconDownload = true;
 	}
 
@@ -823,11 +887,17 @@ public class OverviewAppState : GameState
 	private void loadAppList()
 	{
 		m_getAppRequestQueue.reset();
-		m_getAppRequestQueue.add(new GetAppOwnRequest());
-		m_getAppRequestQueue.add(new GetAppByPageRequest(SessionHandler.getInstance().currentKid.age,"google",m_currentPage,firstGetAppListComplete));
+		//m_getAppRequestQueue.add(new GetAppOwnRequest());
+		m_getAppRequestQueue.add(new NewGetAppByPageRequest(SessionHandler.getInstance().currentKid,"google",m_currentPage,firstGetAppListComplete));
 		m_getAppRequestQueue.request(RequestType.SEQUENCE);
 		
 		isLoadApp = true;
+	}
+
+	private void loadAppListImmediate()
+	{
+		isLoadApp = true;
+		firstLoadMoreAppList ();
 	}
 
 	private void firstGetAppListComplete(WWW p_response)
@@ -836,20 +906,36 @@ public class OverviewAppState : GameState
 		{
 			string l_string = UnicodeDecoder.Unicode(p_response.text);
 			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
-			int l_dataCount = l_data.Count;
-			Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
-			for(int l_i = 0; l_i < l_dataCount; l_i++)
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
 			{
-				Hashtable l_table = l_data[l_i] as Hashtable;
-				App l_app = new App(l_table);
-				if(null != l_table)
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
 				{
-					l_app.own = l_appOwn.ContainsKey(l_app.id.ToString());
+					Hashtable l_result = l_response["response"] as Hashtable;
+					if(l_result.ContainsKey("app_owned"))
+					{
+						SessionHandler.getInstance().appOwn = l_result["app_owned"] as Hashtable;
+					}
+					if(l_result.ContainsKey("apps"))
+					{
+						ArrayList l_data = l_result["apps"] as ArrayList;
+						int l_dataCount = l_data.Count;
+						Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
+						for(int l_i = 0; l_i < l_dataCount; l_i++)
+						{
+							Hashtable l_table = l_data[l_i] as Hashtable;
+							App l_app = new App(l_table);
+							if(null != l_table)
+							{
+								l_app.own = l_appOwn.ContainsKey(l_app.id.ToString());
+							}
+							m_currentAppList.Add(l_app);
+						}
+						firstLoadMoreAppList();
+					}
 				}
-				m_currentAppList.Add(l_app);
 			}
-			firstLoadMoreAppList();
 		}
 	}
 
@@ -907,7 +993,7 @@ public class OverviewAppState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -937,6 +1023,7 @@ public class OverviewAppState : GameState
 	private bool 					  canMoveLeftMenu = true;
 	private bool 					  appListOpen = false;
 	private UILabel					  m_appCountLabel;
+	private bool					  m_isLoaded = false;
 
 	private UIElement  				  m_costArea;
 	private UIButton 			      m_buyGemsButton;
@@ -965,4 +1052,6 @@ public class OverviewAppState : GameState
 	private RequestQueue 			  m_requestQueue;
 	private RequestQueue 			  m_getAppRequestQueue;
 	private RequestQueue 			  m_getIconRequestQueue;
+
+	private List<RequestQueue>			m_iconRequests;
 }

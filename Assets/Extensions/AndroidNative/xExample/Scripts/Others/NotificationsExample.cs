@@ -30,7 +30,8 @@ public class NotificationsExample : MonoBehaviour {
 		GoogleCloudMessageService.instance.addEventListener(GoogleCloudMessageService.CLOUD_MESSAGE_LOADED, OnMessageLoaded);
 
 		GoogleCloudMessageService.instance.InitPushNotifications ();
-		GoogleCloudMessageService.instance.InitParsePushNotifications ();
+		//GoogleCloudMessageService.instance.InitGameThriveNotifications ();
+		//GoogleCloudMessageService.instance.InitParsePushNotifications ();
 	}
 
 	//--------------------------------------

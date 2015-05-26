@@ -28,9 +28,9 @@ public class GP_SnapshotConflict  {
 
 	public void Resolve(GP_Snapshot snapshot) {
 		if(snapshot.Equals(_s1)) {
-			AN_GooglePlayProxy.ResolveSnapshotsConflict_Bridge(0);
+			AN_GMSGeneralProxy.ResolveSnapshotsConflict_Bridge(0);
 		} else {
-			AN_GooglePlayProxy.ResolveSnapshotsConflict_Bridge(1);
+			AN_GMSGeneralProxy.ResolveSnapshotsConflict_Bridge(1);
 		}
 	}
 }

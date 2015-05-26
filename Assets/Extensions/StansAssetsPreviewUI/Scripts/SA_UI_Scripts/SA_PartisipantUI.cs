@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SA_PartisipantUI : MonoBehaviour {
@@ -16,7 +16,7 @@ public class SA_PartisipantUI : MonoBehaviour {
 		defaulttexture = avatar.GetComponent<Renderer>().material.mainTexture;
 	}
 
-	public void SetPartisipant(GP_Partisipant p) {
+	public void SetParticipant(GP_Participant p) {
 
 		id.text = "";
 		playerId.text = "";
@@ -37,10 +37,7 @@ public class SA_PartisipantUI : MonoBehaviour {
 
 		}
 		id.text  = "ID: " +  p.id;
-		status.text = "Status: " + p.status.ToString();
-
-
-
+		status.text = "Status: " + p.Status.ToString();
 
 
 	}

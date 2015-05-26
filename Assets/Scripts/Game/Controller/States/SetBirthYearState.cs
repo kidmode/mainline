@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class SetBirthYearState : GameState 
 {	
@@ -34,21 +35,15 @@ public class SetBirthYearState : GameState
 		}
 		if (gotoProfileScreen) 
 		{
-			if(LocalSetting.find("User").getBool("UserTry",true))
+
+			if(null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
 			{
-				if(SessionHandler.getInstance().kidList.Count > 0)
-				{
-					p_gameController.changeState( ZoodleState.PROFILE_SELECTION );
-				}
-				else
-				{
-					m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-					p_gameController.changeState( ZoodleState.CREATE_CHILD );
-				}
+				p_gameController.changeState( ZoodleState.PROFILE_SELECTION );
 			}
 			else
 			{
-				p_gameController.changeState( ZoodleState.SIGN_UP_UPSELL );
+				m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+				p_gameController.changeState( ZoodleState.CREATE_CHILD_NEW );
 			}
 			
 			gotoProfileScreen = false;
@@ -65,7 +60,7 @@ public class SetBirthYearState : GameState
 	//---------------- Private Implementation ----------------------
 	
 	private void _setupScreen( UIManager p_uiManager )
-	{	
+	{
 		m_birthCanvas = p_uiManager.createScreen( UIScreen.SET_BIRTHYEAR, true, 1 );
 
 		m_backButton = m_birthCanvas.getView("backButton") as UIButton;
@@ -95,6 +90,9 @@ public class SetBirthYearState : GameState
 
 		m_deleteButton = m_birthCanvas.getView("deleteButton") as UIButton;
 		m_deleteButton.addClickCallback(deleteNumber);
+
+		m_exitMessageButton = m_birthCanvas.getView("exitButton") as UIButton;
+		m_exitMessageButton.addClickCallback (onExitClick);
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
@@ -112,13 +110,45 @@ public class SetBirthYearState : GameState
 		if (m_inputNum.Length == 4)
 		{
 			int l_pin = int.Parse(m_inputNum);
-			RequestQueue.Request l_request = new SetPinRequest(l_pin);
-			l_request.handler += _setPinComplete;
-			RequestQueue l_queue = new RequestQueue();
-			l_queue.add(l_request);
-			l_queue.request(RequestType.RUSH);
-			p_button.removeClickCallback (onSetBirthYear);
+
+			if( DateTime.Now.Year - l_pin > 13 )
+			{
+				RequestQueue.Request l_request = new SetPinRequest(l_pin);
+				l_request.handler += _setPinComplete;
+				RequestQueue l_queue = new RequestQueue();
+				l_queue.add(l_request);
+				l_queue.request(RequestType.RUSH);
+				p_button.removeClickCallback (onSetBirthYear);
+			}
+			else
+			{
+				p_button.removeClickCallback (onSetBirthYear);
+				UIElement l_messagePanel = m_birthCanvas.getView( "messagePanel" );
+
+				List<Vector3> l_pointListIn = new List<Vector3>();
+				l_pointListIn.Add( l_messagePanel.transform.localPosition );
+				l_pointListIn.Add( l_messagePanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+				l_messagePanel.tweener.addPositionTrack( l_pointListIn, 0f, onShowFinish, Tweener.Style.Standard, false );
+			}
 		}
+	}
+
+	private void onShowFinish( UIElement p_element, Tweener.TargetVar p_target )
+	{
+		m_setButton.addClickCallback (onSetBirthYear);
+	}
+
+	private void onExitClick( UIButton p_button )
+	{
+		UIElement l_messagePanel = m_birthCanvas.getView( "messagePanel" );
+		
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( l_messagePanel.transform.localPosition );
+		l_pointListOut.Add( l_messagePanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+		l_messagePanel.tweener.addPositionTrack( l_pointListOut, 0f );
+
+		m_starLabel.text = string.Empty;
+		m_inputNum = string.Empty;
 	}
 
 	private void _setPinComplete(WWW p_response)
@@ -134,6 +164,7 @@ public class SetBirthYearState : GameState
 		{
 			m_inputNum = m_inputNum + p_button.name.Substring (3);
 			m_starLabel.text = m_starLabel.text + "* ";
+
 		}
 	}
 
@@ -154,6 +185,7 @@ public class SetBirthYearState : GameState
 	private UIButton 	m_setButton;
 	private UILabel 	m_starLabel;
 	private UIButton	m_deleteButton;
+	private UIButton 	m_exitMessageButton;
 
 	private string 		m_inputNum;
 

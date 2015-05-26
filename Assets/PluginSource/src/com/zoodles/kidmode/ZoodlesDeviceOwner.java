@@ -17,6 +17,6 @@ public class ZoodlesDeviceOwner extends DeviceAdminReceiver
         DevicePolicyManager manager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName componentName = new ComponentName(context, ZoodlesDeviceOwner.class);
         manager.setLockTaskPackages(componentName, new String [] {"com.zoodles.kidmode"});
-        Log.v("ZoodlesDeviceOwner", "Enabled and task lock set.");
+//        Log.v("ZoodlesDeviceOwner", "Enabled and task lock set.");
     }
 }

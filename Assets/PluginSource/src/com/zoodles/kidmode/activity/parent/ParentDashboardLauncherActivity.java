@@ -15,7 +15,7 @@ public class ParentDashboardLauncherActivity extends Activity {
 		super.onCreate(p_bundle);
 
 		launchDashboard();		
-		Log.v("Zoodles", "Parent Dashboard");
+//		Log.v("Zoodles", "Parent Dashboard");
 		finish();
 	}
 
@@ -23,7 +23,7 @@ public class ParentDashboardLauncherActivity extends Activity {
 	public void onNewIntent(Intent p_intent)
 	{
 		super.onNewIntent(p_intent);
-		Log.v("Zoodles", "Parent Dashboard2");
+//		Log.v("Zoodles", "Parent Dashboard2");
 		launchDashboard();		
 	}
 	

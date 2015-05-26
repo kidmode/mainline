@@ -34,6 +34,8 @@ public class SessionHandler
 			m_appList = null;
 			Kid l_lastKid = m_kid;
 			m_kid = value;
+			
+			SessionHandler.getInstance().drawingList = null;
 
 			if (l_lastKid != m_kid)
 				GAUtil.changeKid();
@@ -66,7 +68,12 @@ public class SessionHandler
 	public bool childLockSwitch
 	{
 		get { return m_childLockSwitch;   }
-		set { m_childLockSwitch = value;  }
+		set
+		{
+			m_childLockSwitch = value;
+			LocalSetting l_setting = LocalSetting.find( "User" );
+			l_setting.setBool( ZoodlesConstants.USER_CHILDLOCK_SWITCH, m_childLockSwitch );
+		}
 	}
 
 	public string selectAvatar
@@ -190,13 +197,23 @@ public class SessionHandler
 	public bool verifyBirth
 	{
 		get{return m_verifyBirth;}
-		set{m_verifyBirth = value;}
+		set
+		{
+			m_verifyBirth = value;
+			LocalSetting l_setting = LocalSetting.find( "User" );
+			l_setting.setBool( ZoodlesConstants.USER_VERIFY_BIRTHYEAR, m_verifyBirth );
+		}
 	}
 
 	public string childLockPassword
 	{
 		get{return m_childLockPassword;}
-		set{m_childLockPassword = value;}
+		set
+		{
+			m_childLockPassword = value;
+			LocalSetting l_setting = LocalSetting.find( "User" );
+			l_setting.setString( ZoodlesConstants.CHILD_LOCK_PASSWORD, m_childLockPassword );
+		}
 	}
 
 	public int invokeCallServerState
@@ -270,7 +287,7 @@ public class SessionHandler
 		get{return m_appOwn;}
 		set{m_appOwn = value;}
 	}
-	public List<App> appList
+	public List<object> appList
 	{
 		get{return m_appList;}
 		set{m_appList = value;}
@@ -297,7 +314,20 @@ public class SessionHandler
 	public List<Drawing> drawingList
 	{
 		get{return m_drawingList;}
-		set{m_drawingList = value;}
+		set
+		{
+			if (m_drawingList != null)
+			{
+				int l_numDraws = m_drawingList.Count;
+
+				for (int i = 0; i < l_numDraws; ++i)
+				{
+					Drawing l_drawing = m_drawingList[i];
+					l_drawing.dispose();
+				}
+			}
+			m_drawingList = value;
+		}
 	}
 
 	public List<Kid> recordKidList
@@ -315,6 +345,8 @@ public class SessionHandler
 	{
 		get
 		{
+			if( null == m_webContentList )
+				m_webContentList = new List<object>();
 			return m_webContentList;
 		}
 		set{m_webContentList = value;}
@@ -324,6 +356,8 @@ public class SessionHandler
 	{
 		get
 		{
+			if( null == m_bookContentList )
+				m_bookContentList = new List<object>();
 			return m_bookContentList;
 		}
 		set{m_bookContentList = value;}
@@ -405,6 +439,47 @@ public class SessionHandler
 		set{m_settingCache = value;}
 	}
 
+	public string creditCardNum
+	{
+		get{return m_creditCardNum;}
+		set{m_creditCardNum = value;}
+	}
+
+	public string cardMonth
+	{
+		get{return m_cardMonth;}
+		set{m_cardMonth = value;}
+	}
+
+	public string cardYear
+	{
+		get{return m_cardYear;}
+		set{m_cardYear = value;}
+	}
+
+	public string deviceName
+	{
+		get{return m_deviceName;}
+		set{m_deviceName = value;}
+	}
+
+	public int renewalPeriod
+	{
+		get{return m_renewalPeriod;}
+		set{m_renewalPeriod = value;}
+	}
+
+	public RequestQueue appRequest
+	{
+		get{return m_request;}
+		set{m_request = value;}
+	}
+
+	public RequestQueue bookRequest
+	{
+		get{return m_bookRequest;}
+		set{m_bookRequest = value;}
+	}
 	public void clearUserData()
 	{
 		m_kid   = null;
@@ -452,6 +527,11 @@ public class SessionHandler
 		m_bookTable = null;
 		m_readingTable = null;
 		m_allowCall = KidMode.incomingCallsEnabled();
+		m_creditCardNum = string.Empty;
+		m_cardMonth = string.Empty;
+		m_cardYear = string.Empty;
+		m_deviceName = string.Empty;
+		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
 	}
 
@@ -459,9 +539,14 @@ public class SessionHandler
 	{
 		LocalSetting l_setting = LocalSetting.find( "User" );
 		m_username = l_setting.getString( ZoodlesConstants.USER_NAME, "" );
+		m_allowCall = KidMode.incomingCallsEnabled();
+		////
 		m_pin = l_setting.getInt( ZoodlesConstants.USER_PIN, 0 );
 		m_hasPin = (m_pin > 0);
-		m_allowCall = KidMode.incomingCallsEnabled();
+		m_verifyBirth = l_setting.getBool (ZoodlesConstants.USER_VERIFY_BIRTHYEAR,true);
+		m_childLockPassword = l_setting.getString (ZoodlesConstants.CHILD_LOCK_PASSWORD,string.Empty);
+		m_childLockSwitch = l_setting.getBool (ZoodlesConstants.USER_CHILDLOCK_SWITCH,false);
+
 	}
 
 	public void addBook (int p_id, Book p_book)
@@ -495,22 +580,142 @@ public class SessionHandler
 		m_settingCache.active = false;
 	}
 
+	public void getAllKidApplist()
+	{
+		if(null != m_kidList && m_kidList.Count > 0)
+		{
+			if(null == m_request)
+				m_request = new RequestQueue();
+			if(null == m_iconRequest)
+				m_iconRequest = new RequestQueue();
+			foreach(Kid l_kid in m_kidList)
+			{
+				m_request.add(new NewGetAppByPageRequest(l_kid,"google",1));
+				m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,l_kid));
+			}
+			m_request.request(RequestType.RUSH);
+		}
+	}
 
+	public void getSingleKidApplist(Kid p_kid)
+	{
+		if(null == m_request)
+			m_request = new RequestQueue(); 
+		if(null != p_kid)
+		{
+			m_request.reset();
+			if(null == m_singleKidRequest)
+				m_singleKidRequest = new RequestQueue();
+			if(null != p_kid.appList)
+				p_kid.appList = new List<object>();
+			m_request.add(new NewGetAppByPageRequest(p_kid,"google",1));
+			m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,p_kid));
+			m_request.request(RequestType.RUSH);
+		}
+	}
+
+	public void getBooklist()
+	{
+		if (null == m_bookRequest)
+			m_bookRequest = new RequestQueue ();
+		m_bookRequest.add(new GetBookRequest("false"));
+		m_bookRequest.request ();
+	}
+
+	public void getBookIcon()
+	{
+		if (null == m_bookRequest)
+			m_bookRequest = new RequestQueue ();
+
+		if(null != m_bookList && m_bookList.Count > 0)
+		{
+			foreach (Book l_book in m_bookList)
+			{
+				m_bookRequest.add(new BookIconRequest(l_book));
+			}
+		}
+		m_bookRequest.request (RequestType.RUSH);
+	}
+
+	public void getAllAppIcon()
+	{
+		if (null == m_iconRequest)
+			m_iconRequest = new RequestQueue ();
+		if(null != m_kidList && m_kidList.Count > 0)
+		{
+			foreach(Kid l_kid in m_kidList)
+			{
+				List<object> l_appList = l_kid.appList;
+				foreach (App l_app in l_appList)
+				{
+					if(null == l_app.icon && l_app.iconUrl != null && !string.Empty.Equals(l_app.iconUrl))
+					{
+						m_iconRequest.add(new IconRequest(l_app));
+					}
+				}
+			}
+			m_iconRequest.request(RequestType.RUSH);
+		}
+	}
+
+	public void getAppIconByKid(Kid p_kid)
+	{
+		if (null == m_iconRequest)
+			m_iconRequest = new RequestQueue ();
+		//m_iconRequest.reset ();
+		List<object> l_appList = p_kid.appList;
+		foreach (App l_app in l_appList)
+		{
+			if(null == l_app.icon && l_app.iconUrl != null && !string.Empty.Equals(l_app.iconUrl))
+			{
+				m_iconRequest.add(new IconRequest(l_app));
+			}
+		}
+		m_iconRequest.request(RequestType.RUSH);
+	}
+
+	public void getAppIconByApp(App p_app)
+	{
+		if (null == m_iconRequest)
+			m_iconRequest = new RequestQueue ();
+
+		if(null == p_app.icon && p_app.iconUrl != null && !string.Empty.Equals(p_app.iconUrl))
+		{
+			m_iconRequest.add(new IconRequest(p_app));
+		}
+		m_iconRequest.request(RequestType.RUSH);
+	}
+	
 	public void resetSetting()
 	{
 		childLockSwitch = m_settingCache.childLockSwitch;
-		m_verifyBirth = m_settingCache.verifyBirth;
-		m_freeWeeklyApp = m_settingCache.freeWeeklyApp;
-		m_smartSelect = m_settingCache.smartSelect;
-		m_newAddApp = m_settingCache.newAddApp;
-		m_musicVolum = m_settingCache.musicVolum;
-		m_effectsVolum = m_settingCache.effectsVolum;
-		m_masterVolum = m_settingCache.masterVolum;
-		m_allowCall = m_settingCache.allowCall;
-		m_tip = m_settingCache.tip;
-		m_childLockPassword = m_settingCache.childLockPassword;
+		verifyBirth = m_settingCache.verifyBirth;
+		freeWeeklyApp = m_settingCache.freeWeeklyApp;
+		smartSelect = m_settingCache.smartSelect;
+		newAddApp = m_settingCache.newAddApp;
+		musicVolum = m_settingCache.musicVolum;
+		effectsVolum = m_settingCache.effectsVolum;
+		masterVolum = m_settingCache.masterVolum;
+		allowCall = m_settingCache.allowCall;
+		tip = m_settingCache.tip;
+		childLockPassword = m_settingCache.childLockPassword;
+		settingCache.active = false;
 	}
 
+
+	public void resetKidCacheLists()
+	{
+		webContentList = null;
+		bookContentList = null;
+	}
+	
+	public void resetKidCache()
+	{
+		webContentList = null;
+		bookContentList = null;
+		bookTable = null;
+		readingTable = null;
+	}
 
 	private Kid     m_kid   = null;
     private Token   m_token = null;
@@ -563,7 +768,7 @@ public class SessionHandler
 
 	private bool m_flashInstall = false;
 
-	private List<App> m_appList = null;
+	private List<object> m_appList = null;
 	private List<Book> m_bookList = null;
 	private List<Drawing> m_drawingList = null;
 	private List<Kid> m_recordKidList = null;
@@ -580,5 +785,15 @@ public class SessionHandler
 	private string m_gemsJson = string.Empty;
 	private string m_premiumJson = string.Empty;
 
+	private string m_creditCardNum = string.Empty;
+	private string m_cardMonth = string.Empty;
+	private string m_cardYear = string.Empty;
+
+	private string m_deviceName = string.Empty;
+	private int m_renewalPeriod = 0;
+	private RequestQueue m_request;
+	private RequestQueue m_iconRequest;
+	private RequestQueue m_singleKidRequest;
+	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
 }

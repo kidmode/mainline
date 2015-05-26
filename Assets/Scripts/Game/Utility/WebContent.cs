@@ -169,11 +169,30 @@ public class WebContent : object
 	{
 		if (m_url.StartsWith("http://www.youtube.com"))
 		{
-			string[] l_params = m_url.Split("="[0]);
-			m_url = "http://www.youtube.com/embed/" + l_params[1];
-//#if UNITY_EDITOR
-//			_Debug.log("URL: " + m_url);
-//#endif
+			int l_index = m_url.IndexOf("v=");
+			if (l_index != -1)
+			{
+				string l_params = m_url.Substring(l_index+2);
+				m_url = "http://www.youtube.com/embed/" + l_params;
+			}
+			
+			//#if UNITY_EDITOR
+			//			_Debug.log("URL: " + m_url);
+			//#endif
+		}
+
+		if (m_url.StartsWith("https://www.youtube.com"))
+		{
+			int l_index = m_url.IndexOf("v=");
+			if (l_index != -1)
+			{
+				string l_params = m_url.Substring(l_index+2);
+				m_url = "https://www.youtube.com/embed/" + l_params;
+			}
+			
+			//#if UNITY_EDITOR
+			//			_Debug.log("URL: " + m_url);
+			//#endif
 		}
 	}
 }

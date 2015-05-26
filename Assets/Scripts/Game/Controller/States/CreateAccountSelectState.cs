@@ -9,9 +9,10 @@ public class CreateAccountSelectState : GameState
 	enum ScreenChange
 	{
 		None,
-		SetUpAccountScreen,
+		SetUp,
 		PreviousScreen,
 		SignInScreen,
+		CreatePremiumScreen,
 		Back
 	}
 
@@ -37,7 +38,12 @@ public class CreateAccountSelectState : GameState
 		{
 			switch(changeToState)
 			{
-				case ScreenChange.SetUpAccountScreen:
+				case ScreenChange.SetUp:
+					m_gameController.connectState(ZoodleState.SET_UP_ACCOUNT,int.Parse(m_gameController.stateName));
+					p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
+					break;
+				case ScreenChange.CreatePremiumScreen:
+					m_gameController.connectState(ZoodleState.SET_UP_ACCOUNT,int.Parse(m_gameController.stateName));
 					p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 					break;
 				case ScreenChange.SignInScreen:
@@ -50,6 +56,9 @@ public class CreateAccountSelectState : GameState
 
 			changeToState = ScreenChange.None;
 		}
+
+		if (Application.platform == RuntimePlatform.Android && Input.GetKeyUp(KeyCode.Escape))
+			toExitApplication(null);
 	}
 	
 	public override void exit( GameController p_gameController )
@@ -57,7 +66,7 @@ public class CreateAccountSelectState : GameState
 		base.exit( p_gameController );
 		removeListeners();
 		p_gameController.getUI().removeScreen( m_createAccountSelectCanvas );
-	}	
+	}
 	
 	
 	//---------------- Private Implementation ----------------------
@@ -68,17 +77,42 @@ public class CreateAccountSelectState : GameState
 		if( m_createAccountBackgroundCanvas == null )
             m_createAccountBackgroundCanvas = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND, true, -1) as SplashBackCanvas;
 		
-		m_createAccountSelectCanvas = p_uiManager.createScreen( UIScreen.CREATE_ACCOUNT_SELECTION, true, 1 );
-		m_panel = m_createAccountSelectCanvas.getView("panel") as UIElement;
-		m_panel.active = false;
-		m_title = m_createAccountSelectCanvas.getView("topicText") as UILabel;
-		m_title.active = false;
+		m_createAccountSelectCanvas = p_uiManager.createScreen( UIScreen.PANEL_MARKETING_SCREEN, true, 1 );
+		
+		m_startButton = m_createAccountSelectCanvas.getView("startButton") as UIButton;
 
-		m_signUpButton = m_createAccountSelectCanvas.getView("signUpButton") as UIButton;
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+		if( SessionHandler.getInstance().renewalPeriod > 0 )
+		{
+			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+			l_mainPanel.active = false;
+
+			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
+			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
+			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
+			l_continueButton.addClickCallback( onContinueClick );
+			l_exitButton.addClickCallback( onContinueClick );
+
+			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
+
+			string l_deviceName = SessionHandler.getInstance().deviceName;
+			int l_renewalPeriod = SessionHandler.getInstance().renewalPeriod;
+
+			string l_messageText = string.Format( Localization.getString (Localization.TXT_105_LABEL_CONTENT_NOTICE), l_deviceName, l_renewalPeriod);
+			l_message.text = l_messageText;
+			m_startButton.addClickCallback (gotoCreatePremiumScreen);
+		}
+		else
+		{
+			m_startButton.addClickCallback (gotoSetUpScreen);
+		}
+//		#else
+		
+//		m_startButton.addClickCallback (gotoSetUpScreen);
+//		#endif
 
 		m_signInButton = m_createAccountSelectCanvas.getView("signInButton") as UIButton;
 
-		m_title.tweener.addAlphaTrack (0.0f, 1.0f, 0.5f,onTitleTweenFinish);
 
 		m_quitButton = m_createAccountSelectCanvas.getView ("exitButton") as UIButton;
 		m_quitButton.addClickCallback (toExitApplication);
@@ -86,33 +120,23 @@ public class CreateAccountSelectState : GameState
 		l_quitPosList.Add( m_quitButton.transform.localPosition + new Vector3(  100, 0, 0 ) );
 		l_quitPosList.Add( m_quitButton.transform.localPosition );
 		m_quitButton.tweener.addPositionTrack( l_quitPosList, 1.0f );
-
-		m_createAccountBackgroundCanvas.setDown ();
-	}
-
-	private void addListeners( UIElement p_element, Tweener.TargetVar p_targetVar)
-	{
-		//m_quitButton.addClickCallback (toBack);
-		m_signUpButton.addClickCallback (gotoSignUpScreen);
 		m_signInButton.addClickCallback (gotoSignInScreen);
+		m_createAccountBackgroundCanvas.setDown ();
 	}
 
 	private void removeListeners()
 	{
 		//m_quitButton.removeAllCallbacks();
-		m_signUpButton.removeAllCallbacks();
+		m_startButton.removeAllCallbacks();
 		m_signInButton.removeAllCallbacks();
 	}
 
 	private void toExitApplication(UIButton p_button)
 	{
+		KidMode.setKidsModeActive(false);	
 		Application.Quit ();
 	}
-	
-	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		m_panel.tweener.addAlphaTrack (0.0f, 1.0f, 0.5f, addListeners);
-	}
+
 	
 	private void toBack(UIButton p_button)
 	{
@@ -120,29 +144,32 @@ public class CreateAccountSelectState : GameState
         m_createAccountBackgroundCanvas.transitionUp(2.5f);
 	}
 
-	private void reload(UIButton p_button)
+	private void onContinueClick(UIButton p_button)
 	{
-		//changeState = true;
+		m_gameController.getUI ().removeScreen ( UIScreen.PREMIUM_ELIGIBLE );
+		UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+		l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
 	}
 
-	private void gotoSignUpScreen(UIButton p_button)
+	private void gotoSetUpScreen(UIButton p_button)
 	{
-		changeToState = ScreenChange.SetUpAccountScreen;
+		changeToState = ScreenChange.SetUp;
 	}
 	private void gotoSignInScreen(UIButton p_button)
 	{
 		changeToState = ScreenChange.SignInScreen;
 	}
+
+	private void gotoCreatePremiumScreen(UIButton p_button)
+	{
+		changeToState = ScreenChange.CreatePremiumScreen;
+	}
 	
 	//Private variables
 	
-	private UILabel		m_title;
-	
-	private UIButton 	m_signUpButton;
-	private UIButton 	m_connectButton;
+	private UIButton 	m_startButton;
 	private UIButton 	m_signInButton;
 	private UIButton 	m_quitButton;
-	private UIElement 	m_panel;
 	
 	private UICanvas    m_createAccountSelectCanvas;
 	private SplashBackCanvas	m_createAccountBackgroundCanvas;

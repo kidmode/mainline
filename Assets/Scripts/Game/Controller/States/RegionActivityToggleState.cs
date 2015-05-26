@@ -52,6 +52,7 @@ public class RegionBooksState : RegionBaseState
 		
 		m_activityPanelCanvas.canvasGroup.interactable = false;
 		m_activityPanelCanvas.alpha = 0.0f;
+		m_cornerProfileCanvas.canvasGroup.interactable = false;
 		m_cornerProfileCanvas.alpha = 0.0f;
 		_Debug.log (m_cornerProfileCanvas.alpha);
 	}
@@ -87,6 +88,7 @@ public class RegionVideoState : RegionBaseState
 		
 		m_activityPanelCanvas.canvasGroup.interactable = false;
 		m_activityPanelCanvas.alpha = 0.0f;
+		m_cornerProfileCanvas.canvasGroup.interactable = false;
 		m_cornerProfileCanvas.alpha = 0.0f;
 		_Debug.log (m_cornerProfileCanvas.alpha);
 	}
@@ -122,6 +124,7 @@ public class RegionGameState : RegionBaseState
 		
 		m_activityPanelCanvas.canvasGroup.interactable = false;
 		m_activityPanelCanvas.alpha = 0.0f;
+		m_cornerProfileCanvas.canvasGroup.interactable = false;
 		m_cornerProfileCanvas.alpha = 0.0f;
 		_Debug.log (m_cornerProfileCanvas.alpha);
 	}
@@ -157,7 +160,7 @@ public class RegionFunState : RegionBaseState
 		
 		m_activityPanelCanvas.canvasGroup.interactable = false;
 		m_activityPanelCanvas.alpha = 0.0f;
+		m_cornerProfileCanvas.canvasGroup.interactable = false;
 		m_cornerProfileCanvas.alpha = 0.0f;
-		_Debug.log (m_cornerProfileCanvas.alpha);
 	}
 }

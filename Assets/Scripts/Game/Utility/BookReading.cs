@@ -62,6 +62,12 @@ public class BookReading : System.Object
 		foreach( Hashtable t in p_tempPageList )
 		{
 			BookReadingPage l_page = new BookReadingPage( t );
+
+			if( null == l_page.audioSlug || null == l_page.audioUrl )
+			{
+				break;
+			}
+
 			readingPageTable.Add( l_page.pageId, l_page );
 		}
 	}

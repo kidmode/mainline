@@ -28,32 +28,46 @@ public class UISwipeList : UIElement
 	{
 		m_data = p_data;
 
-		adjustScrollSize();
-		redrawPrototypes();
-		layoutElements();
+		if (!m_isFirstFrame)
+		{
+			adjustScrollSize();
+			redrawPrototypes();
+			layoutElements();
 
-		m_numElements = m_data.Count;
+			m_numElements = m_data.Count;
 
-        calculateNumDrawElements();
-        createMissingElements();
+	        calculateNumDrawElements();
+	        createMissingElements();
 
-        applyCallListeners();
+	        applyCallListeners();
+		}
+		else
+		{
+			m_numElements = 0;
+		}
 	}
 
 	public void setDataWithoutMove(List<System.Object> p_data)
 	{
 		m_data = p_data;
 		
-		staticAdjustScrollSize();
-		redrawPrototypes();
-		layoutElements();
-		
-		m_numElements = m_data.Count;
-		
-		calculateNumDrawElements();
-		createMissingElements();
-		
-		applyCallListeners();
+		if (!m_isFirstFrame)
+		{
+			staticAdjustScrollSize();
+			redrawPrototypes();
+			layoutElements();
+			
+			m_numElements = m_data.Count;
+			
+			calculateNumDrawElements();
+			createMissingElements();
+			
+			applyCallListeners();
+		}
+		else
+		{
+			m_numElements = 0;
+		}
 	}
 
 	public List<UIElement> getListElements()
@@ -77,6 +91,11 @@ public class UISwipeList : UIElement
         m_callback = p_callback;
 
         applyCallListeners();	
+
+//		if( null != m_data )
+//		{
+//			setData( m_data );
+//		}
 	}
 	
 
@@ -115,10 +134,17 @@ public class UISwipeList : UIElement
 	public override void update()
 	{
 		base.update();
-		checkInitialScrollPosition();
-		checkDataChange();
-		checkScrolling();
-		redraw();
+		if (!m_isFirstFrame)
+		{
+			checkDataChange();
+			checkScrolling();
+			redraw();
+		}
+		else
+		{
+			checkInitialScrollPosition();
+			m_isFirstFrame = false;
+		}
 	}
 	
 	public override void dispose(bool p_deep)
@@ -195,11 +221,7 @@ public class UISwipeList : UIElement
 
 	private void checkInitialScrollPosition()
 	{
-		if (m_isFirstFrame)
-		{
-			m_scrollPanel.transform.localPosition = m_initialScrollPosition;
-			m_isFirstFrame = false;
-		}
+		m_scrollPanel.transform.localPosition = m_initialScrollPosition;
 	}
 	
 	private void checkDataChange()
@@ -636,13 +658,17 @@ public class UISwipeList : UIElement
 		}
 		
 		//Add the callback to the list
-		m_callbacks[p_button].Add(p_callback);
+		if( !m_callbacks[p_button].Contains(p_callback) )
+		{
+			m_callbacks[p_button].Add(p_callback);
+		}
 	}
 	
 	private void registerButtonListener(UIButton p_button)
 	{	
-		if (m_callbacks[p_button].Count == 1)
+		if (m_callbacks[p_button].Count > 0)
 		{
+			p_button.removeAllCallbacks();
 			p_button.addClickCallback(buttonCallback);	
 		}
 	}

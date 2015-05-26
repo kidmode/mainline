@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.zoodles.kidmode" android:installLocation="preferExternal" android:versionCode="1" android:versionName="1.0">
   <supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true" />
   <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="21" />
   <permission android:name="com.zoodles.kidmode.permission.READ_SETTINGS" android:protectionLevel="signatureOrSystem" />
   <permission android:name="com.zoodles.kidmode.permission.WRITE_SETTINGS" android:protectionLevel="signatureOrSystem" />
   <permission android:name="com.zoodles.kidmode.permission.READ_HTC" android:protectionLevel="signatureOrSystem" />
-  <permission android:name="com.zoodles.kidmode.permission.C2D_MESSAGE" android:protectionLevel="signature" />
   <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
   <uses-feature android:name="android.hardware.wifi" android:required="false" />
   <uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -15,29 +14,14 @@
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
   <uses-feature android:glEsVersion="0x00020000" />
   <application android:name="com.zoodles.kidmode.App" android:allowBackup="false" android:hardwareAccelerated="true" android:icon="@drawable/app_icon" android:label="@string/app_name">
+    <service android:name="com.zoodles.kidmode.service.GlobalTouchDenyService" />
     <service android:name="com.zoodles.kidmode.service.NativeAppService" android:enabled="true" android:exported="false" />
-    <service android:name="com.androidnative.gcm.GcmIntentService" />
-    <meta-data android:name="com.google.android.gms.version" android:value="6171000" />
-    <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 216817929098" />
-    <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="\ 216817929098" />
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="\ 395891937214418" />
-    <receiver android:name="com.androidnative.gcm.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-      <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <category android:name="com.zoodles.kidmode" />
-      </intent-filter>
-    </receiver>
+    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="\ 1" />
     <receiver android:name="com.androidnative.features.notifications.LocalNotificationReceiver" />
     <activity android:name="com.zoodles.kidmode.activity.LauncherActivity" android:excludeFromRecents="true" android:launchMode="singleInstance" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:exported="true" />
     <activity android:name="com.onevcat.uniwebview.AndroidPlugin" android:label="@string/app_name" android:hardwareAccelerated="true" android:excludeFromRecents="true" android:windowSoftInputMode="adjustResize" android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
       <meta-data android:name="android.app.lib_name" android:value="unity" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="oauth" android:host="com.zoodles.kidmode" />
-      </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -47,6 +31,7 @@
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
+        <data />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -57,22 +42,20 @@
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
+        <data />
       </intent-filter>
     </activity>
     <activity android:name="com.onevcat.uniwebview.UniWebViewCustomViewActivity" android:label="@string/app_name" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:launchMode="singleInstance" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:excludeFromRecents="true" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
       <meta-data android:name="android.app.lib_name" android:value="unity" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
     </activity>
-    <activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-    <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-    <activity android:name="com.facebook.unity.FBUnityLoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+    <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboardHidden|orientation" />
+    <activity android:name="com.facebook.unity.FBUnityLoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
     <activity android:name="com.facebook.unity.FBUnityDeepLinkingActivity" android:exported="true" />
     <activity android:name="com.unity3d.player.UnityPlayerActivity" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
-    <activity android:name="com.unity3d.player.UnityPlayerNativeActivity" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
-      <meta-data android:name="android.app.lib_name" android:value="unity" />
-      <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="false" />
-    </activity>
-    
+    <activity android:name="com.androidnative.AndroidNativeProxy" android:launchMode="singleTask" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    <activity android:name="com.androidnative.billing.core.AN_BillingProxyActivity" android:launchMode="singleTask" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    <activity android:name="com.facebook.unity.FBUnityDialogsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
     <activity-alias android:name="com.zoodles.kidmode" android:exported="true" android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" />
     <activity-alias android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" android:name="com.zoodles.kidmode.ZoodlesHome" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:launchMode="singleInstance" android:enabled="true" android:exported="true" android:label="@string/app_name" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:excludeFromRecents="true" android:windowSoftInputMode="stateAlwaysHidden">
       <intent-filter>
@@ -81,14 +64,7 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity-alias>
-    
-    <provider 
-	  	android:name="com.zoodles.kidmode.provider.SettingsProvider" 
-	  	android:authorities="com.zoodles.kidmode.provider.settingsStaging" 
-	  	android:exported="true" 
-	  	android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS" 
-	  	android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" 
-	  />
+    <provider android:name="com.zoodles.kidmode.provider.SettingsProvider" android:authorities="com.zoodles.kidmode.provider.settings" android:exported="true" android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS" android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" />
   </application>
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />

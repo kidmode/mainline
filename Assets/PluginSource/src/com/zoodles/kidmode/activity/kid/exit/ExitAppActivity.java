@@ -16,7 +16,7 @@ public class ExitAppActivity extends Activity
 	{
 		super.onCreate(p_bundle);		
      	launchDashboard();
-		Log.v("Zoodles", "Zoodles Exit");
+//		Log.v("Zoodles", "Zoodles Exit");
  		finish();		
 	}	
 	
@@ -24,7 +24,7 @@ public class ExitAppActivity extends Activity
 	public void onNewIntent(Intent p_intent)
 	{
 		super.onNewIntent(p_intent);
-		Log.v("Zoodles", "Zoodles Exit");
+//		Log.v("Zoodles", "Zoodles Exit");
 		launchDashboard();		
 	}
 	

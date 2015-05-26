@@ -33,11 +33,7 @@ public class AN_GMSGiftsProxy : MonoBehaviour {
 	public static void leaveRoom() {
 		CallActivityFunction("leaveRoom");
 	}
-	
-	
-	public static void acceptInviteToRoom(string invId) {
-		CallActivityFunction("acceptInviteToRoom", invId);
-	}
+
 	
 	public static void showInvitationBox()  {
 		CallActivityFunction("showInvitationBox");

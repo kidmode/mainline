@@ -78,13 +78,13 @@ public class SettingsProvider extends ContentProvider{
 		Preferences prefs = mApp.preferences();
 		switch( sUriMatcher.match( uri ) ){
 		case CODE_ALLOW_INCOMING_CALL:
-			Log.d(TAG, "get value for allow incoming call" );
+//			Log.d(TAG, "get value for allow incoming call" );
 			boolean b = prefs.getSharedValue( Preferences.PREFS_KEY_ALLOW_INCOMING_CALLS, true );
 			int value = b ? 1 : 0;
 			c.addRow( new Integer[]{ value, EXIT_PIN_CODE_UNSPECIFIED } ); 
 			break;
 		case CODE_EXIT_ACTION:
-			Log.d(TAG, "get value for exit action");
+//			Log.d(TAG, "get value for exit action");
 			int internalExitActionCode = prefs.getSharedValue( Preferences.PREFS_KEY_EXIT_ACTION, Preferences.DEFAULT_EXIT_ACTION );
 			int resultCode = obtainExternalExitActionCode( internalExitActionCode );
 			

@@ -24,7 +24,16 @@ public class OverviewArtState : GameState {
 			if(null != SessionHandler.getInstance().drawingList)
 			{
 				isLoadDrawing = false;
-				_setupArtGalleryCanvas();
+
+				if( SessionHandler.getInstance().drawingList.Count > 0 )
+				{					
+					_setupArtGalleryCanvas();
+				}
+				else
+				{
+					UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+					l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
+				}
 			}
 		}
 	}
@@ -109,6 +118,7 @@ public class OverviewArtState : GameState {
 
 		m_moreArtButton = m_artGalleryCanvas.getView( "artListButton" ) as UIButton;
 		m_moreArtButton.addClickCallback( onMoreArtButtonClick );
+		m_moreArtButton.active = false;
 
 		m_exitArtListButton = m_artListCanvas.getView( "exitButton" ) as UIButton;
 		m_exitArtListButton.addClickCallback( onExitArtListButtonClick );
@@ -125,7 +135,15 @@ public class OverviewArtState : GameState {
 
 		if( null != SessionHandler.getInstance().drawingList)
 		{
-			_setupArtGalleryCanvas();
+			if( SessionHandler.getInstance().drawingList.Count > 0 )
+			{					
+				_setupArtGalleryCanvas();
+			}
+			else
+			{
+				UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+				l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
+			}
 		}
 		else
 		{
@@ -142,8 +160,8 @@ public class OverviewArtState : GameState {
 		
 		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = "Art Gallery";
-		l_contentLabel.text = "All your kid's drawings are automatically saved to an art gallery where you can share them with friends and family.";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_CONTENT);
 
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
@@ -163,8 +181,7 @@ public class OverviewArtState : GameState {
 	private void onRightButtonClick( UIButton p_button )
 	{
 		return;
-	}
-	
+	}	
 	
 	private void goToControls( UIButton p_button )
 	{
@@ -245,11 +262,11 @@ public class OverviewArtState : GameState {
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -289,7 +306,7 @@ public class OverviewArtState : GameState {
 			m_drawingList.setData( infoData );
 			m_drawingList.setDrawFunction( onDrawingListDraw );
 			m_drawingList.redraw();
-			m_drawingList.removeClickListener( "Prototype", onArtClick );
+//			m_drawingList.removeClickListener( "Prototype", onArtClick );
 			m_drawingList.addClickListener( "Prototype", onArtClick );
 		}
 	}
@@ -361,6 +378,9 @@ public class OverviewArtState : GameState {
 
 	private void _setupArtGalleryCanvas()
 	{
+		UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+		l_loading.active = false;
+
 		m_requestQueue.reset ();
 		
 		UILabel l_artCountLabel = m_artListCanvas.getView ("artCountText") as UILabel;
@@ -385,6 +405,13 @@ public class OverviewArtState : GameState {
 		l_artCountLabel.text = l_list.Count.ToString ();
 
 		int l_count = l_list.Count >= 6 ? 6 : l_list.Count;
+
+		if( 0 == l_count )
+		{
+			return;
+		}
+
+		m_moreArtButton.active = true;
 		
 		for(int l_i = 0; l_i < l_count; l_i++)
 		{
@@ -466,7 +493,7 @@ public class OverviewArtState : GameState {
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 

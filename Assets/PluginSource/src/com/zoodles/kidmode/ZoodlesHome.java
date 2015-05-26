@@ -160,7 +160,7 @@ public class ZoodlesHome extends Activity {
 	
 	public static void launch(Activity activity) 
 	{
-		Log.v("Zoodles", "launch");
+//		Log.v("Zoodles", "launch");
 /*		
  		if (App.instance().childLock().inChildLock()) {
 			Intent startMain = new Intent(Intent.ACTION_MAIN);

@@ -224,7 +224,7 @@ public class GoogleAnalyticsAndroidV3 : IDisposable {
 
     if (parameters.Keys.Count > 0) {
       if (GoogleAnalyticsV3.belowThreshold(logLevel, GoogleAnalyticsV3.DebugMode.VERBOSE)) {
-        Debug.Log("Added custom variables to hit.");
+//        Debug.Log("Added custom variables to hit.");
       }
     }
 

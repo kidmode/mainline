@@ -65,4 +65,8 @@ public class AN_NotificationProxy {
 	public static void GCMLoadLastMessage() {
 		CallActivityFunction("GCMLoadLastMessage");
 	}
+
+	public static void GCMRemoveLastMessageInfo() {
+		CallActivityFunction("GCMRemoveLastMessageInfo");
+	}
 }

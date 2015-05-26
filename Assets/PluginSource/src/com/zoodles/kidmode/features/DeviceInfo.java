@@ -2,6 +2,7 @@ package com.zoodles.kidmode.features;
 
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
@@ -13,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -21,6 +23,7 @@ import com.zoodles.kidmode.ZoodlesConstants;
 /**
  * Utility class for performing device inventory.
  */
+@SuppressLint("NewApi")
 public class DeviceInfo {
 	
 	//////////////////////////////////////////////////////////////////////////

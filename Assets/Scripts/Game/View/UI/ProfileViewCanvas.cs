@@ -8,6 +8,17 @@ public class ProfileViewCanvas : UICanvas
 		base.init( p_gameObject );
 		
 		//tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_addChild = getView ("addChildBtnText") as UILabel;
+		l_addChild.text = Localization.getString (Localization.TXT_86_BUTTON_ADD_CHILD);
+		UILabel l_finish = getView ("finishBtnText") as UILabel;
+		l_finish.text = Localization.getString (Localization.TXT_86_BUTTON_FINISH);
+		UILabel l_back = getView ("backButton").getView("btnText") as UILabel;
+		l_back.text = Localization.getString (Localization.TXT_BUTTON_BACK);
 	}
 	
 	public override void update()

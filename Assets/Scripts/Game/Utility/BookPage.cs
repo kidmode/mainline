@@ -70,7 +70,11 @@ public class BookPage : System.Object
             position = (int)( (double)p_table[ BookPageTable.COLUMN_POSITION ] );
         
         if( p_table.ContainsKey( BookPageTable.COLUMN_CONTENT ) )
+		{
 			content = p_table[ BookPageTable.COLUMN_CONTENT ] as string;
+			if( content != null )
+				content = content.Trim();
+		}
         
         if( p_table.ContainsKey( BookPageTable.COLUMN_PAGE_URL ) )
             imageUrl = p_table[ BookPageTable.COLUMN_PAGE_URL ] as string;

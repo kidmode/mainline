@@ -41,6 +41,9 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 
 	void Awake() {
 		DontDestroyOnLoad(gameObject);
+
+		GooglePlayManager.instance.Create();
+		init();
 	}
 
 
@@ -66,14 +69,15 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 			connectionString += "DriveAPI";
 		}
 
+		AN_GMSGeneralProxy.setConnectionParams (AndroidNativeSettings.Instance.ShowConnectingPopup);
 		AN_GMSGeneralProxy.playServiceInit(connectionString);
-
-		_isInitialized = true;
 	}
 
 	public void connect()  {
 		connect(null);
 	}
+
+
 
 	public void connect(string accountName) {
 
@@ -82,10 +86,6 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 		}
 
 		OnStateChange(GPConnectionState.STATE_CONNECTING);
-		if(!_isInitialized) {
-			GooglePlayManager.instance.Create();
-			init();
-		}
 
 		if(accountName != null) {
 			AN_GMSGeneralProxy.playServiceConnect (accountName);

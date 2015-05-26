@@ -5,7 +5,7 @@
 // @support stans.assets@gmail.com 
 //
 ////////////////////////////////////////////////////////////////////////////////
-
+ 
 
 
 using UnityEngine;
@@ -38,7 +38,7 @@ public class DisconnectButton : MonoBehaviour {
 	//--------------------------------------
 
 	void OnGUI() {
-		if(GUI.Button(r, "Disonnect")) {
+		if(GUI.Button(r, "Disconnect")) {
 			GameCenterMultiplayer.instance.disconnect ();
 		}
 	}

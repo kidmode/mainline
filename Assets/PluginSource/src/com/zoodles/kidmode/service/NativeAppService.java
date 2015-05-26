@@ -125,8 +125,6 @@ public class NativeAppService extends Service {
 	public int onStartCommand( Intent intent, int flags, int startId ) {
 		String cmd = intent.getStringExtra( EXTRA_COMMAND );
 		
-		Log.v("Zoodles", "start command stack trace following");
-		
 		String packageName = intent.getStringExtra( EXTRA_PACKAGE );
 		String activityName = intent.getStringExtra( EXTRA_ACTIVITY );
 		int kidId = intent.getIntExtra( EXTRA_KID_ID, -1 ); 
@@ -193,10 +191,10 @@ public class NativeAppService extends Service {
 //			i.addFlags( Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS );
 //			i.addFlags( Intent.FLAG_ACTIVITY_MULTIPLE_TASK );
 			((App) getApplicationContext()).childLock().allowedAppIsRunning();
-			Log.d( TAG, "starting activity for " + packageName );
+//			Log.d( TAG, "starting activity for " + packageName );
 			startActivity( i );
 		} catch( Exception e ) {
-			Log.e( TAG, "Error launching package: " + packageName, e );
+//			Log.e( TAG, "Error launching package: " + packageName, e );
 		}
 //		
 		startWatchdogThread( kidId, packageName, preemptIntent, receiver );
@@ -280,8 +278,6 @@ public class NativeAppService extends Service {
 		@Override
 		public void run() 
 		{
-			Log.v( "Zoodles", "watchdog thread started" );
-			
 			while(!shouldExit()) 
 			{
 				try 
@@ -297,17 +293,13 @@ public class NativeAppService extends Service {
 				boolean l_isExternalAppTopTask = isExternalAppTopTask();
 				boolean l_finished = false;
 				
-				Log.v("Zoodles", "Service running");
-				
 				if (!l_isExternalAppTopTask
 					&& !l_isKidmodeTopTask)
 				{
-					Log.v("Zoodles", "We aren't foreground anymore mPackageName:" + mPackageName);
+//					Log.v("Zoodles", "We aren't foreground anymore mPackageName:" + mPackageName);
 					((App) getApplicationContext()).childLock().allowedAppStopped();
 					forceKidModeToTop( mPreemptIntent, "" );
 					mWasTop = true;
-					
-//					l_finished = true;
 				}						
 				
 				if (mWasTop)
@@ -320,7 +312,6 @@ public class NativeAppService extends Service {
 							{
 								try
 								{
-//									com.unity3d.player.UnityPlayer.currentActivity.startLockTask();
 									l_finished = true;
 									Log.v("Zoodles", "Service Finished");
 								}
@@ -503,7 +494,7 @@ public class NativeAppService extends Service {
 			} catch ( NameNotFoundException ignore ) {;}
 			
 			try {
-				Log.d( TAG, "Pushing Kid Mode to top." );
+//				Log.d( TAG, "Pushing Kid Mode to top." );
 				Intent i = new Intent();
 				i.putExtra( IntentConstants.EXTRA_PREEMPT_APP, label );
 				i.putExtra( IntentConstants.EXTRA_PREEMPT_APP_PKG, offendingPackageName );
@@ -751,11 +742,11 @@ public class NativeAppService extends Service {
 		if ( task == null ) { return; }
 		
 		if ( task.baseActivity != null ) {
-			Log.d( TAG, "Killing base activity: " +  task.baseActivity.getPackageName() );
+//			Log.d( TAG, "Killing base activity: " +  task.baseActivity.getPackageName() );
 			murderGameProcess( task.baseActivity.getPackageName() );
 		}
 		if ( task.topActivity != null ) {
-			Log.d( TAG, "Killing top activity: " +  task.topActivity.getPackageName() );
+//			Log.d( TAG, "Killing top activity: " +  task.topActivity.getPackageName() );
 			murderGameProcess( task.topActivity.getPackageName() );
 		}
 	}
@@ -775,7 +766,7 @@ public class NativeAppService extends Service {
 		ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
 		int processId = findNativeAppProcessId( packageName );
 		if ( processId > 0 ) {
-			Log.d( TAG, "Killing process ID for package: " +  processId + " " +  packageName );
+//			Log.d( TAG, "Killing process ID for package: " +  processId + " " +  packageName );
 			activityManager.killBackgroundProcesses( packageName );
 			Process.sendSignal( processId, android.os.Process.SIGNAL_KILL );
 		}
@@ -787,7 +778,7 @@ public class NativeAppService extends Service {
 	private void notifyActivityGameIsDead( ResultReceiver receiver ) {
 		if ( receiver == null ) return;
 		
-		Log.d( TAG, "notifying activity game is dead." );
+//		Log.d( TAG, "notifying activity game is dead." );
 		receiver.send( RESULT_OK, null );
 	}
 }

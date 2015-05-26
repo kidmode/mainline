@@ -19,11 +19,10 @@ public class ProfileState : GameState
 		m_requestQueue = new RequestQueue ();
 
 		m_gotoEntrance = false;
-		m_gotoCREATE_CHILD = false;
+		m_gotoCREATE_CHILD_NEW = false;
 		m_gotoDashBoard = false;
 
-		KidMode.setKidsModeActive(false);
-
+		KidMode.setKidsModeActive(true);		
 		_setupScreen(p_gameController.getUI());
 
 		SoundManager.getInstance().play("Jungle Jam Loopable", 0, 1, "", null, true);
@@ -54,13 +53,13 @@ public class ProfileState : GameState
 			m_gotoEntrance = false;
 		}
 
-		if (m_gotoCREATE_CHILD)
+		if (m_gotoCREATE_CHILD_NEW)
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			p_gameController.changeState(ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
-			m_gotoCREATE_CHILD = false;
+			m_gotoCREATE_CHILD_NEW = false;
 		}
 	
 		if (m_gotoDashBoard) 
@@ -125,14 +124,10 @@ public class ProfileState : GameState
 		l_quitPosList.Add(m_quitButton.transform.localPosition);
 		m_quitButton.tweener.addPositionTrack(l_quitPosList, 1.0f);
 
-        m_quitLabel = m_quitButton.getView("btnText") as UILabel;
-        m_quitLabel.text = Localization.getString(Localization.TXT_BUTTON_QUIT);
-
 		UILabel l_titleLabel = m_profileScreen.getView("introLabel") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_LABEL_PROFILE_INFO);
 
 		List<Vector3> l_titlePosList = new List<Vector3>();
-		l_titlePosList.Add(l_titleLabel.transform.localPosition + new Vector3(-200, 400, 0));
+		l_titlePosList.Add(l_titleLabel.transform.localPosition + new Vector3(-200, 400, 0)); 
 		l_titlePosList.Add(l_titleLabel.transform.localPosition + new Vector3(  20,  30, 0));
 		l_titlePosList.Add(l_titleLabel.transform.localPosition + new Vector3( 100,  50, 0));
 		l_titlePosList.Add(l_titleLabel.transform.localPosition + new Vector3( -20, -10, 0));
@@ -151,19 +146,13 @@ public class ProfileState : GameState
 		l_dashboardList.Add(m_parentDashboardButton.transform.localPosition + new Vector3(-100,0,0));
 		l_dashboardList.Add(m_parentDashboardButton.transform.localPosition);
 		m_parentDashboardButton.tweener.addPositionTrack(l_dashboardList, 1.0f, null, Tweener.Style.QuadOut);
-        m_parentDashboardLabel = m_parentDashboardButton.getView("btnText") as UILabel;
-        m_parentDashboardLabel.text = Localization.getString(Localization.TXT_BUTTON_PARENT_DASHBOARD);
 		m_parentDashboardButton.addClickCallback(onGotoDashboard);
 		
         m_facebookButton = m_profileScreen.getView("facebookButton") as UIButton;
 		m_facebookButton.addClickCallback(_onFacebookButtonClick);
-        m_facebookPostLabel = m_facebookButton.getView("btnText") as UILabel;
-        m_facebookPostLabel.text = Localization.getString(Localization.TXT_BUTTON_FACEBOOK);
 
         m_emailInviteButton = m_profileScreen.getView("inviteButton") as UIButton;
 		m_emailInviteButton.addClickCallback(_onInviteButtonClick);
-        m_emailInviteLabel = m_emailInviteButton.getView("btnText") as UILabel;
-        m_emailInviteLabel.text = Localization.getString(Localization.TXT_BUTTON_EMAIL_INVITE);
 
 		m_createChildButton = m_profileScreen.getView("addChildButton") as UIButton;
 		m_createChildButton.addClickCallback(onCreateChild);
@@ -172,7 +161,7 @@ public class ProfileState : GameState
 		m_tryFreeButton.addClickCallback(toSignInUpsell);
 
 		UIElement l_tryFreeArea = m_profileScreen.getView("tryFreeButtonArea") as UIElement;
-		if (SessionHandler.getInstance().token.isTried())
+		if (SessionHandler.getInstance().token.isTried() || SessionHandler.getInstance().token.isPremium())
 			l_tryFreeArea.active = false;
 
 		UIButton l_termsButton = m_profileScreen.getView("termsOfService") as UIButton;
@@ -231,8 +220,9 @@ public class ProfileState : GameState
 			m_confirmDialog.active = true;
 			m_closeConfirmButton.active = false;
 			m_closeDialogButton.active = true;
-			m_titleText.active = false;
-			m_confirmContentText.text = "From and To cannot be empty.";
+			m_titleText.text = Localization.getString(Localization.TXT_STATE_11_FAIL);
+			m_titleText.active = true;
+			m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_EMPTY);
 			m_toInput.text = string.Empty;
 			m_optionInput.text = string.Empty;
 			m_errorLabel.text = string.Empty;
@@ -253,11 +243,39 @@ public class ProfileState : GameState
 		m_closeConfirmButton.active = true;
 		if (null == p_response.error) 
 		{
-			m_titleText.active = true;
-			m_confirmContentText.text = "Thanks for telling your friends and helping us build the Zoodles' community!";
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					ArrayList l_emailData = l_response["response"] as ArrayList;
+					if(null == l_emailData || l_emailData.Count <= 0)
+					{	
+						m_titleText.text = Localization.getString(Localization.TXT_94_LABEL_SUCCESS);
+						m_titleText.active = true;
+						m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_THANK);
+					}
+					else
+					{
+						string l_failEmail = string.Empty;
+						int l_count = l_emailData.Count;
+						for(int l_i = 0; l_i < l_count; l_i++)
+						{
+							l_failEmail = l_failEmail + " " + l_emailData[l_i];
+						}
+						m_confirmContentText.text = l_failEmail + Localization.getString(Localization.TXT_STATE_1_REGISTERED);;
+					}
+				}
+				else
+					m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_FAIL);
+			}
+			else
+				m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_FAIL);
+
 		}
 		else
-			m_confirmContentText.text = "Sending failed. Please retry.";
+			m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_FAIL);
 	}
 
 	private void showAddFriendCanvas(UIButton p_button)
@@ -302,7 +320,7 @@ public class ProfileState : GameState
 		m_dialog.active = true;
 		m_confirmDialog.active = false;
 		m_titleText.active = false;
-		m_confirmContentText.text = "Sending...";
+		m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_SENDING);
 		p_button.addClickCallback (onCloseButtonClick);
 	}
 
@@ -317,7 +335,7 @@ public class ProfileState : GameState
 		m_dialog.active = true;
 		m_confirmDialog.active = false;
 		m_titleText.active = false;
-		m_confirmContentText.text = "Sending...";
+		m_confirmContentText.text = Localization.getString(Localization.TXT_STATE_1_SENDING);
 		m_fromInput.text = SessionHandler.getInstance ().username;
 		m_toInput.text = string.Empty;
 		m_optionInput.text = string.Empty;
@@ -344,7 +362,7 @@ public class ProfileState : GameState
 			{
 				if(l_email.Equals(SessionHandler.getInstance().username))
 				{
-					m_errorLabel.text = "You can't invite yourself.";
+					m_errorLabel.text = Localization.getString(Localization.TXT_STATE_1_SELF);
 					m_errorLabel.active = true;
 					onCloseAddFriendDialog (p_button);
 				}
@@ -360,7 +378,7 @@ public class ProfileState : GameState
 			}
 			else
 			{
-				m_errorLabel.text = "Email format error. Please retry.";
+				m_errorLabel.text = Localization.getString(Localization.TXT_STATE_1_FORMAT);
 				m_errorLabel.active = true;
 			}
 		}
@@ -403,19 +421,28 @@ public class ProfileState : GameState
 			//**To-do**  Create a new profile
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
 			m_backScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
-			m_gameController.changeState(ZoodleState.CREATE_CHILD);
+			m_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
 		}
 	}
 
 	private void onBackClicked(UIButton p_button)
 	{
-		PlayerPrefs.Save();
-		Application.Quit();
+		if(SessionHandler.getInstance().childLockSwitch)
+		{
+			m_gameController.connectState (ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.BIRTHYEAR);
+		}
+		else
+		{
+			KidMode.setKidsModeActive(false);	
+			PlayerPrefs.Save();
+			Application.Quit();
+		}
     }	
 
 	private void onCreateChild(UIButton p_button)
 	{
-		m_gotoCREATE_CHILD = true;
+		m_gotoCREATE_CHILD_NEW = true;
 	}
 
 	private void onGotoDashboard(UIButton p_button)
@@ -432,7 +459,7 @@ public class ProfileState : GameState
 				}
 				else
 				{
-					setErrorMessage(m_gameController, "error", "Pin inexistence. Please reLogin.");
+					setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_1_ERROR), Localization.getString(Localization.TXT_STATE_1_PIN));
 				}
 			}
 			else
@@ -457,8 +484,7 @@ public class ProfileState : GameState
 
 	private void _sendFacebookFeed()
 	{
-	//	FB.Feed(
-//			linkDescription: "We love the new Zoodles Kid Mode app! It has all the best educational games, apps, videos, and books that our kids rave are tons of fun. And since we're friends, you can try Zoodles Premium for free!");
+	//	FB.Feed(linkDescription: Localization.getString(Localization.TXT_STATE_1_LINK));
 	}
 
 //	private void _onFacebookLogin(FBResult p_result)
@@ -605,10 +631,9 @@ public class ProfileState : GameState
 	private UISwipeList m_gameList;
 
 	private bool m_gotoEntrance;
-	private bool m_gotoCREATE_CHILD;
+	private bool m_gotoCREATE_CHILD_NEW;
 	private bool m_gotoDashBoard;
 
 	private RequestQueue m_requestQueue;
-
 	private bool m_isIntro = true;
 }

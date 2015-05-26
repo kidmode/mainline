@@ -6,6 +6,8 @@ public class OverallProgressCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
+		
+		SetupLocalizition ();
 
 		string l_mappingJson = LocalSetting.find("ServerSetting").getString( ZoodlesConstants.SUBJECTS,"" );
 		
@@ -153,6 +155,29 @@ public class OverallProgressCanvas : UICanvas
 		m_cognitiveSlider.value	 = l_cognitiveValue / l_maxValue * 80;
 		m_creativeSlider.value	 = l_creativeValue / l_maxValue * 80;
 		m_lifeSkillsSlider.value = l_lifeSkillsValue / l_maxValue * 80;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_title = getView("titleText") as UILabel;
+		UILabel l_promote = getView("promoteButton").getView("Text") as UILabel;
+		UILabel l_math = getView("mathText") as UILabel;
+		UILabel l_reading = getView("readingText") as UILabel;
+		UILabel l_science = getView("scienceText") as UILabel;
+		UILabel l_social = getView("socialText") as UILabel;
+		UILabel l_cognitive = getView("cognitiveText") as UILabel;
+		UILabel l_creative = getView("creativeText") as UILabel;
+		UILabel l_life = getView("lifeSkillsText") as UILabel;
+		
+		l_title.text = Localization.getString( Localization.TXT_57_LABEL_PROGRESS );
+		l_promote.text = Localization.getString( Localization.TXT_57_LABEL_PROMOTE );
+		l_math.text = Localization.getString( Localization.TXT_COURSE_MATH );
+		l_reading.text = Localization.getString( Localization.TXT_COURSE_READING );
+		l_science.text = Localization.getString( Localization.TXT_COURSE_SCIENCE );
+		l_social.text = Localization.getString( Localization.TXT_COURSE_SOCIAL );
+		l_cognitive.text = Localization.getString( Localization.TXT_COURSE_COGNITIVE );
+		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
+		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
 	}
 
 	private UISlider m_mathSlider;

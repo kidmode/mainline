@@ -44,6 +44,8 @@ import android.widget.FrameLayout;
 import com.gamecloudstudios.HtmlAudioInterface;
 import com.gamecloudstudios.ZoodlesInterface;
 import com.unity3d.player.UnityPlayer;
+import com.zoodles.kidmode.App;
+import com.zoodles.kidmode.features.DeviceInfo;
 
 import java.util.ArrayList;
 
@@ -66,7 +68,7 @@ public class UniWebViewDialog extends Dialog {
 	private boolean _transparent;
 	private boolean _backButtonEnable = true;
 	private boolean _manualHide;
-	private boolean _useZoodlesInterfaces = true;
+	private boolean _useZoodlesInterfaces = false;
 
 	private HtmlAudioInterface m_audioInterface;
 	private ZoodlesInterface m_zoodlesInterface;
@@ -95,7 +97,11 @@ public class UniWebViewDialog extends Dialog {
 		
 		m_audioInterface = new HtmlAudioInterface();
 		m_zoodlesInterface = new ZoodlesInterface();
-
+		
+		App app = App.instance();
+		DeviceInfo di = app.deviceInfo();
+		_useZoodlesInterfaces = (di.getSDKVersion() < 20); //Only use on kitkat or lower api.
+		
 		schemes = new ArrayList<String>();
 		schemes.add("uniwebview");
 
@@ -335,7 +341,6 @@ public class UniWebViewDialog extends Dialog {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				Log.d(AndroidPlugin.LOG_TAG, "shouldOverrideUrlLoading: " + url);
-				Log.v("Loading again", "load load load");
 				return UniWebViewDialog.this._listener
 						.shouldOverrideUrlLoading(UniWebViewDialog.this, url);
 			}

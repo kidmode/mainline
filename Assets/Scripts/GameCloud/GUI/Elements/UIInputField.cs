@@ -10,7 +10,6 @@ public class UIInputField : UIElement
 	{
 		base.init(p_gameObject);
 		m_input = p_gameObject.GetComponent<InputField>();
-		m_input.shouldHideMobileInput = true;
 		listener.onSelect += _onSelect;
 		listener.onDeselect += _onDeselect;
 	}

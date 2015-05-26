@@ -14,7 +14,7 @@ public class UILabel : UIElement
 
 		m_outline 	= p_gameObject.GetComponent<Outline>();
 		m_shadow	= p_gameObject.GetComponent<Shadow>();
-
+		m_alpha 	= color.a;
 	}
 
 	public override void update()
@@ -39,8 +39,11 @@ public class UILabel : UIElement
 	{
 		set 
 		{ 
-			base.alpha = value;
-			color = new Color( color.r, color.g, color.b, value ); 
+			if (value != base.alpha)
+			{
+				base.alpha = value;
+				color = new Color( color.r, color.g, color.b, value ); 
+			}
 		}
 		get { return color.a; }
 	}
@@ -55,7 +58,14 @@ public class UILabel : UIElement
 	public string text
 	{
 		get { return m_label.text;	}
-		set { m_label.text = value;	}
+		set 
+		{
+			if (null == value
+			    || !value.Equals(m_label.text) )
+			{
+				m_label.text = value;	
+			}
+		}
 	}
 
     public TextAnchor alignment

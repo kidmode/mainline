@@ -91,14 +91,15 @@ public class UploadHelper
 	private string GetContentType(FileInfo f)  
 	{  
 		string l_extension = f.Extension;
-		if( l_extension.Equals(".wav") )
-		{
-			return "wav";
-		}
-		else
-		{
-			return "txt";
-		}
+//		if( l_extension.Equals(".wav") )
+//		{
+//			return "wav";
+//		}
+//		else
+//		{
+//			return "txt";
+//		}
+		return l_extension.TrimStart ('.');
 	}
 
 	private void AppendBytes(byte[] bytes)   

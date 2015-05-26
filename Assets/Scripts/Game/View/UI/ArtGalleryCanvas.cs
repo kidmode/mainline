@@ -6,6 +6,18 @@ public class ArtGalleryCanvas : UICanvas {
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_title = getView("titleImage").getView ("titleText") as UILabel;
+		l_title.text =  Localization.getString (Localization.TXT_77_LABEL_TITLE);
+		UILabel l_seeMore = getView("artListButton").getView ("Text") as UILabel;
+		l_seeMore.text =  Localization.getString (Localization.TXT_77_BUTTON_SEE_MORE);
+
+		UILabel l_loading = getView ("loadingText") as UILabel;
+		l_loading.text = Localization.getString (Localization.TXT_LABEL_LOADING);
 	}
 
 	public override void update ()

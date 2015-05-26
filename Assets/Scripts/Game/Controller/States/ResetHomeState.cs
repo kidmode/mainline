@@ -37,7 +37,7 @@ public class ResetHomeState: GameState
 
 		UILabel l_explanationText = m_screen.getView("ExplanationText") as UILabel;
 		string l_homeName = KidMode.getHomeName();
-		l_explanationText.text = "You accidentally gave Child Lock to\n\"" + l_homeName + "\" instead of \"Kid Mode\".";
+		l_explanationText.text = string.Format (Localization.getString(Localization.TXT_STATE_26_HOME), l_homeName);
 
 		m_beginButton = m_screen.getView("BeginButton") as UIButton;
 		m_beginButton.addClickCallback(begin);
@@ -58,7 +58,7 @@ public class ResetHomeState: GameState
 		if (m_began == false)
 		{
 			KidMode.clearHomeButton();
-			KidMode.makeToast("See \"Launch by Default\", then press the \"Clear defaults\" button.");
+			KidMode.makeToast(Localization.getString(Localization.TXT_STATE_26_CLEAR));
 			m_began = true;
 		}
 	}

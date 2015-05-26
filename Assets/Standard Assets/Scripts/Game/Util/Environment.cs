@@ -56,6 +56,7 @@ namespace GCS
 			Debug.Log("[Environment] game_static_host: " + s_staticHost );
 			Debug.Log("[Environment] game_server_host: " + s_host);	
 			Debug.Log("[Environment] serviceURL: " + s_serviceURL);
+			Debug.Log("[Environment] version:" + CurrentBundleVersion.version);
 		}
 		
 		public static string getVariable(string p_key)

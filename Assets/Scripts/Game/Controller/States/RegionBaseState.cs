@@ -46,12 +46,14 @@ public class WebViewInfo : System.Object
 				RequestQueue l_queue = new RequestQueue();
 				l_queue.add(new ImageRequest("icon", webData.icon, _requestIconComplete));
 				l_queue.request(RequestType.RUSH);
+				m_queue = l_queue;
 			}
 			else if( webData.iconMedium != null )
 			{
 				RequestQueue l_queue = new RequestQueue();
 				l_queue.add(new ImageRequest("icon", webData.iconMedium, _requestIconComplete));
 				l_queue.request(RequestType.RUSH);
+				m_queue = l_queue;
 			}
 		}
 	}
@@ -75,16 +77,30 @@ public class WebViewInfo : System.Object
 				m_retriveHandler = null;
 			}
 		}
+
+		if (null != m_queue)
+		{
+			m_queue.dispose();
+			m_queue = null;
+		}
 	}
 
 	public void dispose()
 	{
+		if (null != m_queue)
+		{
+			m_queue.dispose();
+			m_queue = null;
+		}
+
 		if (null != icon)
 		{
 			GameObject.Destroy(icon);
+			icon = null;
 		}
 	}
 
+	private RequestQueue m_queue = null;
 	private RetriveIconHandler m_retriveHandler = null;
 }
 
@@ -98,6 +114,9 @@ public class RegionBaseState : GameState
 	
 	protected const float FOREGROUND_SPEED = 0.5f;
 	protected const float BACKGROUND_SPEED = 0.13f;
+
+	private RequestQueue m_queue = null;
+	private RequestQueue m_bookQueue = null;
 
 	protected enum RegionState
 	{
@@ -132,62 +151,24 @@ public class RegionBaseState : GameState
 		m_regionState 	= RegionState.Left;
 		m_transitioning = false;
 		m_subState = SubState.None;
+		m_bookLoaded = false;
+		m_linkLoaded = false;
 		
 		_createViews();
 		
 		_setupElements();
 
-		RequestQueue l_queue = new RequestQueue();
-
-		if ( null == SessionHandler.getInstance().webContentList && (!m_requestStates.ContainsKey("WEB") || m_requestStates["WEB"] == true) )
+		if (m_queue == null)
 		{
-			m_requestStates["WEB"] = false;
-			l_queue.add(new WebContentRequest(_requestWebContentComplete));
-
-			#if UNITY_ANDROID && !UNITY_EDITOR
-			string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-			_Debug.log ( l_appListJson );
-			ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-			if( null != l_appNameList )
-			{
-				List<System.Object> l_list = KidMode.getLocalApps();
-				
-				if( l_list != null && l_list.Count > 0)
-				{
-					foreach(AppInfo l_app in l_list)
-					{
-						if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
-						{
-							GameInfo l_game = new GameInfo(l_app);
-							m_gameViewList.Add(l_game);
-						}
-					}
-				}
-			}
-			#endif
-		}
-		else
-		{
-			canSetWebContent = true;
-		}
-
-		if ( null == SessionHandler.getInstance().bookContentList && (!m_requestStates.ContainsKey("BOOK") || m_requestStates["BOOK"] == true) )
-		{
-			m_requestStates["BOOK"] = false;
-			l_queue.add(new BookListRequest(_requestBookListComplete));
-		}
-		else
-		{
-			canSetBook = true;		
+			m_queue = new RequestQueue();
 		}
 
 		if (!m_requestStates.ContainsKey("PAINT") || m_requestStates["PAINT"] == true)
 		{
-			m_requestStates["PAINT"] = false;
-			l_queue.add(new DrawingListRequest(_requestDrawingListComplete));
+			m_queue.add(new DrawingListRequest(_requestDrawingListComplete));
 		}
 
-		l_queue.request(RequestType.RUSH);
+		m_queue.request(RequestType.RUSH);
 
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
@@ -197,6 +178,8 @@ public class RegionBaseState : GameState
 	public override void update(GameController p_gameController, int p_time)
 	{
 		base.update(p_gameController, p_time);
+
+		checkActivityScreen ();
 
 		if( canSetImage )
 		{
@@ -258,7 +241,39 @@ public class RegionBaseState : GameState
 			m_subState = SubState.None;
 		}
 		
+		checkIfLinksCacheLoaded(p_gameController);
+		checkIfBooksCacheLoaded(p_gameController);
 		_handleDynamicActivities();
+	}
+
+	public void checkIfLinksCacheLoaded(GameController p_gameController)
+	{
+		if (m_linkLoaded == false)
+		{
+			Game l_game = p_gameController.game;
+			User l_user = l_game.user;
+			WebContentCache l_cache = l_user.contentCache;
+			if (l_cache.isFinishedLoadingWebContent)
+			{
+				m_linkLoaded = true;
+				canSetWebContent = true;
+			}
+		}
+	}
+
+	void checkIfBooksCacheLoaded (GameController p_gameController)
+	{
+		if (m_bookLoaded == false)
+		{
+			Game l_game = p_gameController.game;
+			User l_user = l_game.user;
+			WebContentCache l_cache = l_user.contentCache;
+			if (l_cache.isFinishedLoadingBooks)
+			{
+				m_bookLoaded = true;
+				canSetBook = true;
+			}
+		}
 	}
 	
 	public override void exit(GameController p_gameController)
@@ -283,9 +298,44 @@ public class RegionBaseState : GameState
 		_clearContentLists();
 		
 		_cleanUpTextures();
+
+		if (null != m_queue)
+		{
+			m_queue.dispose();
+			m_queue = null;
+		}
+
+		if (null != m_bookQueue)
+		{
+			m_bookQueue.dispose();
+			m_bookQueue = null;
+		}
 	}
 	
 	//------------------ Private Implementation ----------------------
+
+	private void checkActivityScreen()
+	{
+		if( null != m_gameActivityCanvas && null != m_gameActivityCanvas.getView("mainPanel") )
+		{
+			m_gameActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+		}
+
+		if( null != m_videoActivityCanvas && null != m_videoActivityCanvas.getView("mainPanel") )
+		{
+			m_videoActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+		}
+
+		if( null != m_bookActivityCanvas && null != m_bookActivityCanvas.getView("mainPanel") )
+		{
+			m_bookActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+		}
+
+		if( null != m_funActivityCanvas && null != m_funActivityCanvas.getView("mainBack") )
+		{
+			m_funActivityCanvas.getView("mainBack").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+		}
+	}
 	
 	private void _createViews()
 	{
@@ -301,24 +351,13 @@ public class RegionBaseState : GameState
 	{
 		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
 		
-		UILabel l_regionHeader = m_speechBubble.getView("header") as UILabel;
-		l_regionHeader.text = Localization.getString(Localization.TXT_LABEL_REGION_HEADER);
-		
-		UILabel l_regionBody = m_speechBubble.getView("body") as UILabel;
-		l_regionBody.text = Localization.getString(Localization.TXT_LABEL_REGION_BODY);
-		
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
 		m_cornerPosition = m_mapButton.transform.localPosition;
-		UILabel l_mapLabel = m_mapButton.getView("btnText") as UILabel;
-		l_mapLabel.text = Localization.getString(Localization.TXT_BUTTON_MAPS);
-		
 		
 		m_backButton = m_regionLandingCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(onBackButtonClicked);
 		m_backButton.transform.localPosition += new Vector3(0, 200, 0);
-		UILabel l_backLabel = m_backButton.getView("btnText") as UILabel;
-		l_backLabel.text = Localization.getString(Localization.TXT_BUTTON_BACK);
 		
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
@@ -375,12 +414,20 @@ public class RegionBaseState : GameState
 			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
 			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
 
+			if( true == l_videoInfo.active && m_linkLoaded )
+			{
+				l_videoInfo.text = Localization.getString(Localization.TXT_11_LABEL_INFO);
+			}
+
 			if (m_videoFeatured != null)
 			{
-				UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
-				l_featureButton.addClickCallback(onFeatureVideoClicked);
-				UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-				m_videoFeatured.retriveIcon((Texture2D p_icon) => { l_featureImage.setTexture(p_icon); });
+				m_videoFeatured.retriveIcon(setFeatureImageVideo);
+			}
+
+			if( m_videoFavoritesList.Count <= 0 )
+			{
+				UILabel l_favorateInfoLabel = m_videoActivityCanvas.getView("favoriteInfo") as UILabel;
+				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
 			}
 		}
 		
@@ -389,7 +436,7 @@ public class RegionBaseState : GameState
 			m_gameActivityCanvas = m_gameController.getUI().createScreen(UIScreen.GAME_ACTIVITY, true, 4);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_gameActivityCanvas;
-			
+
 			m_gameSwipeList = m_gameActivityCanvas.getView("allContentScrollView") as UISwipeList;
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
@@ -401,12 +448,20 @@ public class RegionBaseState : GameState
 			UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
 			l_gameInfo.active = (m_gameSwipeList.getData().Count <= 0);
 
+			if( true == l_gameInfo.active && m_linkLoaded )
+			{
+				l_gameInfo.text = Localization.getString(Localization.TXT_12_LABEL_INFO);
+			}
+
 			if (m_gameFeatured != null)
 			{
-				UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
-				l_featureButton.addClickCallback(onFeatureGameClicked);
-				UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-				m_gameFeatured.retriveIcon((Texture2D p_icon) => { l_featureImage.setTexture(p_icon); });
+				m_gameFeatured.retriveIcon(setFeatureImageGame);
+			}
+
+			if( m_gameFavoritesList.Count <= 0 )
+			{
+				UILabel l_favorateInfoLabel = m_gameActivityCanvas.getView("favoriteInfo") as UILabel;
+				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_12_LABEL_FAVORITE);
 			}
 		}
 		
@@ -425,6 +480,14 @@ public class RegionBaseState : GameState
 			m_bookFavorateSwipeList.setData(m_bookFavoritesList);
 			m_bookFavorateSwipeList.addClickListener("Prototype", onBookClicked);
 
+			UILabel l_bookInfo = m_bookActivityCanvas.getView("info") as UILabel;
+			l_bookInfo.active = (m_bookSwipeList.getData().Count <= 0);
+			
+			if( true == l_bookInfo.active && m_bookLoaded )
+			{
+				l_bookInfo.text = Localization.getString(Localization.TXT_14_LABEL_INFO);
+			}
+
 			UIButton l_featureButton = m_bookActivityCanvas.getView("featureOne") as UIButton;
 			l_featureButton.addClickCallback(onFeatureBookClicked);
 			if(m_topBook != null)
@@ -441,6 +504,12 @@ public class RegionBaseState : GameState
 			}
 			m_quitMessageButton = m_messageCanvas.getView("quitButton") as UIButton;
 			m_quitMessageButton.addClickCallback(onQuitMessageButtonClick);
+
+			if( m_bookFavoritesList.Count <= 0 )
+			{
+				UILabel l_favorateInfoLabel = m_bookActivityCanvas.getView("favoriteInfo") as UILabel;
+				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_14_LABEL_FAVORITE);
+			}
 		}
 		
 		if (m_createActivity == ActivityType.Fun)
@@ -454,6 +523,34 @@ public class RegionBaseState : GameState
 			m_funSwipeList.addClickListener("Prototype", onFunActivityClicked);
 			//m_createActivity 		= ActivityType.None;
 			//m_gotoPaint 			= true;
+		}
+	}
+
+	private void setFeatureImageVideo(Texture2D p_icon)
+	{
+		UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
+		if (null != l_featureButton)
+		{
+			l_featureButton.addClickCallback(onFeatureVideoClicked);
+			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+			if (null != l_featureImage)
+			{
+				l_featureImage.setTexture(p_icon);
+			}
+		}
+	}
+	
+	private void setFeatureImageGame(Texture2D p_icon)
+	{
+		UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
+		if (null != l_featureButton)
+		{
+			l_featureButton.addClickCallback(onFeatureGameClicked);
+			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+			if (null != l_featureImage)
+			{
+				l_featureImage.setTexture(p_icon);
+			}
 		}
 	}
 	
@@ -572,7 +669,7 @@ public class RegionBaseState : GameState
 	private void _changeToVideoView(GameController p_gameController)
 	{
 		if (m_currentActivityCanvas != null)
-			p_gameController.getUI().removeScreen(m_currentActivityCanvas);
+			p_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 
 		p_gameController.changeState(ZoodleState.VIDEO_VIEW);
 	}
@@ -580,7 +677,7 @@ public class RegionBaseState : GameState
 	private void _changeToGameView(GameController p_gameController)
 	{
 		if (m_currentActivityCanvas != null)
-			p_gameController.getUI().removeScreen(m_currentActivityCanvas);
+			p_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 		
 		p_gameController.changeState(ZoodleState.GAME_VIEW);
 	}
@@ -590,7 +687,7 @@ public class RegionBaseState : GameState
 		//m_removeCornerProfile = true;
 		
 		if (m_currentActivityCanvas != null)
-			p_gameController.getUI().removeScreen(m_currentActivityCanvas);
+			p_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 		
 		m_regionLandingCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
 		m_regionBackgroundCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
@@ -713,7 +810,7 @@ public class RegionBaseState : GameState
 		if( m_topBook.bookState == BookState.NeedToBuy )
 		{
 			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
-			l_content.text = "Please ask your parents to buy this book.";
+			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
 			MessageIn();
 		}
 		if( m_topBook.bookState == BookState.NotRecorded )
@@ -738,7 +835,7 @@ public class RegionBaseState : GameState
 		if( l_bookInfo.bookState == BookState.NeedToBuy )
 		{
 			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
-			l_content.text = "Please ask your parents to buy this book.";
+			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
 			MessageIn();
 		}
 
@@ -746,135 +843,6 @@ public class RegionBaseState : GameState
 		{
 			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
 			m_subState = SubState.GO_BOOKS;
-		}
-	}
-
-	private void _requestWebContentComplete(WWW p_response)
-	{
-		if (p_response.error == null)
-		{
-			List<object> l_contentList = new List<object>();
-			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
-			foreach (object o in l_data)
-			{
-				l_contentList.Add(new WebContent(o as Hashtable));
-			}
-			_setupWebContentList(l_contentList);
-			SessionHandler.getInstance().webContentList = l_contentList;
-		}
-		m_requestStates["WEB"] = true;
-	}
-
-	private void _requestBookListComplete(WWW p_response)
-	{ 
-		if (p_response.error == null)
-		{
-			string l_string = p_response.text;
-
-			l_string = UnicodeDecoder.Unicode(l_string);
-			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
-
-			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as ArrayList;
-			foreach (object o in l_data)
-			{
-				Book l_book = new Book(o as Hashtable);
-//				SessionHandler.getInstance().bookTable[l_book.id] = l_book;
-				SessionHandler.getInstance().addBook(l_book.id, l_book);
-			}
-
-		}
-		
-		m_requestStates["BOOK"] = true;
-
-		RequestQueue l_request = new RequestQueue ();
-		l_request.add ( new GetReadingsRequest( _requestReadingListComplete ) );
-		l_request.request (RequestType.RUSH);
-	}
-
-	private void _requestReadingListComplete(WWW p_response)
-	{
-		if( null == SessionHandler.getInstance ().bookTable || 0 == SessionHandler.getInstance ().bookTable.Count )
-		{
-			return;
-		}
-		if (p_response.error == null)
-		{
-			string l_string = "";
-			l_string = UnicodeDecoder.Unicode(p_response.text);
-			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
-
-			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as ArrayList;
-			foreach (object o in l_data)
-			{
-				BookReading l_bookReading = new BookReading(o as Hashtable);
-
-				bool l_isAudio = true;
-
-				foreach( BookReadingPage l_page in l_bookReading.readingPageTable.Values )
-				{
-					if( null == l_page.audioSlug || null == l_page.audioUrl)
-						l_isAudio = false;
-				}
-
-				if( l_isAudio != true )
-				{
-					continue;
-				}
-
-				Book l_book = SessionHandler.getInstance ().bookTable[l_bookReading.bookId] as Book;
-
-				if( l_book == null )
-				{
-					continue;
-				}
-
-				l_bookReading.setPagePosition( l_book.pageTable );
-
-//				SessionHandler.getInstance ().readingTable.Add( l_bookReading.id, l_bookReading );
-				SessionHandler.getInstance().readingTable[l_bookReading.id] = l_bookReading;
-			}
-		}
-
-		List<object> l_contentList = new List<object> ();
-		List<int> l_recordedBookList = new List<int>();
-		
-		foreach( BookReading l_bookReading in SessionHandler.getInstance ().readingTable.Values )
-		{
-			string l_bookName = (SessionHandler.getInstance ().bookTable[l_bookReading.bookId] as Book).title;
-			BookInfo l_bookInfo = new BookInfo( l_bookName, BookState.Recorded, l_bookReading.coverUrl, l_bookReading.bookId, l_bookReading.id);
-			l_contentList.Add(l_bookInfo);
-			l_recordedBookList.Add( l_bookReading.bookId );
-		}
-		foreach( Book l_book in SessionHandler.getInstance ().bookTable.Values )
-		{
-			BookState l_state = BookState.Free;
-			Token l_token = SessionHandler.getInstance ().token;
-			
-			if( l_token.isPremium() || l_token.isCurrent() || l_book.gems == 0 || l_book.owned )
-			{
-				l_state = BookState.NotRecorded;
-			}
-			else
-			{
-				l_state = BookState.NeedToBuy;
-			}
-			
-			BookInfo l_bookInfo = new BookInfo( l_book.title,l_state, l_book.coverUrl, l_book.id);
-
-			if( l_recordedBookList.Contains(l_book.id) )
-			{
-				continue;
-			}
-			
-			l_contentList.Add(l_bookInfo);
-		}
-
-		if( l_contentList.Count > 0 )
-		{
-			_setupBookSwipeLists(l_contentList);
-			SessionHandler.getInstance().bookContentList = l_contentList;
 		}
 	}
 
@@ -893,7 +861,6 @@ public class RegionBaseState : GameState
 			_setupDrawingList(l_contentList);
 			SessionHandler.getInstance ().drawingList = l_list;
 		}
-		m_requestStates["PAINT"] = true;
 	}
 	
 	private void onFadeFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
@@ -926,6 +893,7 @@ public class RegionBaseState : GameState
 		
 		m_transitioning = false;
 		m_activityPanelCanvas.canvasGroup.interactable = true;
+		m_cornerProfileCanvas.canvasGroup.interactable = true;
 	}
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
@@ -957,14 +925,14 @@ public class RegionBaseState : GameState
 			m_transitioning = true;
 			m_activityPanelCanvas.canvasGroup.interactable = false;
 			m_activityPanelCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
+			m_cornerProfileCanvas.canvasGroup.interactable = false;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
-			m_profileButton.enabled = false;
 		}
 		else
 		{
-			_Debug.log("CurrentActivity: " + m_currentActivityCanvas);
+//			_Debug.log("CurrentActivity: " + m_currentActivityCanvas);
 			if (m_currentActivityCanvas != null)
-				m_gameController.getUI().removeScreen(m_currentActivityCanvas);
+				m_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 			
 			m_createActivity = m_nextActivity;
 		}
@@ -997,7 +965,7 @@ public class RegionBaseState : GameState
 			m_backButton.tweener.addPositionTrack(l_backPositions, 0.4f);
 			
 			if (m_currentActivityCanvas != null)
-				m_gameController.getUI().removeScreen(m_currentActivityCanvas);
+				m_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 
 			m_transitioning = true;
 			
@@ -1006,8 +974,8 @@ public class RegionBaseState : GameState
 			
 			m_activityPanelCanvas.canvasGroup.interactable = false;
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
-			m_profileButton.enabled = true;
 		}
 	}	
 	
@@ -1085,8 +1053,21 @@ public class RegionBaseState : GameState
 	
 	private void _setupBookSwipeLists(List<object> p_contentList)
 	{
-		if (p_contentList == null)
-			return;
+		if (p_contentList.Count <= 0)
+		{
+			WebContentCache l_cache = m_gameController.game.user.contentCache;
+
+			if( l_cache.loadBookFail )
+			{
+				UILabel l_bookInfo = m_bookActivityCanvas.getView("info") as UILabel;
+				if (null != l_bookInfo)
+				{
+					l_bookInfo.active = true;
+					l_bookInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				}
+				return;
+			}
+		}
 
 //		if( ZoodleState.REGION_LANDING != int.Parse(m_gameController.stateName) )
 //			return;
@@ -1101,7 +1082,10 @@ public class RegionBaseState : GameState
 			if (l_bookCount++ >= ZoodlesConstants.MAX_BOOK_CONTENT)
 				continue;
 
-			l_info.reload();
+			if (l_info.disposed)
+			{
+				l_info.reload();
+			}
 
 			Book l_book = (Book)SessionHandler.getInstance ().bookTable[l_info.bookId];
 
@@ -1122,12 +1106,49 @@ public class RegionBaseState : GameState
 
 			m_bookViewList.Add(l_info);
 		}
+
+		if( null != m_bookActivityCanvas )
+		{
+			UILabel l_bookInfo = m_bookActivityCanvas.getView("info") as UILabel;
+			if (null != l_bookInfo)
+			{
+				if( m_bookViewList.Count <= 0 )
+				{
+					l_bookInfo.active = true;
+					l_bookInfo.text = Localization.getString(Localization.TXT_14_LABEL_INFO);
+				}
+				else
+				{
+					l_bookInfo.active = false;
+				}
+			}
+		}
 	}
 	
 	private void _setupWebContentList(List<object> p_contentList)
 	{
-		if (p_contentList == null)
-			return;
+		if (p_contentList.Count <= 0)
+		{
+			WebContentCache l_cache = m_gameController.game.user.contentCache;
+			
+			if( l_cache.loadWebContentFail )
+			{
+				UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
+				if (null != l_videoInfo)
+				{
+					l_videoInfo.active = true;
+					l_videoInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				}
+
+				UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
+				if (null != l_gameInfo)
+				{
+					l_gameInfo.active = true;
+					l_gameInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				}
+				return;
+			}
+		}
 
 		m_videoViewList.Clear();
 		m_videoFavoritesList.Clear();
@@ -1159,7 +1180,7 @@ public class RegionBaseState : GameState
 		}
 		l_gameCount += m_gameViewList.Count;
 		#endif
-		
+
 		foreach (object o in p_contentList)
 		{
 			WebContent l_content = o as WebContent;
@@ -1206,16 +1227,64 @@ public class RegionBaseState : GameState
 		if( null != m_videoActivityCanvas )
 		{
 			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
-			l_videoInfo.active = (m_videoViewList.Count <= 0);
+			if (null != l_videoInfo)
+			{
+				if( m_videoViewList.Count <= 0 )
+				{
+					l_videoInfo.active = true;
+					l_videoInfo.text = Localization.getString(Localization.TXT_11_LABEL_INFO);
+				}
+				else
+				{
+					l_videoInfo.active = false;
+				}
+			}
+
+			if (null != m_videoFeatured)
+			{
+				UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
+				if (null != l_featureButton)
+				{
+					l_featureButton.addClickCallback(onFeatureVideoClicked);
+					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+					if (null != l_featureImage)
+					{
+						m_videoFeatured.retriveIcon(setFeatureImageVideo);
+					}
+				}
+			}
 		}
 
 		if( null != m_gameActivityCanvas )
 		{
 			UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
-			l_gameInfo.active = (m_gameViewList.Count <= 0);
-		}
+			if (null != l_gameInfo)
+			{
+				if( m_gameViewList.Count <= 0 )
+				{
+					l_gameInfo.active = true;
+					l_gameInfo.text = Localization.getString(Localization.TXT_12_LABEL_INFO);
+				}
+				else
+				{
+					l_gameInfo.active = false;
+				}
+			}
 
-		
+			if (null != m_gameFeatured)
+			{
+				UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
+				if (null != l_featureButton)
+				{
+					l_featureButton.addClickCallback(onFeatureGameClicked);
+					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+					if (null != l_featureImage)
+					{
+						m_gameFeatured.retriveIcon(setFeatureImageGame);
+					}
+				}
+			}
+		}		
 		// m_gameSwipeList.setData(m_gameViewList);
 		// m_videoSwipeList.setData(m_videoViewList);
 	}
@@ -1372,6 +1441,9 @@ public class RegionBaseState : GameState
 	protected List<AnimationTrigger> m_triggers	= new List<AnimationTrigger>();
 
 	protected Dictionary<string, bool> m_requestStates		= new Dictionary<string, bool>();
+
+	protected bool m_bookLoaded = false;
+	protected bool m_linkLoaded = false;
 }
 
 public class AnimationTrigger

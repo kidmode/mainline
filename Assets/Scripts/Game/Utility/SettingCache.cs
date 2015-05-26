@@ -13,7 +13,7 @@ public class SettingCache : System.Object
 		set 
 		{ 
 			m_enableCache = true;
-			m_childLockSwitch = value;  
+			m_childLockSwitch = value; 
 		}
 	}
 
@@ -50,7 +50,10 @@ public class SettingCache : System.Object
 	public bool newAddApp
 	{
 		get{return m_newAddApp;}
-		set{m_newAddApp = value;}
+		set
+		{
+			m_newAddApp = value;
+		}
 	}
 
 	public int musicVolum
@@ -118,7 +121,6 @@ public class SettingCache : System.Object
 		get{return m_enableCache;}
 		set
 		{
-			m_enableCache = true;
 			m_enableCache = value;
 		}
 	}
@@ -135,5 +137,4 @@ public class SettingCache : System.Object
 	private bool m_tip;
 	private string m_childLockPassword;
 	private bool m_enableCache = false;
-	private SessionHandler m_session;
 }

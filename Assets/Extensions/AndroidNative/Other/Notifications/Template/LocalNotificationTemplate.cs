@@ -17,6 +17,8 @@ public class LocalNotificationTemplate  {
 	
 		string[] nodes = data.Split(new string[] { DATA_SPLITTER }, StringSplitOptions.None);
 
+
+
 		_id = System.Convert.ToInt32(nodes[0]);
 		_title =  nodes[1];
 		_message = nodes[2];

@@ -33,7 +33,7 @@ public class ActivityPanelCanvas : UICanvas
 		m_inactivePosition_Y 	= m_videoToggle.transform.localPosition.y;
 		m_activePosition_Y 		= m_inactivePosition_Y - TWEEN_DISTANCE;
 
-        _setupLocalization();
+		SetupLocalizition();
 	}
 	
 	public override void update()
@@ -127,19 +127,17 @@ public class ActivityPanelCanvas : UICanvas
 		p_element.tweener.addPositionTrack( position, TWEEN_TIME );
 	}
 
-    private void _setupLocalization()
+	private void SetupLocalizition()
     {
         UILabel l_videoLabel    = m_videoToggle.getView("titleLabel") as UILabel;
-        l_videoLabel.text       = Localization.getString(Localization.TXT_LABEL_VIDEOS);
-
         UILabel l_gamesLabel    = m_gamesToggle.getView("titleLabel") as UILabel;
-        l_gamesLabel.text       = Localization.getString(Localization.TXT_LABEL_GAMES);
-
         UILabel l_booksLabel    = m_booksToggle.getView("titleLabel") as UILabel;
-        l_booksLabel.text       = Localization.getString(Localization.TXT_LABEL_BOOKS);
-
         UILabel l_funLabel      = m_funToggle.getView("titleLabel") as UILabel;
-        l_funLabel.text         = Localization.getString(Localization.TXT_LABEL_ACTIVITIES);
+		
+		l_gamesLabel.text       = Localization.getString(Localization.TXT_LABEL_GAMES);
+		l_videoLabel.text       = Localization.getString(Localization.TXT_LABEL_VIDEOS);
+		l_booksLabel.text       = Localization.getString(Localization.TXT_LABEL_BOOKS);
+		l_funLabel.text         = Localization.getString(Localization.TXT_LABEL_ACTIVITIES);
     }
 
 

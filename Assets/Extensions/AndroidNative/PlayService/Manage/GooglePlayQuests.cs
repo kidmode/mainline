@@ -191,7 +191,7 @@ public class GooglePlayQuests : SA_Singleton<GooglePlayQuests> {
 	private void OnGPQuestsLoaded(string data) {
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
-		
+
 		GooglePlayResult result = new GooglePlayResult (storeData [0]);
 		if(result.isSuccess) {
 			

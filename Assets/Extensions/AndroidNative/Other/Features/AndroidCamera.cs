@@ -24,8 +24,12 @@ public class AndroidCamera : SA_Singleton<AndroidCamera>  {
 	}
 
 
-
+	[Obsolete("SaveImageToGalalry is deprecated, please use SaveImageToGallery instead.")]
 	public void SaveImageToGalalry(Texture2D image, String name = "Screenshot") {
+		SaveImageToGallery(image, name);
+	}
+
+	public void SaveImageToGallery(Texture2D image, String name = "Screenshot") {
 		if(image != null) {
 			byte[] val = image.EncodeToPNG();
 			string mdeia = System.Convert.ToBase64String (val);
@@ -34,6 +38,8 @@ public class AndroidCamera : SA_Singleton<AndroidCamera>  {
 			Debug.LogWarning("AndroidCamera::SaveToGalalry:  image is null");
 		}
 	}
+
+
 
 
 	public void SaveScreenshotToGallery(String name = "") {
@@ -89,7 +95,7 @@ public class AndroidCamera : SA_Singleton<AndroidCamera>  {
 
 	private void OnScreenshotReady(Texture2D tex) {
 		SA_ScreenShotMaker.instance.OnScreenshotReady -= OnScreenshotReady;
-		SaveImageToGalalry(tex, _lastImageName);
+		SaveImageToGallery(tex, _lastImageName);
 
 	}
 }

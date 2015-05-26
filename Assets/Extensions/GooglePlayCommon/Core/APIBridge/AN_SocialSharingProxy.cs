@@ -30,4 +30,15 @@ public class AN_SocialSharingProxy {
 	public static void SendMail(string caption, string message,  string subject, string email) {
 		CallActivityFunction("SendMail", caption, message, subject, email);
 	}
+
+
+	public static void InstagramPostImage(string data, string cpation) {
+		CallActivityFunction("InstagramPostImage", data, cpation);
+	}
+
+
+
+
+
+
 }

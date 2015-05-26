@@ -25,6 +25,16 @@ public class Drawing : System.Object
 		m_favorite = bool.Parse(p_data["favorite"].ToString());
 	}
 
+	public void dispose ()
+	{
+		if (m_largeIcon != null)
+		{
+			GameObject.Destroy(m_largeIcon);
+		}
+		
+		m_largeIcon = null;
+	}
+
 	private string m_id;
 	private string m_mediumUrl;
 	private string m_largeUrl;

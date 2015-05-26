@@ -21,7 +21,7 @@ public class Game : MonoBehaviour
 
 	public void Start()
 	{
-		_Debug.mode = OutputMode.CONSOLE;
+		_Debug.mode = OutputMode.DISABLE;
 
 		switch (Input.deviceOrientation) 
 		{
@@ -60,6 +60,8 @@ public class Game : MonoBehaviour
 		ZoodlesScreenFactory l_screenFactory = new ZoodlesScreenFactory();
 		ZoodlesStateFactory	 l_stateFactory	= new ZoodlesStateFactory();
 		m_gameController = new GameController(this, l_screenFactory, l_stateFactory);
+
+		Localization.loadLanguage ();
 
         startLoading();
 

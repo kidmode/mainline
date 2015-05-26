@@ -19,6 +19,11 @@ public class SelectAvatarState : GameState
 
 		_setupScreen( p_gameController.getUI() );
 
+		if (m_queue == null)
+			m_queue = new RequestQueue();
+		else
+			m_queue.reset();
+
 		if (null == m_postData) 
 		{
 			m_postData = new Hashtable();
@@ -31,8 +36,34 @@ public class SelectAvatarState : GameState
 		base.update( p_gameController, p_time );
 		if (gotoPrevious)
 		{
-			p_gameController.changeState(ZoodleState.CREATE_CHILD);
+			if( SessionHandler.getInstance().CreateChild )
+			{
+				p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);				
+			}
+			else
+			{
+				p_gameController.changeState(ZoodleState.CREATE_CHILD);
+			}
 			gotoPrevious = false;
+		}
+
+		if (m_queue.isCompleted())
+		{
+			if(SessionHandler.getInstance().CreateChild)
+			{
+				p_gameController.changeState(ZoodleState.PROFILE_VIEW);
+				if(SessionHandler.getInstance().kidList.Count == 1)
+				{
+					SessionHandler.getInstance().getAllKidApplist();
+					if( null == SessionHandler.getInstance().currentKid )
+					{
+						SessionHandler.getInstance().currentKid = SessionHandler.getInstance().kidList[0];
+					}
+					SessionHandler.getInstance().getBooklist();
+				}
+			}
+			else
+				p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 		}
 	}
 	
@@ -40,7 +71,8 @@ public class SelectAvatarState : GameState
 	{
 		base.exit( p_gameController );
 		m_lastIndex = -1;
-		p_gameController.getUI().removeScreen( m_selectAvatarCanvas );
+		p_gameController.getUI().removeScreen( UIScreen.SELECT_AVATAR );
+		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);		
 	}
 	
 	
@@ -48,7 +80,7 @@ public class SelectAvatarState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
-		m_selectAvatarCanvas = p_uiManager.createScreen( UIScreen.SELECT_AVATAR, true, 1 );
+		m_selectAvatarCanvas = p_uiManager.createScreen( UIScreen.SELECT_AVATAR, false, 1 );
 
 		m_titleArea = m_selectAvatarCanvas.getView( "titleArea" ) as UIElement;
 		m_avatarSwipe = m_selectAvatarCanvas.getView( "avatarSwipeList" ) as UISwipeList;
@@ -75,9 +107,37 @@ public class SelectAvatarState : GameState
 
 	private void toSaveAvatar( UIButton p_button )
 	{
-		SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
-		m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-		m_game.gameController.changeState (ZoodleState.CREATE_CHILD);
+		if( !SessionHandler.getInstance ().CreateChild )
+		{
+			SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
+			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
+			m_game.gameController.changeState (ZoodleState.CREATE_CHILD);
+		}
+		else
+		{
+			p_button.removeClickCallback(toSaveAvatar);
+			
+			SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
+			string l_url = "@absolute:";
+			if (Application.platform == RuntimePlatform.Android)
+			{
+				l_url += "jar:file://"+Application.dataPath+"!/assets/"+ m_avatarImgPath + ".png";
+			}
+			else if (Application.platform == RuntimePlatform.IPhonePlayer)
+			{
+				l_url += Application.dataPath + "/Raw/" + m_avatarImgPath + ".png";
+			}
+			else
+			{
+				l_url += "file://" + Application.dataPath + "/StreamingAssets/" + m_avatarImgPath + ".png";
+			}
+			
+			m_queue.add(new ImageRequest("childAvatar", l_url));
+			m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday, "childAvatar"));
+			m_queue.request(RequestType.SEQUENCE);
+			m_selectAvatarCanvas.active = false;
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 2);
+		}
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
@@ -121,4 +181,6 @@ public class SelectAvatarState : GameState
 	private int 		m_lastIndex = -1;
 
 	private bool 		gotoPrevious = false;
+
+	private RequestQueue m_queue;
 }

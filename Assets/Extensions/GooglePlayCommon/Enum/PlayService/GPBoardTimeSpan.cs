@@ -8,6 +8,8 @@
 
 
  
+//https://developer.android.com/reference/com/google/android/gms/games/leaderboard/LeaderboardVariant.html#TIME_SPAN_WEEKLY
+
 
 using UnityEngine;
 using System.Collections;

@@ -7,6 +7,8 @@ public class KidsProfileCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		
+		SetupLocalizition ();
 
 		_setupInfo();
 		refreshInfo();
@@ -57,6 +59,19 @@ public class KidsProfileCanvas : UICanvas
 	{
 		m_childAvatar = getView( "avatarIcon" ) as UIImage;
 		m_childNameLabel = getView ( "childName" ) as UILabel;
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_back = getView("backButton").getView("btnText") as UILabel;
+		UILabel l_edit = getView("editPhotoButton").getView("Text") as UILabel;
+		UILabel l_title = getView("messageDialog").getView("titleText") as UILabel;
+		UILabel l_content = getView("messageDialog").getView("contentText") as UILabel;
+		
+		l_back.text = Localization.getString( Localization.TXT_BUTTON_BACK );
+		l_edit.text = Localization.getString( Localization.TXT_51_LABEL_EDIT );
+		l_title.text = Localization.getString( Localization.TXT_51_LABEL_TITLE );
+		l_content.text = Localization.getString( Localization.TXT_51_LABEL_CONTENT );
 	}
 
 	private UIImage m_childAvatar;

@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.onevcat.uniwebview.AndroidPlugin;
 import com.zoodles.kidmode.App;
+import com.zoodles.kidmode.util.ChildLock;
 
 public class GlobalTouchDenyService extends Service implements OnTouchListener {
 
@@ -59,8 +60,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 			}
 
 			watcherHandler.sendEmptyMessage(0);
-			Log.v("Zoodles", "Mesage for watcher thread looper to start.");
-
 		}
 	}
 
@@ -91,7 +90,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 		{
 			if (started) 
 			{
-				Log.v("Zoodles", "Already Started");
 				return;
 			}
 			
@@ -100,18 +98,16 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 			final List<ActivityManager.RunningTaskInfo> recentTasks = activityManager.getRunningTasks(3);
 			String topPackageName = recentTasks.get(0).baseActivity.getPackageName();
 
-			Log.d(TAG, "Top Package Name " + topPackageName);
+//			Log.d(TAG, "Top Package Name " + topPackageName);
 			if ((recentTasks != null 
 					&& recentTasks.size() > 0 
 					&& topPackageName.equals(getPackageName()))
 				|| whiteLists.contains(topPackageName)) 
 			{
-				Log.v("Zoodles", "retry  blocking task");
 				retryBlockingTask();
 				return;
 			}
 
-			Log.v("Zoodles", "add block view");
 			addBlockView();
 		}
 	}
@@ -136,7 +132,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 			final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 			final List<ActivityManager.RunningTaskInfo> recentTasks = activityManager.getRunningTasks(3);
 			String topPackageName = recentTasks.get(0).baseActivity.getPackageName();
-			Log.v(TAG, "In Handler Top Package Name " + topPackageName);
 
 			if ((recentTasks != null 
 					&& recentTasks.size() > 0 
@@ -168,8 +163,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 		whiteLists.add(ZOODLES_PACKAGE);
 		whiteLists.add(PLUGIN_PACKAGE);
 		whiteLists.add(this.getPackageName());
-
-		Log.v("Zoodles2", "package name:" + this.getPackageName());
 
 		watcherList.add(PLUGIN_PACKAGE);
 
@@ -204,8 +197,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 		watcherThread = new HandlerThread("watcherThread");
 		watcherThread.start();
 
-		Log.v("Zoodles", "Watcher thread started");
-
 		watcherHandler = new Handler(watcherThread.getLooper())
 		{
 			@Override
@@ -214,15 +205,20 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 				super.handleMessage(msg);
 				synchronized (watcherLock)
 				{
-					Log.v("Zoodles", "watcher");
 					final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 					final List<ActivityManager.RunningTaskInfo> recentTasks = activityManager.getRunningTasks(3);
 					String topPackageName = recentTasks.get(0).baseActivity.getPackageName();
-					watcherHandler.sendEmptyMessageDelayed(0, WATCHER_INTERVAL);
-
-					if (!whiteLists.contains(topPackageName) && !watcherList.contains(topPackageName))
+					
+					App l_app = App.instance();
+					ChildLock l_childLock = l_app.childLock();
+					if (l_childLock.inChildLock())
 					{
-						addBlockView();
+						watcherHandler.sendEmptyMessageDelayed(0, WATCHER_INTERVAL);
+						
+						if (!whiteLists.contains(topPackageName) && !watcherList.contains(topPackageName))
+						{
+							addBlockView();
+						}
 					}
 				}
 			}
@@ -237,7 +233,6 @@ public class GlobalTouchDenyService extends Service implements OnTouchListener {
 	private void addBlockView() {
 
 		if (!started) {
-			Log.v("Zoodles", "Add block view thing");
 			mWindowManager.addView(touchLayout, mParams);
 		}
 		started = true;

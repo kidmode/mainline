@@ -9,6 +9,19 @@ public class RecordFinishCanvas : UICanvas
 		base.init (p_gameObject);
 
 		_setupElement ();
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_title = getView("titleArea").getView ("Text") as UILabel;
+		l_title.text =  Localization.getString (Localization.TXT_82_LABEL_TITLE);
+		UILabel l_message = getView("messageText") as UILabel;
+		l_message.text =  Localization.getString (Localization.TXT_82_LABEL_MESSAGE);
+		UILabel l_addKids = getView("addButton").getView ("Text") as UILabel;
+		l_addKids.text =  Localization.getString (Localization.TXT_82_BUTTON_ADD_KID);
+		UILabel l_send = getView("sendButton").getView ("Text") as UILabel;
+		l_send.text =  Localization.getString (Localization.TXT_82_BUTTON_SEND);
 	}
 
 	public override void update ()

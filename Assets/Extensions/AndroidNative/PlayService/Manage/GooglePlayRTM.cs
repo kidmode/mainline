@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -68,7 +68,7 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 	public static Action<AndroidActivityResult> ActionWatingRoomIntentClosed =  delegate{};
 	
 	//contains invitation id
-	public static Action<string> ActionInvitationReceived =  delegate{};
+	public static Action<GP_Invite> ActionInvitationReceived =  delegate{};
 	public static Action<string> ActionInvitationRemoved =  delegate{};
 
 
@@ -77,7 +77,7 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 
 	private const int BYTE_LIMIT = 256;
 	private GP_RTM_Room _currentRoom = new GP_RTM_Room();
-	private List<GP_RTM_Invite> _invitations =  new List<GP_RTM_Invite>();
+	private List<GP_Invite> _invitations =  new List<GP_Invite>();
 
 	
 	//--------------------------------------
@@ -88,6 +88,8 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 		DontDestroyOnLoad(gameObject);
 		_currentRoom = new GP_RTM_Room();
 
+
+		GooglePlayInvitationManager.instance.Init();
 		Debug.Log("GooglePlayRTM Created");
 
 	}
@@ -96,8 +98,23 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 	// API METHODS
 	//--------------------------------------
 
-	public void FindMatch(int minPlayers, int maxPlayers, int bitMask = 0) {
-		AN_GMSRTMProxy.RTMFindMatch(minPlayers, maxPlayers, bitMask);
+	public void FindMatch(int minPlayers, int maxPlayers) {
+		FindMatch(minPlayers, maxPlayers, new string[0] {});
+	}
+
+
+	public void FindMatch(int minPlayers, int maxPlayers, params GooglePlayerTemplate[] playersToInvite) {
+
+		List<string> ids =  new List<string>();
+		foreach(GooglePlayerTemplate p in playersToInvite) {
+			ids.Add(p.playerId);
+		}
+
+		AN_GMSRTMProxy.RTMFindMatch(minPlayers, maxPlayers, ids.ToArray());
+	}
+
+	public void FindMatch(int minPlayers, int maxPlayers, params string[] playersToInvite) {
+		AN_GMSRTMProxy.RTMFindMatch(minPlayers, maxPlayers, playersToInvite);
 	}
 
 	public void SendDataToAll(byte[] data, GP_RTM_PackageType sendType) {
@@ -124,14 +141,34 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 	}
 
 
-	public void AcceptInviteToRoom(string intitationId) {
-		AN_GMSGiftsProxy.acceptInviteToRoom(intitationId);
+	public void AcceptInvitation(string invitationId)  {
+		AN_GMSRTMProxy.RTM_AcceptInvitation (invitationId);
+		
 	}
+	
+	public void DeclineInvitation(string invitationId)  {
+		AN_GMSRTMProxy.RTM_DeclineInvitation (invitationId);
+	}
+	
+	public void DismissInvitation(string invitationId)  {
+		AN_GMSRTMProxy.RTM_DismissInvitation (invitationId);
+	}
+
 	
 	public void OpenInvitationInBoxUI()  {
 		AN_GMSGiftsProxy.showInvitationBox();
 	}
 
+
+
+	public void SetVariant(int val) {
+		AN_GMSRTMProxy.RTM_SetVariant (val);
+	}
+	
+
+	public void SetExclusiveBitMask(int val) {
+		AN_GMSRTMProxy.RTM_SetExclusiveBitMask (val);
+	}
 
 
 	//--------------------------------------
@@ -144,7 +181,7 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 		}
 	}
 
-	public List<GP_RTM_Invite> invitations {
+	public List<GP_Invite> invitations {
 		get {
 			return _invitations;
 		}
@@ -179,8 +216,8 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 				break;
 			}
 
-			GP_Partisipant p =  new GP_Partisipant(ParticipantsInfo[i], ParticipantsInfo[i + 1], ParticipantsInfo[i + 2], ParticipantsInfo[i + 3], ParticipantsInfo[i + 4], ParticipantsInfo[i + 5]);
-			_currentRoom.AddPartisipant(p);
+			GP_Participant p =  new GP_Participant(ParticipantsInfo[i], ParticipantsInfo[i + 1], ParticipantsInfo[i + 2], ParticipantsInfo[i + 3], ParticipantsInfo[i + 4], ParticipantsInfo[i + 5]);
+			_currentRoom.AddParticipant(p);
 		}
 
 
@@ -330,20 +367,28 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 		dispatch(ON_INVITATION_BOX_UI_CLOSED,  result);
 	}
 
-	private void OnInvitationReceived(string invitationId) {
-	
+	private void OnInvitationReceived(string data) {
 
-		GP_RTM_Invite inv =  new GP_RTM_Invite();
-		inv.id = invitationId;
-		_invitations.Add(inv);
-		ActionInvitationReceived(invitationId);
-		dispatch(ON_INVITATION_RECEIVED, invitationId);
+		string[] storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
 
+
+		GP_Invite inv =  new GP_Invite();
+		inv.Id = storeData[0];
+		inv.CreationTimestamp = System.Convert.ToInt64 (storeData[1]);
+		inv.InvitationType = (GP_InvitationType)System.Convert.ToInt32 (storeData[2]);
+		inv.Variant = System.Convert.ToInt32 (storeData [3]);
+		inv.Participant = GooglePlayManager.ParseParticipanData (storeData, 4);
+
+		if (inv.InvitationType == GP_InvitationType.INVITATION_TYPE_REAL_TIME) {
+			_invitations.Add(inv);
+			ActionInvitationReceived(inv);
+			dispatch(ON_INVITATION_RECEIVED, inv);
+		}
 	}
 
 	private void OnInvitationRemoved(string invitationId) {
-		foreach(GP_RTM_Invite inv in _invitations) {
-			if(inv.id.Equals(invitationId)) {
+		foreach(GP_Invite inv in _invitations) {
+			if(inv.Id.Equals(invitationId)) {
 				_invitations.Remove(inv);
 				return;
 			}
@@ -400,6 +445,7 @@ public class GooglePlayRTM : SA_Singleton<GooglePlayRTM>  {
 		return b;
 		
 	}
+
 
 
 

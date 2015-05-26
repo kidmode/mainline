@@ -1,13 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ANNativeEventsExample : MonoBehaviour {
 
 
 	void Start () {
-		AndroidApp.instance.OnStop += OnStop;
-		AndroidApp.instance.OnStart += OnStart;
-		AndroidApp.instance.OnNewIntent += OnNewIntent;
 		AndroidApp.instance.OnActivityResult += OnActivityResult;
 	}
 	

@@ -32,13 +32,10 @@ public class ScreenLock {
 	}
 
 	public void handleAppResume(boolean resume) {
-		App.instance().childLock();
 		if (!resume) {
-			App.instance().startLockScreenService();
 			windowCloseHandler.postDelayed(recentAppCloseRunnable, 10);
 		} else {
-			App.instance().stopLockScreenService();
-			App.instance().stopWatcherLockScreenService();
+			
 		}
 	}
 
@@ -52,12 +49,12 @@ public class ScreenLock {
 					.getRunningTasks(2);
 
 			ComponentName cn = runningTaskInfo.get(0).topActivity;
-			Log.d(TAG, "class " + cn.getClassName());
+//			Log.d(TAG, "class " + cn.getClassName());
 
 			if (cn != null
 					&& cn.getPackageName().equals(
 							ZoodlesConstants.SYSTEM_UI_PACKAGE)) {
-				Log.d(TAG, "System UI class " + cn.getClassName());
+//				Log.d(TAG, "System UI class " + cn.getClassName());
 				// If we are on Honeycomb or higher, we can bring the app toward
 				// to recents
 				if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

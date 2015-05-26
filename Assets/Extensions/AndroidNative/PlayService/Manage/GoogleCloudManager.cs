@@ -56,7 +56,7 @@ public class GoogleCloudManager : SA_Singleton<GoogleCloudManager> {
 	//--------------------------------------
 
 	public  void loadAllStates() {
-		AndroidNative.listStates ();
+		AN_GMSGeneralProxy.ListStates ();
 	}
 
 	public void updateState(int stateKey, byte[] val) {
@@ -71,7 +71,7 @@ public class GoogleCloudManager : SA_Singleton<GoogleCloudManager> {
 			b += val[i].ToString();
 		}
 		
-		AndroidNative.updateState (stateKey, b);
+		AN_GMSGeneralProxy.UpdateState (stateKey, b);
 	}
 	
 
@@ -86,15 +86,15 @@ public class GoogleCloudManager : SA_Singleton<GoogleCloudManager> {
 			b += resolvedData[i].ToString();
 		}
 		
-		AndroidNative.resolveState (stateKey, b, resolvedVersion);
+		AN_GMSGeneralProxy.ResolveState (stateKey, b, resolvedVersion);
 	}
 
 	public void deleteState(int stateKey)  {
-		AndroidNative.deleteState (stateKey);
+		AN_GMSGeneralProxy.DeleteState (stateKey);
 	}
 
 	public void loadState(int stateKey)  {
-		AndroidNative.loadState (stateKey);
+		AN_GMSGeneralProxy.LoadState (stateKey);
 	}
 
 	//--------------------------------------

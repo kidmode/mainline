@@ -13,31 +13,4 @@ public class AN_ImmersiveModeProxy {
 	public static void enableImmersiveMode() {
 		CallActivityFunction("enableImmersiveMode");
 	}
-
-
-	
-	public static void setGravity(int gravity, int id) {
-
-		CallActivityFunction("setGravity", gravity, id);
-	}
-	
-	
-	public static void setPosition(int x, int y, int id) {
-		CallActivityFunction("setPosition", x, y, id);
-	}
-	
-	
-	public static void show(int id) {
-		CallActivityFunction("show", id);
-	}
-	
-	
-	public static void hide(int id) {
-		CallActivityFunction("hide", id);
-	}
-	
-	
-	public static void refresh(int id) {
-		CallActivityFunction("refresh", id);
-	}
 }

@@ -6,6 +6,13 @@ public class MessageCanvas : UICanvas
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_title = getView ("messageLabel") as UILabel;
+		l_title.text =  Localization.getString (Localization.TXT_91_LABEEL_MESSAGE);
 	}
 
 	public override void update ()

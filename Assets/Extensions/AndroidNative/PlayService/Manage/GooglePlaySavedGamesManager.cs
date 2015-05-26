@@ -27,6 +27,7 @@ public class GooglePlaySavedGamesManager :  SA_Singleton<GooglePlaySavedGamesMan
 	public static Action<GP_SpanshotLoadResult> ActionGameSaveLoaded 	= delegate {};
 	public static Action<GP_SpanshotLoadResult> ActionGameSaveResult 	= delegate {};
 	public static Action<GP_SnapshotConflict> ActionConflict 	= delegate {};
+	public static Action<GP_DeleteSnapshotResult> ActionGameSaveRemoved 	= delegate {};
 
 	private List<GP_SnapshotMeta> _AvailableGameSaves = new List<GP_SnapshotMeta>();
 
@@ -49,7 +50,7 @@ public class GooglePlaySavedGamesManager :  SA_Singleton<GooglePlaySavedGamesMan
 	public void ShowSavedGamesUI(string title, int maxNumberOfSavedGamesToShow)  {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 
-		AN_GooglePlayProxy.ShowSavedGamesUI_Bridge(title, maxNumberOfSavedGamesToShow);
+		AN_GMSGeneralProxy.ShowSavedGamesUI_Bridge(title, maxNumberOfSavedGamesToShow);
 	}
 
 
@@ -70,16 +71,20 @@ public class GooglePlaySavedGamesManager :  SA_Singleton<GooglePlaySavedGamesMan
 
 		string data = System.Convert.ToBase64String (spanshotData);
 
-		AN_GooglePlayProxy.CreateNewSpanshot_Bridge(name, description, mdeia, data, PlayedTime);
+		AN_GMSGeneralProxy.CreateNewSpanshot_Bridge(name, description, mdeia, data, PlayedTime);
 	}
 
 
 	public void LoadSpanshotByName(string name) {
-		AN_GooglePlayProxy.OpenSpanshotByName_Bridge(name);
+		AN_GMSGeneralProxy.OpenSpanshotByName_Bridge(name);
+	}
+
+	public void DeleteSpanshotByName(string name) {
+		AN_GMSGeneralProxy.DeleteSpanshotByName_Bridge(name);
 	}
 
 	public void LoadAvailableSavedGames() {
-		AN_GooglePlayProxy.LoadSpanshots_Bridge();
+		AN_GMSGeneralProxy.LoadSpanshots_Bridge();
 	}
 
 
@@ -286,24 +291,19 @@ public class GooglePlaySavedGamesManager :  SA_Singleton<GooglePlaySavedGamesMan
 
 
 
+	private void OnDeleteResult(string data) {
+		string[] storeData;
+		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
+		
+		
+		GP_DeleteSnapshotResult result = new GP_DeleteSnapshotResult (storeData [0]);
+		if(result.isSuccess) {
+			result.SetId(storeData [1]);
+		}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		ActionGameSaveRemoved(result);
+	}
 
 
 

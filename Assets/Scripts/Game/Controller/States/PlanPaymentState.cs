@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlanPaymentState : GameState
 {
@@ -64,6 +65,36 @@ public class PlanPaymentState : GameState
 		m_cardYear = m_paymentCanvas.getView("cardExpiredYear") as UIInputField;
 		m_cardYear.listener.onSelect += _onCardYearSelect;
 		m_cardYear.listener.onDeselect += _onCardYearDeselect;
+		
+		m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH );
+		m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR );
+
+		m_monthComBox = m_paymentCanvas.getView ("monthChcekbox") as UIComboBox;
+		m_yearComBox = m_paymentCanvas.getView ("yearChcekbox") as UIComboBox;
+		
+		List<object> l_monthDate = new List<object> ();
+		List<object> l_yearDate = new List<object> ();
+		l_monthDate.Add (new ComboBoxData("01",1));
+		l_monthDate.Add (new ComboBoxData("02",2));
+		l_monthDate.Add (new ComboBoxData("03",3));
+		l_monthDate.Add (new ComboBoxData("04",4));
+		l_monthDate.Add (new ComboBoxData("05",5));
+		l_monthDate.Add (new ComboBoxData("06",6));
+		l_monthDate.Add (new ComboBoxData("07",7));
+		l_monthDate.Add (new ComboBoxData("08",8));
+		l_monthDate.Add (new ComboBoxData("09",9));
+		l_monthDate.Add (new ComboBoxData("10",10));
+		l_monthDate.Add (new ComboBoxData("11",11));
+		l_monthDate.Add (new ComboBoxData("12",12));
+		m_monthComBox.setSwipeListDate (l_monthDate);
+		int l_nowYear = System.DateTime.Now.Year;
+		int l_year = 0;
+		for (int l_i=0; l_i<8; l_i++) 
+		{
+			l_year = l_nowYear + l_i;
+			l_yearDate.Add(new ComboBoxData(l_year.ToString(),l_year));
+		}
+		m_yearComBox.setSwipeListDate (l_yearDate);
 	}
 
 	private Hashtable _getPlanDetailByName(ArrayList p_plans, string p_planName)
@@ -95,15 +126,17 @@ public class PlanPaymentState : GameState
 		else
 			l_discount = 0.25f;
 
-		m_prePrice.text = "was $"+ (l_nowMonthPrice / ( 1 - l_discount)).ToString("N") + " now";
+		//m_prePrice.text = "was $"+ (l_nowMonthPrice / ( 1 - l_discount)).ToString("N") + " now";
+		m_prePrice.text = string.Format(Localization.getString( Localization.TXT_STATE_65_DISCOUNT ),(l_nowMonthPrice / ( 1 - l_discount)).ToString("N"));
 		m_nowPrice.text = "$" + l_nowMonthPrice;
-		m_discountText.text = (l_discount*100).ToString() + "% off"; 
+		m_discountText.text = (l_discount*100).ToString() + Localization.getString( Localization.TXT_STATE_65_OFF); 
 		m_payable.text = "$" + l_nowMonthPrice;
 	}
 	
 	private string appendTopicText(string p_topic)
 	{
-		return "You've selected our " + p_topic + " Package.";
+		//return "You've selected our " + p_topic + " Package.";
+		return string.Format (Localization.getString( Localization.TXT_STATE_65_SELECT_PACKAGE ),p_topic);
 	}
 	
 	private void _goBack(UIButton p_button)
@@ -113,24 +146,38 @@ public class PlanPaymentState : GameState
 	
 	private void _goPaymentConfirm(UIButton p_button)
 	{
-		if (m_cardNumber.text == "CC#" || m_cardMonth.text == "Month" || m_cardYear.text == "Year")
-			setErrorMessage(m_gameController, "Invalid value", "Your credit card info is incorrect!");
+		int l_selectYear = int.Parse(m_yearComBox.currentData.entryValue.ToString());
+		int l_selectMonth = int.Parse(m_monthComBox.currentData.entryValue.ToString());
+		if(l_selectYear == System.DateTime.Now.Year && l_selectMonth < System.DateTime.Now.Month)
+		{
+			setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_39_INVAILD), Localization.getString(Localization.TXT_8_DATE_VERIFIY));
+		}
 		else
 		{
-			m_gameController.getUI().removeScreen(m_paymentCanvas);
-			m_paymentCanvas = null;
-			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
-			string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
-			string l_returnJson = SessionHandler.getInstance().PremiumJson;
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
-			ArrayList l_planList = l_data["plan_info"] as ArrayList;
-			Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
+			if (m_cardNumber.text == Localization.getString( Localization.TXT_STATE_65_CC))
+				setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_EMPTY));
+			else
+			{
+				m_gameController.getUI().removeScreen(m_paymentCanvas);
+				m_paymentCanvas = null;
+				m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+				string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
+				string l_returnJson = SessionHandler.getInstance().PremiumJson;
+				Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+				ArrayList l_planList = l_data["plan_info"] as ArrayList;
+				Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
 
-			string l_cardType = CreditCardHelper.parseType(m_cardNumber.text);
-			Server.init(ZoodlesConstants.getHttpsHost());
-			RequestQueue l_queue = new RequestQueue();
-			l_queue.add(new PaymentRequest(l_plan["id"].ToString(), l_cardType, m_cardNumber.text, m_cardMonth.text, m_cardYear.text, _onPaymentComplete));
-			l_queue.request(RequestType.RUSH);
+				string l_cardType = CreditCardHelper.parseType(m_cardNumber.text);
+				if(string.Empty.Equals(l_cardType))
+				{
+					setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_INCORRECT));
+					return;
+				}
+				Server.init(ZoodlesConstants.getHttpsHost());
+				RequestQueue l_queue = new RequestQueue();
+				l_queue.add(new PaymentRequest(l_plan["id"].ToString(), l_cardType, m_cardNumber.text, m_monthComBox.currentData.entryValue.ToString(), m_yearComBox.currentData.entryValue.ToString(), _onPaymentComplete));
+				l_queue.request(RequestType.RUSH);
+			}
 		}
 	}
 	
@@ -154,51 +201,51 @@ public class PlanPaymentState : GameState
 					}
 					else
 					{
-						setErrorMessage(m_gameController, "Invalid value", "Your credit card info is incorrect!");
+						setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_INCORRECT));
 					}
 				}
 			}
 		}
 		else
 		{
-			setErrorMessage(m_gameController, "Invalid value", "Your credit card info is incorrect!");
+			setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_INCORRECT));
 		}
 	}
 
 	private void _onCardNumberSelect(UIElement p_element)
 	{
-		if (m_cardNumber.text == "CC#")
+		if (m_cardNumber.text == Localization.getString( Localization.TXT_STATE_65_CC))
 			m_cardNumber.text = "";
 	}
 
 	private void _onCardNumberDeselect(UIElement p_element)
 	{
 		if (m_cardNumber.text == "")
-			m_cardNumber.text = "CC#";
+			m_cardNumber.text = Localization.getString( Localization.TXT_STATE_65_CC);
 	}
 
 	private void _onCardMonthSelect(UIElement p_element)
 	{
-		if (m_cardMonth.text == "Month")
+		if (m_cardMonth.text == Localization.getString( Localization.TXT_23_LABEL_MONTH))
 			m_cardMonth.text = "";
 	}
 
 	private void _onCardMonthDeselect(UIElement p_element)
 	{
 		if (m_cardMonth.text == "")
-			m_cardMonth.text = "Month";
+			m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH);
 	}
 
 	private void _onCardYearSelect(UIElement p_element)
 	{
-		if (m_cardYear.text == "Year")
+		if (m_cardYear.text == Localization.getString( Localization.TXT_23_LABEL_YEAR))
 			m_cardYear.text = "";
 	}
 
 	private void _onCardYearDeselect(UIElement p_element)
 	{
 		if (m_cardYear.text == "")
-			m_cardYear.text = "Year";
+			m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR);
 	}
 	
 	private UICanvas m_paymentCanvas;
@@ -206,6 +253,9 @@ public class PlanPaymentState : GameState
 	
 	private UIButton m_purchaseButton;
 	private UIButton m_backButton;
+	
+	private UIComboBox  m_yearComBox;
+	private UIComboBox  m_monthComBox;
 	
 	private UILabel m_topicText;
 	private UILabel m_prePrice;

@@ -73,7 +73,8 @@ public class ViewPremiumState : GameState
 			UILabel l_MonthDiscountLabel = m_premiumCanvas.getView("monthCard").getView ("discount").getView("Text") as UILabel;
 			UILabel l_YealyDiscountLabel = m_premiumCanvas.getView("yearlyCard").getView ("discount").getView("Text") as UILabel;
 
-			float l_discount;
+			float l_monthDiscount;
+			float l_yealyDiscount;
 			float l_nowMonthPrice = 0;
 			float l_nowYearPrice = 0;
 
@@ -82,14 +83,16 @@ public class ViewPremiumState : GameState
 			l_nowMonthPrice = float.Parse(l_detail["amount"].ToString());
 			l_detail = _getPlanDetailByName(l_planList, "Annual");
 			l_nowYearPrice =float.Parse(l_detail["amount"].ToString());
-			l_discount = 0.25f;
 
+			l_monthDiscount = 0.20f;
+			l_yealyDiscount = 0.50f;
+			
 			l_nowMonthPriceLabel.text = "$" + l_nowMonthPrice.ToString("N");
 			l_nowYearPriceLabel.text = "$" + l_nowYearPrice.ToString("N");
-			l_MonthDiscountLabel.text = (l_discount*100).ToString() + "%"; 
-			l_YealyDiscountLabel.text = (l_discount*100).ToString() + "%"; 
-			l_preMonthPriceLabel.text = "$"+ (l_nowMonthPrice /(1- l_discount)).ToString("N");
-			l_preYearPriceLabel.text = "$"+ (l_nowYearPrice /(1- l_discount)).ToString("N");
+			l_MonthDiscountLabel.text = (l_monthDiscount*100).ToString() + "%";
+			l_YealyDiscountLabel.text = (l_yealyDiscount*100).ToString() + "%"; 
+			l_preMonthPriceLabel.text = "$"+ (l_nowMonthPrice /(1- l_monthDiscount)).ToString("N");
+			l_preYearPriceLabel.text = "$"+ (l_nowYearPrice /(1- l_yealyDiscount)).ToString("N");
 		}
 		else
 		{
@@ -112,6 +115,7 @@ public class ViewPremiumState : GameState
 
 	private void backToUpsell( UIButton p_button )
 	{
+		p_button.removeClickCallback (backToUpsell);
 		int l_state = m_gameController.getConnectedState ( ZoodleState.VIEW_PREMIUM );
 		m_game.gameController.changeState (l_state);
 	}

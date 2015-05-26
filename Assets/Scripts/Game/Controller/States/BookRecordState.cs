@@ -43,7 +43,16 @@ public class BookRecordState : GameState
 		m_runningTime = 0;
 		m_recordedCount = 0;
 		m_uploadedCount = 0;
+		m_isFinished = false;
 		m_request = new RequestQueue ();
+
+		for( int i = 0; i < m_book.pageList.Count; i++ )
+		{
+			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
+			{
+				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
+			}
+		}
 
         _setupElements();
 
@@ -94,18 +103,33 @@ public class BookRecordState : GameState
 
 		if( m_setMessage )
 		{
-			m_messageTitleLabel.text = "Upload Result";
-			m_messageContentLabel.text = "Upload progress : " + m_uploadedCount + "/" + m_recordedCount;
+			m_messageTitleLabel.text = Localization.getString(Localization.TXT_STATE_44_RESULT);
+			m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_PROGRESS) + m_uploadedCount + "/" + m_recordedCount;
 			
 			m_setMessage = false;
 		}
 
-		if( m_recordedCount > 0 && m_uploadedCount > 0 && m_recordedCount == m_uploadedCount )
+		if( m_recordedCount > 0 && m_uploadedCount > 0 && m_recordedCount == m_uploadedCount && !m_isFinished )
 		{
+			m_isFinished = true;
+
 			m_exitMessageButton.active = true;
 			
-			m_messageTitleLabel.text = "Upload Result";
-			m_messageContentLabel.text = "Upload successed.";
+			m_messageTitleLabel.text = Localization.getString(Localization.TXT_STATE_44_RESULT);
+			m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_SUCCESS);
+
+			ArrayList l_list = new ArrayList();
+
+			for( int i = 0; i < SessionHandler.getInstance().recordKidList.Count; i++ )
+			{
+				l_list.Add(SessionHandler.getInstance ().recordKidList[i].id);
+			}
+
+			LocalSetting.find("User").setString( m_book.id.ToString(), MiniJSON.MiniJSON.jsonEncode(l_list) );
+			Debug.Log( MiniJSON.MiniJSON.jsonEncode(l_list) );
+
+			m_sendButton.addClickCallback( onSendButtonClicked );
+			Debug.Log("finish upload :" + DateTime.Now);
 		}
 	}
 	
@@ -119,13 +143,13 @@ public class BookRecordState : GameState
         m_audioSource.pitch = 1.0f;
         m_audioSource.Stop();
 
-		for( int i = 0; i < m_book.pageList.Count; i++ )
-		{
-			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
-			{
-				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
-			}
-		}
+//		for( int i = 0; i < m_book.pageList.Count; i++ )
+//		{
+//			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
+//			{
+//				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
+//			}
+//		}
 
         UIManager l_ui = p_gameController.getUI();
         l_ui.removeScreen( m_bookReaderCanvas   );
@@ -183,8 +207,8 @@ public class BookRecordState : GameState
 		l_pointListIn.Add( l_currentPanel.transform.localPosition );
 		l_pointListIn.Add( l_currentPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
 		l_currentPanel.tweener.addPositionTrack( l_pointListIn, 0f );
-		m_messageTitleLabel.text = "Uploading Data";
-		m_messageContentLabel.text = "Please wait.";
+		m_messageTitleLabel.text = Localization.getString(Localization.TXT_STATE_44_UPLOADING);
+		m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_WAIT);
 		m_exitMessageButton.active = false;
 		
 		m_request.reset ();
@@ -199,6 +223,7 @@ public class BookRecordState : GameState
 		else
 		{
 			m_uploadedCount = 0;
+			m_isFinished = false;
 			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 			if(l_jsonResponse.ContainsKey("jsonResponse"))
 			{
@@ -225,6 +250,8 @@ public class BookRecordState : GameState
 
 					try
 					{
+						Debug.Log("start upload :" + DateTime.Now);
+
 						for( int i = 0; i < m_book.pageList.Count; i++ )
 						{
 							if(!File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
@@ -249,8 +276,8 @@ public class BookRecordState : GameState
 					{
 						m_exitMessageButton.active = true;
 						
-						m_messageTitleLabel.text = "Upload Result";
-						m_messageContentLabel.text = "Uploading failed.Please try again.";
+						m_messageTitleLabel.text = Localization.getString(Localization.TXT_STATE_44_RESULT);
+						m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_FAIL);
 					}
 				}
 			}
@@ -505,13 +532,14 @@ public class BookRecordState : GameState
         _loadCurrentPageContent();
         _setPageContent();
 
-		for( int i = 0; i < m_book.pageList.Count; i++ )
-		{
-			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
-			{
-				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
-			}
-		}
+//		for( int i = 0; i < m_book.pageList.Count; i++ )
+//		{
+//			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
+//			{
+////				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
+//				m_recordedCount++;
+//			}
+//		}
     }
 
     private IEnumerator _loadPage( int p_index )
@@ -582,7 +610,7 @@ public class BookRecordState : GameState
 	{
 		m_gameController.getUI ().changeScreen (UIScreen.RECORD_FINISH, true);
 
-		m_messageLabel.text = "Your recording of " + m_book.title + " is being processed and will soon be available to these recipients:";
+		m_messageLabel.text = string.Format( Localization.getString(Localization.TXT_STATE_44_RECORDED), m_book.title );
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_currentPanel = m_recordFinishCanvas.getView ("mainPanel");
@@ -805,7 +833,8 @@ public class BookRecordState : GameState
 		m_audioSource.pitch = 1.0f;
     }
 	
-	private const int FREQUENCY = 44100;
+//	private const int FREQUENCY = 44100;
+	private const int FREQUENCY = 8000;
 
     private Book        m_book;
 
@@ -866,4 +895,5 @@ public class BookRecordState : GameState
 	private RequestQueue m_request;
 
 	private bool 		m_setMessage = false;
+	private bool 		m_isFinished = false;
 }

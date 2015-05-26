@@ -49,11 +49,23 @@ public class UniWebChromeClient extends WebChromeClient {
     public void onHideCustomView() {
         if (_customView != null) {
             _customView.setVisibility(View.GONE);
-            _customViewContainer.removeView(_customView);
+            if (null != _customViewContainer)
+            {
+            	_customViewContainer.removeView(_customView);
+            }
             _customView = null;
-            _customViewContainer.setVisibility(View.GONE);
-            _customViewCallback.onCustomViewHidden();
-            _uniWebViewLayout.setVisibility(View.VISIBLE);
+            if (null != _customViewContainer)
+            {
+            	_customViewContainer.setVisibility(View.GONE);
+            }
+            if (null != _customViewCallback)
+            {
+            	_customViewCallback.onCustomViewHidden();
+            }
+            if (null != _uniWebViewLayout)
+            {
+            	_uniWebViewLayout.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

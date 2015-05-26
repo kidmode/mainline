@@ -16,7 +16,7 @@ public class LauncherActivity extends Activity
 	{
 		super.onCreate(p_bundle);		
      	launchKidmode();
-		Log.v("Zoodles", "Zoodles Launcher");
+//		Log.v("Zoodles", "Zoodles Launcher");
  		finish();		
 	}	
 	

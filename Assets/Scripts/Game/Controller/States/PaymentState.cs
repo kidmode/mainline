@@ -81,22 +81,22 @@ public class PaymentState : GameState
 		switch(l_purchaseObject)
 		{
 			case "Monthly":
-				fillPremiunDate(l_planList,"Monthly");
+				fillPremiunDate(l_planList,Localization.getString(Localization.TXT_STATE_21_MONTH));
 				break;
 			case "Yearly":
-				fillPremiunDate(l_planList,"Yearly");
+				fillPremiunDate(l_planList,Localization.getString(Localization.TXT_STATE_21_YEAR));
 				break;
 			case "good":
 				Hashtable l_good = l_response["good"] as Hashtable;
-				fillDate(l_good,"Good");
+				fillDate(l_good,Localization.getString(Localization.TXT_STATE_21_GOOD));
 				break;
 			case "better":
 				Hashtable l_better = l_response["better"] as Hashtable;
-				fillDate(l_better,"Better");
+				fillDate(l_better,Localization.getString(Localization.TXT_STATE_21_BETTER));
 				break;
 			case "best":
 				Hashtable l_best = l_response["best"] as Hashtable;
-				fillDate(l_best,"Best");
+				fillDate(l_best,Localization.getString(Localization.TXT_STATE_21_BEST));
 				break;
 			default:
 				break;
@@ -105,28 +105,29 @@ public class PaymentState : GameState
 
 	private void fillDate(Hashtable p_date,string p_title)
 	{
-		if("Best".Equals(p_title))
+		if(Localization.getString(Localization.TXT_STATE_21_BEST).Equals(p_title))
 		{
 			m_bestDealImg.active =true;
 		}
 		m_topicText.text = p_title;
 		m_topic.text = appendTopicText (p_title);
-		m_prePrice.text = p_date["gems"].ToString() + " Gems";
-		m_nowPrice.text = "$" + p_date["amount"].ToString();
+		m_prePrice.text = p_date["gems"].ToString() + Localization.getString(Localization.TXT_STATE_21_GEMS);
+		m_nowPrice.text = Localization.getString(Localization.TXT_STATE_21_MONEY) + p_date["amount"].ToString();
 		m_discountText.text = "";
-		m_payable.text = "$" + p_date["amount"].ToString();;
+		m_payable.text = Localization.getString(Localization.TXT_STATE_21_MONEY) + p_date["amount"].ToString();;
 	}
 
 	private void fillPremiunDate(Hashtable p_date,string p_title)
 	{
 		float l_nowMonthPrice;
-		if("Yearly".Equals(p_title))
+		if(Localization.getString(Localization.TXT_STATE_21_YEAR).Equals(p_title))
 		{
 			m_bestDealImg.active =true;
 			l_nowMonthPrice =float.Parse( p_date["Annual"].ToString());
 		}
 		else
 		{
+			m_bestDealImg.active =false;
 			l_nowMonthPrice =float.Parse( p_date[p_title].ToString());
 		}
 		m_topicText.text = p_title;
@@ -141,15 +142,15 @@ public class PaymentState : GameState
 			l_discount = 0.25f;
 		}
 
-		m_prePrice.text = "was $"+ (l_nowMonthPrice / ( 1 - l_discount)).ToString("N") + " now";
-		m_nowPrice.text = "$" + l_nowMonthPrice;
-		m_discountText.text = (l_discount*100).ToString() + "% off"; 
-		m_payable.text = "$" + l_nowMonthPrice;
+		m_prePrice.text = string.Format(Localization.getString(Localization.TXT_STATE_21_WAS), (l_nowMonthPrice / ( 1 - l_discount)).ToString("N") );
+		m_nowPrice.text = Localization.getString(Localization.TXT_STATE_21_MONEY) + l_nowMonthPrice;
+		m_discountText.text = (l_discount*100).ToString() + Localization.getString(Localization.TXT_STATE_21_OFF); 
+		m_payable.text = Localization.getString(Localization.TXT_STATE_21_MONEY) + l_nowMonthPrice;
 	}
 
 	private string appendTopicText(string l_topic)
 	{
-		return "You've selected our " +l_topic+ " Package.";
+		return string.Format(Localization.getString(Localization.TXT_STATE_21_PACKAGE), l_topic );
 	}
 	
 	private void goBack( UIButton p_button )

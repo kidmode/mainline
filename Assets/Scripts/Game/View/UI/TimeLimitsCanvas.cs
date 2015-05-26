@@ -7,6 +7,8 @@ public class TimeLimitsCanvas : UICanvas
 	{
 		base.init (p_gameObject);
 		
+		SetupLocalizition ();
+		
 		_setupElement();
 	}
 	
@@ -117,6 +119,37 @@ public class TimeLimitsCanvas : UICanvas
 				break;
 			}
 		}
+	}
+
+	private void SetupLocalizition()
+	{
+		UILabel l_top = getView("titleText") as UILabel;
+		UILabel l_week = getView("weekLabel") as UILabel;
+		UILabel l_weekend = getView("weekendLabel") as UILabel;
+		UILabel l_week30 = getView("weekGroup").getView("thirtyMinToggle").getView("toogleLabel") as UILabel;
+		UILabel l_week1 = getView("weekGroup").getView("oneHourToggle").getView("toogleLabel") as UILabel;
+		UILabel l_week2 = getView("weekGroup").getView("twoHoursToggle").getView("toogleLabel") as UILabel;
+		UILabel l_week4 = getView("weekGroup").getView("fourHoursToggle").getView("toogleLabel") as UILabel;
+		UILabel l_week0 = getView("weekGroup").getView("unlimitedToggle").getView("toogleLabel") as UILabel;
+		UILabel l_weekend30 = getView("weekendGroup").getView("thirtyMinToggle").getView("toogleLabel") as UILabel;
+		UILabel l_weekend1 = getView("weekendGroup").getView("oneHourToggle").getView("toogleLabel") as UILabel;
+		UILabel l_weekend2 = getView("weekendGroup").getView("twoHoursToggle").getView("toogleLabel") as UILabel;
+		UILabel l_weekend4 = getView("weekendGroup").getView("fourHoursToggle").getView("toogleLabel") as UILabel;
+		UILabel l_weekend0 = getView("weekendGroup").getView("unlimitedToggle").getView("toogleLabel") as UILabel;
+		
+		l_top.text = Localization.getString( Localization.TXT_63_LABEL_TITLE );
+		l_week.text = Localization.getString( Localization.TXT_63_LABEL_WEEK );
+		l_weekend.text = Localization.getString( Localization.TXT_63_LABEL_WEEKEND );
+		l_week30.text = Localization.getString( Localization.TXT_63_LABEL_HALF );
+		l_week1.text = Localization.getString( Localization.TXT_63_LABEL_ONE );
+		l_week2.text = Localization.getString( Localization.TXT_63_LABEL_TWO );
+		l_week4.text = Localization.getString( Localization.TXT_63_LABEL_FOUR );
+		l_week0.text = Localization.getString( Localization.TXT_63_LABEL_UNLIMITED );
+		l_weekend30.text = Localization.getString( Localization.TXT_63_LABEL_HALF );
+		l_weekend1.text = Localization.getString( Localization.TXT_63_LABEL_ONE );
+		l_weekend2.text = Localization.getString( Localization.TXT_63_LABEL_TWO );
+		l_weekend4.text = Localization.getString( Localization.TXT_63_LABEL_FOUR );
+		l_weekend0.text = Localization.getString( Localization.TXT_63_LABEL_UNLIMITED );
 	}
 	
 	private UIToggleGroup m_weekGroup;

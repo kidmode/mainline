@@ -23,6 +23,7 @@ public class MapState : GameState
 
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
+		m_subState = SubState.NONE;
 
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
@@ -59,10 +60,6 @@ public class MapState : GameState
         l_ui.removeScreen(UIScreen.CORNER_PROFILE_INFO);
 		//if( m_removeCornerProfile )
 		//	p_gameController.getUI().removeScreen( UIScreen.CORNER_PROFILE_INFO );
-		SessionHandler.getInstance ().webContentList = null;
-		SessionHandler.getInstance ().bookContentList = null;
-		SessionHandler.getInstance ().bookTable = null;
-		SessionHandler.getInstance ().readingTable = null;
 
 		base.exit(p_gameController);
 	}
@@ -88,25 +85,13 @@ public class MapState : GameState
 		UIButton l_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 		l_entranceButton.addClickCallback(onBackClicked);
 		
-		UILabel l_entranceLabel = l_entranceButton.getView("btnText") as UILabel;
-		l_entranceLabel.text = Localization.getString(Localization.TXT_BUTTON_PROFILES);
-		
 		UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
 		l_jungleButton.addClickCallback(onJungleClicked);
-		UILabel l_jungleLabel = l_jungleButton.getView("locationText") as UILabel;
-		l_jungleLabel.text = Localization.getString(Localization.TXT_BUTTON_JUNGLE);
 		
-		UIButton l_savannaButton = m_mapCanvas.getView("savannaButton") as UIButton;
-		UILabel l_savannaLabel = l_savannaButton.getView("locationText") as UILabel;
-		l_savannaLabel.text = Localization.getString(Localization.TXT_BUTTON_SAVANNAH);
+//		UIButton l_savannaButton = m_mapCanvas.getView("savannaButton") as UIButton;
 
 		UIButton l_welcomeButton = m_mapCanvas.getView("infoPanel") as UIButton;
 		l_welcomeButton.addClickCallback(onSpeechClick);
-		
-		UILabel l_jungleHeaderLabel = l_welcomeButton.getView("headerText") as UILabel;
-		l_jungleHeaderLabel.text = Localization.getString(Localization.TXT_LABEL_JUNGLE_HEADER);
-		UILabel l_jungleBodyLabel = l_welcomeButton.getView("bodyText") as UILabel;
-		l_jungleBodyLabel.text = Localization.getString(Localization.TXT_LABEL_JUNGLE_BODY);
 		
 		UIImage l_arrow	= m_mapCanvas.getView( "activeArrow" ) as UIImage;
 		List<Vector3> l_arrowPosList = new List<Vector3>();

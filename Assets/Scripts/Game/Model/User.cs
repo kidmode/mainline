@@ -27,7 +27,7 @@ public class ProfileInfo : System.Object
 public class User : Object
 {
 	public Kid  currentKid;
-
+	public WebContentCache contentCache = new WebContentCache();
     public List<Kid>    kidList = new List<Kid>();
 
 	private int m_level;

@@ -50,7 +50,7 @@ public class UpsellCongraturationsState : GameState
 		if(null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
 			m_game.gameController.changeState (ZoodleState.PROFILE_SELECTION);
 		else
-			m_game.gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_game.gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 	}
 
 	private IEnumerator _tweenFillBar( float p_filledAmount, float p_duration )

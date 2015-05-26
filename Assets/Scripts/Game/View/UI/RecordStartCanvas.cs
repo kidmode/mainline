@@ -10,8 +10,21 @@ public class RecordStartCanvas : UICanvas {
 
 		m_normalIcon = Resources.Load ("GUI/2048/common/buttons/bt_circle_up") as Texture2D;
 		m_selectedIcon = Resources.Load ("GUI/2048/common/buttons/bt_circle_down") as Texture2D;
-
+		
+		setupLocalization ();
 		_setupElement ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_title = getView("titleArea").getView ("Text") as UILabel;
+		l_title.text =  Localization.getString (Localization.TXT_80_LABEL_TITLE);
+		UILabel l_message = getView("messageText") as UILabel;
+		l_message.text =  Localization.getString (Localization.TXT_80_LABEL_MESSAGE);
+		UILabel l_select = getView("selectButton").getView("Text") as UILabel;
+		l_select.text =  Localization.getString (Localization.TXT_80_BUTTON_SELECT_ALL);
+		UILabel l_save = getView("saveButton").getView("Text") as UILabel;
+		l_save.text =  Localization.getString (Localization.TXT_80_BUTTON_SAVE);
 	}
 
 	public override void update ()

@@ -137,7 +137,7 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 
 
 	public void LoadFriendsList() {
-		GooglePlayManager.instance.LoadConnectedPlayers();
+		GooglePlayManager.instance.LoadFriends();
 	}
 
 

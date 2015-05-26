@@ -42,4 +42,3 @@ public class ServerErrorState : GameState
 
 	private bool m_closed = false;
 }
-

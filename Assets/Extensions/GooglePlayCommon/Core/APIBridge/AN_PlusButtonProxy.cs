@@ -40,4 +40,6 @@ public class AN_PlusButtonProxy {
 	public static void refresh(int id) {
 		CallActivityFunction("refresh", id);
 	}
+	
+
 }

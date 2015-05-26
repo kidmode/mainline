@@ -29,10 +29,34 @@ public class BirthYearState : GameState
 	public override void update( GameController p_gameController, int p_time )
 	{
 		base.update( p_gameController, p_time );
+
 		if (gotoPrevious) 
 		{
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			gotoPrevious = false;
+			if(null == SessionHandler.getInstance().kidList || SessionHandler.getInstance().kidList.Count == 0)
+			{
+				SessionHandler.getInstance().clearUserData();
+				p_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+				return;
+			}
+			int l_nextState = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
+			if(GameController.UNDEFINED_STATE != l_nextState)
+			{
+				if(l_nextState == ZoodleState.INITIALIZE_GAME)
+				{
+					KidMode.setKidsModeActive(false);	
+					PlayerPrefs.Save();
+					Application.Quit();
+				}
+				else
+				{
+					p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+				}
+			}
+			else
+			{
+				p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			}
 		}
 	}
 	
@@ -67,9 +91,9 @@ public class BirthYearState : GameState
 		m_panel.tweener.addAlphaTrack (0.0f, 1.0f, 1.0f,onTitleTweenFinish);
 
 		UILabel l_commonDialogTopic = m_dialogCanvas.getView ("dialogText") as UILabel;
-		l_commonDialogTopic.text = "PIN Recovery";
+		l_commonDialogTopic.text = Localization.getString(Localization.TXT_STATE_12_PIN_TITLE);
 		UILabel l_commonDialogContent = m_dialogCanvas.getView ("contentText") as UILabel;
-		l_commonDialogContent.text = "Please check your email to recover your PIN.";
+		l_commonDialogContent.text = Localization.getString(Localization.TXT_STATE_12_PIN_CONTENT);
 
 		m_forgotButton = m_birthCanvas.getView("forgotButtonArea").getView("forgotButton") as UIButton;
 		m_forgotButton.active = false;
@@ -85,7 +109,7 @@ public class BirthYearState : GameState
 
 		if(!SessionHandler.getInstance().verifyBirth)
 		{
-			m_noticeText.text = "Please enter 4-digit Pin below.";
+			m_noticeText.text = Localization.getString(Localization.TXT_STATE_12_PIN_NOTICE);
 		}
 
 		m_deleteButton = m_birthCanvas.getView("deleteButton") as UIButton;
@@ -140,28 +164,52 @@ public class BirthYearState : GameState
 				
 				if(0!= SessionHandler.getInstance().pin && l_inputNum == SessionHandler.getInstance().pin)
 				{
-					m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+					changeStateAfterVerify();
 				}
 				else
 				{
-					setErrorMessage(m_gameController,"Incorrect Entry","The birth year that you entered was incorrect.");
+					setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_12_INCORRECT),Localization.getString(Localization.TXT_STATE_12_INCORRECT_YEAR));
 				}
 			}
 			else
-			{	
+			{
 				if(m_inputNum.Equals(SessionHandler.getInstance().childLockPassword))
 				{
-					m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+					changeStateAfterVerify();
 				}
 				else
 				{
-					setErrorMessage(m_gameController,"Incorrect Entry","The pin that you entered was incorrect.");
+					setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_12_INCORRECT),Localization.getString(Localization.TXT_STATE_12_INCORRECT_PIN));
 				}
 			}
 
 			m_inputNum = "";
 			m_starLabel.text = "";
 		}
+	}
+
+	private void changeStateAfterVerify()
+	{
+		int l_previous = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
+		if(GameController.UNDEFINED_STATE != l_previous)
+		{
+			if(l_previous == ZoodleState.PROFILE_SELECTION)
+			{
+				KidMode.setKidsModeActive(false);	
+				PlayerPrefs.Save();
+				Application.Quit();
+			}
+			else if(l_previous == ZoodleState.INITIALIZE_GAME)
+			{
+				m_gameController.changeState(ZoodleState.SIGN_IN_CACHE);
+			}
+			else
+			{
+				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			}
+		}
+		else
+			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 	}
 
 	private void deleteNumber( UIButton p_button )

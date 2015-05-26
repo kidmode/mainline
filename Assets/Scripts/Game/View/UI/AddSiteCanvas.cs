@@ -16,6 +16,17 @@ public class AddSiteCanvas : UICanvas
 		m_normalBtnIcon = Resources.Load ( "GUI/2048/common/icon/icon_add" ) as Texture2D;
 
 		m_searchData = new List<object> ();
+		setupLocalization ();
+	}
+	
+	public void setupLocalization()
+	{
+		UILabel l_title = getView("titleImage").getView ("titleText") as UILabel;
+		l_title.text =  Localization.getString (Localization.TXT_76_LABEL_TITLE);
+		UILabel l_searchPanel = getView("searchPanel").getView ("Text") as UILabel;
+		l_searchPanel.text =  Localization.getString (Localization.TXT_76_LABEL_PANEL_TITLE);
+		UILabel l_searchButton = getView("searchButton").getView ("Text") as UILabel;
+		l_searchButton.text =  Localization.getString (Localization.TXT_76_BUTTON_SEARCH);
 	}
 
 	public override void update ()

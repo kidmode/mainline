@@ -18,6 +18,7 @@ public class SettingAppInfoState : GameState
 		m_session = SessionHandler.getInstance ();
 		m_requestQueue = new RequestQueue ();
 		_setupScreen( p_gameController.getUI() );
+		canClick = true;
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
@@ -44,6 +45,8 @@ public class SettingAppInfoState : GameState
 	private void _setupScreen( UIManager p_uiManager )
 	{
 		m_planDetailsCanvas = p_uiManager.createScreen (UIScreen.PLAN_DEATILS, true, 6) as PlanDetails;
+
+		m_commonDialogCanvas =  p_uiManager.createScreen (UIScreen.COMMON_DIALOG, true, 11) as CommonDialogCanvas;
 		m_cancelSubscriptionCanvas = p_uiManager.createScreen (UIScreen.CANCEL_SUB, true, 10) as CancelSubscriptionCanvas;
 		m_thankCanvas =  p_uiManager.createScreen (UIScreen.THANK, true, 7) as ThankCanvas;
 		m_signOutConfirmCanvas =  p_uiManager.createScreen (UIScreen.SIGN_OUT, true, 8) as SignOutConfirmCanvas;
@@ -62,6 +65,14 @@ public class SettingAppInfoState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
+		UILabel l_dialogText = m_commonDialogCanvas.getView ("dialogText") as UILabel;
+		UILabel l_contentText = m_commonDialogCanvas.getView ("contentText") as UILabel;
+		l_dialogText.text = Localization.getString(Localization.TXT_STATE_SETTING_APP_INFO_DIALOG_TITLE);
+		l_contentText.text = Localization.getString(Localization.TXT_STATE_SETTING_APP_INFO_DIALOG);
+
+		m_editProfileButton = m_appInfoCanvas.getView ("editProfileButton") as UIButton;
+		m_editProfileButton.addClickCallback (onProfileButtonClick);
+
 		m_planDetailsButton = m_appInfoCanvas.getView ("planDetailsButton") as UIButton;
 		m_planDetailsButton.addClickCallback (onShowPlanDetails);
 
@@ -69,17 +80,19 @@ public class SettingAppInfoState : GameState
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
 			m_planDetailsButton.enabled = false;
-			l_premuimLabel.text = "Free";
+			l_premuimLabel.text = Localization.getString(Localization.TXT_STATE_29_FREE);
 		}
 		if( SessionHandler.getInstance().token.isCurrent() )
 		{
-			l_premuimLabel.text = "Premium Trial";
+			l_premuimLabel.text = Localization.getString(Localization.TXT_STATE_29_TRIAL);
 		}
 		if( SessionHandler.getInstance().token.isPremium() )
 		{
-			l_premuimLabel.text = "Premium";
+			l_premuimLabel.text = Localization.getString(Localization.TXT_STATE_29_PREMIUM);
 		}
 
+		UILabel l_versionText = m_appInfoCanvas.getView ("versionMessage") as UILabel;
+		l_versionText.text = l_versionText.text.Replace("{0}", CurrentBundleVersion.version);
 
 		m_dialogCloseButton = m_planDetailsCanvas.getView ("closeMark") as UIButton;
 		m_cancelSubDialogCloseButton = m_cancelSubscriptionCanvas.getView ("closeMark") as UIButton;
@@ -141,7 +154,10 @@ public class SettingAppInfoState : GameState
 		m_deviceButton.addClickCallback (toDeviceScreen);
 		m_faqButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
 		m_faqButton.addClickCallback (toShowFAQ);
-
+		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
+		m_overviewButton.enabled = false;
+		m_deviceButton.enabled = true;
+		m_faqButton.enabled = true;
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
 
@@ -173,19 +189,19 @@ public class SettingAppInfoState : GameState
 			{
 			case "askQuestionButton":
 				l_to = ZoodlesConstants.ZOODLES_SUPPORT_PROBLEM_EMAIL + ZoodlesConstants.ZOODLES_EMAIL_DOMAIN;
-				l_subject = "Question";
+				l_subject = Localization.getString(Localization.TXT_STATE_29_QUESTION);
 				break;
 			case "submitIdealButton":
 				l_to = ZoodlesConstants.ZOODLES_SUPPORT_IDEA_EMAIL + ZoodlesConstants.ZOODLES_EMAIL_DOMAIN;
-				l_subject = "Ideal";
+				l_subject = Localization.getString(Localization.TXT_STATE_29_IDEA);
 				break;
 			case "reportProblemButton":
 				l_to = ZoodlesConstants.ZOODLES_SUPPORT_PROBLEM_EMAIL + ZoodlesConstants.ZOODLES_EMAIL_DOMAIN;
-				l_subject = "Problem";
+				l_subject = Localization.getString(Localization.TXT_STATE_29_PROBLEM);
 				break;
 			case "complimentButton":
 				l_to = ZoodlesConstants.ZOODLES_SUPPORT_COMPLIMENT_EMAIL + ZoodlesConstants.ZOODLES_EMAIL_DOMAIN;
-				l_subject = "compliment";
+				l_subject = Localization.getString(Localization.TXT_STATE_29_COMPLIMENT);
 				break;
 			default: 
 				l_sendEmail = false;
@@ -230,21 +246,41 @@ public class SettingAppInfoState : GameState
 			jo_intent.Call<AndroidJavaObject>( "putExtra", jo_subject, l_subject );
 			jo_intent.Call<AndroidJavaObject>( "putExtra", jo_text, "" );
 
-			AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>( "createChooser", jo_intent, "Choose An Email App" );
+			AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>( "createChooser", jo_intent, Localization.getString(Localization.TXT_STATE_29_CHOOSE) );
 
 			l_joActivity.Call("startActivity", jo_chooser );
 			#endif
 		}
 	}
+
+	private void onProfileButtonClick(UIButton p_button)
+	{
+		if(canClick)
+		{
+			canClick = false;
+			p_button.removeAllCallbacks ();
+			m_commonDialogCanvas.setOriginalPosition ();
+			UIButton l_closeButton = m_commonDialogCanvas.getView ("closeMark") as UIButton;
+			l_closeButton.addClickCallback (onCloseDialogButtonClick);
+		}
+	}
+
+	private void onCloseDialogButtonClick(UIButton p_button)
+	{
+		canClick = true;
+		p_button.removeAllCallbacks();
+		m_commonDialogCanvas.setOutPosition ();
+		m_editProfileButton.addClickCallback (onProfileButtonClick);
+	}
 	
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 		Kid l_kid = p_data as Kid;
-		if (ZoodlesConstants.ADD_CHILD_TEXT.Equals (l_kid.name))
+		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
 			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
 		}
 		else
 		{
@@ -324,7 +360,7 @@ public class SettingAppInfoState : GameState
 		}
 		else
 		{
-			setErrorMessage(m_gameController,"fail","Get date failed please try it again.");
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
 
@@ -342,10 +378,14 @@ public class SettingAppInfoState : GameState
 
 	private void onShowPlanDetails(UIButton p_button)
 	{
-		p_button.removeClickCallback (onShowPlanDetails);
-		m_requestQueue = new RequestQueue ();
-		m_requestQueue.add (new ShowPlanDetailsRequest (showPlanDetails));
-		m_requestQueue.request ();
+		if(canClick)
+		{
+			canClick = false;
+			p_button.removeClickCallback (onShowPlanDetails);
+			m_requestQueue = new RequestQueue ();
+			m_requestQueue.add (new ShowPlanDetailsRequest (showPlanDetails));
+			m_requestQueue.request ();
+		}
 	}
 
 	private void showPlanDetails(WWW p_response)
@@ -357,7 +397,7 @@ public class SettingAppInfoState : GameState
 			//m_renewText = m_planDetailsCanvas.getView("renewsText") as UILabel;
 			Hashtable l_table = (Hashtable)MiniJSON.MiniJSON.jsonDecode(p_response.text);
 			//DateTime l_dt = DateTime.Parse( (string)l_table["next_renewal_at"]);
-			string l_plan ="You are currently subscribed to Zoodles Premium on a " + (string)l_table["plan_name"] + " memebership plan.";
+			string l_plan = string.Format( Localization.getString(Localization.TXT_STATE_29_CURRENT), (string)l_table["plan_name"]);
 			//string l_renewTime ="You plan renews on " + l_dt.ToString("m, yyyy", DateTimeFormatInfo.InvariantInfo);
 			m_planText.text = l_plan;
 			//m_renewText.text = l_renewTime;
@@ -373,24 +413,34 @@ public class SettingAppInfoState : GameState
 
 	private void onSendFeedBack(UIButton p_button)
 	{
-		m_gameController.getUI ().changeScreen (UIScreen.SENT_FEED_BACK,true);
-		m_sentFeedBackCanvas.setOriginalPosition ();
+		if(canClick)
+		{
+			canClick = false;
+			m_gameController.getUI ().changeScreen (UIScreen.SENT_FEED_BACK,true);
+			m_sentFeedBackCanvas.setOriginalPosition ();
+		}
 	}
 
 	private void onCloseSendBack(UIButton p_button)
 	{
+		canClick = true;
 		m_gameController.getUI ().changeScreen (UIScreen.SENT_FEED_BACK,false);
 		m_sentFeedBackCanvas.setOutPosition ();
 	}
 
 	private void onSignOut(UIButton p_button)
 	{
-		m_gameController.getUI ().changeScreen (UIScreen.SIGN_OUT,true);
-		m_signOutConfirmCanvas.setOriginalPosition ();
+		if(canClick)
+		{
+			canClick = false;
+			m_gameController.getUI ().changeScreen (UIScreen.SIGN_OUT,true);
+			m_signOutConfirmCanvas.setOriginalPosition ();
+		}
 	}
 
 	private void onCancelSignOut(UIButton p_button)
 	{
+		canClick = true;
 		m_gameController.getUI ().changeScreen (UIScreen.SIGN_OUT,false);
 		m_signOutConfirmCanvas.setOutPosition ();
 	}
@@ -433,6 +483,7 @@ public class SettingAppInfoState : GameState
 	
 	private void onCloseDialog(UIButton p_button)
 	{
+		canClick = true;
 		m_gameController.getUI().changeScreen(UIScreen.PLAN_DEATILS,false);
 		m_planDetailsCanvas.setOutPosition ();
 		m_planDetailsButton.addClickCallback (onShowPlanDetails);
@@ -521,6 +572,8 @@ public class SettingAppInfoState : GameState
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;
 	private UIButton 	m_sendButton;
+	private UIButton	m_editProfileButton;
+	private UIButton	m_overviewButton;
 	
 	private UIButton 	m_currentReasonButton;
 	private string 		m_reason;
@@ -548,8 +601,10 @@ public class SettingAppInfoState : GameState
 	private ThankCanvas 		m_thankCanvas;
 	private SignOutConfirmCanvas m_signOutConfirmCanvas;
 	private SentFeedBackCanvas  m_sentFeedBackCanvas;
+	private CommonDialogCanvas  m_commonDialogCanvas;
 
 	private bool 		canMoveLeftMenu = true;
+	private bool		canClick = true;
 
 	private RequestQueue m_requestQueue;
 }

@@ -3,7 +3,7 @@ using System.Collections;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 using System.Runtime.InteropServices;
 #endif
-
+ 
 public class IOSNativeMarketBridge  {
 
 	#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE

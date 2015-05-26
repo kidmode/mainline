@@ -9,19 +9,7 @@ public class GameActivityCanvas : UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
-		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
-
-        UILabel l_allGamesLabel = getView("allContentLabel") as UILabel;
-        l_allGamesLabel.text    = Localization.getString(Localization.TXT_TAB_ALL_GAMES);
-
-        //UILabel l_featuredGameLabel = getView("featuredLabel") as UILabel;
-        //l_featuredGameLabel.text    = Localization.getString(Localization.TXT_LABEL_FEATURED_GAMES);
-
-        //UILabel l_gamesLabel    = getView("contentLabel") as UILabel;
-        //l_gamesLabel.text       = Localization.getString(Localization.TXT_LABEL_GAMES);
-
-        UILabel l_favorateLabel = getView("favorateLabel") as UILabel;
-        l_favorateLabel.text    = Localization.getString(Localization.TXT_TAB_FAVORITES);
+//		getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
         UIToggle l_favorateTab = getView("favorateTab") as UIToggle;
         l_favorateTab.addValueChangedCallback(onFeaturedToggled);
@@ -37,7 +25,11 @@ public class GameActivityCanvas : UICanvas
 		m_gameFavorateInfo = getView("favoriteInfo") as UILabel;
 		m_gameInfo = getView("info") as UILabel;
 
+		m_emptyTexture = new Texture2D (1, 1);
+
 		_setupList();
+		
+		SetupLocalizition ();
 	}
 	
 	public override void enteringTransition(  )
@@ -111,40 +103,46 @@ public class GameActivityCanvas : UICanvas
 		DebugUtils.Assert( l_game != null );
 
         //*Temporary*
-        UILabel l_numberLabel = p_element.getView("number") as UILabel;
-        DebugUtils.Assert(l_numberLabel != null);
+		UILabel l_numberLabel = p_element.getView("number") as UILabel;
+		DebugUtils.Assert(l_numberLabel != null);
 
         l_numberLabel.text = (p_index + 1).ToString();
 
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
-		l_appName.active = false;
 
-        if (l_rawImage == null)
+		if (l_appImage != null)
+			l_appImage.active = false;
+	
+		if (l_rawImage == null)
             return;
 
 		if( l_game.isWebView )
 		{
 			WebViewInfo l_info = l_game.webViewData;
 
+			if (l_appName.active)
+			{
+				l_appName.active = false;
+			}
 			if( l_info.icon == null )
 			{
-				l_rawImage.setTexture( new Texture2D(1, 1) );
+				l_rawImage.setTexture( m_emptyTexture );
 			}
 			else
 			{
 				l_rawImage.setTexture(l_info.icon);
 			}
-
-			if (l_appImage != null)
-				l_appImage.active = false;
 		}
 		else
 		{
 			AppInfo l_info = l_game.appData;
 			l_appName.text = l_info.appName;
-			l_appName.active = true;
+			if (l_appName.active == false)
+			{
+				l_appName.active = true;
+			}
 
 			Vector2 l_textSize = l_appName.calcSize();
 			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
@@ -153,11 +151,11 @@ public class GameActivityCanvas : UICanvas
 			
 			if( l_info.appIcon == null )
 			{
-				l_appImage.setTexture( new Texture2D(1, 1) );
+				l_appImage.setTexture( m_emptyTexture );
 			}
 			else
 			{
-				l_appImage.setTexture(l_info.appIcon);
+				l_rawImage.setTexture(l_info.appIcon);
 			}
 		}
 	}
@@ -176,10 +174,24 @@ public class GameActivityCanvas : UICanvas
 		//
 		//l_swipe.setData( l_infoData );
         m_gameSwipeList.setDrawFunction(onListDraw);
-        m_gameSwipeList.redraw();
-
         m_gameFavorateSwipeList.setDrawFunction(onListDraw);
-        m_gameFavorateSwipeList.redraw();
+	}
+
+	private void SetupLocalizition()
+	{		
+		UILabel l_allGamesLabel 	= getView("allContentLabel") as UILabel;
+		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_infoLabel 		= getView("info") as UILabel;
+		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
+		UILabel l_headerLabel 		= getView("header") as UILabel;
+		
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allGamesLabel.text    	= Localization.getString(Localization.TXT_TAB_ALL_GAMES);
+//		l_infoLabel.text 			= Localization.getString(Localization.TXT_12_LABEL_INFO);
+//		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_12_LABEL_FAVORITE);
+		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_headerLabel.text 			= Localization.getString(Localization.TXT_12_LABEL_HEADER);
 	}
 
     private UISwipeList     m_gameSwipeList;
@@ -188,4 +200,6 @@ public class GameActivityCanvas : UICanvas
 	private UILabel			m_gameInfo;
 
 	private List< Button > 	m_buttonList;
+
+	private Texture2D m_emptyTexture;
 }

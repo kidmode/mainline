@@ -524,7 +524,7 @@ public class UniWebView : MonoBehaviour {
 	}
 
 	private void LoadBegin(string url) {
-		Debug.Log("Begin to load: " + url);
+//		Debug.Log("Begin to load: " + url);
 		if (OnLoadBegin != null) {
 			OnLoadBegin(this, url);
 		}
