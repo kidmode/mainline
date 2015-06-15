@@ -405,6 +405,8 @@ public class RegionBaseState : GameState
 		m_profileButton = m_cornerProfileCanvas.getView("profileButton") as UIButton;
 		m_profileButton.addClickCallback(onProfileClick);
 
+		m_foregroundGafGroup = m_regionLandingCanvas.getView("gafGroup");
+
 		m_triggers.Clear();
 		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
 		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
@@ -906,6 +908,8 @@ public class RegionBaseState : GameState
 		
 		m_createActivity = m_nextActivity;
 		m_nextActivity = ActivityType.None;
+
+		m_foregroundGafGroup.gameObject.SetActive (false);
 	}
 	
 	private void onToLeftRegionTweenFinished(UIElement p_element, Tweener.TargetVar p_targetVar)
@@ -918,6 +922,8 @@ public class RegionBaseState : GameState
 		m_transitioning = false;
 		m_activityPanelCanvas.canvasGroup.interactable = true;
 		m_cornerProfileCanvas.canvasGroup.interactable = true;
+
+		m_foregroundGafGroup.gameObject.SetActive (true);
 	}
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
@@ -1000,6 +1006,8 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			m_foregroundGafGroup.gameObject.SetActive (true);
 		}
 	}	
 	
@@ -1428,6 +1436,8 @@ public class RegionBaseState : GameState
 	
 	protected UIElement 	m_foreground;
 	protected UIElement 	m_background;
+
+	protected UIElement m_foregroundGafGroup;
 
 	protected SubState m_subState = SubState.None;
 
