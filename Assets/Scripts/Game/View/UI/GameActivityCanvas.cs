@@ -130,9 +130,12 @@ public class GameActivityCanvas : UICanvas
 			{
 				l_rawImage.setTexture( m_emptyTexture );
 			}
-			else
+			else if (l_info.icon != null)
 			{
 				l_rawImage.setTexture(l_info.icon);
+				l_rawImage.active = true;
+				if (l_appImage != null)
+					l_appImage.active = false;
 			}
 		}
 		else
@@ -153,9 +156,11 @@ public class GameActivityCanvas : UICanvas
 			{
 				l_appImage.setTexture( m_emptyTexture );
 			}
-			else
+			else if (l_info.appIcon != null)
 			{
-				l_rawImage.setTexture(l_info.appIcon);
+				l_appImage.setTexture(l_info.appIcon);
+				l_appImage.active = true;
+				l_rawImage.active = false;
 			}
 		}
 	}

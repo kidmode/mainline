@@ -24,13 +24,13 @@ public class WebViewState : GameState
 		UIButton l_button = l_screen.getView("backButton") as UIButton;
 		l_button.addClickCallback(_clickBack);
 
-		float l_inset = calculateInset(l_button);
+		m_inset = calculateInset(l_button);
 		TextAsset l_asset = Resources.Load( "Data/removeFullScreenButton" ) as TextAsset;
 		m_text = (l_asset).text;
 		string l_url = getURL();
 
 		m_isLoaded = false;
-		_setupWebView("Prefabs/Web/YoutubeWebview", l_inset);
+		_setupWebView("Prefabs/Web/YoutubeWebview", m_inset);
 		m_webView.OnLoadComplete += HandleOnLoadComplete;
 		m_webView.OnLoadBegin += HandleOnLoadBegin;
 		m_webView.Load(l_url);
@@ -89,7 +89,7 @@ public class WebViewState : GameState
 		RectTransform l_transform = (RectTransform) p_topBar.transform;		
 		float l_scale = p_topBar.canvas.scaleFactor;
 		float l_offset = Screen.height - l_transform.position.y;
-		float l_height = l_transform.rect.height * l_scale;
+		float l_height = l_transform.rect.height * l_transform.transform.localScale.y * l_scale;
 		float l_inset = l_height + (2 * l_offset);
 		return l_inset;
 	}
@@ -157,7 +157,7 @@ public class WebViewState : GameState
 			return;
 
 		//m_webView.insets = new UniWebViewEdgeInsets((int)(90.0f * p_scale), 0, 0, 0);
-		m_webView.insets = new UniWebViewEdgeInsets((int)p_inset, 0, 0, 0);
+		m_webView.insets = new UniWebViewEdgeInsets(0, (int)p_inset, 0, 0);
 		m_webView.SetUseWideViewPort(false);
 		m_webView.OnReceivedKeyCode += _onBackKeyCode;
 		m_webView.OnWebViewShouldClose 	+= _onShouldCloseView;
@@ -189,11 +189,13 @@ public class WebViewState : GameState
 	}
 
 	private GameObject	m_webObj;
-	private UniWebView	m_webView;
+	protected UniWebView m_webView;
 	protected SubState m_subState = SubState.NONE;
 	private bool m_isLoaded;
 	private int m_linkId = -1;
 	protected int m_duration = 0;
+
+	protected float m_inset;
 }
 
 public class VideoViewState : WebViewState
@@ -239,6 +241,21 @@ public class GameViewState : WebViewState
 		Screen.autorotateToPortrait = true;
 		Screen.autorotateToPortraitUpsideDown = true;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+		m_webView.InsetsForScreenOreitation += setInsetsScreenOrientation;
+	}
+
+	UniWebViewEdgeInsets setInsetsScreenOrientation(UniWebView webView, UniWebViewOrientation orientation)
+	{
+		Debug.Log("orientation: " + orientation);
+		if (orientation == UniWebViewOrientation.Portrait)
+		{
+			return new UniWebViewEdgeInsets((int)m_inset, 0, 0, 0);
+		}
+		else
+		{
+			return new UniWebViewEdgeInsets(0, (int)m_inset, 0, 0);
+		}
 	}
 
 	public override void update(GameController p_gameController, int p_time)
