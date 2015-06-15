@@ -318,24 +318,48 @@ public class RegionBaseState : GameState
 	{
 		if( null != m_gameActivityCanvas && null != m_gameActivityCanvas.getView("mainPanel") )
 		{
-			m_gameActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
+			if( !m_gameActivityCanvas.getView("mainPanel").active){
+
+				Tweener tw = m_gameActivityCanvas.getView("mainPanel").tweener;
+
+				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+			}
+
 		}
 
 		if( null != m_videoActivityCanvas && null != m_videoActivityCanvas.getView("mainPanel") )
 		{
-			m_videoActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
+			if( !m_videoActivityCanvas.getView("mainPanel").active){ //m_gameActivityCanvas.getView("mainPanel").alpha < 1.0f &&
+				
+				m_videoActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+				
+			}
 		}
 
 		if( null != m_bookActivityCanvas && null != m_bookActivityCanvas.getView("mainPanel") )
 		{
-			m_bookActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
+			if( !m_bookActivityCanvas.getView("mainPanel").active){ //m_gameActivityCanvas.getView("mainPanel").alpha < 1.0f &&
+				
+				m_bookActivityCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+				
+			}
 		}
 
 		if( null != m_funActivityCanvas && null != m_funActivityCanvas.getView("mainBack") )
 		{
-			m_funActivityCanvas.getView("mainBack").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
+			if( !m_funActivityCanvas.getView("mainBack").active){ //m_gameActivityCanvas.getView("mainPanel").alpha < 1.0f &&
+				
+				m_funActivityCanvas.getView("mainBack").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+				
+			}
+
 		}
 	}
+
 	
 	private void _createViews()
 	{
