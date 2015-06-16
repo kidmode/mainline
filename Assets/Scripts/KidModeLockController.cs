@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 using UnityEngine.UI;
 
@@ -35,6 +36,19 @@ public class KidModeLockController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
+
+		string settingsLauncher = PlayerPrefs.GetString ("settingsLauncher");
+
+		if (settingsLauncher == null || settingsLauncher == "") {
+
+			KidModeLockController.Instance.stateHomeLauncher = StateHomeLauncher.KidMode;
+
+		} else {
+		
+			KidModeLockController.Instance.stateHomeLauncher = (KidModeLockController.StateHomeLauncher)Enum.Parse (typeof(KidModeLockController.StateHomeLauncher), settingsLauncher);   
+
+		}
 		
 		checkDefaultLauncherStatus ();
 		

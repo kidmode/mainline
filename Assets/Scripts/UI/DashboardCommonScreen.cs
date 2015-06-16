@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
+//using System;
 
 public class DashboardCommonScreen : MonoBehaviour {
 
@@ -11,9 +11,7 @@ public class DashboardCommonScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		string settingsLauncher = PlayerPrefs.GetString ("settingsLauncher");
 
-		KidModeLockController.Instance.stateHomeLauncher = (KidModeLockController.StateHomeLauncher) Enum.Parse(typeof(KidModeLockController.StateHomeLauncher), settingsLauncher);    
 
 		updateToggleButtons ();
 	

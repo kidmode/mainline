@@ -471,9 +471,21 @@ public class SettingChildLockState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
-		if(checkPin())
-		{
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+
+
+		if (KidMode.isHomeLauncherKidMode ()) {
+			
+			if(checkPin())
+			{
+				m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+			}
+			
+		} else {
+			
+			KidMode.enablePluginComponent();
+			
+			KidMode.openLauncherSelector ();
+			
 		}
 	}
 
