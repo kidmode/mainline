@@ -388,6 +388,7 @@ public class OverviewAppState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (KidMode.isHomeLauncherKidMode ()) {
 			
 			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
@@ -399,6 +400,9 @@ public class OverviewAppState : GameState
 			KidMode.openLauncherSelector ();
 			
 		}
+		#else
+		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#endif
 	}
 
 	private void toSettingScreen(UIButton p_button)

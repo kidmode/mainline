@@ -279,8 +279,9 @@ public class NotificationState : GameState
 	private void toChildMode(UIButton p_button)
 	{
 
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (KidMode.isHomeLauncherKidMode ()) {
-
+			
 			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
 			
 		} else {
@@ -290,6 +291,9 @@ public class NotificationState : GameState
 			KidMode.openLauncherSelector ();
 			
 		}
+		#else
+		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#endif
 
 	}
 
