@@ -337,7 +337,17 @@ public class DeviceOptionsState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		if (KidMode.isHomeLauncherKidMode ()) {
+			
+			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+			
+		} else {
+			
+			KidMode.enablePluginComponent();
+			
+			KidMode.openLauncherSelector ();
+			
+		}
 	}
 
 	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )

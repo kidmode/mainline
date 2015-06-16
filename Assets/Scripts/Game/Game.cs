@@ -167,6 +167,23 @@ public class Game : MonoBehaviour
 		}
 	}
 
+	public void onAndroidPause(string info){
+		
+		Debug.LogWarning (" onAndroidPause " + info);
+		
+		KidModeLockController.Instance.onAndroidPause ();
+		
+	}
+	
+	
+	public void onAndroidResume(string info){
+		
+		Debug.LogWarning (" onAndroidResume " + info);
+		
+		KidModeLockController.Instance.onAndroidResume ();
+		
+	}
+
 	public bool delayedParentDashboard
 	{
 		get; set;
