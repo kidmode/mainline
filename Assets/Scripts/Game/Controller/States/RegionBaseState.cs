@@ -369,11 +369,21 @@ public class RegionBaseState : GameState
 		m_activityPanelCanvas = l_ui.createScreen(UIScreen.ACTIVITY_PANEL, true, 2);
 		m_regionLandingCanvas = l_ui.createScreen(UIScreen.REGION_LANDING, true, 1);
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
+
+		// Sean: vzw
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 2);
 	}
 	
 	private void _setupElements()
 	{
 		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
+
+		// Sean: vzw
+		m_speechBubble.active = false;
+		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+
+		this._setupAppContentList();
+		// end vzw
 		
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
@@ -406,11 +416,16 @@ public class RegionBaseState : GameState
 		m_profileButton.addClickCallback(onProfileClick);
 
 		m_foregroundGafGroup = m_regionLandingCanvas.getView("gafGroup");
+		// Sean: vzw
+		this._setupGafGroup(false);
 
 		m_triggers.Clear();
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+		// Sean: vzw
+		if (false) {
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+		} // vzw end
 
 		UIButton l_butterfly = m_regionLandingCanvas.getView("Butterfly") as UIButton;
 		List<Vector3> l_butterflyPosList = new List<Vector3>();
@@ -419,6 +434,13 @@ public class RegionBaseState : GameState
 		l_butterfly.tweener.addPositionTrack(l_butterflyPosList, 30.0f, null, Tweener.Style.Standard, true);
 
 		_oscillateLightsDown(m_regionLandingCanvas.getView("light"), Tweener.TargetVar.Rotation);
+	}
+
+	private void _setupGafGroup(bool active)
+	{
+		m_foregroundGafGroup.getView("monkeyTrigger").active = active;
+		m_foregroundGafGroup.getView("snakeTrigger").active = active;
+		m_foregroundGafGroup.getView("toucanTrigger").active = active;
 	}
 	
 	private void _handleDynamicActivities()
@@ -1156,7 +1178,37 @@ public class RegionBaseState : GameState
 			}
 		}
 	}
-	
+
+	// Sean: vzw
+	private void _setupAppContentList()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		_Debug.log ( l_appListJson );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<System.Object> l_list = KidMode.getLocalApps();
+			
+			if( l_list != null && l_list.Count > 0)
+			{
+				foreach(AppInfo l_app in l_list)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						GameInfo l_game = new GameInfo(l_app);
+						m_gameViewList.Add(l_game);
+					}
+				}
+			}
+		}
+		l_gameCount += m_gameViewList.Count;
+		#endif
+
+	}
+
 	private void _setupWebContentList(List<object> p_contentList)
 	{
 		if (p_contentList.Count <= 0)
@@ -1396,7 +1448,14 @@ public class RegionBaseState : GameState
 	{
 		p_element.tweener.addRotationTrack(2.0f, -2.0f, 5.0f, _oscillateLightsDown);
 	}
-	
+
+	// Sean: vzw
+	private UICanvas m_regionAppCanvas;
+	private UISwipeList m_appSwipeList;
+
+	// end vzw
+
+
 	protected UICanvas 	m_regionLandingCanvas;
 	protected UICanvas 	m_activityPanelCanvas;
 	protected UICanvas 	m_regionBackgroundCanvas;

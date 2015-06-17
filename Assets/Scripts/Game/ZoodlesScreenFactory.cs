@@ -110,6 +110,11 @@ public class UIScreen
 	public const int CONGRATURATION				= 104;
 	public const int PREMIUM_ELIGIBLE 			= 105;
 	public const int PAY_GEMS_COMFIRM			= 106;
+
+
+
+	// Sean: vzw
+	public const int REGION_APP					= 901;
 }
 
 
@@ -226,6 +231,12 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD,	SCREEN_DIRECTORY + "SetAccountScreen"  );
 		m_directoryMap.Add( UIScreen.CONGRATURATION,			SCREEN_DIRECTORY + "CongraturationScreen"  );
 		m_directoryMap.Add( UIScreen.PREMIUM_ELIGIBLE,			SCREEN_DIRECTORY + "PremiumEligibleScreen"  );
+
+
+		// Sean: vzw
+		m_directoryMap.Add( UIScreen.REGION_APP,				SCREEN_DIRECTORY + "RegionAppScreen" );
+
+		// end vzw
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -341,6 +352,10 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.CONGRATURATION:		 return new CongratulationCanvas() 		as UICanvas;
 			case UIScreen.PREMIUM_ELIGIBLE:		 return new PremiumEligibleCanvas() 	as UICanvas;
 
+
+			// Sean: vzw
+			case UIScreen.REGION_APP:			return new RegionAppCanvas() 			as UICanvas;
+			// end vzw
 		}
 		return new UICanvas();
 	}
