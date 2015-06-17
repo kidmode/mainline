@@ -13,7 +13,8 @@ public class BuyGemsState : GameState
 	{
 		base.enter(p_gameController);
 
-		KidMode.setKidsModeActive(false);
+//		KidMode.setKidsModeActive(false);
+		KidModeLockController.Instance.swith2DParentMode();
 		_init();
 	}
 	

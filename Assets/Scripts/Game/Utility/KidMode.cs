@@ -4,20 +4,23 @@ using System.Collections.Generic;
 
 public class KidMode
 {
+
+	//================================
+	//This is now Kid lock native call Settings ON or OFF
 	public static void setKidsModeActive(bool p_isActive)
 	{
 
-		if (p_isActive) {
-
-			KidModeLockController.Instance.swith2KidMode();
-
-
-		} else {
-
-			KidModeLockController.Instance.swith2DParentMode();
-
-
-		}
+//		if (p_isActive) {
+//
+//			KidModeLockController.Instance.swith2KidMode();
+//
+//
+//		} else {
+//
+//			KidModeLockController.Instance.swith2DParentMode();
+//
+//
+//		}
 
 //		KidModeLockController.Instance.stateChanged ();
 
@@ -167,6 +170,9 @@ public class KidMode
 
 	public static void startActivity(string p_packageName, string p_activityName)
 	{
+
+		Debug.LogError ("   startActivity     p_packageName  " + p_packageName + "          p_packageName " + p_activityName);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -181,6 +187,8 @@ public class KidMode
 
 	public static void startActivity(string p_packageName)
 	{
+		Debug.LogError ("   startActivity   PACKAGE ONLY   p_packageName  " + p_packageName);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 

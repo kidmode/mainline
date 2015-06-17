@@ -23,7 +23,8 @@ public class GotoParentDashboardState: GameState
 
 	private void turnOffChildLock()
 	{
-		KidMode.setKidsModeActive(false);	
+//		KidMode.setKidsModeActive(false);	
+		KidModeLockController.Instance.swith2DParentMode();
 	}
 	
 	private void wipeScreens(GameController p_gameController)
