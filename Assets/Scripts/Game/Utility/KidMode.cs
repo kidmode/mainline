@@ -220,12 +220,16 @@ public class KidMode
 			int l_flag = l_joApplication.Get<int>("flags");
 			AndroidJavaClass l_jcApplicationInfo = new AndroidJavaClass("android.content.pm.ApplicationInfo");
 			int l_flagSystem = l_jcApplicationInfo.GetStatic<int>("FLAG_SYSTEM");
+			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
 			if( (l_flag & l_flagSystem) != 0 )
 			{
-				continue;
+				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
+				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				{
+					continue;
+				}
 			}
-			
-			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
+
 			string l_packageName = l_joApplication.Get<string>( "packageName" );
 			byte[] l_byteIcon;
 
@@ -254,7 +258,7 @@ public class KidMode
 			
 			
 			AppInfo l_app = new AppInfo();
-			Texture2D l_textureIcon = new Texture2D(1, 1, , TextureFormat.ARGB32, false);
+			Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 			l_textureIcon.LoadImage( l_byteIcon );
 			l_app.appName = l_appName;
 			l_app.appIcon = l_textureIcon;
