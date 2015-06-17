@@ -818,6 +818,11 @@ public class RegionBaseState : GameState
 		}
 		else
 		{
+
+			KidMode.taskManagerLockFalse();
+
+			KidMode.setKidsModeActive(false);
+
 			KidMode.startActivity(l_game.appData.packageName);
 			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_game.appData.appName);
 		}

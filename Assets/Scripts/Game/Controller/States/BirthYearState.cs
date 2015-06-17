@@ -44,7 +44,8 @@ public class BirthYearState : GameState
 			{
 				if(l_nextState == ZoodleState.INITIALIZE_GAME)
 				{
-					KidMode.setKidsModeActive(false);	
+//					KidMode.setKidsModeActive(false);	
+					KidModeLockController.Instance.swith2DParentMode();
 					PlayerPrefs.Save();
 					Application.Quit();
 				}
@@ -199,7 +200,8 @@ public class BirthYearState : GameState
 		{
 			if(l_previous == ZoodleState.PROFILE_SELECTION)
 			{
-				KidMode.setKidsModeActive(false);	
+//				KidMode.setKidsModeActive(false);	
+				KidModeLockController.Instance.swith2DParentMode();
 				PlayerPrefs.Save();
 				Application.Quit();
 			}
