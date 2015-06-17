@@ -189,8 +189,24 @@ public class FAQState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
-		p_button.removeClickCallback (toChildMode);
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		if (KidMode.isHomeLauncherKidMode ()) {
+			
+			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+			
+		} else {
+			
+			KidMode.enablePluginComponent();
+			
+			KidMode.openLauncherSelector ();
+			
+		}
+		#else
 		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#endif
+
+
 	}
 
 	private void onCloseDialog(UIButton p_button)

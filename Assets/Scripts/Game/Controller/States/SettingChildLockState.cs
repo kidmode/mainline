@@ -471,10 +471,45 @@ public class SettingChildLockState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
+
+
+//		if (KidMode.isHomeLauncherKidMode ()) {
+//			
+//			if(checkPin())
+//			{
+//				m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+//			}
+//			
+//		} else {
+//			
+//			KidMode.enablePluginComponent();
+//			
+//			KidMode.openLauncherSelector ();
+//			
+//		}
+
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		if (KidMode.isHomeLauncherKidMode ()) {
+			
+			if(checkPin())
+			{
+				m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+			}
+			
+		} else {
+			
+			KidMode.enablePluginComponent();
+			
+			KidMode.openLauncherSelector ();
+			
+		}
+		#else
 		if(checkPin())
 		{
 			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
 		}
+		#endif
 	}
 
 	private void toCheckVerifyBirth(UIToggle p_button, bool p_value)

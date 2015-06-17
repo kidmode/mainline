@@ -13,7 +13,9 @@ public class MapState : GameState
 		NONE,
 		GO_PROFILE,
 		GO_REGION,
-		GO_KIDPROFILE
+		GO_KIDPROFILE,
+		//added by honda
+		ADD_BIRTHYEAR,
 	}
 	//--------------------Public Interface -----------------------
 	
@@ -46,6 +48,9 @@ public class MapState : GameState
 				break;
 			case SubState.GO_KIDPROFILE:
 				_changeToKidsProfile(p_gameController);
+				break;
+			case SubState.ADD_BIRTHYEAR:
+				_changeToBirthYear(p_gameController);
 				break;
 			}
 
@@ -133,6 +138,22 @@ public class MapState : GameState
 		m_mapCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED, onFadeFinish);
 	}
 
+	//added by honda
+	private void _changeToBirthYear(GameController p_gameController)
+	{
+		UIManager l_ui = p_gameController.getUI();
+		UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
+		if (l_backScreen == null)
+		{
+			l_backScreen = l_ui.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+			SplashBackCanvas l_splashBack = l_backScreen as SplashBackCanvas;
+			l_splashBack.setDown();
+		}
+
+		p_gameController.connectState(ZoodleState.BIRTHYEAR, ZoodleState.MAP);
+		p_gameController.changeState(ZoodleState.BIRTHYEAR);
+	}
+
 	//Listeners	
 	private void onFadeFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
 	{
@@ -143,7 +164,7 @@ public class MapState : GameState
 
 	private void onBackClicked(UIButton p_button)
 	{
-		m_subState = SubState.GO_PROFILE;
+		m_subState = /*SubState.ADD_BIRTHYEAR;//*/SubState.GO_PROFILE;
 	}
 
 	private void onJungleClicked(UIButton p_button)

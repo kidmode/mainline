@@ -6,6 +6,22 @@ public class KidMode
 {
 	public static void setKidsModeActive(bool p_isActive)
 	{
+
+		if (p_isActive) {
+
+			KidModeLockController.Instance.swith2KidMode();
+
+
+		} else {
+
+			KidModeLockController.Instance.swith2DParentMode();
+
+
+		}
+
+//		KidModeLockController.Instance.stateChanged ();
+
+//		return;
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -25,6 +41,8 @@ public class KidMode
 	
 	public static bool incomingCallsEnabled()
 	{
+		return false;
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -35,6 +53,18 @@ public class KidMode
 		#endif
 	}
 
+
+	public static bool isHomeLauncherKidMode()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		bool isHomeLauncherKidMode = jo.Call<bool>("isMyLauncherDefault"); 
+		return isHomeLauncherKidMode;
+		#else
+		return false;		
+		#endif
+	}
 	//1 = DRAW_Z
 	//2 = BIRTH_YEAR
 	//3 = PIN
@@ -216,7 +246,7 @@ public class KidMode
 			
 			
 			AppInfo l_app = new AppInfo();
-			Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+			Texture2D l_textureIcon = new Texture2D(1, 1, , TextureFormat.ARGB32, false);
 			l_textureIcon.LoadImage( l_byteIcon );
 			l_app.appName = l_appName;
 			l_app.appIcon = l_textureIcon;
@@ -308,4 +338,126 @@ public class KidMode
 		return false;
 		#endif
 	}
+
+
+	public static void enablePluginComponent(){
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		Debug.LogWarning ("  ======================    enablePluginComponent =====================   " );
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
+		
+		jo.Call("enablePluginComponent"); 
+		#endif
+		
+	}
+
+	public static bool isLauncherKidmode(){
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		bool launcher = jo.Call<bool>("isMyLauncherDefault"); 
+		
+		return launcher;
+		#endif
+		return false;
+		
+	}
+
+	public static void openLauncherSelector(){
+		
+		//		Debug.LogWarning ("  ======================    openLauncherSelector =====================   " );
+		
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
+		
+		jo.Call("openLauncherSelector"); 
+		#endif
+		
+	}
+
+	public static void disablePluginComponent(){
+		
+		Debug.LogWarning ("  ======================    disablePluginComponent =====================   " );
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
+		
+		jo.Call("disablePluginComponent"); 
+		
+		#endif
+		
+	}
+
+	public static void taskManagerLockTrue(){
+		
+		Debug.LogWarning ("  ======================    taskManagerLockTrue =====================   " );
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
+		
+		object[] l_args = new object[] {true};
+		jo.Call("setTaskManagerLock", l_args); 
+		
+		#endif
+		
+	}
+	
+	
+	
+	public static void taskManagerLockFalse(){
+		
+		Debug.LogWarning ("  ======================    taskManagerLockFalse =====================   " );
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
+		
+		
+		object[] l_args = new object[] {false};
+		jo.Call("setTaskManagerLock", l_args); 
+		
+		#endif
+		
+	}
+
+
+	public void openDefaultLauncher(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openDefaultLauncher"); 
+		
+	}
+	
+	public void openSettings(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openSettings1"); 
+		
+	}
+
+
 }

@@ -48,6 +48,10 @@ public class BirthYearState : GameState
 					PlayerPrefs.Save();
 					Application.Quit();
 				}
+				else if (l_nextState == ZoodleState.MAP)
+				{
+					p_gameController.changeState(ZoodleState.MAP);
+				}
 				else
 				{
 					p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
@@ -202,6 +206,11 @@ public class BirthYearState : GameState
 			else if(l_previous == ZoodleState.INITIALIZE_GAME)
 			{
 				m_gameController.changeState(ZoodleState.SIGN_IN_CACHE);
+			}
+			else if (l_previous == ZoodleState.MAP)
+			{
+				m_gameController.getUI().removeScreen(UIScreen.MAP);
+				m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			}
 			else
 			{

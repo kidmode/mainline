@@ -78,7 +78,21 @@ public class DashBoardState : GameState
 
 	private void toChildMode(UIButton p_button)
 	{
-		m_game.gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		if (KidMode.isHomeLauncherKidMode ()) {
+			
+			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+			
+		} else {
+			
+			KidMode.enablePluginComponent();
+			
+			KidMode.openLauncherSelector ();
+			
+		}
+		#else
+		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#endif
 	}
 
 	private void toShowMenu(UIButton p_button)

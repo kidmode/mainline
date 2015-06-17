@@ -406,7 +406,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 964073122}
   m_Layer: 0
-  m_Name: GameView
+  m_Name: 'GameView '
   m_TagString: Root
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -424,111 +424,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!1 &1058884782
+--- !u!1 &1084465274
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 1058884784}
-  - 114: {fileID: 1058884783}
+  - 4: {fileID: 1084465275}
+  - 114: {fileID: 1084465276}
   m_Layer: 0
-  m_Name: Crittercism Initializer
+  m_Name: KidModeLockController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1058884783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058884782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9205a3e5731534f549dd9b55ea2a7b94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1058884784
+--- !u!4 &1084465275
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058884782}
+  m_GameObject: {fileID: 1084465274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
---- !u!1 &1540648813
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_PrefabInternal: {fileID: 2053246634}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1540648815}
-  - 114: {fileID: 1540648814}
-  m_Layer: 0
-  m_Name: SwrvePrefab
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1540648814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48,
-    type: 2}
-  m_PrefabInternal: {fileID: 2053246634}
-  m_GameObject: {fileID: 1540648813}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47a6e343a3a6a47659f180ae8178ccf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameId: 2652
-  ApiKey: bnfTPgVz7KdEepkVHtA
-  Config:
-    UserId: 
-    AppVersion: 
-    AppStore: 
-    Language: 
-    DefaultLanguage: en
-    TalkEnabled: 1
-    AutoDownloadCampaignsAndResources: 1
-    Orientation: 2
-    EventsServer: http://api.swrve.com
-    UseHttpsForEventsServer: 0
-    ContentServer: http://content.swrve.com
-    UseHttpsForContentServer: 0
-    AutomaticSessionManagement: 1
-    NewSessionInterval: 30
-    MaxBufferChars: 20000
-    SendEventsIfBufferTooLarge: 1
-    StoreDataInPlayerPrefs: 0
-    PushNotificationEnabled: 0
-    GCMSenderId: 
-    GCMPushNotificationTitle: '#Your App Title'
-    AutoShowMessagesMaxDelay: 5
-  FlushEventsOnApplicationQuit: 0
-  InitialiseOnStart: 0
---- !u!4 &1540648815
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_PrefabInternal: {fileID: 2053246634}
-  m_GameObject: {fileID: 1540648813}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -383.887268, y: 37.4077415, z: 1.77520752}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!114 &1084465276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1084465274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a5cf001931f480eadf8f528dc94e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateHomeLauncher: 0
+  stateKidMode: 1
+  defaultLauncherChecked: 0
 --- !u!1 &1685593281
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,73 +665,5 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
   m_RootGameObject: {fileID: 599918110}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
---- !u!1001 &2053246634
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: ApiKey
-      value: bnfTPgVz7KdEepkVHtA
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: GameId
-      value: 2652
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: FlushEventsOnApplicationQuit
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: InitialiseOnStart
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_RootGameObject: {fileID: 1540648813}
   m_IsPrefabParent: 0
   m_IsExploded: 1
