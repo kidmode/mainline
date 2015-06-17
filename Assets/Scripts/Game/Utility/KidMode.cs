@@ -254,7 +254,7 @@ public class KidMode
 			
 			
 			AppInfo l_app = new AppInfo();
-			Texture2D l_textureIcon = new Texture2D(1, 1, , TextureFormat.ARGB32, false);
+			Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 			l_textureIcon.LoadImage( l_byteIcon );
 			l_app.appName = l_appName;
 			l_app.appIcon = l_textureIcon;
