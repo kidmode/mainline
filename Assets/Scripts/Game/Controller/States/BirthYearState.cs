@@ -76,6 +76,18 @@ public class BirthYearState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
+//		int l_previous = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
+//		if (l_previous == ZoodleState.MAP)
+//		{
+//			UICanvas l_backScreen = p_uiManager.findScreen(UIScreen.SPLASH_BACKGROUND);
+//			if (l_backScreen == null)
+//			{
+//				l_backScreen = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+//				SplashBackCanvas l_splashBack = l_backScreen as SplashBackCanvas;
+//				l_splashBack.setDown();
+//			}
+//		}
+
 		m_dialogCanvas = p_uiManager.createScreen (UIScreen.COMMON_DIALOG, true, 3) as CommonDialogCanvas;
 		m_dialogCanvas.setUIManager (p_uiManager);
 		m_dialogCanvas.setUIManager (p_uiManager);
@@ -209,7 +221,14 @@ public class BirthYearState : GameState
 			}
 			else if (l_previous == ZoodleState.MAP)
 			{
-				m_gameController.getUI().removeScreen(UIScreen.MAP);
+				UIManager manager = m_gameController.getUI();
+				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
+				if (mcanvas != null)
+					manager.removeScreenImmediately(mcanvas);
+				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+				if (sbcanvas != null)
+					manager.removeScreenImmediately(sbcanvas);
+
 				m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			}
 			else
