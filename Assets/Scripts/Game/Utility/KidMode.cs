@@ -4,20 +4,23 @@ using System.Collections.Generic;
 
 public class KidMode
 {
+
+	//================================
+	//This is now Kid lock native call Settings ON or OFF
 	public static void setKidsModeActive(bool p_isActive)
 	{
 
-		if (p_isActive) {
-
-			KidModeLockController.Instance.swith2KidMode();
-
-
-		} else {
-
-			KidModeLockController.Instance.swith2DParentMode();
-
-
-		}
+//		if (p_isActive) {
+//
+//			KidModeLockController.Instance.swith2KidMode();
+//
+//
+//		} else {
+//
+//			KidModeLockController.Instance.swith2DParentMode();
+//
+//
+//		}
 
 //		KidModeLockController.Instance.stateChanged ();
 
@@ -167,6 +170,9 @@ public class KidMode
 
 	public static void startActivity(string p_packageName, string p_activityName)
 	{
+
+		Debug.LogError ("   startActivity     p_packageName  " + p_packageName + "          p_packageName " + p_activityName);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -181,6 +187,8 @@ public class KidMode
 
 	public static void startActivity(string p_packageName)
 	{
+		Debug.LogError ("   startActivity   PACKAGE ONLY   p_packageName  " + p_packageName);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -212,12 +220,16 @@ public class KidMode
 			int l_flag = l_joApplication.Get<int>("flags");
 			AndroidJavaClass l_jcApplicationInfo = new AndroidJavaClass("android.content.pm.ApplicationInfo");
 			int l_flagSystem = l_jcApplicationInfo.GetStatic<int>("FLAG_SYSTEM");
+			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
 			if( (l_flag & l_flagSystem) != 0 )
 			{
-				continue;
+				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
+				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				{
+					continue;
+				}
 			}
-			
-			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
+
 			string l_packageName = l_joApplication.Get<string>( "packageName" );
 			byte[] l_byteIcon;
 

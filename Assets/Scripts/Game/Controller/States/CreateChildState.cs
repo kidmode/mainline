@@ -27,6 +27,7 @@ public class CreateChildState : GameState
 		m_verfiyString = Localization.getString (Localization.TXT_STATE_69_VERIFICATION);
 		
 		GAUtil.logScreen("CreateChildScreen");
+		SwrveComponent.Instance.SDK.NamedEvent("AddChild.start");
 	}
 
 	public override void update(GameController p_gameController, int p_time)
@@ -300,7 +301,7 @@ public class CreateChildState : GameState
 				setErrorMessage(m_gameController,Localization.getString (Localization.TXT_STATE_69_CREATE_KID_FAILED),Localization.getString (Localization.TXT_STATE_69_SIX_CHILD));
 				return;
 			}
-
+			SwrveComponent.Instance.SDK.NamedEvent("AddChild.CREATE_PROFILE");
 			SessionHandler.getInstance().inputedChildName = m_childFirstName.text;
 			m_gameController.changeState(ZoodleState.SELECT_AVATAR);
 		}
