@@ -170,6 +170,7 @@ public class MapState : GameState
 	private void onJungleClicked(UIButton p_button)
 	{
 		m_subState = SubState.GO_REGION;
+		SwrveComponent.Instance.SDK.NamedEvent("ENTER_JUNGLE");
 	}	
 
 	private void onSpeechClick(UIButton p_button)

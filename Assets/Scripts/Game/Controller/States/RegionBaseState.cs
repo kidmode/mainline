@@ -761,21 +761,25 @@ public class RegionBaseState : GameState
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Video;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
 	}
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Game;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
 	}
 	
 	private void bookCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Books;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
 	}
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Fun;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
 	}
 	
 	#region Callbacks
@@ -794,7 +798,9 @@ public class RegionBaseState : GameState
 		SessionHandler.getInstance().currentContent = l_webContent;
 
 		m_subState = SubState.GO_VIDEO;
-		//SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",l_webContent.name);
+
+		Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
+		SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 	}
 
 	private void onFeatureVideoClicked(UIButton p_button)
@@ -814,7 +820,8 @@ public class RegionBaseState : GameState
 			SessionHandler.getInstance().currentContent = l_webContent;
 			
 			m_subState = SubState.GO_GAME;
-			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_webContent.name);
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
+			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 		}
 		else
 		{
@@ -824,7 +831,8 @@ public class RegionBaseState : GameState
 			KidMode.setKidsModeActive(false);
 
 			KidMode.startActivity(l_game.appData.packageName);
-			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_game.appData.appName);
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
+			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 		}
 	}
 
