@@ -286,6 +286,9 @@ public class RegionBaseState : GameState
 		l_ui.removeScreenImmediately(UIScreen.ACTIVITY_PANEL);
 		l_ui.removeScreenImmediately(UIScreen.CORNER_PROFILE_INFO);
 
+		// Sean: vzw
+		l_ui.removeScreenImmediately(UIScreen.REGION_APP);
+
 		m_topBook = null;
 		m_gameFeatured = null;
 		m_videoFeatured = null;
@@ -294,6 +297,8 @@ public class RegionBaseState : GameState
 		m_videoActivityCanvas = null;
 		m_funActivityCanvas = null;
 		m_bookActivityCanvas = null;
+		// Sean: vzw
+		m_regionAppCanvas = null;
 
 		_clearContentLists();
 		
@@ -612,6 +617,18 @@ public class RegionBaseState : GameState
 		_disposeWebInfos(m_videoFavoritesList);
 		_disposeActivityInfos(m_funViewList);
 
+		// Sean: vzw
+		if (null != m_appList)
+		{
+			foreach (AppInfo app in m_appList)
+			{
+				app.dispose();
+			}
+		}
+		m_appList.Clear();
+		// end vzw
+
+		
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
 		m_bookViewList.Clear();
@@ -824,6 +841,14 @@ public class RegionBaseState : GameState
 		
 		m_subState = SubState.GO_VIDEO;
 	}
+
+	// Sean: vzw
+	private void onAppClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
+	{
+		AppInfo l_app = p_data as AppInfo;
+		KidMode.startActivity(l_app.packageName);
+	}
+	// end vzw
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
@@ -1184,29 +1209,15 @@ public class RegionBaseState : GameState
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
 
-
-		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-		_Debug.log ( l_appListJson );
-		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-		if( null != l_appNameList )
+		List<object> l_list = KidMode.getSystemApps();
+		foreach (AppInfo l_app in l_list)
 		{
-			List<System.Object> l_list = KidMode.getLocalApps();
-			
-			if( l_list != null && l_list.Count > 0)
-			{
-				foreach(AppInfo l_app in l_list)
-				{
-					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
-					{
-						GameInfo l_game = new GameInfo(l_app);
-						m_gameViewList.Add(l_game);
-					}
-				}
-			}
+			m_appList.Add(l_app);
 		}
-		l_gameCount += m_gameViewList.Count;
 		#endif
 
+		m_appSwipeList.setData(m_appList);
+		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
 
 	private void _setupWebContentList(List<object> p_contentList)
@@ -1390,6 +1401,16 @@ public class RegionBaseState : GameState
 		_cleanUpBookInfo(m_bookSwipeList);
 		_cleanUpGameContent(m_gameSwipeList);
 		_cleanUpWebContent(m_videoSwipeList);
+
+		// Sean: vzw
+		List<System.Object> data = m_appSwipeList.getData();
+		foreach (System.Object o in data)
+		{
+			AppInfo l_info = o as AppInfo;
+			l_info.dispose();
+		}
+
+		// end vzw
 	}
 	
 	private void _cleanUpBookInfo(UISwipeList p_swipeList)
@@ -1452,6 +1473,7 @@ public class RegionBaseState : GameState
 	// Sean: vzw
 	private UICanvas m_regionAppCanvas;
 	private UISwipeList m_appSwipeList;
+	private List<object> m_appList = new List<object>();
 
 	// end vzw
 

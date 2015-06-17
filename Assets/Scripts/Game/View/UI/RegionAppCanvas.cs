@@ -12,9 +12,12 @@ public class RegionAppCanvas: UICanvas
 	public override void init( GameObject p_gameObject )
 	{
 		base.init( p_gameObject );
-		
-//		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
-//		setupLocalization ();
+
+		m_emptyTexture = new Texture2D (1, 1);
+
+		m_appSwipeList = getView("appScrollView") as UISwipeList;
+
+		_setupList();
 	}
 	
 	public void setupLocalization()
@@ -58,7 +61,52 @@ public class RegionAppCanvas: UICanvas
 //	}
 	
 	
-//	//-- Private Implementation --
+	//-- Private Implementation --
+	private void _setupList()
+	{
+		m_appSwipeList.setDrawFunction(onListDraw);
+	}
+
+	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
+	{
+		UIButton l_button = p_element as UIButton;
+		DebugUtils.Assert( l_button != null );
+
+		AppInfo l_info = p_data as AppInfo;
+		DebugUtils.Assert( l_info != null );
+
+		UIImage l_rawImage = p_element.getView("icon") as UIImage;
+		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
+		UILabel l_appName = p_element.getView("appName") as UILabel;
+
+		if (l_appImage != null)
+			l_appImage.active = false;
+	
+		if (l_rawImage == null)
+            return;
+
+		l_appName.text = l_info.appName;
+		if (l_appName.active == false)
+		{
+			l_appName.active = true;
+		}
+
+		Vector2 l_textSize = l_appName.calcSize();
+		RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
+		float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
+		l_transform.localScale = new Vector3(l_scale, l_scale, 1);
+		
+		if( l_info.appIcon == null )
+		{
+			l_appImage.setTexture( m_emptyTexture );
+		}
+		else if (l_info.appIcon != null)
+		{
+			l_appImage.setTexture(l_info.appIcon);
+			l_appImage.active = true;
+			l_rawImage.active = false;
+		}
+	}
 //	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
 //	{
 //		UICanvas l_canvas = p_element as UICanvas;
@@ -66,5 +114,7 @@ public class RegionAppCanvas: UICanvas
 //	}
 
 	private UISwipeList 	m_appSwipeList;
-	
+
+	private Texture2D m_emptyTexture;
+
 }
