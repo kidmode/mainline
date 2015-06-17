@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +23,7 @@ public class SignInState : GameState
 		_setupScreen(p_gameController.getUI());
 
 		GAUtil.logScreen("SignInScreen");
+		SwrveComponent.Instance.SDK.NamedEvent("SIGN_IN_UI");
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
