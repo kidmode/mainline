@@ -112,6 +112,8 @@ public class SelectAvatarState : GameState
 			SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
 			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
 			m_game.gameController.changeState (ZoodleState.CREATE_CHILD);
+			SwrveComponent.Instance.SDK.NamedEvent("AddChild.end", null);
+
 		}
 		else
 		{
@@ -137,7 +139,10 @@ public class SelectAvatarState : GameState
 			m_queue.request(RequestType.SEQUENCE);
 			m_selectAvatarCanvas.active = false;
 			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 2);
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"Avatar_png", l_url}};
+			SwrveComponent.Instance.SDK.NamedEvent("AddChild.end", payload);
 		}
+
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
