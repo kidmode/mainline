@@ -439,4 +439,25 @@ public class KidMode
 	}
 
 
+	public void openDefaultLauncher(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openDefaultLauncher"); 
+		
+	}
+	
+	public void openSettings(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openSettings1"); 
+		
+	}
+
+
 }

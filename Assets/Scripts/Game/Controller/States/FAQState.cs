@@ -190,9 +190,9 @@ public class FAQState : GameState
 	private void toChildMode(UIButton p_button)
 	{
 
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (KidMode.isHomeLauncherKidMode ()) {
 			
-			p_button.removeClickCallback (toChildMode);
 			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
 			
 		} else {
@@ -202,6 +202,9 @@ public class FAQState : GameState
 			KidMode.openLauncherSelector ();
 			
 		}
+		#else
+		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		#endif
 
 
 	}
