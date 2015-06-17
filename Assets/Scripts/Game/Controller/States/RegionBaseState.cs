@@ -1020,6 +1020,10 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = false;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			// Sean: vzw
+			m_regionAppCanvas.canvasGroup.interactable = false;
+			m_regionAppCanvas.active = false;
 		}
 		else
 		{
@@ -1069,6 +1073,9 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			m_regionAppCanvas.active = true;
+			m_regionAppCanvas.canvasGroup.interactable = true;
 
 			m_foregroundGafGroup.gameObject.SetActive (true);
 		}
@@ -1221,6 +1228,7 @@ public class RegionBaseState : GameState
 	}
 
 	// Sean: vzw
+
 	private void _setupAppContentList()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
@@ -1235,6 +1243,7 @@ public class RegionBaseState : GameState
 		m_appSwipeList.setData(m_appList);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
+	// end vzw
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
@@ -1487,7 +1496,7 @@ public class RegionBaseState : GameState
 	}
 
 	// Sean: vzw
-	private UICanvas m_regionAppCanvas;
+	protected UICanvas m_regionAppCanvas;
 	private UISwipeList m_appSwipeList;
 	private List<object> m_appList = new List<object>();
 
