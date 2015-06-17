@@ -246,7 +246,7 @@ public class KidMode
 			
 			
 			AppInfo l_app = new AppInfo();
-			Texture2D l_textureIcon = new Texture2D(1, 1);
+			Texture2D l_textureIcon = new Texture2D(1, 1, , TextureFormat.ARGB32, false);
 			l_textureIcon.LoadImage( l_byteIcon );
 			l_app.appName = l_appName;
 			l_app.appIcon = l_textureIcon;
@@ -254,6 +254,74 @@ public class KidMode
 			l_app.isAdded = false;
 			
 			l_list.Add( l_app );
+		}
+		#endif
+		return l_list;
+	}
+
+	//This is for vzw_project, get useful system apps
+	public static List<System.Object> getSystemApps()
+	{
+		List<System.Object> l_list = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ( "com.unity3d.player.UnityPlayer" );
+		AndroidJavaObject l_joActivity = l_jcPlayer.GetStatic<AndroidJavaObject>( "currentActivity" );
+		AndroidJavaObject l_joPackageManager = l_joActivity.Call<AndroidJavaObject> ( "getPackageManager" );
+		AndroidJavaObject l_joPackageInfoList = l_joPackageManager.Call<AndroidJavaObject> ( "getInstalledPackages" , 0 );
+		
+		AndroidJavaClass l_jcBitMap = new AndroidJavaClass( "android.graphics.Bitmap$CompressFormat" );
+		AndroidJavaObject l_joPNG = l_jcBitMap.GetStatic<AndroidJavaObject>( "PNG" );
+		
+		for( int i = 0; i < l_joPackageInfoList.Call<int>("size"); i++ )
+		{
+			AndroidJavaObject l_joPackageInfo = l_joPackageInfoList.Call<AndroidJavaObject>( "get", i );
+			AndroidJavaObject l_joApplication = l_joPackageInfo.Get<AndroidJavaObject>( "applicationInfo" );
+			
+			int l_flag = l_joApplication.Get<int>("flags");
+			AndroidJavaClass l_jcApplicationInfo = new AndroidJavaClass("android.content.pm.ApplicationInfo");
+			int l_flagSystem = l_jcApplicationInfo.GetStatic<int>("FLAG_SYSTEM");
+			
+			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
+			string l_packageName = l_joApplication.Get<string>( "packageName" );
+			byte[] l_byteIcon;
+			if( (l_flag & l_flagSystem) != 0 )
+			{
+				//for vzw_project, get system apps
+				if ((l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
+				     || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				{
+					
+					try
+					{
+						AndroidJavaObject l_jcBitmaoDrawable = l_joPackageManager.Call<AndroidJavaObject>( "getApplicationIcon", l_joApplication );
+						
+						AndroidJavaObject l_joBitMapIcon = l_jcBitmaoDrawable.Call<AndroidJavaObject>( "getBitmap" );
+						
+						AndroidJavaObject l_joBaos = new AndroidJavaObject( "java.io.ByteArrayOutputStream" );
+						int l_quality = 100;
+						
+						l_joBitMapIcon.Call<bool>( "compress", l_joPNG, l_quality, l_joBaos);
+						
+						l_byteIcon = l_joBaos.Call<byte[]>( "toByteArray" );
+						
+						AppInfo l_app = new AppInfo();
+						Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+						l_textureIcon.LoadImage( l_byteIcon );
+						l_app.appName = l_appName;
+						l_app.appIcon = l_textureIcon;
+						l_app.packageName = l_packageName;
+						l_app.isAdded = false;
+						
+						l_list.Add( l_app );
+					}
+					catch( AndroidJavaException )
+					{
+						l_byteIcon = null;
+					}
+				}
+				else
+					continue;
+			}
 		}
 		#endif
 		return l_list;
@@ -367,6 +435,27 @@ public class KidMode
 		jo.Call("setTaskManagerLock", l_args); 
 		
 		#endif
+		
+	}
+
+
+	public void openDefaultLauncher(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openDefaultLauncher"); 
+		
+	}
+	
+	public void openSettings(){
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openSettings1"); 
 		
 	}
 
