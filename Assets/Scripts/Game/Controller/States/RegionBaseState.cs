@@ -794,6 +794,7 @@ public class RegionBaseState : GameState
 		SessionHandler.getInstance().currentContent = l_webContent;
 
 		m_subState = SubState.GO_VIDEO;
+		//SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",l_webContent.name);
 	}
 
 	private void onFeatureVideoClicked(UIButton p_button)
@@ -813,10 +814,17 @@ public class RegionBaseState : GameState
 			SessionHandler.getInstance().currentContent = l_webContent;
 			
 			m_subState = SubState.GO_GAME;
+			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_webContent.name);
 		}
 		else
 		{
+
+			KidMode.taskManagerLockFalse();
+
+			KidMode.setKidsModeActive(false);
+
 			KidMode.startActivity(l_game.appData.packageName);
+			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_game.appData.appName);
 		}
 	}
 

@@ -22,7 +22,8 @@ public class ProfileState : GameState
 		m_gotoCREATE_CHILD_NEW = false;
 		m_gotoDashBoard = false;
 
-		KidMode.setKidsModeActive(true);		
+//		KidMode.setKidsModeActive(true);	
+		KidModeLockController.Instance.swith2KidMode();
 		_setupScreen(p_gameController.getUI());
 
 		SoundManager.getInstance().play("Jungle Jam Loopable", 0, 1, "", null, true);
@@ -434,7 +435,8 @@ public class ProfileState : GameState
 		}
 		else
 		{
-			KidMode.setKidsModeActive(false);	
+//			KidMode.setKidsModeActive(false);	
+			KidModeLockController.Instance.swith2DParentMode();
 			PlayerPrefs.Save();
 			Application.Quit();
 		}

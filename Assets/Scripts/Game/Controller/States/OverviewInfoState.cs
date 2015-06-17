@@ -25,7 +25,8 @@ public class OverviewInfoState : GameState {
 
 	private void turnOffChildLock()
 	{
-		KidMode.setKidsModeActive(false);	
+//		KidMode.setKidsModeActive(false);	
+		KidModeLockController.Instance.swith2DParentMode();
 	}
 	//private float l_time = 0.0f;
 	public override void update (GameController p_gameController, int p_time)

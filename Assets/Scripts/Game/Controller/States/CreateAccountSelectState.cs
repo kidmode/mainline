@@ -133,7 +133,8 @@ public class CreateAccountSelectState : GameState
 
 	private void toExitApplication(UIButton p_button)
 	{
-		KidMode.setKidsModeActive(false);	
+//		KidMode.setKidsModeActive(false);	
+		KidModeLockController.Instance.swith2DParentMode();
 		Application.Quit ();
 	}
 

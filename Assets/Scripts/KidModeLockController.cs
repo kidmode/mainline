@@ -74,9 +74,9 @@ public class KidModeLockController : MonoBehaviour {
 	
 	void checkDefaultLauncherStatus(){
 		
-		//		return;
+//				return;
 		
-		//		Debug.Log ("   +++++++++++++++++++++++++++++  kidModeNativeCalls.isLauncherKidmode ()  " + kidModeNativeCalls.isLauncherKidmode ());
+		Debug.Log ("  000000000000000000000000000000000000000  checkDefaultLauncherStatus checkDefaultLauncherStatus     checkDefaultLauncherStatus  ");
 		
 		if (stateKidMode == StateKidMode.Parent) {
 			
@@ -89,18 +89,30 @@ public class KidModeLockController : MonoBehaviour {
 			
 		}
 		
-		
+
+		Debug.Log ("   0000000000000000000000000000000000000   isLauncherKidmode  ");
+
 		if (!KidMode.isLauncherKidmode ()) {
+
+
+
 			
 			KidMode.enablePluginComponent ();
+
+
+			Debug.Log ("   0000000000000000000000000000000000000   Open Launcher  ");
 			
 			KidMode.openLauncherSelector ();
+
+			defaultLauncherChecked = true;
 			
 		} else {
 			
 			defaultLauncherChecked = true;
 			
 		}
+
+
 		
 	}
 	
@@ -114,8 +126,10 @@ public class KidModeLockController : MonoBehaviour {
 	}
 	
 	public void onAndroidResume(){
+
+//		return;
 		
-		checkDefaultLauncherStatus ();
+//		checkDefaultLauncherStatus ();
 		
 		stateChanged ();
 		
@@ -136,7 +150,9 @@ public class KidModeLockController : MonoBehaviour {
 				KidMode.disablePluginComponent();
 				
 				KidMode.taskManagerLockFalse();
-				
+
+				KidMode.setKidsModeActive(false);
+
 			}else{//Kid Mode
 				
 				
@@ -146,6 +162,8 @@ public class KidModeLockController : MonoBehaviour {
 				checkDefaultLauncherStatus();
 				
 				KidMode.taskManagerLockTrue();
+
+				KidMode.setKidsModeActive(true);
 				
 				// 
 				
@@ -158,6 +176,8 @@ public class KidModeLockController : MonoBehaviour {
 				KidMode.enablePluginComponent ();
 				
 				KidMode.taskManagerLockFalse();
+
+				KidMode.setKidsModeActive(false);
 				
 			}else{//Kid Mode
 				
@@ -166,6 +186,8 @@ public class KidModeLockController : MonoBehaviour {
 				checkDefaultLauncherStatus();
 				
 				KidMode.taskManagerLockTrue();
+
+				KidMode.setKidsModeActive(true);
 				
 			}
 			

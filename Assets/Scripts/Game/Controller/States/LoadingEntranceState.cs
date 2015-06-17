@@ -22,7 +22,8 @@ public class LoadingEntranceState : GameState
 
 		_setupScreen( p_gameController.getUI() );
       
-		KidMode.setKidsModeActive(true);
+//		KidMode.setKidsModeActive(true);
+		KidModeLockController.Instance.swith2KidMode();
 		SessionHandler.getInstance().resetKidCache();
 
 		m_triggerNextScreen = false;
