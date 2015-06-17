@@ -451,18 +451,18 @@ public class ProfileState : GameState
 		Token l_token = l_sessionHandler.token;
 		if (l_token.isPremium())
 		{
-			if (SessionHandler.getInstance().childLockSwitch)
-			{
-				if (0 != SessionHandler.getInstance().pin) 
-				{
-					m_gameController.changeState(ZoodleState.BIRTHYEAR);
-				}
-				else
-				{
-					setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_1_ERROR), Localization.getString(Localization.TXT_STATE_1_PIN));
-				}
-			}
-			else
+//			if (SessionHandler.getInstance().childLockSwitch)
+//			{
+//				if (0 != SessionHandler.getInstance().pin) 
+//				{
+//					m_gameController.changeState(ZoodleState.BIRTHYEAR);
+//				}
+//				else
+//				{
+//					setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_1_ERROR), Localization.getString(Localization.TXT_STATE_1_PIN));
+//				}
+//			}
+//			else
 			{
 				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			}
