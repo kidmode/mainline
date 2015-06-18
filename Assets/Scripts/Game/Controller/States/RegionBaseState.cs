@@ -286,6 +286,9 @@ public class RegionBaseState : GameState
 		l_ui.removeScreenImmediately(UIScreen.ACTIVITY_PANEL);
 		l_ui.removeScreenImmediately(UIScreen.CORNER_PROFILE_INFO);
 
+		// Sean: vzw
+		l_ui.removeScreenImmediately(UIScreen.REGION_APP);
+
 		m_topBook = null;
 		m_gameFeatured = null;
 		m_videoFeatured = null;
@@ -294,6 +297,8 @@ public class RegionBaseState : GameState
 		m_videoActivityCanvas = null;
 		m_funActivityCanvas = null;
 		m_bookActivityCanvas = null;
+		// Sean: vzw
+		m_regionAppCanvas = null;
 
 		_clearContentLists();
 		
@@ -369,11 +374,21 @@ public class RegionBaseState : GameState
 		m_activityPanelCanvas = l_ui.createScreen(UIScreen.ACTIVITY_PANEL, true, 2);
 		m_regionLandingCanvas = l_ui.createScreen(UIScreen.REGION_LANDING, true, 1);
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
+
+		// Sean: vzw
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 2);
 	}
 	
 	private void _setupElements()
 	{
 		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
+
+		// Sean: vzw
+		m_speechBubble.active = false;
+		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+
+		this._setupAppContentList();
+		// end vzw
 		
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
@@ -406,11 +421,16 @@ public class RegionBaseState : GameState
 		m_profileButton.addClickCallback(onProfileClick);
 
 		m_foregroundGafGroup = m_regionLandingCanvas.getView("gafGroup");
+		// Sean: vzw
+		this._setupGafGroup(false);
 
 		m_triggers.Clear();
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
-		m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+		// Sean: vzw
+		if (false) {
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+		} // vzw end
 
 		UIButton l_butterfly = m_regionLandingCanvas.getView("Butterfly") as UIButton;
 		List<Vector3> l_butterflyPosList = new List<Vector3>();
@@ -419,6 +439,13 @@ public class RegionBaseState : GameState
 		l_butterfly.tweener.addPositionTrack(l_butterflyPosList, 30.0f, null, Tweener.Style.Standard, true);
 
 		_oscillateLightsDown(m_regionLandingCanvas.getView("light"), Tweener.TargetVar.Rotation);
+	}
+
+	private void _setupGafGroup(bool active)
+	{
+		m_foregroundGafGroup.getView("monkeyTrigger").active = active;
+		m_foregroundGafGroup.getView("snakeTrigger").active = active;
+		m_foregroundGafGroup.getView("toucanTrigger").active = active;
 	}
 	
 	private void _handleDynamicActivities()
@@ -590,6 +617,18 @@ public class RegionBaseState : GameState
 		_disposeWebInfos(m_videoFavoritesList);
 		_disposeActivityInfos(m_funViewList);
 
+		// Sean: vzw
+		if (null != m_appList)
+		{
+			foreach (AppInfo app in m_appList)
+			{
+				app.dispose();
+			}
+		}
+		m_appList.Clear();
+		// end vzw
+
+		
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
 		m_bookViewList.Clear();
@@ -761,21 +800,25 @@ public class RegionBaseState : GameState
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Video;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
 	}
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Game;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
 	}
 	
 	private void bookCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Books;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
 	}
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
 		m_nextActivity = ActivityType.Fun;
+		SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
 	}
 	
 	#region Callbacks
@@ -794,7 +837,9 @@ public class RegionBaseState : GameState
 		SessionHandler.getInstance().currentContent = l_webContent;
 
 		m_subState = SubState.GO_VIDEO;
-		//SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",l_webContent.name);
+
+		Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
+		SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 	}
 
 	private void onFeatureVideoClicked(UIButton p_button)
@@ -803,6 +848,14 @@ public class RegionBaseState : GameState
 		
 		m_subState = SubState.GO_VIDEO;
 	}
+
+	// Sean: vzw
+	private void onAppClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
+	{
+		AppInfo l_app = p_data as AppInfo;
+		KidMode.startActivity(l_app.packageName);
+	}
+	// end vzw
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
@@ -814,7 +867,8 @@ public class RegionBaseState : GameState
 			SessionHandler.getInstance().currentContent = l_webContent;
 			
 			m_subState = SubState.GO_GAME;
-			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_webContent.name);
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
+			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 		}
 		else
 		{
@@ -824,7 +878,8 @@ public class RegionBaseState : GameState
 			KidMode.setKidsModeActive(false);
 
 			KidMode.startActivity(l_game.appData.packageName);
-			//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",l_game.appData.appName);
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
+			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 		}
 	}
 
@@ -965,6 +1020,10 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = false;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			// Sean: vzw
+			m_regionAppCanvas.canvasGroup.interactable = false;
+			m_regionAppCanvas.active = false;
 		}
 		else
 		{
@@ -1014,6 +1073,9 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			m_regionAppCanvas.active = true;
+			m_regionAppCanvas.canvasGroup.interactable = true;
 
 			m_foregroundGafGroup.gameObject.SetActive (true);
 		}
@@ -1164,7 +1226,25 @@ public class RegionBaseState : GameState
 			}
 		}
 	}
-	
+
+	// Sean: vzw
+
+	private void _setupAppContentList()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		List<object> l_list = KidMode.getSystemApps();
+		foreach (AppInfo l_app in l_list)
+		{
+			m_appList.Add(l_app);
+		}
+		#endif
+
+		m_appSwipeList.setData(m_appList);
+		m_appSwipeList.addClickListener("Prototype", onAppClicked);
+	}
+	// end vzw
+
 	private void _setupWebContentList(List<object> p_contentList)
 	{
 		if (p_contentList.Count <= 0)
@@ -1346,6 +1426,16 @@ public class RegionBaseState : GameState
 		_cleanUpBookInfo(m_bookSwipeList);
 		_cleanUpGameContent(m_gameSwipeList);
 		_cleanUpWebContent(m_videoSwipeList);
+
+		// Sean: vzw
+		List<System.Object> data = m_appSwipeList.getData();
+		foreach (System.Object o in data)
+		{
+			AppInfo l_info = o as AppInfo;
+			l_info.dispose();
+		}
+
+		// end vzw
 	}
 	
 	private void _cleanUpBookInfo(UISwipeList p_swipeList)
@@ -1404,7 +1494,15 @@ public class RegionBaseState : GameState
 	{
 		p_element.tweener.addRotationTrack(2.0f, -2.0f, 5.0f, _oscillateLightsDown);
 	}
-	
+
+	// Sean: vzw
+	protected UICanvas m_regionAppCanvas;
+	private UISwipeList m_appSwipeList;
+	private List<object> m_appList = new List<object>();
+
+	// end vzw
+
+
 	protected UICanvas 	m_regionLandingCanvas;
 	protected UICanvas 	m_activityPanelCanvas;
 	protected UICanvas 	m_regionBackgroundCanvas;

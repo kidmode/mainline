@@ -156,6 +156,7 @@ public class AppInfo
 		if (null != appIcon)
 		{
 			GameObject.Destroy(appIcon);
+			appIcon = null;
 		}
 	}
 }
