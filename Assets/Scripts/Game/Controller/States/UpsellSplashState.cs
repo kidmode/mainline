@@ -60,18 +60,19 @@ public class UpsellSplashState : GameState
 	private void gotoDashBoard( UIButton p_button )
 	{
 		p_button.removeClickCallback( gotoDashBoard );
-		if(SessionHandler.getInstance().childLockSwitch)
-		{
-			if (0 != SessionHandler.getInstance ().pin) 
-			{
-				m_gameController.changeState (ZoodleState.BIRTHYEAR);
-			}
-			else
-			{
-				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_1_ERROR),Localization.getString(Localization.TXT_STATE_1_PIN));
-			}
-		}
-		else
+		//remove type birth year due to flow change
+//		if(SessionHandler.getInstance().childLockSwitch)
+//		{
+//			if (0 != SessionHandler.getInstance ().pin) 
+//			{
+//				m_gameController.changeState (ZoodleState.BIRTHYEAR);
+//			}
+//			else
+//			{
+//				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_1_ERROR),Localization.getString(Localization.TXT_STATE_1_PIN));
+//			}
+//		}
+//		else
 		{
 			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
 		}
