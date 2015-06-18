@@ -381,7 +381,9 @@ public class RegionBaseState : GameState
 		
 		m_backButton = m_regionLandingCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(onBackButtonClicked);
+		m_backButtonPosition = m_backButton.transform.localPosition;
 		m_backButton.transform.localPosition += new Vector3(0, 200, 0);
+
 		
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
@@ -437,6 +439,11 @@ public class RegionBaseState : GameState
 			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
 
+
+			//Get Scroll view updateor
+			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+			viewUpdator.setContentDataSize(m_videoViewList.Count);
+
 			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
 			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
 
@@ -466,6 +473,11 @@ public class RegionBaseState : GameState
 			m_gameSwipeList = m_gameActivityCanvas.getView("allContentScrollView") as UISwipeList;
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+
+
+			//Get Scroll view updateor
+			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+			viewUpdator.setContentDataSize(m_gameViewList.Count);
 			
 			m_gameFavorateSwipeList = m_gameActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_gameFavorateSwipeList.setData(m_gameFavoritesList);
@@ -506,6 +518,10 @@ public class RegionBaseState : GameState
 			m_bookFavorateSwipeList.setData(m_bookFavoritesList);
 			m_bookFavorateSwipeList.addClickListener("Prototype", onBookClicked);
 
+			//Get Scroll view updateor
+			KidModeScrollViewUpdator viewUpdator = m_bookSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+			viewUpdator.setContentDataSize(m_bookViewList.Count);
+			
 			UILabel l_bookInfo = m_bookActivityCanvas.getView("info") as UILabel;
 			l_bookInfo.active = (m_bookSwipeList.getData().Count <= 0);
 			
@@ -904,8 +920,8 @@ public class RegionBaseState : GameState
 	private void onToRightRegionTweenFinished(UIElement p_element, Tweener.TargetVar p_targetVar)
 	{
 		List<Vector3> l_backPositions = new List<Vector3>();
-		l_backPositions.Add(m_cornerPosition + new Vector3(0, 200.0f, 0));
-		l_backPositions.Add(m_cornerPosition);
+		l_backPositions.Add(m_backButtonPosition + new Vector3(0, 200.0f, 0));
+		l_backPositions.Add(m_backButtonPosition);
 		m_backButton.tweener.addPositionTrack(l_backPositions, ZoodlesScreenFactory.FADE_SPEED);
 		
 		m_transitioning = false;
@@ -1464,6 +1480,9 @@ public class RegionBaseState : GameState
 	
 	
 	protected Vector3 m_cornerPosition;
+
+	protected Vector3 m_backButtonPosition;
+
 	protected RegionState m_regionState;
 	
 	protected List<object> m_videoViewList        = new List<object>();

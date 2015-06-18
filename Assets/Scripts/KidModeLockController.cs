@@ -76,7 +76,7 @@ public class KidModeLockController : MonoBehaviour {
 		
 //				return;
 		
-		Debug.Log ("  000000000000000000000000000000000000000  checkDefaultLauncherStatus checkDefaultLauncherStatus     checkDefaultLauncherStatus  ");
+//		Debug.Log ("  000000000000000000000000000000000000000  checkDefaultLauncherStatus checkDefaultLauncherStatus     checkDefaultLauncherStatus  ");
 		
 		if (stateKidMode == StateKidMode.Parent) {
 			
@@ -90,7 +90,7 @@ public class KidModeLockController : MonoBehaviour {
 		}
 		
 
-		Debug.Log ("   0000000000000000000000000000000000000   isLauncherKidmode  ");
+//		Debug.Log ("   0000000000000000000000000000000000000   isLauncherKidmode  ");
 
 		if (!KidMode.isLauncherKidmode ()) {
 
@@ -100,7 +100,7 @@ public class KidModeLockController : MonoBehaviour {
 			KidMode.enablePluginComponent ();
 
 
-			Debug.Log ("   0000000000000000000000000000000000000   Open Launcher  ");
+//			Debug.Log ("   0000000000000000000000000000000000000   Open Launcher  ");
 			
 			KidMode.openLauncherSelector ();
 

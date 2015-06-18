@@ -25,8 +25,9 @@
             <category android:name="android.intent.category.DEFAULT" />
    	 	</intent-filter>
    	 </activity>	
-    <activity android:name="com.onevcat.uniwebview.AndroidPlugin" android:label="@string/app_name" android:hardwareAccelerated="true" android:excludeFromRecents="true" android:windowSoftInputMode="adjustResize" android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" android:exported="true" android:enabled="true">
-      <meta-data android:name="android.app.lib_name" android:value="unity" />
+    <activity android:name="com.onevcat.uniwebview.AndroidPlugin" android:parentActivityName="com.zoodles.kidmode.activity.LauncherActivity" android:label="@string/app_name" android:hardwareAccelerated="true" android:excludeFromRecents="false" android:windowSoftInputMode="adjustResize" android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" android:exported="true" android:enabled="true">
+<!--      <meta-data android:name="android.app.lib_name" android:value="unity" />-->
+      <meta-data android:name="unityplayer.UnityActivity" android:value="unity" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
 		<intent-filter>
       	</intent-filter>
@@ -51,6 +52,13 @@
             <category android:name="android.intent.category.DEFAULT" />
    	 	</intent-filter>-->
    	</activity>
+   	
+   	<activity android:name="com.unity3d.player.UnityPlayerNativeActivity" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" >
+   	</activity>
+   		<activity android:name="com.unity3d.player.UnityPlayerProxyActivity" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" >
+   	</activity>
+   	
+   	
    	
    	
    	 <activity android:name="com.roamwander.kevin.sharetext2.MainActivity" android:label="@string/app_name" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" >
