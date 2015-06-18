@@ -75,6 +75,10 @@ public class MapState : GameState
 	{
 		UIManager l_ui = p_gameController.getUI();
 
+		SplashBackCanvas sbcanvas = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if (sbcanvas != null)
+			l_ui.removeScreenImmediately(sbcanvas);
+
 		m_mapCanvas = l_ui.findScreen(UIScreen.MAP);
 		if (m_mapCanvas != null)
 		{
@@ -164,12 +168,13 @@ public class MapState : GameState
 
 	private void onBackClicked(UIButton p_button)
 	{
-		m_subState = /*SubState.ADD_BIRTHYEAR;//*/SubState.GO_PROFILE;
+		m_subState = SubState.ADD_BIRTHYEAR;//SubState.GO_PROFILE;
 	}
 
 	private void onJungleClicked(UIButton p_button)
 	{
 		m_subState = SubState.GO_REGION;
+		SwrveComponent.Instance.SDK.NamedEvent("ENTER_JUNGLE");
 	}	
 
 	private void onSpeechClick(UIButton p_button)
