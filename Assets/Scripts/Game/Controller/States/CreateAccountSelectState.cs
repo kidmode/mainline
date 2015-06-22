@@ -155,6 +155,7 @@ public class CreateAccountSelectState : GameState
 	private void gotoSetUpScreen(UIButton p_button)
 	{
 		changeToState = ScreenChange.SetUp;
+		SwrveComponent.Instance.SDK.NamedEvent("SignUp.start");
 	}
 	private void gotoSignInScreen(UIButton p_button)
 	{

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class WebViewState : GameState
 {
@@ -279,6 +281,17 @@ public class GameViewState : WebViewState
 	public override void exit(GameController p_gameController)
 	{
 		GAUtil.logVisit("Game", m_duration);
+
+		int gametime = (int)Math.Ceiling(m_duration * 0.001);
+		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", gametime.ToString()}};
+		if (gametime > 120)
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("Game.DURATION.>2mins",payload);
+		}
+		else
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("Game.DURATION.<2mins",payload);
+		}
 
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
