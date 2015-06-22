@@ -24,7 +24,7 @@ public class KidMode
 
 //		KidModeLockController.Instance.stateChanged ();
 
-		return;
+//		return;
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -452,7 +452,7 @@ public class KidMode
 	}
 
 
-	public void openDefaultLauncher(){
+	public static void openDefaultLauncher(){
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
@@ -462,7 +462,7 @@ public class KidMode
 		
 	}
 	
-	public void openSettings(){
+	public static void openSettings(){
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
@@ -470,6 +470,20 @@ public class KidMode
 		
 		jo.Call("openSettings1"); 
 		
+	}
+
+	public static void setFullScreen(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("setFullScreen"); 
+
+		#endif
+
 	}
 
 
