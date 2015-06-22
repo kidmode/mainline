@@ -24,7 +24,7 @@ public class KidMode
 
 //		KidModeLockController.Instance.stateChanged ();
 
-//		return;
+		return;
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -223,8 +223,9 @@ public class KidMode
 			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
 			if( (l_flag & l_flagSystem) != 0 )
 			{
-				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				//parent dashboard will not show system apps
+//				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
+//				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
 				{
 					continue;
 				}
@@ -233,7 +234,7 @@ public class KidMode
 			string l_packageName = l_joApplication.Get<string>( "packageName" );
 			byte[] l_byteIcon;
 
-			if( l_packageName.Equals("com.zoodles.kidmode") )
+			if( l_packageName.Equals("com.zoodles.vzwkidmode") )
 			{
 				continue;
 			}
@@ -300,7 +301,7 @@ public class KidMode
 			{
 				//for vzw_project, get system apps
 				if ((l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-				     || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				     || l_appName.Equals("Calculator") ))  //|| l_appName.Equals("Maps")
 				{
 					
 					try
@@ -451,7 +452,7 @@ public class KidMode
 	}
 
 
-	public void openDefaultLauncher(){
+	public static void openDefaultLauncher(){
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
@@ -461,7 +462,7 @@ public class KidMode
 		
 	}
 	
-	public void openSettings(){
+	public static void openSettings(){
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
@@ -469,6 +470,20 @@ public class KidMode
 		
 		jo.Call("openSettings1"); 
 		
+	}
+
+	public static void setFullScreen(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("setFullScreen"); 
+
+		#endif
+
 	}
 
 

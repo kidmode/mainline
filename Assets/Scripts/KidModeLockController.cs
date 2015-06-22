@@ -80,7 +80,7 @@ public class KidModeLockController : MonoBehaviour {
 		
 		if (stateKidMode == StateKidMode.Parent) {
 			
-			KidMode.enablePluginComponent ();
+//			KidMode.enablePluginComponent ();
 			
 			
 			defaultLauncherChecked = true;
@@ -164,6 +164,8 @@ public class KidModeLockController : MonoBehaviour {
 				KidMode.taskManagerLockTrue();
 
 				KidMode.setKidsModeActive(true);
+
+//				KidMode.setFullScreen();
 				
 				// 
 				
@@ -188,6 +190,8 @@ public class KidModeLockController : MonoBehaviour {
 				KidMode.taskManagerLockTrue();
 
 				KidMode.setKidsModeActive(true);
+
+//				KidMode.setFullScreen();
 				
 			}
 			
