@@ -223,8 +223,9 @@ public class KidMode
 			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
 			if( (l_flag & l_flagSystem) != 0 )
 			{
-				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				//parent dashboard will not show system apps
+//				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
+//				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
 				{
 					continue;
 				}
@@ -233,7 +234,7 @@ public class KidMode
 			string l_packageName = l_joApplication.Get<string>( "packageName" );
 			byte[] l_byteIcon;
 
-			if( l_packageName.Equals("com.zoodles.kidmode") )
+			if( l_packageName.Equals("com.zoodles.vzwkidmode") )
 			{
 				continue;
 			}
