@@ -24,7 +24,7 @@ public class KidMode
 
 //		KidModeLockController.Instance.stateChanged ();
 
-//		return;
+		return;
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
