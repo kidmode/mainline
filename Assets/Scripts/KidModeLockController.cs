@@ -80,7 +80,7 @@ public class KidModeLockController : MonoBehaviour {
 		
 		if (stateKidMode == StateKidMode.Parent) {
 			
-			KidMode.enablePluginComponent ();
+//			KidMode.enablePluginComponent ();
 			
 			
 			defaultLauncherChecked = true;

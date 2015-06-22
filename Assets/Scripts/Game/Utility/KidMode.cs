@@ -24,7 +24,7 @@ public class KidMode
 
 //		KidModeLockController.Instance.stateChanged ();
 
-//		return;
+		return;
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -300,7 +300,7 @@ public class KidMode
 			{
 				//for vzw_project, get system apps
 				if ((l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-				     || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				     || l_appName.Equals("Calculator") ))  //|| l_appName.Equals("Maps")
 				{
 					
 					try
