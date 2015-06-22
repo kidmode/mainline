@@ -165,7 +165,7 @@ public class KidModeLockController : MonoBehaviour {
 
 				KidMode.setKidsModeActive(true);
 
-				KidMode.setFullScreen();
+//				KidMode.setFullScreen();
 				
 				// 
 				
@@ -191,7 +191,7 @@ public class KidModeLockController : MonoBehaviour {
 
 				KidMode.setKidsModeActive(true);
 
-				KidMode.setFullScreen();
+//				KidMode.setFullScreen();
 				
 			}
 			
