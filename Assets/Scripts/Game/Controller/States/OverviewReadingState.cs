@@ -334,7 +334,11 @@ public class OverviewReadingState : GameState
 		m_requestQueue.request ();
 		
 		m_moreBookButton.active = true;
-		m_memberButton.active = true;
+
+		// Sean: vzw
+		//m_memberButton.active = true;
+		m_memberButton.active = false;
+
 		UIElement l_panel = m_recordAReadingCanvas.getView ("panel");
 		l_panel.active = true;
 	}
