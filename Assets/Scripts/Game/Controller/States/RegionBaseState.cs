@@ -376,7 +376,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 2);
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 4);
 	}
 	
 	private void _setupElements()
