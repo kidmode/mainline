@@ -881,7 +881,7 @@ public class RegionBaseState : GameState
 		{
 			WebContent l_webContent = l_game.webViewData.webData;
 			SessionHandler.getInstance().currentContent = l_webContent;
-			
+		
 			m_subState = SubState.GO_GAME;
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
 			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
