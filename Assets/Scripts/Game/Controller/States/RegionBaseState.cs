@@ -118,6 +118,9 @@ public class RegionBaseState : GameState
 	private RequestQueue m_queue = null;
 	private RequestQueue m_bookQueue = null;
 
+	private int LAYER_GAME = 5;
+	private int LAYER_MESSAGE = 6;
+
 	protected enum RegionState
 	{
 		Left = 0,
@@ -454,7 +457,7 @@ public class RegionBaseState : GameState
 	{
 		if (m_createActivity == ActivityType.Video)
 		{
-			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, 4);
+			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_videoActivityCanvas;
 			
@@ -493,7 +496,7 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Game)
 		{
-			m_gameActivityCanvas = m_gameController.getUI().createScreen(UIScreen.GAME_ACTIVITY, true, 4);
+			m_gameActivityCanvas = m_gameController.getUI().createScreen(UIScreen.GAME_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_gameActivityCanvas;
 
@@ -532,8 +535,8 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Books)
 		{
-			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, 5);
-			m_bookActivityCanvas = m_gameController.getUI().createScreen(UIScreen.BOOK_ACTIVITY, true, 4);
+			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, LAYER_MESSAGE);
+			m_bookActivityCanvas = m_gameController.getUI().createScreen(UIScreen.BOOK_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_bookActivityCanvas;
 			
@@ -583,7 +586,7 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Fun)
 		{
-			m_funActivityCanvas = m_gameController.getUI().createScreen(UIScreen.FUN_ACTIVITY, true, 4);
+			m_funActivityCanvas = m_gameController.getUI().createScreen(UIScreen.FUN_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_funActivityCanvas;
 			
@@ -1263,6 +1266,8 @@ public class RegionBaseState : GameState
 		#endif
 
 		m_appSwipeList.setData(m_appList);
+		KidModeScrollViewUpdator viewUpdator = m_appSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+		viewUpdator.setContentDataSize(m_appList.Count);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
 	// end vzw
