@@ -376,7 +376,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 2);
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 4);
 	}
 	
 	private void _setupElements()
@@ -935,6 +935,8 @@ public class RegionBaseState : GameState
 			SessionHandler.getInstance().currentBookReading = SessionHandler.getInstance ().readingTable[l_bookInfo.bookReadingId] as BookReading;
 			
 			m_subState = SubState.GO_BOOKS;
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.RECORDED",payload);
 		}
 
 		if( l_bookInfo.bookState == BookState.NeedToBuy )
@@ -942,12 +944,16 @@ public class RegionBaseState : GameState
 			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
 			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
 			MessageIn();
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NEEDTOBUY",payload);
 		}
 
 		if( l_bookInfo.bookState == BookState.NotRecorded )
 		{
 			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
 			m_subState = SubState.GO_BOOKS;
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
 		}
 	}
 
