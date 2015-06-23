@@ -2,18 +2,24 @@
 using System.Collections;
 //using System;
 
+//===================================================
+//Kevin
+//Buttons Events are handeled across many any  state classes . .. .  want to do new button actions here to save time and less complexity.
+
 public class DashboardCommonScreen : MonoBehaviour {
 
-	public GameObject swith2DefaultLauncherButton;
+//	public GameObject swith2DefaultLauncherButton;
+//
+//	public GameObject swith2KidModeLauncherButton;
 
-	public GameObject swith2KidModeLauncherButton;
+	public GameObject gameLogic;
 
 	// Use this for initialization
 	void Start () {
 
-
-
 		updateToggleButtons ();
+
+		gameLogic = GameObject.Find ("GameLogic");
 	
 	}
 	
@@ -26,20 +32,24 @@ public class DashboardCommonScreen : MonoBehaviour {
 
 		Debug.Log ("  updateToggleButtons  " + KidModeLockController.Instance.stateHomeLauncher.ToString() );
 
-		if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.Default) {
 
-			swith2DefaultLauncherButton.SetActive(false);
 
-			swith2KidModeLauncherButton.SetActive(true);
+		return;
 
-		}else if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.KidMode) {
-
-			swith2DefaultLauncherButton.SetActive(true);
-			
-			swith2KidModeLauncherButton.SetActive(false);
-
-			
-		}
+//		if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.Default) {
+//
+//			swith2DefaultLauncherButton.SetActive(false);
+//
+//			swith2KidModeLauncherButton.SetActive(true);
+//
+//		}else if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.KidMode) {
+//
+//			swith2DefaultLauncherButton.SetActive(true);
+//			
+//			swith2KidModeLauncherButton.SetActive(false);
+//
+//			
+//		}
 
 	}
 
@@ -62,5 +72,18 @@ public class DashboardCommonScreen : MonoBehaviour {
 		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
 
 	}
+
+	public void openTabletSettings(){
+
+		if (gameLogic != null) {
+
+			Game game = gameLogic.GetComponent<Game>();
+
+			game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false,6);
+
+		}
+
+	}
+
 
 }

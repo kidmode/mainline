@@ -146,12 +146,17 @@ public class UIButton : UIElement
 
 	private void listenerCallbackDispatcher()
 	{	
-		int l_numCallbacks = m_callbacks.Count;
-		for (int i = 0; i < l_numCallbacks; ++i)
-		{
-			ButtonClickCallback l_callback = m_callbacks[i];
-			l_callback(this);
+
+		if (m_callbacks != null) {
+
+			int l_numCallbacks = m_callbacks.Count;
+			for (int i = 0; i < l_numCallbacks; ++i) {
+				ButtonClickCallback l_callback = m_callbacks [i];
+				l_callback (this);
+			}
+
 		}
+
 	}
 
 	private void _setAlphaOfColorBlock( ColorBlock p_colorBlock, float p_alpha )

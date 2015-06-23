@@ -1003,6 +1003,7 @@ public class RegionBaseState : GameState
 		m_cornerProfileCanvas.canvasGroup.interactable = true;
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
+
 	}
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
