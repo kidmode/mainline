@@ -230,9 +230,10 @@ MonoBehaviour:
   scrollRect: {fileID: 11410178}
   scrollArrowLeft: {fileID: 106402}
   scrollArrowRight: {fileID: 106404}
-  scrollStartContentSize: 10
+  scrollStartContentSize: 0
   contentSize: 0
   currPos: {x: 0, y: 0}
+  alwaysShowArrow: 1
 --- !u!114 &11406404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -610,10 +611,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22418292}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -391.674225, y: 51.1878204}
-  m_SizeDelta: {x: -857.851318, y: -267.624542}
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: -391.674194, y: 0}
+  m_SizeDelta: {x: 18.1486816, y: 68.3754578}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22406404
 RectTransform:
@@ -627,10 +628,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22418292}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 397.325806, y: 51.1878204}
-  m_SizeDelta: {x: -857.851318, y: -267.624542}
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 397.325806, y: 0}
+  m_SizeDelta: {x: 18.1486816, y: 68.3754578}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22415198
 RectTransform:

@@ -18,11 +18,19 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	private int contentSize;
 	[SerializeField]
 	private Vector2 currPos;
+
+	[SerializeField]
+	private bool alwaysShowArrow = false;
+
 	// Use this for initialization
 	void Start () {
 
 		scrollRect.onValueChanged.AddListener( onValueChanged ); 
 	
+		if (alwaysShowArrow) {
+			scrollArrowLeft.SetActive(true);
+			scrollArrowRight.SetActive(true);
+		}
 	}
 	
 	// Update is called once per frame
@@ -33,6 +41,12 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	void onValueChanged(Vector2 scrolRectPos){
 
 //		Debug.Log (" onValueChanged " + scrolRectPos);
+
+		if (alwaysShowArrow) {
+			scrollArrowLeft.SetActive(true);
+			scrollArrowRight.SetActive(true);
+			return;
+		}
 
 		currPos = scrolRectPos;
 
