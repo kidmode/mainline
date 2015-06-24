@@ -115,6 +115,9 @@ public class UIScreen
 
 	// Sean: vzw
 	public const int REGION_APP					= 901;
+
+	// Sean: vzw
+	public const int TABLET_SETTINGS					= 1001;
 }
 
 
@@ -236,6 +239,8 @@ public class ZoodlesScreenFactory : IScreenFactory
 		// Sean: vzw
 		m_directoryMap.Add( UIScreen.REGION_APP,				SCREEN_DIRECTORY + "RegionAppScreen" );
 
+		// Kevin: vzw
+		m_directoryMap.Add( UIScreen.TABLET_SETTINGS,				SCREEN_DIRECTORY + "DashBoard/TabletSettingsScreen" );
 		// end vzw
 	}
 
@@ -355,6 +360,9 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 			// Sean: vzw
 			case UIScreen.REGION_APP:			return new RegionAppCanvas() 			as UICanvas;
+
+			//Kevin : vzw
+			case UIScreen.TABLET_SETTINGS:			return new UICanvas() 			as UICanvas;
 			// end vzw
 		}
 		return new UICanvas();

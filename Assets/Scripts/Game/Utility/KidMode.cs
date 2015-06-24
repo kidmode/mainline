@@ -172,8 +172,6 @@ public class KidMode
 	public static void startActivity(string p_packageName, string p_activityName)
 	{
 
-		Debug.LogError ("   startActivity     p_packageName  " + p_packageName + "          p_packageName " + p_activityName);
-
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -188,7 +186,6 @@ public class KidMode
 
 	public static void startActivity(string p_packageName)
 	{
-		Debug.LogError ("   startActivity   PACKAGE ONLY   p_packageName  " + p_packageName);
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
@@ -324,7 +321,6 @@ public class KidMode
 	public static void enablePluginComponent(){
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		Debug.LogWarning ("  ======================    enablePluginComponent =====================   " );
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
 		
@@ -338,8 +334,7 @@ public class KidMode
 	public static bool isLauncherKidmode(){
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
-		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
 		
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
 		
@@ -353,22 +348,19 @@ public class KidMode
 
 	public static void openLauncherSelector(){
 		
-		//		Debug.LogWarning ("  ======================    openLauncherSelector =====================   " );
-		
-		
 		#if UNITY_ANDROID && !UNITY_EDITOR
+
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
 		
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
 		
-		jo.Call("openLauncherSelector"); 
+		jo.Call("openLauncherSelector");
+
 		#endif
 		
 	}
 
 	public static void disablePluginComponent(){
-		
-		Debug.LogWarning ("  ======================    disablePluginComponent =====================   " );
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -384,8 +376,6 @@ public class KidMode
 
 	public static void taskManagerLockTrue(){
 		
-		Debug.LogWarning ("  ======================    taskManagerLockTrue =====================   " );
-		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
@@ -393,6 +383,7 @@ public class KidMode
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
 		
 		object[] l_args = new object[] {true};
+
 		jo.Call("setTaskManagerLock", l_args); 
 		
 		#endif
@@ -403,16 +394,14 @@ public class KidMode
 	
 	public static void taskManagerLockFalse(){
 		
-		Debug.LogWarning ("  ======================    taskManagerLockFalse =====================   " );
-		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
 		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 		
-		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 				
 		
 		object[] l_args = new object[] {false};
+
 		jo.Call("setTaskManagerLock", l_args); 
 		
 		#endif
@@ -421,22 +410,16 @@ public class KidMode
 
 
 	public static void openDefaultLauncher(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
 		
 		jo.Call("openDefaultLauncher"); 
-		
-	}
-	
-	public static void openSettings(){
-		
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
-		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
-		jo.Call("openSettings1"); 
+
+		#endif
 		
 	}
 
@@ -452,6 +435,43 @@ public class KidMode
 
 		#endif
 
+	}
+
+	public static void openSettings(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openSettings1"); 
+		
+		#endif
+		
+	}
+
+
+	public static void openWifi(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openWifiSettings"); 
+		
+		#endif
+		
+	}
+
+	public static void openGooglePlay(){
+
+		string packageName = "com.android.vending";
+
+		startActivity (packageName);
+		
 	}
 
 

@@ -34,6 +34,7 @@ public class BookReaderState : GameState {
 		
 		m_isRunning = false;
 		m_isPlayed = false;
+		m_finishReading = false;
 		m_length = 0;
 		
 		_setupElements();
@@ -131,6 +132,9 @@ public class BookReaderState : GameState {
 //		}
 
 		GAUtil.logVisit("Book", m_duration);
+
+		Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.coverUrl}};
+		//SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
 	}
 	
 	
@@ -281,6 +285,7 @@ public class BookReaderState : GameState {
 			if( pageIndex >= m_book.pageList.Count - 1 )
 			{
 				m_nextPageButton.enabled = false;
+				m_finishReading = true;
 			}
 			
 			if(l_localAudio.error != null)
@@ -457,4 +462,6 @@ public class BookReaderState : GameState {
 	private AudioClip m_currentPageAudio = null;
 
 	private int			m_duration = 0;
+
+	private bool 		m_finishReading;
 }

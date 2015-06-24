@@ -10,12 +10,14 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 
 	public GameObject scrollArrowRight;
 
-	public int scrollStartContentSize = 6;
+	[SerializeField]
+	private int scrollStartContentSize = 6;
 
 	//This will be set by RegionbaseSate 
-	public int contentSize;
-
-	public Vector2 currPos;
+	[SerializeField]
+	private int contentSize;
+	[SerializeField]
+	private Vector2 currPos;
 	// Use this for initialization
 	void Start () {
 
@@ -35,8 +37,6 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 		currPos = scrolRectPos;
 
 		updateChanges (scrolRectPos);
-
-
 
 	}
 
