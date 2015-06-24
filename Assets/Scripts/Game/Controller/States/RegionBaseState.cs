@@ -1014,7 +1014,6 @@ public class RegionBaseState : GameState
 		// end vzw
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
-
 	}
 
 	// Sean: vzw
@@ -1274,8 +1273,6 @@ public class RegionBaseState : GameState
 		#endif
 
 		m_appSwipeList.setData(m_appList);
-		KidModeScrollViewUpdator viewUpdator = m_appSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-		viewUpdator.setContentDataSize(m_appList.Count);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
 	// end vzw
