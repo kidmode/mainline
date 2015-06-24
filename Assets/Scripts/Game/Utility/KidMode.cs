@@ -200,12 +200,12 @@ public class KidMode
 
 	public static List<System.Object> getLocalApps()
 	{
+		List<System.Object> l_list = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		TextAsset package = Resources.Load("Data/VZW_System_Apps") as TextAsset;
 		string[] names = package.text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
 		List<string> packageList = new List<string>(names);
 
-		List<System.Object> l_list = new List<object>();
-		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ( "com.unity3d.player.UnityPlayer" );
 		AndroidJavaObject l_joActivity = l_jcPlayer.GetStatic<AndroidJavaObject>( "currentActivity" );
 		AndroidJavaObject l_joPackageManager = l_joActivity.Call<AndroidJavaObject> ( "getPackageManager" );
@@ -297,6 +297,7 @@ public class KidMode
 		return selectedAppList;
 	}
 
+	//vzw: get apps for parent dashboard
 	public static List<System.Object> getApps()
 	{
 		List<System.Object> appList = new List<object>();
@@ -319,7 +320,6 @@ public class KidMode
 		#endif
 
 		return appList;
-		
 	}
 
 	public static void addDefaultAppsInTheFirstTime()

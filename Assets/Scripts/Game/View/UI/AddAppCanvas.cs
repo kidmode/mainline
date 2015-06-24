@@ -70,21 +70,11 @@ public class AddAppCanvas : UICanvas
 	private void reload()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		KidMode.addDefaultAppsInTheFirstTime();
-		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
 		m_dataList = new List<object> ();
-		List<System.Object> l_list = KidMode.getLocalApps();
-		if ( l_list != null && l_list.Count > 0)
+		List<object> l_list = KidMode.getApps();
+		foreach (AppInfo l_app in l_list)
 		{
-			foreach (AppInfo l_app in l_list)
-			{
-				if ( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
-				{
-					l_app.isAdded = true;
-				}
-				m_dataList.Add( l_app );
-			}
+			m_dataList.Add(l_app);
 		}
 		#endif
 	}
