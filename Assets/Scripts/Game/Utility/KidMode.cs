@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class KidMode
 {
@@ -199,6 +200,10 @@ public class KidMode
 
 	public static List<System.Object> getLocalApps()
 	{
+		TextAsset package = Resources.Load("Data/VZW_System_Apps") as TextAsset;
+		string[] names = package.text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+		List<string> packageList = new List<string>(names);
+
 		List<System.Object> l_list = new List<object>();
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ( "com.unity3d.player.UnityPlayer" );
@@ -217,44 +222,38 @@ public class KidMode
 			int l_flag = l_joApplication.Get<int>("flags");
 			AndroidJavaClass l_jcApplicationInfo = new AndroidJavaClass("android.content.pm.ApplicationInfo");
 			int l_flagSystem = l_jcApplicationInfo.GetStatic<int>("FLAG_SYSTEM");
+
 			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
+			string l_packageName = l_joApplication.Get<string>( "packageName" );
+
 			if( (l_flag & l_flagSystem) != 0 )
 			{
-				//parent dashboard will not show system apps
-//				if (!(l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-//				      || l_appName.Equals("Calculator") || l_appName.Equals("Maps")))
+				//parent dashboard will show specific system apps
+				if (!packageList.Contains(l_packageName))
 				{
 					continue;
 				}
 			}
-
-			string l_packageName = l_joApplication.Get<string>( "packageName" );
-			byte[] l_byteIcon;
-
-			if( l_packageName.Equals("com.zoodles.vzwkidmode") )
+			if( l_packageName.Equals("com.zoodles.kidmode") )
 			{
 				continue;
 			}
-			
+
+			byte[] l_byteIcon;
 			try
 			{
 				AndroidJavaObject l_jcBitmaoDrawable = l_joPackageManager.Call<AndroidJavaObject>( "getApplicationIcon", l_joApplication );
-				
 				AndroidJavaObject l_joBitMapIcon = l_jcBitmaoDrawable.Call<AndroidJavaObject>( "getBitmap" );
-				
 				AndroidJavaObject l_joBaos = new AndroidJavaObject( "java.io.ByteArrayOutputStream" );
 				int l_quality = 100;
-				
 				l_joBitMapIcon.Call<bool>( "compress", l_joPNG, l_quality, l_joBaos);
-				
 				l_byteIcon = l_joBaos.Call<byte[]>( "toByteArray" );
 			}
 			catch( AndroidJavaException )
 			{
 				l_byteIcon = null;
 			}
-			
-			
+
 			AppInfo l_app = new AppInfo();
 			Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 			l_textureIcon.LoadImage( l_byteIcon );
@@ -266,77 +265,44 @@ public class KidMode
 			l_list.Add( l_app );
 		}
 		#endif
+
 		return l_list;
 	}
 
-	//This is for vzw_project, get useful system apps
-	public static List<System.Object> getSystemApps()
+	//vzw: get selected apps
+	public static List<System.Object> getApps()
 	{
-
-		List<System.Object> l_list = new List<object>();
+		List<System.Object> selectedAppList = new List<object>();
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ( "com.unity3d.player.UnityPlayer" );
-		AndroidJavaObject l_joActivity = l_jcPlayer.GetStatic<AndroidJavaObject>( "currentActivity" );
-		AndroidJavaObject l_joPackageManager = l_joActivity.Call<AndroidJavaObject> ( "getPackageManager" );
-		AndroidJavaObject l_joPackageInfoList = l_joPackageManager.Call<AndroidJavaObject> ( "getInstalledPackages" , 0 );
-		
-		AndroidJavaClass l_jcBitMap = new AndroidJavaClass( "android.graphics.Bitmap$CompressFormat" );
-		AndroidJavaObject l_joPNG = l_jcBitMap.GetStatic<AndroidJavaObject>( "PNG" );
-		
-		for( int i = 0; i < l_joPackageInfoList.Call<int>("size"); i++ )
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		//set default apps in the first time
+		if( null == l_appNameList )
 		{
-			AndroidJavaObject l_joPackageInfo = l_joPackageInfoList.Call<AndroidJavaObject>( "get", i );
-			AndroidJavaObject l_joApplication = l_joPackageInfo.Get<AndroidJavaObject>( "applicationInfo" );
-			
-			int l_flag = l_joApplication.Get<int>("flags");
-			AndroidJavaClass l_jcApplicationInfo = new AndroidJavaClass("android.content.pm.ApplicationInfo");
-			int l_flagSystem = l_jcApplicationInfo.GetStatic<int>("FLAG_SYSTEM");
-			
-			string l_appName = l_joPackageManager.Call<string>( "getApplicationLabel", l_joApplication );
-			string l_packageName = l_joApplication.Get<string>( "packageName" );
-			byte[] l_byteIcon;
-			if( (l_flag & l_flagSystem) != 0 )
+			l_appNameList = new ArrayList();
+			l_appNameList.Add("com.android.calculator2");
+			l_appNameList.Add("com.android.camera2");
+			l_appNameList.Add("com.android.gallery3d");
+			l_appNameList.Add("com.google.android.apps.maps");
+			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
+		}
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = KidMode.getLocalApps();
+			if(allAppList != null && allAppList.Count > 0)
 			{
-
-				//for vzw_project, get system apps
-				if ((l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
-				     || l_appName.Equals("Calculator") ))  //|| l_appName.Equals("Maps")
+				foreach(AppInfo l_app in allAppList)
 				{
-					
-					try
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
 					{
-						AndroidJavaObject l_jcBitmaoDrawable = l_joPackageManager.Call<AndroidJavaObject>( "getApplicationIcon", l_joApplication );
-						
-						AndroidJavaObject l_joBitMapIcon = l_jcBitmaoDrawable.Call<AndroidJavaObject>( "getBitmap" );
-						
-						AndroidJavaObject l_joBaos = new AndroidJavaObject( "java.io.ByteArrayOutputStream" );
-						int l_quality = 100;
-						
-						l_joBitMapIcon.Call<bool>( "compress", l_joPNG, l_quality, l_joBaos);
-						
-						l_byteIcon = l_joBaos.Call<byte[]>( "toByteArray" );
-						
-						AppInfo l_app = new AppInfo();
-						Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-						l_textureIcon.LoadImage( l_byteIcon );
-						l_app.appName = l_appName;
-						l_app.appIcon = l_textureIcon;
-						l_app.packageName = l_packageName;
-						l_app.isAdded = false;
-						
-						l_list.Add( l_app );
-					}
-					catch( AndroidJavaException )
-					{
-						l_byteIcon = null;
+						selectedAppList.Add(l_app);
 					}
 				}
-				else
-					continue;
 			}
 		}
 		#endif
-		return l_list;
+
+		return selectedAppList;
 	}
 
 	public static bool hasFlashInstalled ()

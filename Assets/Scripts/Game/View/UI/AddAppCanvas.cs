@@ -75,6 +75,13 @@ public class AddAppCanvas : UICanvas
 		if( null == l_appNameList )
 		{
 			l_appNameList = new ArrayList();
+
+			//vzw : add defualt apps
+			l_appNameList.Add("com.android.calculator2");
+			l_appNameList.Add("com.android.camera2");
+			l_appNameList.Add("com.android.gallery3d");
+			l_appNameList.Add("com.google.android.apps.maps");
+
 			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
 		}
 		
@@ -94,6 +101,15 @@ public class AddAppCanvas : UICanvas
 				m_dataList.Add( l_app );
 			}
 		}
+
+		//honda:vzw, not finished
+//		List<System.Object> l_list = KidMode.getApps();
+//		foreach (AppInfo l_app in l_list)
+//		{
+//			l_app.isAdded = true;
+//			m_dataList.Add(l_app);
+//		}
+
 	}
 
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
