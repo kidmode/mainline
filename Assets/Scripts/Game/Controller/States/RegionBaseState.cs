@@ -1266,7 +1266,7 @@ public class RegionBaseState : GameState
 	private void _setupAppContentList()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		List<object> l_list = KidMode.getApps();
+		List<object> l_list = KidMode.getSelectedApps();
 		foreach (AppInfo l_app in l_list)
 		{
 			m_appList.Add(l_app);

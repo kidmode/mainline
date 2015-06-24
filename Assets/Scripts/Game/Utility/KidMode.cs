@@ -270,22 +270,14 @@ public class KidMode
 	}
 
 	//vzw: get selected apps
-	public static List<System.Object> getApps()
+	public static List<System.Object> getSelectedApps()
 	{
 		List<System.Object> selectedAppList = new List<object>();
 		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		KidMode.addDefaultAppsInTheFirstTime();
 		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
 		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-		//set default apps in the first time
-		if( null == l_appNameList )
-		{
-			l_appNameList = new ArrayList();
-			l_appNameList.Add("com.android.calculator2");
-			l_appNameList.Add("com.android.camera2");
-			l_appNameList.Add("com.android.gallery3d");
-			l_appNameList.Add("com.google.android.apps.maps");
-			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
-		}
 		if( null != l_appNameList )
 		{
 			List<object> allAppList = KidMode.getLocalApps();
@@ -303,6 +295,51 @@ public class KidMode
 		#endif
 
 		return selectedAppList;
+	}
+
+	public static List<System.Object> getApps()
+	{
+		List<System.Object> appList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		List<System.Object> l_list = KidMode.getLocalApps();
+		if ( l_list != null && l_list.Count > 0)
+		{
+			foreach (AppInfo l_app in l_list)
+			{
+				if ( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+				{
+					l_app.isAdded = true;
+				}
+				appList.Add( l_app );
+			}
+		}
+		#endif
+
+		return appList;
+		
+	}
+
+	public static void addDefaultAppsInTheFirstTime()
+	{
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		//set default apps in the first time
+		if( null == l_appNameList )
+		{
+			l_appNameList = new ArrayList();
+			
+			TextAsset defaultApps = Resources.Load("Data/Default_Native_Apps") as TextAsset;
+			string[] names = defaultApps.text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+			List<string> defaultAppsList = new List<string>(names);
+			foreach (string name in defaultAppsList)
+			{
+				l_appNameList.Add(name);
+			}
+			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
+		}
 	}
 
 	public static bool hasFlashInstalled ()

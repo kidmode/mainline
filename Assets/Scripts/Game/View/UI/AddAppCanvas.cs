@@ -69,47 +69,24 @@ public class AddAppCanvas : UICanvas
 
 	private void reload()
 	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		KidMode.addDefaultAppsInTheFirstTime();
 		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-		_Debug.log ( l_appListJson );
 		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-		if( null == l_appNameList )
-		{
-			l_appNameList = new ArrayList();
-
-			//vzw : add defualt apps
-			l_appNameList.Add("com.android.calculator2");
-			l_appNameList.Add("com.android.camera2");
-			l_appNameList.Add("com.android.gallery3d");
-			l_appNameList.Add("com.google.android.apps.maps");
-
-			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
-		}
-		
 		m_dataList = new List<object> ();
-		
 		List<System.Object> l_list = KidMode.getLocalApps();
-		
-		if( l_list != null && l_list.Count > 0)
+		if ( l_list != null && l_list.Count > 0)
 		{
-			foreach(AppInfo l_app in l_list)
+			foreach (AppInfo l_app in l_list)
 			{
-				if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+				if ( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
 				{
 					l_app.isAdded = true;
 				}
-				
 				m_dataList.Add( l_app );
 			}
 		}
-
-		//honda:vzw, not finished
-//		List<System.Object> l_list = KidMode.getApps();
-//		foreach (AppInfo l_app in l_list)
-//		{
-//			l_app.isAdded = true;
-//			m_dataList.Add(l_app);
-//		}
-
+		#endif
 	}
 
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
