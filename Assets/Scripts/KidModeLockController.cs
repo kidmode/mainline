@@ -212,6 +212,8 @@ public class KidModeLockController : MonoBehaviour {
 	public void swith2DefaultLauncher(){
 		
 		stateHomeLauncher = StateHomeLauncher.Default;
+
+		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
 		
 		stateChanged ();
 		
@@ -220,6 +222,8 @@ public class KidModeLockController : MonoBehaviour {
 	public void swith2KidModeLauncher(){
 		
 		stateHomeLauncher = StateHomeLauncher.KidMode;
+
+		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
 		
 		stateChanged ();
 		

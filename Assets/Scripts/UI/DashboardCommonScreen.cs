@@ -8,11 +8,8 @@ using System.Collections;
 
 public class DashboardCommonScreen : MonoBehaviour {
 
-//	public GameObject swith2DefaultLauncherButton;
-//
-//	public GameObject swith2KidModeLauncherButton;
-
-	public GameObject gameLogic;
+	[SerializeField]
+	private GameObject gameLogic;
 
 	// Use this for initialization
 	void Start () {
@@ -59,7 +56,7 @@ public class DashboardCommonScreen : MonoBehaviour {
 
 		updateToggleButtons ();
 
-		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
+
 
 	}
 
@@ -69,7 +66,7 @@ public class DashboardCommonScreen : MonoBehaviour {
 
 		updateToggleButtons ();
 
-		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
+//		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
 
 	}
 

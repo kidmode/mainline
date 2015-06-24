@@ -275,6 +275,8 @@ public class KidMode
 	//This is for vzw_project, get useful system apps
 	public static List<System.Object> getSystemApps()
 	{
+
+
 		List<System.Object> l_list = new List<object>();
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ( "com.unity3d.player.UnityPlayer" );
@@ -299,6 +301,9 @@ public class KidMode
 			byte[] l_byteIcon;
 			if( (l_flag & l_flagSystem) != 0 )
 			{
+
+				Debug.Log (" ********************************************************           l_appName " + l_appName   +"       l_packageName " + l_packageName);
+
 				//for vzw_project, get system apps
 				if ((l_appName.Equals("Camera") || l_appName.Equals("Gallery") 
 				     || l_appName.Equals("Calculator") ))  //|| l_appName.Equals("Maps")
@@ -400,7 +405,7 @@ public class KidMode
 
 	public static void disablePluginComponent(){
 		
-		Debug.LogWarning ("  ======================    disablePluginComponent =====================   " );
+//		Debug.LogWarning ("  ======================    disablePluginComponent =====================   " );
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -416,7 +421,7 @@ public class KidMode
 
 	public static void taskManagerLockTrue(){
 		
-		Debug.LogWarning ("  ======================    taskManagerLockTrue =====================   " );
+//		Debug.LogWarning ("  ======================    taskManagerLockTrue =====================   " );
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -435,7 +440,7 @@ public class KidMode
 	
 	public static void taskManagerLockFalse(){
 		
-		Debug.LogWarning ("  ======================    taskManagerLockFalse =====================   " );
+//		Debug.LogWarning ("  ======================    taskManagerLockFalse =====================   " );
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -453,24 +458,32 @@ public class KidMode
 
 
 	public static void openDefaultLauncher(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
 		
 		jo.Call("openDefaultLauncher"); 
+
+		#endif
 		
 	}
 	
-	public static void openSettings(){
-		
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
-		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
-		jo.Call("openSettings1"); 
-		
-	}
+//	public static void openSettings(){
+//
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+//		
+//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+//		
+//		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+//		
+//		jo.Call("openSettings1"); 
+//
+//		#endif
+//		
+//	}
 
 	public static void setFullScreen(){
 
@@ -484,6 +497,63 @@ public class KidMode
 
 		#endif
 
+	}
+
+	public static void openSettings(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openSettings1"); 
+		
+		#endif
+		
+	}
+
+
+	public static void openWifi(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("openWifiSettings"); 
+		
+		#endif
+		
+	}
+
+	public static void openGooglePlay(){
+		
+		//=================================
+		//Need to update android plugin first
+
+//		Debug.Log ("      openGooglePlay  " );
+		//play.google.com
+
+//		Application.OpenURL ("play.google.com");
+
+		string packageName = "com.android.vending";
+
+		startActivity (packageName);
+
+		return;
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("setFullScreen"); 
+		
+		#endif
+		
 	}
 
 

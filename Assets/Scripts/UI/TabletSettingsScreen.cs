@@ -3,7 +3,19 @@ using System.Collections;
 
 public class TabletSettingsScreen : MonoBehaviour {
 
+	[SerializeField]
+	private GameObject highlightKidmodeLauncher;
+
+	[SerializeField]
+	private GameObject highlightDeaultLauncher;
+
+	[SerializeField]
+	private GameObject homeSettingsPanel;
+
+	[SerializeField]
 	private GameObject gameLogic;
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +24,30 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 		//=========================
 		//Add localisation here
+
+
+		//Set Home settings panel
+		homeSettingsPanel.SetActive (false);
 	
+	}
+
+	void showHomeSettingsHighLights(){
+
+		if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.Default) {
+
+			highlightKidmodeLauncher.SetActive(false);
+
+			highlightDeaultLauncher.SetActive(true);
+
+		}else if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.KidMode) {
+
+			highlightKidmodeLauncher.SetActive(true);
+			
+			highlightDeaultLauncher.SetActive(false);
+
+			
+		}
+
 	}
 	
 	// Update is called once per frame
@@ -22,17 +57,29 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonSettings(){
 
+		KidMode.openSettings ();
+
 	}
 
 	public void buttonHome(){
+
+		//KidMode.openHome ();
+
+		homeSettingsPanel.SetActive (true);
+
+		showHomeSettingsHighLights ();
 		
 	}
 
 	public void buttonWifi(){
+
+		KidMode.openWifi ();
 		
 	}
 
 	public void buttonGooglePlay(){
+
+		KidMode.openGooglePlay ();
 		
 	}
 
@@ -47,4 +94,30 @@ public class TabletSettingsScreen : MonoBehaviour {
 		}
 
 	}
+
+
+	public void closeHomeSettings(){
+
+		homeSettingsPanel.SetActive (false);
+
+	}
+
+	public void setLauncherKidmode(){
+
+		KidModeLockController.Instance.swith2KidModeLauncher ();
+
+		showHomeSettingsHighLights ();
+
+	}
+
+	public void setLauncherDefault(){
+
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+
+		showHomeSettingsHighLights ();
+
+	}
+
+
+
 }
