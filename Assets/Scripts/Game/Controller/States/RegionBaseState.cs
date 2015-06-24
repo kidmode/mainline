@@ -379,7 +379,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 4);
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
 	private void _setupElements()
@@ -1011,6 +1011,12 @@ public class RegionBaseState : GameState
 		m_activityPanelCanvas.canvasGroup.interactable = true;
 		m_cornerProfileCanvas.canvasGroup.interactable = true;
 
+		// Sean: vzw
+		m_regionAppCanvas.active = true;
+		m_regionAppCanvas.canvasGroup.interactable = true;
+		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+		// end vzw
+
 		m_foregroundGafGroup.gameObject.SetActive (true);
 	}
 	
@@ -1098,9 +1104,6 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
-
-			m_regionAppCanvas.active = true;
-			m_regionAppCanvas.canvasGroup.interactable = true;
 
 			m_foregroundGafGroup.gameObject.SetActive (true);
 		}
