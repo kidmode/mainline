@@ -1006,19 +1006,25 @@ public class RegionBaseState : GameState
 		l_mapPositions.Add(m_cornerPosition - new Vector3(200.0f, 0, 0));
 		l_mapPositions.Add(m_cornerPosition);
 		m_mapButton.tweener.addPositionTrack(l_mapPositions, ZoodlesScreenFactory.FADE_SPEED);
-		
-		m_transitioning = false;
-		m_activityPanelCanvas.canvasGroup.interactable = true;
-		m_cornerProfileCanvas.canvasGroup.interactable = true;
 
 		// Sean: vzw
 		m_regionAppCanvas.active = true;
 		m_regionAppCanvas.canvasGroup.interactable = true;
-		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
 		// end vzw
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
+
 	}
+
+	// Sean: vzw
+	private void onToLeftRegionTweenAndAppListFadedIn( UIElement p_element, Tweener.TargetVar p_targetVar )
+	{
+		m_transitioning = false;
+		m_activityPanelCanvas.canvasGroup.interactable = true;
+		m_cornerProfileCanvas.canvasGroup.interactable = true;
+	}
+	// end vzw
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
