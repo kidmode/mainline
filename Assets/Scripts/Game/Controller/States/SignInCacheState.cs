@@ -11,27 +11,36 @@ public class SignInCacheState : GameState
 
 		m_loginSuccess = false;
 		_setupScreen(p_gameController.getUI());
-	//	SessionHandler.getInstance ().clientId = 600;
-		m_queue = new RequestQueue();
-//		m_queue.add(new ClientIdRequest(getclientIdComplete));
-		m_queue.add(new GetUserSettingRequest(checkError));
 
-		LocalSetting l_setting = LocalSetting.find("ServerSetting");
-		if (!l_setting.hasKey(ZoodlesConstants.ZPS_LEVEL))
-			m_queue.add(new GetLevelsInfoRequest(checkError));
-		if (!l_setting.hasKey(ZoodlesConstants.EXPERIENCE_POINTS))
-			m_queue.add(new GetExperiencePointsInfoRequest(checkError));
-		if (!l_setting.hasKey(ZoodlesConstants.CATEGORIES))
-			m_queue.add(new GetCategoriesInfoRequest(checkError));
-		if (!l_setting.hasKey(ZoodlesConstants.TAGS))
-			m_queue.add(new GetTagsInfoRequest(checkError));
-		if (!l_setting.hasKey(ZoodlesConstants.SUBJECTS))
-			m_queue.add(new GetSubjectsInfoRequest(checkError));
+		if (SessionHandler.getInstance().token.isLogin()) //cynthia
+		{
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+			m_loginSuccess = true;
+		}
+		else
+		{
+			//	SessionHandler.getInstance ().clientId = 600;
+			m_queue = new RequestQueue();
+			//		m_queue.add(new ClientIdRequest(getclientIdComplete));
+			m_queue.add(new GetUserSettingRequest(checkError));
+			
+			LocalSetting l_setting = LocalSetting.find("ServerSetting");
+			if (!l_setting.hasKey(ZoodlesConstants.ZPS_LEVEL))
+				m_queue.add(new GetLevelsInfoRequest(checkError));
+			if (!l_setting.hasKey(ZoodlesConstants.EXPERIENCE_POINTS))
+				m_queue.add(new GetExperiencePointsInfoRequest(checkError));
+			if (!l_setting.hasKey(ZoodlesConstants.CATEGORIES))
+				m_queue.add(new GetCategoriesInfoRequest(checkError));
+			if (!l_setting.hasKey(ZoodlesConstants.TAGS))
+				m_queue.add(new GetTagsInfoRequest(checkError));
+			if (!l_setting.hasKey(ZoodlesConstants.SUBJECTS))
+				m_queue.add(new GetSubjectsInfoRequest(checkError));
+			
+			m_queue.add(new GetKidListRequest(onGetKidsComplete));
+			m_queue.request(RequestType.SEQUENCE);
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+		}
 
-		m_queue.add(new GetKidListRequest(onGetKidsComplete));
-		m_queue.request(RequestType.SEQUENCE);
-
-		p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
 	}
 
 	public override void update(GameController p_gameController, int p_time)
