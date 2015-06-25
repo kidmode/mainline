@@ -38,6 +38,7 @@ public class KidModeLockController : MonoBehaviour {
 	void Start () {
 
 
+
 		string settingsLauncher = PlayerPrefs.GetString ("settingsLauncher");
 
 		if (settingsLauncher == null || settingsLauncher == "") {
@@ -57,17 +58,13 @@ public class KidModeLockController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-		
-		//		checkDefaultLauncherStatus ();
 		
 		if (!defaultLauncherChecked) {
 			
 			checkDefaultLauncherStatus();
 			
 		}
-		
-		
+
 		
 	}
 	

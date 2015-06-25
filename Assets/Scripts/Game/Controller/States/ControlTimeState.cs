@@ -65,7 +65,7 @@ public class ControlTimeState : GameState
 		int l_listCount = 5;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (2);
+		m_dashboardControllerCanvas.setCurrentIndex (3);
 		
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;

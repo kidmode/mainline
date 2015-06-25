@@ -133,8 +133,18 @@ public class BookReaderState : GameState {
 
 		GAUtil.logVisit("Book", m_duration);
 
-		Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.coverUrl}};
-		//SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
+		int readingtime = (int)Math.Ceiling(m_duration * 0.001);
+		if (m_finishReading)
+		{
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.title},{"Duration", readingtime.ToString()}};
+			SwrveComponent.Instance.SDK.NamedEvent("Book.FINISH",payload);
+		}
+		else
+		{
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.title},{"Duration", readingtime.ToString()}};
+			SwrveComponent.Instance.SDK.NamedEvent("Book.NOTFINISH",payload);
+		}
+
 	}
 	
 	

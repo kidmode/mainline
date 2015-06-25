@@ -301,7 +301,7 @@ public class DashBoardStarChartState : GameState
 
 	private void goToControls( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
 	private void goToOverview( UIButton p_button )

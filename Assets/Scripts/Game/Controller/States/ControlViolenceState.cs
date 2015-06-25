@@ -65,7 +65,7 @@ public class ControlViolenceState : GameState
 		int l_listCount = 5;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (3);
+		m_dashboardControllerCanvas.setCurrentIndex (4);
 
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
@@ -323,13 +323,15 @@ public class ControlViolenceState : GameState
 	
 	private void onRightButtonClick( UIButton p_button )
 	{
-		#if !UNITY_EDITOR && UNITY_ANDROID
-		m_gameController.changeState( ZoodleState.CONTROL_APP );
-		#endif
-		
-		#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN
-		m_gameController.changeState( ZoodleState.CONTROL_SITE );
-		#endif
+		return;
+
+//		#if !UNITY_EDITOR && UNITY_ANDROID
+//		m_gameController.changeState( ZoodleState.CONTROL_APP );
+//		#endif
+//		
+//		#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN
+//		m_gameController.changeState( ZoodleState.CONTROL_SITE );
+//		#endif
 	}
 
 	private void onViolenceChanged( UIToggle p_toggle, bool p_bool )
