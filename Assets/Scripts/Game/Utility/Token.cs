@@ -12,6 +12,7 @@ public class Token
         m_vpc       = ZoodlesConstants.USER_VPC_NONE;
 		m_try 		= false;
 		m_current 	= false;
+		m_login     = false; //cynthia
 		_read();
     }
 
@@ -23,6 +24,7 @@ public class Token
 		m_vpc = ZoodlesConstants.USER_VPC_NONE;
 		m_try 		= false;
 		m_current 	= false;
+		m_login     = false; //cynthia
 		_write();
 	}
 
@@ -44,7 +46,7 @@ public class Token
 		m_premium = false;
 		m_vpc = 0;
 		m_current 	= false;
-
+		m_login     = false; //cynthia
 		_clear();
 	}
 	
@@ -90,6 +92,15 @@ public class Token
 		return m_current;
 	}
 
+	/**
+     * Is the user hava tried.
+     * @return
+     */
+	public bool isLogin()
+	{
+		return m_login;
+	}
+
     /**
      * Have we obtained verified parental consent.
      * @return
@@ -127,6 +138,12 @@ public class Token
 		_write ();
 	}
 
+	public void setLogin(bool p_bool)
+	{
+		m_login = p_bool;
+		_write ();
+	}
+
  //  /**
  //   * Returns an MD5 hash of the login token.
  //   * 
@@ -151,6 +168,7 @@ public class Token
 		m_premium = l_setting.getBool( ZoodlesConstants.USER_PREMIUM, false );
 		m_try = l_setting.getBool( ZoodlesConstants.USER_TRY, false );
 		m_current = l_setting.getBool( ZoodlesConstants.USER_CURRENT, false );
+		m_login   = l_setting.getBool( ZoodlesConstants.USER_LOGIN, false ); //cynthia
 	}
 
 	private void _write()
@@ -160,6 +178,7 @@ public class Token
 		l_setting.setBool( ZoodlesConstants.USER_PREMIUM, m_premium );
 		l_setting.setBool( ZoodlesConstants.USER_TRY, m_try );
 		l_setting.setBool( ZoodlesConstants.USER_CURRENT, m_current );
+		l_setting.setBool( ZoodlesConstants.USER_LOGIN, m_login );
 	}
 
 	private void _clear()
@@ -169,6 +188,7 @@ public class Token
 		l_setting.setBool( ZoodlesConstants.USER_PREMIUM, false );
 		l_setting.setBool( ZoodlesConstants.USER_TRY, false );
 		l_setting.setBool( ZoodlesConstants.USER_CURRENT, false );
+		l_setting.setBool( ZoodlesConstants.USER_LOGIN, false );
 	}
 
     private string m_token;
@@ -178,4 +198,5 @@ public class Token
 	private bool m_current;
 	private bool m_try;
     private int m_vpc;			// see User model object for constants
+	private bool m_login;
 }

@@ -17,12 +17,21 @@ public class InitializeGameState : GameState
 		Application.targetFrameRate = 30;
 		m_gotoLogin = false;
 		m_time = 0;
-		m_request = new RequestQueue ();
-		m_request.add ( new ClientIdRequest(getClientIdComplete) );
-		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
-		m_request.request ( RequestType.SEQUENCE );
 
-		_setupScreen(p_gameController.getUI());
+		if (SessionHandler.getInstance().token.isLogin()) //cynthia
+		{
+			_setupScreen(p_gameController.getUI());
+			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
+		} 
+		else 
+		{
+			m_request = new RequestQueue ();
+			m_request.add ( new ClientIdRequest(getClientIdComplete) );
+			m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
+			m_request.request ( RequestType.SEQUENCE );
+			_setupScreen(p_gameController.getUI());
+		}
+
 
 		GAUtil.logScreen("SplashScreen");
 	}

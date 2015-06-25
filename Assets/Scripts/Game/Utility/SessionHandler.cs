@@ -48,7 +48,7 @@ public class SessionHandler
 		set {   m_kidList = value;  }
 	}
 
-    public Token token
+	public Token token
     {
         get { return m_token;   }
     }

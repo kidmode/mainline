@@ -229,6 +229,10 @@ public class VideoViewState : WebViewState
 	public override void exit(GameController p_gameController)
 	{
 		GAUtil.logVisit("Video", m_duration);
+		// add this later
+//		int videotime = (int)Math.Ceiling(m_duration * 0.001);
+//		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", videotime.ToString()}};
+		SwrveComponent.Instance.SDK.NamedEvent("Video.end");
 
 		base.exit(p_gameController);
 	}
