@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class KidModeScrollViewUpdator : MonoBehaviour {
-
+	
 	public ScrollRect scrollRect;
 
 	public GameObject scrollArrowLeft;
@@ -13,11 +13,14 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	[SerializeField]
 	private int scrollStartContentSize = 6;
 
-	//This will be set by RegionbaseSate 
+	//Icons in the list. This will be set by RegionbaseSate or others
 	[SerializeField]
 	private int contentSize;
+
+	//Current scroll position
 	[SerializeField]
 	private Vector2 currPos;
+
 	// Use this for initialization
 	void Start () {
 
@@ -31,8 +34,6 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	}
 
 	void onValueChanged(Vector2 scrolRectPos){
-
-//		Debug.Log (" onValueChanged " + scrolRectPos);
 
 		currPos = scrolRectPos;
 
@@ -79,10 +80,6 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 
 	void OnDisable(){
 
-		Debug.Log ("  OnDisable " + gameObject.name);
-
-//		updateChanges (currPos);
-
 		if (contentSize <= scrollStartContentSize) {
 
 			scrollArrowLeft.SetActive (false);
@@ -90,8 +87,6 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 			scrollArrowRight.SetActive (false);
 			
 		} else {
-
-//			
 
 			scrollArrowLeft.SetActive (false);
 
@@ -102,10 +97,6 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	}
 
 	void OnEnable(){
-
-		Debug.Log ("  OnEnable " + gameObject.name);
-
-
 
 		if (contentSize <= scrollStartContentSize) {
 
