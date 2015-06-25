@@ -65,7 +65,7 @@ public class ControlSubjectState : GameState
 		int l_listCount = 5;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (0);
+		m_dashboardControllerCanvas.setCurrentIndex (1);
 		
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
@@ -327,7 +327,7 @@ public class ControlSubjectState : GameState
 
 	private void onLeftButtonClick( UIButton p_button )
 	{
-		return;
+		m_gameController.changeState( ZoodleState.CONTROL_APP );
 	}
 	
 	private void onRightButtonClick( UIButton p_button )
