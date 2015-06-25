@@ -166,7 +166,7 @@ public class OverviewProgressState : GameState {
 	
 	private void goToControls( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 	
 	private void goToStarChart( UIButton p_button )

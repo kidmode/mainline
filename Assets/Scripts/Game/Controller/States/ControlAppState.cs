@@ -26,13 +26,13 @@ public class ControlAppState : GameState
 		
 		base.exit (p_gameController);
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
-		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
+		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_CONTROLLER );
+		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_COMMON );
+		m_uiManager.removeScreenImmediately( UIScreen.LEFT_MENU );
+		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
 		
-		m_uiManager.removeScreen( UIScreen.ADD_APPS );
-		m_uiManager.removeScreen( UIScreen.PAYWALL );
+		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
+		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -66,7 +66,7 @@ public class ControlAppState : GameState
 		int l_listCount = 5;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (4);
+		m_dashboardControllerCanvas.setCurrentIndex (0);
 		
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
@@ -121,7 +121,6 @@ public class ControlAppState : GameState
 			updateAddApp();
 		}
 	}
-
 	
 	private void onHelpButtonClick(UIButton p_button)
 	{
@@ -311,12 +310,12 @@ public class ControlAppState : GameState
 
 	private void onLeftButtonClick( UIButton p_button )
 	{
-		m_gameController.changeState( ZoodleState.CONTROL_VIOLENCE );
+		return;
 	}
 	
 	private void onRightButtonClick( UIButton p_button )
 	{
-		return;
+		m_gameController.changeState( ZoodleState.CONTROL_SUBJECT );
 	}
 
 	private void onAppButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
