@@ -118,6 +118,9 @@ public class RegionBaseState : GameState
 	private RequestQueue m_queue = null;
 	private RequestQueue m_bookQueue = null;
 
+	private int LAYER_GAME = 5;
+	private int LAYER_MESSAGE = 6;
+
 	protected enum RegionState
 	{
 		Left = 0,
@@ -376,7 +379,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, false, 4);
+		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
 	private void _setupElements()
@@ -454,7 +457,7 @@ public class RegionBaseState : GameState
 	{
 		if (m_createActivity == ActivityType.Video)
 		{
-			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, 4);
+			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_videoActivityCanvas;
 			
@@ -493,7 +496,7 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Game)
 		{
-			m_gameActivityCanvas = m_gameController.getUI().createScreen(UIScreen.GAME_ACTIVITY, true, 4);
+			m_gameActivityCanvas = m_gameController.getUI().createScreen(UIScreen.GAME_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_gameActivityCanvas;
 
@@ -532,8 +535,8 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Books)
 		{
-			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, 5);
-			m_bookActivityCanvas = m_gameController.getUI().createScreen(UIScreen.BOOK_ACTIVITY, true, 4);
+			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, LAYER_MESSAGE);
+			m_bookActivityCanvas = m_gameController.getUI().createScreen(UIScreen.BOOK_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_bookActivityCanvas;
 			
@@ -583,7 +586,7 @@ public class RegionBaseState : GameState
 		
 		if (m_createActivity == ActivityType.Fun)
 		{
-			m_funActivityCanvas = m_gameController.getUI().createScreen(UIScreen.FUN_ACTIVITY, true, 4);
+			m_funActivityCanvas = m_gameController.getUI().createScreen(UIScreen.FUN_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_funActivityCanvas;
 			
@@ -1003,13 +1006,24 @@ public class RegionBaseState : GameState
 		l_mapPositions.Add(m_cornerPosition - new Vector3(200.0f, 0, 0));
 		l_mapPositions.Add(m_cornerPosition);
 		m_mapButton.tweener.addPositionTrack(l_mapPositions, ZoodlesScreenFactory.FADE_SPEED);
-		
-		m_transitioning = false;
-		m_activityPanelCanvas.canvasGroup.interactable = true;
-		m_cornerProfileCanvas.canvasGroup.interactable = true;
+
+		// Sean: vzw
+		m_regionAppCanvas.active = true;
+		m_regionAppCanvas.canvasGroup.interactable = true;
+		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
+		// end vzw
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
 	}
+
+	// Sean: vzw
+	private void onToLeftRegionTweenAndAppListFadedIn( UIElement p_element, Tweener.TargetVar p_targetVar )
+	{
+		m_transitioning = false;
+		m_activityPanelCanvas.canvasGroup.interactable = true;
+		m_cornerProfileCanvas.canvasGroup.interactable = true;
+	}
+	// end vzw
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
@@ -1095,9 +1109,6 @@ public class RegionBaseState : GameState
 			m_activityPanelCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 			m_cornerProfileCanvas.canvasGroup.interactable = true;
 			m_cornerProfileCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
-
-			m_regionAppCanvas.active = true;
-			m_regionAppCanvas.canvasGroup.interactable = true;
 
 			m_foregroundGafGroup.gameObject.SetActive (true);
 		}
@@ -1254,8 +1265,7 @@ public class RegionBaseState : GameState
 	private void _setupAppContentList()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
-
-		List<object> l_list = KidMode.getSystemApps();
+		List<object> l_list = KidMode.getSelectedApps();
 		foreach (AppInfo l_app in l_list)
 		{
 			m_appList.Add(l_app);
@@ -1299,29 +1309,6 @@ public class RegionBaseState : GameState
 
 		int l_gameCount = 0;
 		int l_videoCount = 0;
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-		_Debug.log ( l_appListJson );
-		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-		if( null != l_appNameList )
-		{
-			List<System.Object> l_list = KidMode.getLocalApps();
-			
-			if( l_list != null && l_list.Count > 0)
-			{
-				foreach(AppInfo l_app in l_list)
-				{
-					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
-					{
-						GameInfo l_game = new GameInfo(l_app);
-						m_gameViewList.Add(l_game);
-					}
-				}
-			}
-		}
-		l_gameCount += m_gameViewList.Count;
-		#endif
 
 		foreach (object o in p_contentList)
 		{

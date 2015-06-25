@@ -47,14 +47,14 @@ public class DashBoardCommonCanvas : UICanvas
 		UILabel l_profile = getView ("middleLabelArea").getView("profileNameText") as UILabel;
 		UILabel l_overview = getView ("overviewButton").getView("Text") as UILabel;
 		UILabel l_control = getView ("controlButton").getView("Text") as UILabel;
-		UILabel l_assessment = getView ("starButton").getView("Text") as UILabel;
-		UILabel l_block = getView ("starButton").getView("blockText") as UILabel;
+//		UILabel l_assessment = getView ("starButton").getView("Text") as UILabel;
+//		UILabel l_block = getView ("starButton").getView("blockText") as UILabel;
 		
 		l_dashborad.text = Localization.getString (Localization.TXT_26_LABEL_DASHBOARD);
 		l_profile.text = SessionHandler.getInstance().currentKid.name + " " + Localization.getString (Localization.TXT_26_LABEL_PROFILE);
 		l_overview.text = Localization.getString (Localization.TXT_26_LABEL_OVERVIEW);
 		l_control.text = Localization.getString (Localization.TXT_26_LABEL_CONTROL);
-		l_assessment.text = Localization.getString (Localization.TXT_26_LABEL_ASSESSMENT);
-		l_block.text = Localization.getString (Localization.TXT_26_LABEL_BLOCK);
+//		l_assessment.text = Localization.getString (Localization.TXT_26_LABEL_ASSESSMENT);
+//		l_block.text = Localization.getString (Localization.TXT_26_LABEL_BLOCK);
 	}
 }

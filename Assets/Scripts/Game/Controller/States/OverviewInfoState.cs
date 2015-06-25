@@ -158,6 +158,9 @@ public class OverviewInfoState : GameState {
 		m_topRecommendAppArea = m_dashboardInfoCanvas.getView ("app") as UIButton;
 		m_topRecommendAppArea.addClickCallback (showAppDetail);
 
+		//m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
+//		m_statChartButton.addClickCallback (goToStarChart);
+
 		if (null == m_app)
 		{
 			m_topRecommendAppArea.active = false;
