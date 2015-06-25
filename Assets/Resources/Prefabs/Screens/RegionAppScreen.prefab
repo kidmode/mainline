@@ -195,7 +195,6 @@ GameObject:
   - 222: {fileID: 22274998}
   - 114: {fileID: 11474998}
   - 114: {fileID: 11410178}
-  - 114: {fileID: 11406402}
   m_Layer: 5
   m_Name: appScrollView
   m_TagString: Untagged
@@ -216,23 +215,6 @@ Transform:
   - {fileID: 22455034}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11406402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 174998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 232f455363a4c4b5bbc0f16c6bc3155b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrollRect: {fileID: 11410178}
-  scrollArrowLeft: {fileID: 106402}
-  scrollArrowRight: {fileID: 106404}
-  scrollStartContentSize: 10
-  contentSize: 0
-  currPos: {x: 0, y: 0}
 --- !u!114 &11406404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -610,10 +592,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22418292}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -391.674225, y: 51.1878204}
-  m_SizeDelta: {x: -857.851318, y: -267.624542}
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: -391.674194, y: 0}
+  m_SizeDelta: {x: 18.1486816, y: 68.3754578}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22406404
 RectTransform:
@@ -627,10 +609,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22418292}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 397.325806, y: 51.1878204}
-  m_SizeDelta: {x: -857.851318, y: -267.624542}
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 397.325806, y: 0}
+  m_SizeDelta: {x: 18.1486816, y: 68.3754578}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22415198
 RectTransform:

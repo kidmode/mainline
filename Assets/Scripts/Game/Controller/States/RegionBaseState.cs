@@ -1014,7 +1014,6 @@ public class RegionBaseState : GameState
 		// end vzw
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
-
 	}
 
 	// Sean: vzw
@@ -1266,8 +1265,7 @@ public class RegionBaseState : GameState
 	private void _setupAppContentList()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
-
-		List<object> l_list = KidMode.getSystemApps();
+		List<object> l_list = KidMode.getSelectedApps();
 		foreach (AppInfo l_app in l_list)
 		{
 			m_appList.Add(l_app);
@@ -1275,8 +1273,6 @@ public class RegionBaseState : GameState
 		#endif
 
 		m_appSwipeList.setData(m_appList);
-		KidModeScrollViewUpdator viewUpdator = m_appSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-		viewUpdator.setContentDataSize(m_appList.Count);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
 	// end vzw
@@ -1313,29 +1309,6 @@ public class RegionBaseState : GameState
 
 		int l_gameCount = 0;
 		int l_videoCount = 0;
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
-		_Debug.log ( l_appListJson );
-		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
-		if( null != l_appNameList )
-		{
-			List<System.Object> l_list = KidMode.getLocalApps();
-			
-			if( l_list != null && l_list.Count > 0)
-			{
-				foreach(AppInfo l_app in l_list)
-				{
-					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
-					{
-						GameInfo l_game = new GameInfo(l_app);
-						m_gameViewList.Add(l_game);
-					}
-				}
-			}
-		}
-		l_gameCount += m_gameViewList.Count;
-		#endif
 
 		foreach (object o in p_contentList)
 		{

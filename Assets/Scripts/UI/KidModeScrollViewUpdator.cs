@@ -25,7 +25,7 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	void Start () {
 
 		scrollRect.onValueChanged.AddListener( onValueChanged ); 
-	
+
 	}
 	
 	// Update is called once per frame
@@ -49,7 +49,7 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 			
 			scrollArrowRight.SetActive (false);
 			
-			return;
+//			return;
 			
 		}
 		
