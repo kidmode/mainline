@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zoodles.kidmode"
+    package="com.zoodles.ellipsiskids"
     android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -17,13 +17,13 @@
     android:targetSdkVersion="21" />
     
     <permission
-    android:name="com.zoodles.kidmode.permission.READ_SETTINGS"
+    android:name="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
     android:protectionLevel="signatureOrSystem" />
     <permission
-    android:name="com.zoodles.kidmode.permission.WRITE_SETTINGS"
+    android:name="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS"
     android:protectionLevel="signatureOrSystem" />
     <permission
-    android:name="com.zoodles.kidmode.permission.READ_HTC"
+    android:name="com.zoodles.ellipsiskids.permission.READ_HTC"
     android:protectionLevel="signatureOrSystem" />
     
     <uses-feature
@@ -50,15 +50,15 @@
     <uses-feature android:glEsVersion="0x00020000" />
     
     <application
-        android:name="com.zoodles.kidmode.App"
+        android:name="com.zoodles.ellipsiskids.App"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:hasCode="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-        <service android:name="com.zoodles.kidmode.service.GlobalTouchDenyService" />
+        <service android:name="com.zoodles.ellipsiskids.service.GlobalTouchDenyService" />
         <service
-        android:name="com.zoodles.kidmode.service.NativeAppService"
+        android:name="com.zoodles.ellipsiskids.service.NativeAppService"
         android:enabled="true"
         android:exported="false" />
         
@@ -69,7 +69,7 @@
         <receiver android:name="com.androidnative.features.notifications.LocalNotificationReceiver" />
         
         <activity
-            android:name="com.zoodles.kidmode.activity.LauncherActivity"
+            android:name="com.zoodles.ellipsiskids.activity.LauncherActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -100,7 +100,7 @@
             android:name="android.app.lib_name"
             android:value="unity" />
             <!-- <meta-data android:name="unityplayer.UnityActivity" android:value="unity" /> -->
-<!--            android:parentActivityName="com.zoodles.kidmode.activity.LauncherActivity"-->
+<!--            android:parentActivityName="com.zoodles.ellipsiskids.activity.LauncherActivity"-->
             <meta-data
             android:name="unityplayer.ForwardNativeEventsToDalvik"
             android:value="true" />
@@ -153,7 +153,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.parent.ParentDashboardLauncherActivity"
+            android:name="com.zoodles.ellipsiskids.activity.parent.ParentDashboardLauncherActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -164,7 +164,7 @@
             >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.kid.exit.ExitAppActivity"
+            android:name="com.zoodles.ellipsiskids.activity.kid.exit.ExitAppActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -224,11 +224,11 @@
         android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         
         <activity-alias
-        android:name="com.zoodles.kidmode"
+        android:name="com.zoodles.ellipsiskids"
         android:exported="true"
         android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" />
         <activity-alias
-            android:name="com.zoodles.kidmode.ZoodlesHome"
+            android:name="com.zoodles.ellipsiskids.ZoodlesHome"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -242,11 +242,11 @@
         </activity-alias>
         
         <provider
-        android:name="com.zoodles.kidmode.provider.SettingsProvider"
-        android:authorities="com.zoodles.kidmode.provider.settings"
+        android:name="com.zoodles.ellipsiskids.provider.SettingsProvider"
+        android:authorities="com.zoodles.ellipsiskids.provider.settings"
         android:exported="true"
-        android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS"
-        android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" />
+        android:readPermission="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
+        android:writePermission="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS" />
     </application>
     
     <uses-permission android:name="android.permission.WRITE_SESET_PREFERRED_APPLICATIONSTTINGS" />
@@ -268,7 +268,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.zoodles.kidmode.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
