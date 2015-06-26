@@ -38,7 +38,10 @@ public class BookReaderState : GameState {
 		m_length = 0;
 		
 		_setupElements();
-		
+
+		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
+		PointSystemController.Instance.startPointSystemTimer();
+
 //		_loadFirstPage();
 		_loadPage (0);
 		
@@ -67,15 +70,30 @@ public class BookReaderState : GameState {
 			int l_nextState = p_gameController.getConnectedState(ZoodleState.BOOK_ACTIVITY);
 			if (l_nextState != 0)
 			{
-				if(l_nextState == ZoodleState.OVERVIEW_BOOK)
-				{
-					p_gameController.changeState( l_nextState );
-				}
-				else
-				{
+//				if(l_nextState == ZoodleState.OVERVIEW_BOOK)
+//				{
+//					p_gameController.changeState( l_nextState );
+//				}
+//				else
+//				{
+//					p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
+//					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
+//				}
+
+				if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+					
 					p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
 					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
+					
+				} else {
+					
+					PointSystemController.Instance.stopPointSystemTimer();
+					
+					p_gameController.changeState( l_nextState );
+					
 				}
+
+
 			}
 		}
 
@@ -177,6 +195,7 @@ public class BookReaderState : GameState {
 	{
 		UICanvas p_canvas = p_element as UICanvas;
 		p_canvas.isTransitioning = false;
+
 	}
 
 	private void onBackClicked( UIButton p_button )
@@ -186,6 +205,8 @@ public class BookReaderState : GameState {
 
 	private void onNextPage(UIButton p_button)
 	{
+		Debug.Log ("    onNextPage  ");
+
 		_nextPage();
 	}
 	
@@ -198,6 +219,8 @@ public class BookReaderState : GameState {
 	
 	private void _loadFirstPage()
 	{
+		Debug.Log ("    _loadFirstPage  ");
+
 		m_canSetImage   = true;
 		pageIndex       = 0;
 		

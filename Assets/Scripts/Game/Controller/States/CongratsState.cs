@@ -27,7 +27,9 @@ public class CongratsState : GameState
 		UIButton l_next = m_screen.getView("nextButton") as UIButton;
 		l_next.addClickCallback(_click);
 
-		SoundManager.getInstance().play("win", 0, -1, "", null, true);
+		SoundManager.getInstance().playVolume("win", 0, -1, "", null, false, 0.2f);
+
+//		SoundManager.getInstance().play("win", 0, -1, "", null, true);
 
 		m_queue = new RequestQueue();
 		m_queue.add(new GetZPs(2, _requestComplete));

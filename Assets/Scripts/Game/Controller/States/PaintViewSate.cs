@@ -178,6 +178,9 @@ public class PaintViewSate : GameState
 	private void onEditButtonClick( UIButton p_button )
 	{
 		p_button.removeClickCallback (onEditButtonClick);
+
+//		m_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
+
 		m_gameController.changeState(ZoodleState.PAINT_ACTIVITY);
 	}
 
