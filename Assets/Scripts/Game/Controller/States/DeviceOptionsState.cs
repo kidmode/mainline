@@ -364,16 +364,18 @@ public class DeviceOptionsState : GameState
 		if( false == p_value )
 		{
 			m_allowCall = false;
-			
-			IncomingCallControl.StartBlock();
+
+			//honda: vzw version comment out incoming call due to no use
+//			IncomingCallControl.StartBlock();
 
 			m_settingCache.allowCall = false;
 		}
 		else
 		{
 			m_allowCall = true;
-			
-			IncomingCallControl.EndBlock();
+
+			//honda: vzw version comment out incoming call due to no use
+//			IncomingCallControl.EndBlock();
 
 			m_settingCache.allowCall = true;
 		}
