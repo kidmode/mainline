@@ -27,8 +27,6 @@ public class SignUpAfterInoutCreditCardCanvas : UICanvas
 		l_createFreeButton.text = Localization.getString (Localization.TXT_102_BUTTON_CREATE_FREE_ACCOUNT);
 		UILabel l_createButton = getView("createAccountButton").getView ("createAccountText") as UILabel;
 		l_createButton.text = Localization.getString (Localization.TXT_102_BUTTON_CREATE_ACCOUNT);
-		UILabel l_getPremiumAccountButton = getView("getPremiumButton").getView ("Text") as UILabel;
-		l_getPremiumAccountButton.text = Localization.getString (Localization.TXT_102_BUTTON_PREMIIUM);
 		UILabel l_backButton = getView("backButton").getView ("btnText") as UILabel;
 		l_backButton.text = Localization.getString (Localization.TXT_BUTTON_BACK);
 
