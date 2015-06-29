@@ -89,7 +89,7 @@ public class KidModeLockController : MonoBehaviour {
 
 //		Debug.Log ("   0000000000000000000000000000000000000   isLauncherKidmode  ");
 
-		if (!KidMode.isLauncherKidmode ()) {
+		if (!KidMode.isHomeLauncherKidMode ()) {
 
 
 
@@ -127,6 +127,17 @@ public class KidModeLockController : MonoBehaviour {
 //		return;
 		
 //		checkDefaultLauncherStatus ();
+
+		Debug.Log ("  ===================================     onAndroidResume  ================================ ");
+
+		swith2KidModeLauncher ();
+
+		if(!KidMode.isHomeLauncherKidMode()){
+			
+								KidMode.openLauncherSelector();
+			
+							}
+
 		
 		stateChanged ();
 		
@@ -137,7 +148,7 @@ public class KidModeLockController : MonoBehaviour {
 	
 	void stateChanged(){
 		
-		//		Debug.Log ("  ===================================     stateChanged  ================================ ");
+				Debug.Log ("  ===================================     stateChanged  ================================ ");
 		//================================
 		//Default Launcher
 		if (stateHomeLauncher == StateHomeLauncher.Default) {
@@ -149,6 +160,12 @@ public class KidModeLockController : MonoBehaviour {
 				KidMode.taskManagerLockFalse();
 
 				KidMode.setKidsModeActive(false);
+
+//				if(KidMode.isHomeLauncherKidMode()){
+//
+//					KidMode.openLauncherSelector();
+//
+//				}
 
 			}else{//Kid Mode
 				

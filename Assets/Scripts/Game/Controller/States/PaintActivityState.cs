@@ -39,6 +39,9 @@ public class PaintActivityState : GameState
 			l_queue.request(RequestType.RUSH);
 		}
 
+		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
+		PointSystemController.Instance.startPointSystemTimer();
+
 		GAUtil.logScreen("PaintActivityScreen");
 	}
 	

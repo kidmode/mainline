@@ -1,75 +1,75 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zoodles.kidmode"
+    package="com.zoodles.ellipsiskids"
     android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <supports-screens
-    android:anyDensity="true"
-    android:largeScreens="true"
-    android:normalScreens="true"
-    android:smallScreens="true"
-    android:xlargeScreens="true" />
-    
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
     <uses-sdk
-    android:minSdkVersion="11"
-    android:targetSdkVersion="21" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="21" />
+
+    <permission
+    android:name="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
+    android:protectionLevel="signatureOrSystem" />
+    <permission
+    android:name="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS"
+    android:protectionLevel="signatureOrSystem" />
+    <permission
+    android:name="com.zoodles.ellipsiskids.permission.READ_HTC"
+    android:protectionLevel="signatureOrSystem" />
     
-    <permission
-    android:name="com.zoodles.kidmode.permission.READ_SETTINGS"
-    android:protectionLevel="signatureOrSystem" />
-    <permission
-    android:name="com.zoodles.kidmode.permission.WRITE_SETTINGS"
-    android:protectionLevel="signatureOrSystem" />
-    <permission
-    android:name="com.zoodles.kidmode.permission.READ_HTC"
-    android:protectionLevel="signatureOrSystem" />
-    
     <uses-feature
-    android:name="android.hardware.touchscreen"
-    android:required="true" />
+        android:name="android.hardware.touchscreen"
+        android:required="true" />
     <uses-feature
-    android:name="android.hardware.wifi"
-    android:required="false" />
+        android:name="android.hardware.wifi"
+        android:required="false" />
     <uses-feature
-    android:name="android.hardware.telephony"
-    android:required="false" />
+        android:name="android.hardware.telephony"
+        android:required="false" />
     <uses-feature
-    android:name="android.hardware.microphone"
-    android:required="false" />
+        android:name="android.hardware.microphone"
+        android:required="false" />
     <uses-feature
-    android:name="android.hardware.camera"
-    android:required="false" />
+        android:name="android.hardware.camera"
+        android:required="false" />
     <uses-feature
-    android:name="android.hardware.camera.front"
-    android:required="false" />
+        android:name="android.hardware.camera.front"
+        android:required="false" />
     <uses-feature
-    android:name="android.hardware.camera.autofocus"
-    android:required="false" />
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
     <uses-feature android:glEsVersion="0x00020000" />
-    
+
     <application
-        android:name="com.zoodles.kidmode.App"
+        android:name="com.zoodles.ellipsiskids.App"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:hasCode="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-        <service android:name="com.zoodles.kidmode.service.GlobalTouchDenyService" />
+        <service android:name="com.zoodles.ellipsiskids.service.GlobalTouchDenyService" />
         <service
-        android:name="com.zoodles.kidmode.service.NativeAppService"
+        android:name="com.zoodles.ellipsiskids.service.NativeAppService"
         android:enabled="true"
         android:exported="false" />
-        
+
         <meta-data
-        android:name="com.facebook.sdk.ApplicationId"
-        android:value="\ 1" />
-        
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="\ 1" />
+
         <receiver android:name="com.androidnative.features.notifications.LocalNotificationReceiver" />
-        
+
         <activity
-            android:name="com.zoodles.kidmode.activity.LauncherActivity"
+            android:name="com.zoodles.ellipsiskids.activity.LauncherActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -77,12 +77,15 @@
             android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-            <intent-filter>
+
+            <!--
+                 <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.onevcat.uniwebview.AndroidPlugin"
@@ -91,51 +94,54 @@
             android:excludeFromRecents="false"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:label="@string/app_name"
+            android:label="@string/app_name"	
             android:launchMode="singleInstance"
-            
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
-            android:name="android.app.lib_name"
-            android:value="unity" />
+                android:name="android.app.lib_name"
+                android:value="unity" />
             <!-- <meta-data android:name="unityplayer.UnityActivity" android:value="unity" /> -->
-<!--            android:parentActivityName="com.zoodles.kidmode.activity.LauncherActivity"-->
+
+<!--            android:parentActivityName="com.zoodles.ellipsiskids.activity.LauncherActivity"-->
+
             <meta-data
-            android:name="unityplayer.ForwardNativeEventsToDalvik"
-            android:value="true" />
-            
-            <intent-filter>
-            </intent-filter>
+                android:name="unityplayer.ForwardNativeEventsToDalvik"
+                android:value="true" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                
-                <category android:name="android.intent.category.DEFAULT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.onevcat.uniwebview.FakeHome"
-            android:enabled="false" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
+            android:name="com.onevcat.uniwebview.FakeHome"
+            android:enabled="false" >
+
+            <!--
+                 <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
             android:label="@string/app_name" >
-            
+
             <!--
              <intent-filter>
              <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.HOME"/>
              <category android:name="android.intent.category.DEFAULT" />
              </intent-filter>
-             -->
+            -->
         </activity>
         <activity
             android:name="com.unity3d.player.UnityPlayerNativeActivity"
@@ -153,7 +159,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.parent.ParentDashboardLauncherActivity"
+            android:name="com.zoodles.ellipsiskids.activity.parent.ParentDashboardLauncherActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -164,7 +170,7 @@
             >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.kid.exit.ExitAppActivity"
+            android:name="com.zoodles.ellipsiskids.activity.kid.exit.ExitAppActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -172,9 +178,9 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                
+
                 <category android:name="android.intent.category.DEFAULT" />
-                
+
                 <data />
             </intent-filter>
         </activity>
@@ -188,47 +194,47 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
-            android:name="android.app.lib_name"
-            android:value="unity" />
+                android:name="android.app.lib_name"
+                android:value="unity" />
             <meta-data
-            android:name="unityplayer.ForwardNativeEventsToDalvik"
-            android:value="true" />
+                android:name="unityplayer.ForwardNativeEventsToDalvik"
+                android:value="true" />
         </activity>
         <activity
-        android:name="com.facebook.LoginActivity"
-        android:configChanges="keyboardHidden|orientation"
-        android:label="@string/app_name"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name="com.facebook.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-        android:name="com.facebook.unity.FBUnityLoginActivity"
-        android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+            android:name="com.facebook.unity.FBUnityLoginActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity
-        android:name="com.facebook.unity.FBUnityDeepLinkingActivity"
-        android:exported="true" />
+            android:name="com.facebook.unity.FBUnityDeepLinkingActivity"
+            android:exported="true" />
         <activity
-        android:name="com.androidnative.AndroidNativeProxy"
-        android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-        android:label="@string/app_name"
-        android:launchMode="singleTask"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name="com.androidnative.AndroidNativeProxy"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-        android:name="com.androidnative.billing.core.AN_BillingProxyActivity"
-        android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-        android:label="@string/app_name"
-        android:launchMode="singleTask"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name="com.androidnative.billing.core.AN_BillingProxyActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-        android:name="com.facebook.unity.FBUnityDialogsActivity"
-        android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-        
+            android:name="com.facebook.unity.FBUnityDialogsActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+
         <activity-alias
-        android:name="com.zoodles.kidmode"
+        android:name="com.zoodles.ellipsiskids"
         android:exported="true"
         android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" />
         <activity-alias
-            android:name="com.zoodles.kidmode.ZoodlesHome"
+            android:name="com.zoodles.ellipsiskids.ZoodlesHome"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -240,15 +246,15 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity-alias>
-        
+
         <provider
-        android:name="com.zoodles.kidmode.provider.SettingsProvider"
-        android:authorities="com.zoodles.kidmode.provider.settings"
+        android:name="com.zoodles.ellipsiskids.provider.SettingsProvider"
+        android:authorities="com.zoodles.ellipsiskids.provider.settings"
         android:exported="true"
-        android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS"
-        android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" />
+        android:readPermission="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
+        android:writePermission="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS" />
     </application>
-    
+
     <uses-permission android:name="android.permission.WRITE_SESET_PREFERRED_APPLICATIONSTTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -262,15 +268,14 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.zoodles.kidmode.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    
+
 </manifest>

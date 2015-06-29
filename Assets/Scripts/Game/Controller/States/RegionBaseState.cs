@@ -807,11 +807,13 @@ public class RegionBaseState : GameState
 		SessionHandler.getInstance ().IsParent = false;
 		if( null == SessionHandler.getInstance().currentDrawing )
 		{
+//			m_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
+
 			p_gameController.changeState(ZoodleState.PAINT_ACTIVITY);
 		}
 		else
 		{
-			p_gameController.connectState(ZoodleState.PAINT_VIEW, ZoodleState.REGION_FUN);
+//			p_gameController.connectState(ZoodleState.PAINT_VIEW, ZoodleState.REGION_FUN);
 			p_gameController.changeState(ZoodleState.PAINT_VIEW);
 		}
 	}

@@ -246,7 +246,7 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_FIXED] = "True";
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_DI.Call<string>("getRelease");
 		m_params [ZoodlesConstants.PARAM_BRAND] = l_DI.Call<string>("getBrand");
 		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_DI.Call<string>("getManufacturer");
@@ -404,10 +404,12 @@ public class GetUserSettingRequest : RequestQueue.Request
 			if (l_data.ContainsKey ("incoming_calls"))
 			{
 				l_session.allowCall = (bool)l_data["incoming_calls"];
-				#if UNITY_ANDROID && !UNITY_EDITOR
-				if( false == l_session.allowCall )
-					IncomingCallControl.StartBlock();
-				#endif
+
+				//honda: vzw version comment out incoming call due to no use
+//				#if UNITY_ANDROID && !UNITY_EDITOR
+//				if( false == l_session.allowCall )
+//					IncomingCallControl.StartBlock();
+//				#endif
 			}
 			if (l_data.ContainsKey ("today_tips"))
 				l_session.tip = (bool)l_data["today_tips"];
@@ -881,7 +883,7 @@ public class WebContentRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		string l_locale = l_DI.Call<string>("getLanguage");
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
@@ -924,7 +926,7 @@ public class BookListRequest : RequestQueue.Request
 			break;
 		case SystemLanguage.Chinese :
 			#if UNITY_ANDROID && !UNITY_EDITOR
-			AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+			AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 			string l_locale = l_DI.Call<string>("getLanguage");
 			
 			switch ( l_locale )
@@ -1224,7 +1226,7 @@ public class NewGetAppByPageRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_kid.age;
 		m_params[ZoodlesConstants.PARAM_PAGE] = m_page;
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		string l_locale = l_DI.Call<string>("getLanguage");
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
@@ -1302,7 +1304,7 @@ public class GetAppRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
 		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_age;
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		string l_locale = l_DI.Call<string>("getLanguage");
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
@@ -1351,7 +1353,7 @@ public class GetBookRequest : RequestQueue.Request
 		if(!(null == m_pageRequest || string.Empty.Equals(m_pageRequest)))
 			m_params[ZoodlesConstants.PARAM_APP_PAGES] = m_pageRequest;
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		string l_locale = l_DI.Call<string>("getLanguage");
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
@@ -1945,7 +1947,7 @@ public class GetTopRecommandRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
 		m_params[ZoodlesConstants.PARAM_KID_AGE] = m_kid.age;
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
+		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		string l_locale = l_DI.Call<string>("getLanguage");
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
