@@ -71,6 +71,15 @@ public class WebViewInfo : System.Object
 		if (p_response.error == null)
 		{
 			icon = p_response.texture;
+
+			if (webData.category == WebContent.GAME_TYPE || 
+			    webData.category == WebContent.VIDEO_TYPE)
+			{
+				string name = "link_" + webData.id + ".png";
+				Debug.Log(name);
+				ImageCache.saveCacheImage(name, icon);
+			}
+
 			if (m_retriveHandler != null)
 			{
 				m_retriveHandler(icon);
@@ -156,9 +165,10 @@ public class RegionBaseState : GameState
 		m_subState = SubState.None;
 		m_bookLoaded = false;
 		m_linkLoaded = false;
-		
+
+		//create jungle view
 		_createViews();
-		
+		//set buttons for jungle view
 		_setupElements();
 
 		if (m_queue == null)
@@ -166,6 +176,7 @@ public class RegionBaseState : GameState
 			m_queue = new RequestQueue();
 		}
 
+		//honda: this line is weird
 		if (!m_requestStates.ContainsKey("PAINT") || m_requestStates["PAINT"] == true)
 		{
 			m_queue.add(new DrawingListRequest(_requestDrawingListComplete));
@@ -182,28 +193,32 @@ public class RegionBaseState : GameState
 	{
 		base.update(p_gameController, p_time);
 
+		//set alpha transition from jungle to activity
 		checkActivityScreen ();
 
-		if( canSetImage )
-		{
-			if( m_topBook != null && m_topBook.icon != null && null != m_bookActivityCanvas )
-			{
-				UIButton l_featureButton = m_bookActivityCanvas.getView("featureOne") as UIButton;
-				if( l_featureButton != null)
-				{
-					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-					l_featureImage.setTexture(m_topBook.icon);
-					canSetImage = false;
-				}
-			}
-		}
+		//honda: comment out because we remove feature toy box
+		//honda: set featured book image
+//		if( canSetImage )
+//		{
+//			if( m_topBook != null && m_topBook.icon != null && null != m_bookActivityCanvas )
+//			{
+//				UIButton l_featureButton = m_bookActivityCanvas.getView("featureOne") as UIButton;
+//				if( l_featureButton != null)
+//				{
+//					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//					l_featureImage.setTexture(m_topBook.icon);
+//					canSetImage = false;
+//				}
+//			}
+//		}
 
+		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
 		}
-
+		//after complete books loading, set contents to WebContentCache
 		if( canSetBook )
 		{
 			canSetBook = false;
@@ -243,9 +258,13 @@ public class RegionBaseState : GameState
 
 			m_subState = SubState.None;
 		}
-		
+
+		//honda comments
+		//check whether complete games and videos loading from server or not
 		checkIfLinksCacheLoaded(p_gameController);
+		//check wheather complete books loading from server or not
 		checkIfBooksCacheLoaded(p_gameController);
+		//create video, game or book view depending on current activity
 		_handleDynamicActivities();
 	}
 
@@ -482,10 +501,11 @@ public class RegionBaseState : GameState
 				l_videoInfo.text = Localization.getString(Localization.TXT_11_LABEL_INFO);
 			}
 
-			if (m_videoFeatured != null)
-			{
-				m_videoFeatured.retriveIcon(setFeatureImageVideo);
-			}
+			//honda: comment out because we remove feature toy box
+//			if (m_videoFeatured != null)
+//			{
+//				m_videoFeatured.retriveIcon(setFeatureImageVideo);
+//			}
 
 			if( m_videoFavoritesList.Count <= 0 )
 			{
@@ -504,7 +524,6 @@ public class RegionBaseState : GameState
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
-
 			//Get Scroll view updateor
 			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 			viewUpdator.setContentDataSize(m_gameViewList.Count);
@@ -521,10 +540,11 @@ public class RegionBaseState : GameState
 				l_gameInfo.text = Localization.getString(Localization.TXT_12_LABEL_INFO);
 			}
 
-			if (m_gameFeatured != null)
-			{
-				m_gameFeatured.retriveIcon(setFeatureImageGame);
-			}
+			//honda: comment out because we remove feature toy box
+//			if (m_gameFeatured != null)
+//			{
+//				m_gameFeatured.retriveIcon(setFeatureImageGame);
+//			}
 
 			if( m_gameFavoritesList.Count <= 0 )
 			{
@@ -560,20 +580,21 @@ public class RegionBaseState : GameState
 				l_bookInfo.text = Localization.getString(Localization.TXT_14_LABEL_INFO);
 			}
 
-			UIButton l_featureButton = m_bookActivityCanvas.getView("featureOne") as UIButton;
-			l_featureButton.addClickCallback(onFeatureBookClicked);
-			if(m_topBook != null)
-			{
-				if( m_topBook.icon == null )
-				{
-					canSetImage = true;
-				}
-				else
-				{
-					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-					l_featureImage.setTexture(m_topBook.icon);
-				}
-			}
+			//honda: comment out because we remove feature toy box
+//			UIButton l_featureButton = m_bookActivityCanvas.getView("featureOne") as UIButton;
+//			l_featureButton.addClickCallback(onFeatureBookClicked);
+//			if(m_topBook != null)
+//			{
+//				if( m_topBook.icon == null )
+//				{
+//					canSetImage = true;
+//				}
+//				else
+//				{
+//					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//					l_featureImage.setTexture(m_topBook.icon);
+//				}
+//			}
 			m_quitMessageButton = m_messageCanvas.getView("quitButton") as UIButton;
 			m_quitMessageButton.addClickCallback(onQuitMessageButtonClick);
 
@@ -598,33 +619,35 @@ public class RegionBaseState : GameState
 		}
 	}
 
-	private void setFeatureImageVideo(Texture2D p_icon)
-	{
-		UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
-		if (null != l_featureButton)
-		{
-			l_featureButton.addClickCallback(onFeatureVideoClicked);
-			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-			if (null != l_featureImage)
-			{
-				l_featureImage.setTexture(p_icon);
-			}
-		}
-	}
-	
-	private void setFeatureImageGame(Texture2D p_icon)
-	{
-		UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
-		if (null != l_featureButton)
-		{
-			l_featureButton.addClickCallback(onFeatureGameClicked);
-			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-			if (null != l_featureImage)
-			{
-				l_featureImage.setTexture(p_icon);
-			}
-		}
-	}
+	//honda: comment out because we remove feature toy box
+//	private void setFeatureImageVideo(Texture2D p_icon)
+//	{
+//		UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
+//		if (null != l_featureButton)
+//		{
+//			l_featureButton.addClickCallback(onFeatureVideoClicked);
+//			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//			if (null != l_featureImage)
+//			{
+//				l_featureImage.setTexture(p_icon);
+//			}
+//		}
+//	}
+
+	//honda: comment out because we remove feature toy box
+//	private void setFeatureImageGame(Texture2D p_icon)
+//	{
+//		UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
+//		if (null != l_featureButton)
+//		{
+//			l_featureButton.addClickCallback(onFeatureGameClicked);
+//			UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//			if (null != l_featureImage)
+//			{
+//				l_featureImage.setTexture(p_icon);
+//			}
+//		}
+//	}
 	
 	private void _clearContentLists()
 	{
@@ -861,12 +884,13 @@ public class RegionBaseState : GameState
 		SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 	}
 
-	private void onFeatureVideoClicked(UIButton p_button)
-	{
-		SessionHandler.getInstance().currentContent = m_videoFeatured.webData;
-		
-		m_subState = SubState.GO_VIDEO;
-	}
+	//honda: comment out because we remove feature toy box
+//	private void onFeatureVideoClicked(UIButton p_button)
+//	{
+//		SessionHandler.getInstance().currentContent = m_videoFeatured.webData;
+//		
+//		m_subState = SubState.GO_VIDEO;
+//	}
 
 	// Sean: vzw
 	private void onAppClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
@@ -902,31 +926,33 @@ public class RegionBaseState : GameState
 		}
 	}
 
-	private void onFeatureGameClicked(UIButton p_button)
-	{
-		SessionHandler.getInstance().currentContent = m_gameFeatured.webData;
-		
-		m_subState = SubState.GO_GAME;
-	}
+	//honda: comment out because we remove feature toy box
+//	private void onFeatureGameClicked(UIButton p_button)
+//	{
+//		SessionHandler.getInstance().currentContent = m_gameFeatured.webData;
+//		
+//		m_subState = SubState.GO_GAME;
+//	}
 
-	private void onFeatureBookClicked(UIButton p_button)
-	{
-		if(m_topBook == null)
-		{
-			return;
-		}
-		if( m_topBook.bookState == BookState.NeedToBuy )
-		{
-			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
-			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
-			MessageIn();
-		}
-		if( m_topBook.bookState == BookState.NotRecorded )
-		{
-			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[m_topBook.bookId] as Book;
-			m_subState = SubState.GO_BOOKS;
-		}
-	}
+	//honda: comment out because we remove feature toy box
+//	private void onFeatureBookClicked(UIButton p_button)
+//	{
+//		if(m_topBook == null)
+//		{
+//			return;
+//		}
+//		if( m_topBook.bookState == BookState.NeedToBuy )
+//		{
+//			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
+//			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
+//			MessageIn();
+//		}
+//		if( m_topBook.bookState == BookState.NotRecorded )
+//		{
+//			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[m_topBook.bookId] as Book;
+//			m_subState = SubState.GO_BOOKS;
+//		}
+//	}
 	
 	private void onBookClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
@@ -1229,15 +1255,16 @@ public class RegionBaseState : GameState
 				m_bookFavoritesList.Add(l_info);
 			}
 
-			if( l_book.isTop )
-			{
-				m_topBook = l_info;
-
-				if( m_topBook.icon == null )
-				{
-					canSetImage = true;
-				}
-			}
+			//honda: comment out because we remove feature toy box
+//			if( l_book.isTop )
+//			{
+//				m_topBook = l_info;
+//
+//				if( m_topBook.icon == null )
+//				{
+//					canSetImage = true;
+//				}
+//			}
 
 			m_bookViewList.Add(l_info);
 		}
@@ -1276,6 +1303,17 @@ public class RegionBaseState : GameState
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
 	// end vzw
+
+	private string getLocalContentNmae(WebContent l_content)
+	{
+		if (l_content.category == WebContent.GAME_TYPE || 
+		    l_content.category == WebContent.VIDEO_TYPE)
+		{
+			string file = "link_" + l_content.id + ".png";
+			return file;
+		}
+		return null;
+	}
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
@@ -1329,8 +1367,9 @@ public class RegionBaseState : GameState
 
 				m_videoViewList.Add(l_info);
 
-				if (l_content.recommend)
-					m_videoFeatured = l_info;
+				//honda: comment out because we remove feature toy box
+//				if (l_content.recommend)
+//					m_videoFeatured = l_info;
 			}
 			else if (l_content.category == WebContent.GAME_TYPE)
 			{
@@ -1338,8 +1377,14 @@ public class RegionBaseState : GameState
 					continue;
 				
 				string l_url = l_content.url;
-				
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+
+				string contentName = getLocalContentNmae(l_content);
+				Texture2D texture = ImageCache.getCacheImage(contentName);
+				if (texture == null)
+					Debug.Log("new icon");
+				else
+					Debug.Log("cached icon"); 
+				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
 
 				GameInfo l_game = new GameInfo(l_info);
 
@@ -1348,8 +1393,9 @@ public class RegionBaseState : GameState
 
 				m_gameViewList.Add(l_game);
 
-				if (l_content.recommend)
-					m_gameFeatured = l_info;
+				//honda: comment out because we remove feature toy box
+//				if (l_content.recommend)
+//					m_gameFeatured = l_info;
 			}
 		}
 
@@ -1369,19 +1415,20 @@ public class RegionBaseState : GameState
 				}
 			}
 
-			if (null != m_videoFeatured)
-			{
-				UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
-				if (null != l_featureButton)
-				{
-					l_featureButton.addClickCallback(onFeatureVideoClicked);
-					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-					if (null != l_featureImage)
-					{
-						m_videoFeatured.retriveIcon(setFeatureImageVideo);
-					}
-				}
-			}
+			//honda: comment out because we remove feature toy box
+//			if (null != m_videoFeatured)
+//			{
+//				UIButton l_featureButton = m_videoActivityCanvas.getView("featureOne") as UIButton;
+//				if (null != l_featureButton)
+//				{
+//					l_featureButton.addClickCallback(onFeatureVideoClicked);
+//					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//					if (null != l_featureImage)
+//					{
+//						m_videoFeatured.retriveIcon(setFeatureImageVideo);
+//					}
+//				}
+//			}
 		}
 
 		if( null != m_gameActivityCanvas )
@@ -1400,19 +1447,20 @@ public class RegionBaseState : GameState
 				}
 			}
 
-			if (null != m_gameFeatured)
-			{
-				UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
-				if (null != l_featureButton)
-				{
-					l_featureButton.addClickCallback(onFeatureGameClicked);
-					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
-					if (null != l_featureImage)
-					{
-						m_gameFeatured.retriveIcon(setFeatureImageGame);
-					}
-				}
-			}
+			//honda: comment out because we remove feature toy box
+//			if (null != m_gameFeatured)
+//			{
+//				UIButton l_featureButton = m_gameActivityCanvas.getView("featureOne") as UIButton;
+//				if (null != l_featureButton)
+//				{
+//					l_featureButton.addClickCallback(onFeatureGameClicked);
+//					UIImage l_featureImage = l_featureButton.getView("featureOneIcon") as UIImage;
+//					if (null != l_featureImage)
+//					{
+//						m_gameFeatured.retriveIcon(setFeatureImageGame);
+//					}
+//				}
+//			}
 		}		
 		// m_gameSwipeList.setData(m_gameViewList);
 		// m_videoSwipeList.setData(m_videoViewList);
