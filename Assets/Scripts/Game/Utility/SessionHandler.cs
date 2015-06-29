@@ -570,7 +570,7 @@ public class SessionHandler
 //				l_kidList.Add(l_kid);
 //				m_kidList = l_kidList;
 //			}
-		}
+//		}
 	}
 
 	public void addBook (int p_id, Book p_book)
