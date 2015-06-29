@@ -145,6 +145,42 @@ public class SoundManager : object
 		
 		return l_ref;*/
 	}
+
+
+	public AudioSource playVolume(string p_name, double p_offset, 
+	                        int p_loops, string p_channelName, object p_transform, bool p_isMusic, float volumeFactor)
+	{
+		AudioClip l_clip = Resources.Load ("Sounds/" + p_name) as AudioClip;
+		AudioSource l_audioSource = null;
+		
+		if (l_clip == null) {
+			// Debug.Log(p_name + " not found");
+			return null;
+		}
+		
+		if (p_isMusic == false) {			
+			if (m_isMutedForMusic) {
+				AudioSource.PlayClipAtPoint (l_clip, new Vector3 (5, 100, 2), m_musicVolume * volumeFactor); 
+			} else {
+				AudioSource.PlayClipAtPoint (l_clip, new Vector3 (5, 100, 2), m_effectVolume * volumeFactor); 
+			}
+		} else { 		
+			GameObject l_gameObject = GameObject.FindGameObjectWithTag ("AudioSource");
+			l_audioSource = l_gameObject.audio;
+			
+			if (l_audioSource.clip != l_clip
+				|| l_audioSource.isPlaying == false) {
+				l_audioSource.clip = l_clip;
+				l_audioSource.volume = m_musicVolume;
+				// set loop
+				l_audioSource.loop = (p_loops == -1) ? false : true;
+				l_audioSource.Play ();
+			}
+		}
+		
+		return l_audioSource;
+
+	}
 	
 	public float audioTime()
 	{

@@ -92,8 +92,8 @@ public class SetUpAccountState : GameState
 		m_createFreeAccountButton.addClickCallback (toCreateChildrenScreen);
 		m_createAccountButton = m_signUpCanvas.getView("createAccountButton") as UIButton;
 		m_createAccountButton.addClickCallback (toCreateChildrenScreen);
-		m_getPremiumButton = m_signUpCanvas.getView("getPremiumButton") as UIButton;
-		m_getPremiumButton.addClickCallback (onClickGetPremium);
+//		m_getPremiumButton = m_signUpCanvas.getView("getPremiumButton") as UIButton;
+//		m_getPremiumButton.addClickCallback (onClickGetPremium);
 
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
 		m_passwordCheckImage = m_signUpCanvas.getView ("passwordInputConfirm") as UIImage;
@@ -121,7 +121,6 @@ public class SetUpAccountState : GameState
 		{
 			m_title.text = Localization.getString(Localization.TXT_STATE_9_ACCOUNT_FREE);
 			m_premiumLogoArea.active = false;
-			m_getPremiumButton.active =	true;
 			m_createAccountButton.active = false;
 			m_createFreeAccountButton.active = true;
 		}
@@ -129,7 +128,6 @@ public class SetUpAccountState : GameState
 		{
 			m_title.text = Localization.getString(Localization.TXT_STATE_9_ACCOUNT);
 			m_premiumLogoArea.active = true;
-			m_getPremiumButton.active =	false;
 			m_createAccountButton.active = true;
 			m_createFreeAccountButton.active = false;
 		}
@@ -184,11 +182,11 @@ public class SetUpAccountState : GameState
 		}
 	}
 
-	private void onClickGetPremium(UIButton p_button)
-	{
-		m_gameController.connectState (ZoodleState.SIGN_UP_UPSELL, int.Parse(m_gameController.stateName));
-		m_gameController.changeState (ZoodleState.SIGN_UP_UPSELL);
-	}
+//	private void onClickGetPremium(UIButton p_button)
+//	{
+//		m_gameController.connectState (ZoodleState.SIGN_UP_UPSELL, int.Parse(m_gameController.stateName));
+//		m_gameController.changeState (ZoodleState.SIGN_UP_UPSELL);
+//	}
 
 	private void onUsernameChange(string p_value)
 	{
@@ -375,7 +373,6 @@ public class SetUpAccountState : GameState
 	private InputField 	m_rePassword;
 
 	private UIButton 	m_createAccountButton;
-	private UIButton 	m_getPremiumButton;
 	private UIImage 	m_emailCheckImage;
 	private UIImage 	m_passwordCheckImage;
 	private UIElement	m_premiumLogoArea;
