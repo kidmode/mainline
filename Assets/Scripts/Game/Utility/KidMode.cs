@@ -368,20 +368,7 @@ public class KidMode
 		
 	}
 
-	public static bool isLauncherKidmode(){
-		
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 		
-		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
-		bool launcher = jo.Call<bool>("isMyLauncherDefault"); 
-		
-		return launcher;
-		#endif
-		return false;
-		
-	}
+
 
 	public static void openLauncherSelector(){
 		

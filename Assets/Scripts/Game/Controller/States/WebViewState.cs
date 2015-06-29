@@ -9,6 +9,7 @@ public class WebViewState : GameState
 	protected enum SubState
 	{
 		NONE,
+		No_Points,
 		GO_CONGRATS
 	}
 
@@ -31,10 +32,15 @@ public class WebViewState : GameState
 		m_text = (l_asset).text;
 		string l_url = getURL();
 
+		Debug.Log ("                          enter       ===========================      l_url " + l_url);
+
+		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
+
 		m_isLoaded = false;
 		_setupWebView("Prefabs/Web/YoutubeWebview", m_inset);
 		m_webView.OnLoadComplete += HandleOnLoadComplete;
 		m_webView.OnLoadBegin += HandleOnLoadBegin;
+		m_webView.OnReceivedKeyCode += HandelOnReceivedKeyCode;
 		m_webView.Load(l_url);
 		m_webView.Show();
 
@@ -47,6 +53,7 @@ public class WebViewState : GameState
 	void HandleOnLoadBegin (UniWebView webView, string loadingUrl)
 	{
 		string l_url = getURL();
+
 		if (loadingUrl != l_url)
 		{
 			webView.Stop();
@@ -68,11 +75,11 @@ public class WebViewState : GameState
 		{
 			if (l_url.Contains("?"))
 			{
-				l_url = l_url + "&fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+				l_url = l_url + "&fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1";
 			}
 			else
 			{
-				l_url = l_url + "?fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+				l_url = l_url + "?fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1";
 			}
 		}
 
@@ -81,10 +88,27 @@ public class WebViewState : GameState
 
 	public void HandleOnLoadComplete (UniWebView webView, bool success, string errorMessage)
 	{
+
+		if (success) {
+
+			PointSystemController.Instance.startPointSystemTimer();
+
+		}
+
 		m_webView.AddJavaScript (m_text);
 		m_webView.EvaluatingJavaScript ("disableFullScreen()");
 		m_isLoaded = true;
 	}
+
+
+
+	public void HandelOnReceivedKeyCode(UniWebView webView, int keyCode){
+
+		Debug.Log ("        HandelOnReceivedKeyCode   )000000000000000000  " + keyCode);
+
+
+	}
+	
 
 	private float calculateInset(UIElement p_topBar)
 	{
@@ -175,19 +199,49 @@ public class WebViewState : GameState
 		p_view.Hide();
 		p_view.CleanCache();
 		p_view.Load("about:blank");
-		
-		m_subState = SubState.GO_CONGRATS;
+
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+
+			m_subState = SubState.GO_CONGRATS;
+
+		} else {
+
+			PointSystemController.Instance.stopPointSystemTimer();
+
+			m_subState = SubState.No_Points;
+
+		}
 	}
 	
 	private bool _onShouldCloseView(UniWebView p_webView)
 	{
-		m_subState = SubState.GO_CONGRATS;
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+			
+			m_subState = SubState.GO_CONGRATS;
+			
+		} else {
+			
+			PointSystemController.Instance.stopPointSystemTimer();
+			
+			m_subState = SubState.No_Points;
+			
+		}
 		return false;
 	}
 
 	private void _clickBack(UIButton p_button)
 	{
-		m_subState = SubState.GO_CONGRATS;
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+			
+			m_subState = SubState.GO_CONGRATS;
+			
+		} else {
+			
+			PointSystemController.Instance.stopPointSystemTimer();
+			
+			m_subState = SubState.No_Points;
+			
+		}
 	}
 
 	private GameObject	m_webObj;
@@ -204,6 +258,7 @@ public class VideoViewState : WebViewState
 {
 	public override void enter(GameController p_gameController)
 	{
+
 		base.enter(p_gameController);
 
 
@@ -219,7 +274,15 @@ public class VideoViewState : WebViewState
 			case SubState.GO_CONGRATS:
 				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
 				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+
 				break;
+
+			case SubState.No_Points:
+
+				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+
+				break;
+
 			}
 			
 			m_subState = SubState.NONE;
@@ -273,8 +336,15 @@ public class GameViewState : WebViewState
 			switch (m_subState)
 			{
 			case SubState.GO_CONGRATS:
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
+				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.GAME_VIEW);
 				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				
+				break;
+				
+			case SubState.No_Points:
+				
+				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+				
 				break;
 			}
 			

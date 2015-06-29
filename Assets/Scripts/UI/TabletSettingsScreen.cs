@@ -63,12 +63,33 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonHome(){
 
-		//KidMode.openHome ();
-
 		homeSettingsPanel.SetActive (true);
 
 		showHomeSettingsHighLights ();
 		
+	}
+
+	public void buttonExit(){
+
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+
+//		KidModeLockController.Instance.stateHomeLauncher = KidModeLockController.StateHomeLauncher.Default;
+//		
+//		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
+//
+//		KidMode.disablePluginComponent ();
+
+		KidMode.openDefaultLauncher ();
+
+//		KidMode.startActivity ("com.android.launcher3");
+//		KidMode.openDefaultLauncher ();
+
+	}
+
+	public void openDefaultLauncher(){
+
+		KidMode.openDefaultLauncher ();
+
 	}
 
 	public void buttonWifi(){

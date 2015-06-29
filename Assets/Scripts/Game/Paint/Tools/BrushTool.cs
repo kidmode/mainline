@@ -7,6 +7,8 @@ public class BrushTool : ToolState
 	{
 		base.enter(p_paintController);
 
+
+
 		m_size = 1;
 		m_color = Color.blue;
 		m_hardness = 50;

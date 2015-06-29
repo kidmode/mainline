@@ -54,9 +54,24 @@ public class PaintAcitivityController : System.Object
 
 		if(m_isFinished)
 		{
+
 			dispose();
-			p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
-			p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+
+
+			if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+				
+				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
+				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+
+			} else {
+
+//				int l_nextState = p_gameController.getConnectedState(ZoodleState.REGION_FUN);
+				
+				PointSystemController.Instance.stopPointSystemTimer();
+				
+				p_gameController.changeState( ZoodleState.REGION_FUN );
+				
+			}
 		}
 	}
 
