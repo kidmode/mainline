@@ -32,6 +32,8 @@ public class WebViewState : GameState
 		m_text = (l_asset).text;
 		string l_url = getURL();
 
+		Debug.Log ("                          enter       ===========================      l_url " + l_url);
+
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
 
 		m_isLoaded = false;
@@ -51,6 +53,7 @@ public class WebViewState : GameState
 	void HandleOnLoadBegin (UniWebView webView, string loadingUrl)
 	{
 		string l_url = getURL();
+
 		if (loadingUrl != l_url)
 		{
 			webView.Stop();
@@ -72,11 +75,11 @@ public class WebViewState : GameState
 		{
 			if (l_url.Contains("?"))
 			{
-				l_url = l_url + "&fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+				l_url = l_url + "&fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1";
 			}
 			else
 			{
-				l_url = l_url + "?fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1&autoplay=1&playsinline=1&iv_load_policy=3";
+				l_url = l_url + "?fs=0&modestbranding=1&rel=0&showinfo=1&controls=1&cc_load_policy=1";
 			}
 		}
 
