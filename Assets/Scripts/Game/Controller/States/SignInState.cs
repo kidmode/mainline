@@ -54,9 +54,6 @@ public class SignInState : GameState
 					{
 						if( SessionHandler.getInstance().token.isPremium() )
 						{
-							//cynthia
-							SessionHandler.getInstance ().token.setLogin(true);
-							//cynthia
 							if (null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
 							{
 								p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
