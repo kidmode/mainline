@@ -15,7 +15,7 @@ public class ImageCache : Object
 			return null;
 
 		byte[] bytes = File.ReadAllBytes(file); 
-		Texture2D texture = new Texture2D(1, 1);
+		Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 		texture.LoadImage(bytes);
 		return texture;
 	}

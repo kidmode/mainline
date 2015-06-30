@@ -1364,7 +1364,6 @@ public class RegionBaseState : GameState
 
 				string contentName = getLocalContentNmae(l_content);
 				Texture2D texture = ImageCache.getCacheImage(contentName);
-
 				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
 				
 				if (l_content.favorite)
@@ -1385,10 +1384,6 @@ public class RegionBaseState : GameState
 
 				string contentName = getLocalContentNmae(l_content);
 				Texture2D texture = ImageCache.getCacheImage(contentName);
-//				if (texture == null)
-//					Debug.Log("new icon:");
-//				else
-//					Debug.Log("cached icon"); 
 				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
 
 				GameInfo l_game = new GameInfo(l_info);
