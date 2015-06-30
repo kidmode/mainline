@@ -120,7 +120,9 @@ public class LoadingEntranceState : GameState
 	private void onRequestComplete(WWW p_response)
 	{
 		if (p_response.error != null)
-			m_gameController.changeState(ZoodleState.SERVER_ERROR);
+		{
+			//m_gameController.changeState(ZoodleState.SERVER_ERROR);  cynthia
+		}
 		else
 		{
 			string l_string = "";

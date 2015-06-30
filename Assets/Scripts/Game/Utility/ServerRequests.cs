@@ -686,13 +686,13 @@ public class CreateChildRequest : RequestQueue.Request
 		SessionHandler.getInstance().kidList.Add(l_kid);
 		SessionHandler.getInstance().getSingleKidApplist(l_kid);
 
-		LocalSetting l_setting = LocalSetting.find( "User" );
-		l_setting.setInt( ZoodlesConstants.USER_KIDCOUNT, SessionHandler.getInstance().kidList.Count);
-		int count = SessionHandler.getInstance().kidList.Count;
-		PlayerPrefs.SetString("kid"+Convert.ToString(count), p_response.text);
+		//cynthia
+//		LocalSetting l_setting = LocalSetting.find( "User" );
+//		l_setting.setInt( ZoodlesConstants.USER_KIDCOUNT, SessionHandler.getInstance().kidList.Count);
+//		int count = SessionHandler.getInstance().kidList.Count;
+//		PlayerPrefs.SetString("kid"+Convert.ToString(count), p_response.text);
+//		PlayerPrefs.Save();
 
-//		TextWriter WriteFileStream = new StreamWriter(Path.Combine(Application.dataPath, "kid"+Convert.ToString(count)));
-//		DictionarySerializer.Serialize (l_data, WriteFileStream);
 	}
 
 	private string m_name;

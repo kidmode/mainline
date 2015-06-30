@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -383,7 +384,15 @@ public class SignInState : GameState
 				SessionHandler.getInstance().currentKid = l_kidList[0];
 				SessionHandler.getInstance().getBooklist();
 			}
-			
+			//cynthia
+//			LocalSetting l_setting = LocalSetting.find( "User" );
+//			l_setting.setInt( ZoodlesConstants.USER_KIDCOUNT, SessionHandler.getInstance().kidList.Count);
+//			for (int i = 0 ; i < l_kidList.Count ; i ++)
+//			{
+//				PlayerPrefs.SetString("kid"+Convert.ToString(i), MiniJSON.MiniJSON.jsonEncode(l_data[i]));
+//			}
+//			PlayerPrefs.Save();
+
 			m_loginSuccess = true;
 		}
 		else
