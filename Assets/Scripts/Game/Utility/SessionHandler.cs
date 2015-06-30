@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.IO;
+using System;
+using System.Xml;
+using System.Xml.Schema;
 
 public class SessionHandler 
 {
@@ -45,7 +50,10 @@ public class SessionHandler
 	public List<Kid> kidList
 	{
 		get {   return m_kidList;   }
-		set {   m_kidList = value;  }
+		set 
+		{  
+			m_kidList = value; 
+		}
 	}
 
 	public Token token
@@ -533,6 +541,7 @@ public class SessionHandler
 		m_deviceName = string.Empty;
 		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
+		m_kidcount = 0;
 	}
 
 	private void _load()
@@ -546,7 +555,22 @@ public class SessionHandler
 		m_verifyBirth = l_setting.getBool (ZoodlesConstants.USER_VERIFY_BIRTHYEAR,true);
 		m_childLockPassword = l_setting.getString (ZoodlesConstants.CHILD_LOCK_PASSWORD,string.Empty);
 		m_childLockSwitch = l_setting.getBool (ZoodlesConstants.USER_CHILDLOCK_SWITCH,false);
-
+		m_kidcount = l_setting.getInt(ZoodlesConstants.USER_KIDCOUNT, 0);
+//		if(m_kidcount > 0)
+//		{
+//			for (int i = 0; i < m_kidcount; i++)
+//			{
+//				String str = PlayerPrefs.GetString("kid"+Convert.ToString(i+1)) as String;
+//				Hashtable h = MiniJSON.MiniJSON.jsonDecode(str) as Hashtable;
+//
+////				TextReader textReader = new StreamReader(Path.Combine(Application.dataPath, "kid"+ Convert.ToString(i+1)));
+////				Hashtable h = DictionarySerializer.Deserialize(textReader) as Hashtable;
+//				Kid l_kid = new Kid(h);
+//				List<Kid> l_kidList = new List<Kid>();
+//				l_kidList.Add(l_kid);
+//				m_kidList = l_kidList;
+//			}
+//		}
 	}
 
 	public void addBook (int p_id, Book p_book)
@@ -717,6 +741,25 @@ public class SessionHandler
 		readingTable = null;
 	}
 
+	public void Save<T> (string name, T instance)
+	{
+		XmlSerializer serializer = new XmlSerializer (typeof(T));
+		using (var ms = new MemoryStream ()) {
+			serializer.Serialize (ms, instance);
+			PlayerPrefs.SetString (name, System.Text.ASCIIEncoding.ASCII.GetString (ms.ToArray ()));
+		}
+	}
+	
+	public T Load<T> (string name)
+	{
+		if(!PlayerPrefs.HasKey(name)) return default(T);
+		XmlSerializer serializer = new XmlSerializer (typeof(T));
+		T instance;
+		using (var ms = new MemoryStream (System.Text.ASCIIEncoding.ASCII.GetBytes (PlayerPrefs.GetString (name)))) {
+			instance = (T)serializer.Deserialize (ms);
+		}
+		return instance;
+	}
 	private Kid     m_kid   = null;
     private Token   m_token = null;
 	private List<Kid> m_kidList = null;
@@ -724,7 +767,7 @@ public class SessionHandler
 	private string  m_selectedAvatar = null;
 	private bool 	m_hasPin = false;
 	private int 	m_pin;
-
+	private int 	m_kidcount; //cynthia
 	private string m_username;
 
 	private string m_errorName;
@@ -796,4 +839,82 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
+}
+
+public class DictionarySerializer : IXmlSerializable
+{
+	private IDictionary dictionary = null;
+	
+	public DictionarySerializer()
+	{
+		this.dictionary = new Hashtable();
+	}
+	
+	private DictionarySerializer(IDictionary dictionary)
+	{
+		this.dictionary = dictionary;
+	}
+	
+	public static void Serialize(IDictionary dictionary, Stream stream)
+	{
+		DictionarySerializer ds = new DictionarySerializer(dictionary);
+		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
+		xs.Serialize(stream, ds);
+	}
+
+	public static void Serialize(IDictionary dictionary, TextWriter textWriter)
+	{
+		DictionarySerializer ds = new DictionarySerializer(dictionary);
+		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
+		xs.Serialize(textWriter, ds);
+	}
+	
+	public static IDictionary Deserialize(Stream stream)
+	{
+		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
+		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(stream);
+		return ds.dictionary;
+	}
+
+	public static IDictionary Deserialize(TextReader textReader)
+	{
+		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
+		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(textReader);
+		return ds.dictionary;
+	}
+
+	XmlSchema IXmlSerializable.GetSchema()
+	{
+		return null;
+	}
+	
+	void IXmlSerializable.ReadXml(XmlReader reader)
+	{
+		reader.Read();
+		reader.ReadStartElement("dictionary");
+		while (reader.NodeType != XmlNodeType.EndElement)
+		{
+			reader.ReadStartElement("item");
+			string key = reader.ReadElementString("key");
+			string value = reader.ReadElementString("value");
+			reader.ReadEndElement();
+			reader.MoveToContent();
+			dictionary.Add(key, value);
+		}
+		reader.ReadEndElement();
+	}
+	
+	void IXmlSerializable.WriteXml(XmlWriter writer)
+	{
+		writer.WriteStartElement("dictionary");
+		foreach (object key in dictionary.Keys)
+		{
+			object value = dictionary[key];
+			writer.WriteStartElement("item");
+			writer.WriteElementString("key", key.ToString());
+			writer.WriteElementString("value", value.ToString());
+			writer.WriteEndElement();
+		}
+		writer.WriteEndElement();
+	}
 }
