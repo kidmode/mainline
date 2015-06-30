@@ -49,10 +49,14 @@ public class NavigationBarControl : MonoBehaviour {
 
 	public void TurnImmersiveModeOn()
 	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
 		using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) { 
 			AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
 			activity.CallStatic("showFullScreen"); 
 		}
+
+		#endif
 	}
 	
 	void TurnImmersiveModeOff() {

@@ -46,25 +46,25 @@ public class CongratsState : GameState
 	{
 		base.update(p_gameController, p_time);
 
-//		m_time += p_time;
-//		if (m_time < 1250)
-//		{
-//			float l_fillAmount = Mathf.Lerp(0, 1.0f, m_time / 1250.0f);
-//			m_loadingBarImg.fillAmount = l_fillAmount;
-//		}
-//		else
-//			m_loadingBarImg.fillAmount = 1.0f;
+		m_time += p_time;
+		if (m_time < 1250)
+		{
+			float l_fillAmount = Mathf.Lerp(0, 1.0f, m_time / 1250.0f);
+			m_loadingBarImg.fillAmount = l_fillAmount;
+		}
+		else
+			m_loadingBarImg.fillAmount = 1.0f;
 
-//		if( !m_requested )
-//		{
-//			m_clicked = false;		
-//		}
+		if( !m_requested )
+		{
+			m_clicked = false;		
+		}
 
-		if (m_requested) {
+		if (m_requested && m_loadingBarImg.fillAmount == 1.0f) {
 
-			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
-			if (l_nextState != -1)
-				p_gameController.changeState(l_nextState);
+//			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
+//			if (l_nextState != -1)
+//				p_gameController.changeState(l_nextState);
 
 		}
 
@@ -73,20 +73,20 @@ public class CongratsState : GameState
 
 
 
-//		if (m_clicked)
-//		{
-//			m_clicked = false;
-//			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
-//			if (l_nextState != -1)
-//				p_gameController.changeState(l_nextState);
-//		}
+		if (m_clicked)
+		{
+			m_clicked = false;
+			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
+			if (l_nextState != -1)
+				p_gameController.changeState(l_nextState);
+		}
 	}
 
 	public override void exit(GameController p_gameController)
 	{
-//		UIManager l_ui = p_gameController.getUI();
-//		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
-//		l_ui.removeScreen(UIScreen.CONGRATS);
+		UIManager l_ui = p_gameController.getUI();
+		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
+		l_ui.removeScreen(UIScreen.CONGRATS);
 
 		base.exit(p_gameController);
 	}
