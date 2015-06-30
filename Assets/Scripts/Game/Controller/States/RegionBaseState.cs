@@ -1361,8 +1361,11 @@ public class RegionBaseState : GameState
 				
 				string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
 					ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
-				
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+
+				string contentName = getLocalContentNmae(l_content);
+				Texture2D texture = ImageCache.getCacheImage(contentName);
+
+				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
 				
 				if (l_content.favorite)
 					m_videoFavoritesList.Add(l_info);
@@ -1382,10 +1385,10 @@ public class RegionBaseState : GameState
 
 				string contentName = getLocalContentNmae(l_content);
 				Texture2D texture = ImageCache.getCacheImage(contentName);
-				if (texture == null)
-					Debug.Log("new icon");
-				else
-					Debug.Log("cached icon"); 
+//				if (texture == null)
+//					Debug.Log("new icon:");
+//				else
+//					Debug.Log("cached icon"); 
 				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
 
 				GameInfo l_game = new GameInfo(l_info);

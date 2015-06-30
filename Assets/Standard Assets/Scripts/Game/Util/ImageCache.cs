@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Threading;
 
 public class ImageCache : Object
 {
@@ -13,7 +14,9 @@ public class ImageCache : Object
 		if (file == null)
 			return null;
 
-		Texture2D texture = (Texture2D)Resources.Load(file);
+		byte[] bytes = File.ReadAllBytes(file); 
+		Texture2D texture = new Texture2D(1, 1);
+		texture.LoadImage(bytes);
 		return texture;
 	}
 
@@ -23,7 +26,7 @@ public class ImageCache : Object
 			return null;
 			
 		string l_file = _composeFileName(p_file);
-		return (File.Exists(l_file) ? "file:///" + l_file : null);
+		return (File.Exists(l_file) ? l_file : null);
 	}
 	
 	public static void saveCacheImage(string p_file, Texture2D p_image)
@@ -45,7 +48,16 @@ public class ImageCache : Object
 		}
 	
 		string l_file = _composeFileName(p_file);
-		File.WriteAllBytes(l_file, p_image.EncodeToPNG());
+		byte[] bytes = p_image.EncodeToPNG();
+
+		Thread thread = new Thread(() => saveImageThread(l_file, bytes));
+		thread.Start();
+	}
+
+	private static void saveImageThread(string filePath, byte[] bytes)
+	{
+		File.WriteAllBytes(filePath, bytes);
+		Debug.Log(filePath + " save image successfully.");
 	}
 	
 	public static void deleteCacheImage(string p_file)
