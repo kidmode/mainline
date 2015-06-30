@@ -25,8 +25,6 @@ public class KidModeListTab : MonoBehaviour {
 
 	public void onValueChanged(bool changed){
 
-		Debug.Log (" KidModeListTabKidModeListTabKidModeListTabKidModeListTab  onValueChanged  " + changed  +"    " + gameObject.name);
-
 		if (changed) {
 
 			onText.SetActive(true);

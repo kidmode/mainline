@@ -18,7 +18,7 @@ public class SignInCacheState : GameState
 //			m_loginSuccess = true;
 //		}
 //		else
-		{
+//		{
 			//	SessionHandler.getInstance ().clientId = 600;
 			m_queue = new RequestQueue();
 			//		m_queue.add(new ClientIdRequest(getclientIdComplete));
@@ -39,7 +39,7 @@ public class SignInCacheState : GameState
 			m_queue.add(new GetKidListRequest(onGetKidsComplete));
 			m_queue.request(RequestType.SEQUENCE);
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
-		}
+//		}
 
 	}
 
