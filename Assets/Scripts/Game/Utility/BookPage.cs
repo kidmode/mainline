@@ -16,14 +16,25 @@ public class BookPage : System.Object
 
 	public void requestImage()
 	{
+		Debug.Log("Book page " + id + "_" + position);
+
 		if( null != pageImage || m_requested )
 			return;
 
 		_Debug.log("URL: " + imageUrl);
-		RequestQueue l_queue = new RequestQueue();
-		l_queue.add(new ImageRequest("content", imageUrl, onPageImageRecieved));
-		l_queue.request(RequestType.RUSH);
-		m_requested = true;
+
+		string contentName = "bookpage_" + id + "_" + position + ".jpg";
+		Texture2D texture = ImageCache.getCacheImage(contentName);
+		pageImage = texture;
+		if (pageImage == null)
+		{
+			RequestQueue l_queue = new RequestQueue();
+			l_queue.add(new ImageRequest("content", imageUrl, onPageImageRecieved));
+			l_queue.request(RequestType.RUSH);
+			m_requested = true;
+		}
+		else
+			Debug.Log(contentName + " cached");
 	}
 
 	public void dispose()
@@ -41,6 +52,10 @@ public class BookPage : System.Object
 		if( p_response.error == null )
 		{
 			pageImage = p_response.texture;
+
+			string name = "bookpage_" + id + "_" + position + ".jpg";
+			Debug.Log(name);
+			ImageCache.saveCacheImage(name, pageImage);
 		}
 		else
 		{
