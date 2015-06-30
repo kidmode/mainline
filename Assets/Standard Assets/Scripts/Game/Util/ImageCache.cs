@@ -48,7 +48,15 @@ public class ImageCache : Object
 		}
 	
 		string l_file = _composeFileName(p_file);
-		byte[] bytes = p_image.EncodeToPNG();
+
+		string[] splitArray = p_file.Split(' ');
+		string fileExt = splitArray[splitArray.Length-1];
+
+		byte[] bytes;
+		if (fileExt.Equals("png"))
+			bytes = p_image.EncodeToPNG();
+		else //if (fileExt.Equals("jpg"))
+			bytes = p_image.EncodeToJPG(100);
 
 		Thread thread = new Thread(() => saveImageThread(l_file, bytes));
 		thread.Start();

@@ -186,7 +186,6 @@ public class BookActivityCanvas : UICanvas
         }
     }
 
-
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
 		UIButton l_button = p_element as UIButton;

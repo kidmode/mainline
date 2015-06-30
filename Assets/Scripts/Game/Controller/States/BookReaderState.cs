@@ -127,9 +127,12 @@ public class BookReaderState : GameState {
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		
-		m_audioSource.pitch = 1.0f;
-		m_audioSource.Stop();
+
+		if (m_audioSource != null)
+		{
+			m_audioSource.pitch = 1.0f;
+			m_audioSource.Stop();
+		}
 		
 		UIManager l_ui = p_gameController.getUI();
 		l_ui.removeScreen( m_bookReaderCanvas   );
