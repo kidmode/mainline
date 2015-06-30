@@ -67,6 +67,17 @@
             android:value="\ 1" />
 
         <receiver android:name="com.androidnative.features.notifications.LocalNotificationReceiver" />
+        
+		<receiver
+            android:name="com.onevcat.uniwebview.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BootCompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name="com.zoodles.ellipsiskids.activity.LauncherActivity"
@@ -271,6 +282,7 @@
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE" />

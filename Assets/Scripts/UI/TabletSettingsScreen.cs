@@ -66,6 +66,8 @@ public class TabletSettingsScreen : MonoBehaviour {
 		homeSettingsPanel.SetActive (true);
 
 		showHomeSettingsHighLights ();
+
+		KidMode.openDefaultLauncher ();
 		
 	}
 
