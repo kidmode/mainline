@@ -54,6 +54,10 @@ public class Game : MonoBehaviour
 	
 	public void Awake () 
 	{
+		// Sean: vzw
+		QualitySettings.SetQualityLevel (0);
+		// vzw end
+
 		GCS.Environment.init();
 		FB.Init(_initFacebookComplete);
 
