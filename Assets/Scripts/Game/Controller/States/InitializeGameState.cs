@@ -18,7 +18,7 @@ public class InitializeGameState : GameState
 		m_gotoLogin = false;
 		m_time = 0;
 
-		if (SessionHandler.getInstance().token.isLogin()) //cynthia
+		if (SessionHandler.getInstance().token.isExist()) //cynthia
 		{
 			_setupScreen(p_gameController.getUI());
 			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);

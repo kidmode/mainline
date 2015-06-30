@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+
 
 public class Kid : System.Object
 {
@@ -10,7 +11,7 @@ public class Kid : System.Object
         maxViolence = ViolenceRating.Default;
     }
 
-    public Kid( string p_name, int p_id, string p_photo )
+	public Kid( string p_name, int p_id, string p_photo )
     {
         name        = p_name;
         id          = p_id;
@@ -19,7 +20,7 @@ public class Kid : System.Object
         maxViolence = ViolenceRating.Default;
     }
 
-    public Kid( Hashtable p_table )
+	public Kid( Hashtable p_table )
     {
         fromHashtable( p_table );
     }
@@ -54,14 +55,14 @@ public class Kid : System.Object
         _Debug.log("*********************************");
     }
 
-    public void fromHashtable( Hashtable p_table )
+	public void fromHashtable( Hashtable p_table )
     {
         DebugUtils.Assert( p_table != null );
-
-        if (p_table.ContainsKey(KidsTable.COLUMN_ID))
+	
+		if (p_table.ContainsKey(KidsTable.COLUMN_ID))
             id = (int)((double)p_table[KidsTable.COLUMN_ID]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_NAME))
+		if (p_table.ContainsKey(KidsTable.COLUMN_NAME))
 		{
 			wholeName = p_table[KidsTable.COLUMN_NAME] as string;
 			List<string> l_list = new List<String>();
@@ -76,7 +77,7 @@ public class Kid : System.Object
 			}
 		}
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_BIRTHDAY))
+		if (p_table.ContainsKey(KidsTable.COLUMN_BIRTHDAY))
 		{
             birthday = p_table[KidsTable.COLUMN_BIRTHDAY] as string;
 
@@ -96,31 +97,31 @@ public class Kid : System.Object
 			age = l_age;
 		}
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_MAX_VIOLENCE))
+		if (p_table.ContainsKey(KidsTable.COLUMN_MAX_VIOLENCE))
             maxViolence = (ViolenceRating)((double)p_table[KidsTable.COLUMN_MAX_VIOLENCE]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_ALLOW_VIDEO_MAIL))
+		if (p_table.ContainsKey(KidsTable.COLUMN_ALLOW_VIDEO_MAIL))
             allowVideoMail = (bool)p_table[KidsTable.COLUMN_ALLOW_VIDEO_MAIL];
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_MATH))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_MATH))
             weightMath = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_MATH]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_READING))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_READING))
             weightReading = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_READING]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_SCIENCE))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_SCIENCE))
             weightScience = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_SCIENCE]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_SOCIAL_STUDIES))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_SOCIAL_STUDIES))
             weightSocialStudies = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_SOCIAL_STUDIES]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_COGNITIVE_DEVELOPMENT))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_COGNITIVE_DEVELOPMENT))
             weightCognitiveDevelopment = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_COGNITIVE_DEVELOPMENT]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_CREATIVE_DEVELOPMENT))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_CREATIVE_DEVELOPMENT))
             weightCreativeDevelopment = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_CREATIVE_DEVELOPMENT]);
 
-        if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_LIFE_SKILLS))
+		if (p_table.ContainsKey(KidsTable.COLUMN_WEIGHT_LIFE_SKILLS))
             weightLifeSkills = (int)((double)p_table[KidsTable.COLUMN_WEIGHT_LIFE_SKILLS]);
 
 		if (p_table.ContainsKey(KidsTable.COLUMN_LEVEL))
@@ -143,7 +144,46 @@ public class Kid : System.Object
 
 		if (p_table.ContainsKey(KidsTable.GAME_PLAYED_COUNT))
 			gamePlayedCount = int.Parse(p_table[KidsTable.GAME_PLAYED_COUNT].ToString());
+
+
     }
+
+//	private List<DataItem> HashtableToDataItem ( Hashtable p_table )
+//	{
+//		tempdataitems = new List<DataItem>(p_table.Count);
+//		foreach (string key in p_table.Keys)
+//		{
+//			tempdataitems.Add(new DataItem(key, p_table[key].ToString()));
+//		}
+//		return tempdataitems;
+//	}
+//
+//	private string SerializeJobData( Hashtable p_table )
+//	{	
+//		XmlSerializer serializer = new XmlSerializer(typeof(List<DataItem>));
+//		StringWriter sw = new StringWriter();
+//		XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+//		ns.Add("","");
+//		
+//		serializer.Serialize(sw, tempdataitems,ns);
+//		
+//		return sw.ToString();
+//	}
+//
+//	private Hashtable DeserializeData(string RawData)
+//	{
+//		Hashtable myTable = new Hashtable();
+//		XmlSerializer xs = new XmlSerializer(typeof(List<DataItem>));
+//		StringReader sr = new StringReader(RawData);
+//		
+//		List<DataItem> templist = (List<DataItem>)xs.Deserialize(sr);
+//		
+//		foreach (DataItem di in templist)
+//		{
+//			myTable.Add(di.Key, di.Value);
+//		}
+//		return myTable;
+//	}
 
 	private List<string> separateChildName(string p_childName)
 	{
@@ -216,9 +256,9 @@ public class Kid : System.Object
 	public List<object> appList					{ get; set; }
 
     public ViolenceRating maxViolence           { get; set; }
+//	public List<DataItem> tempdataitems;
 
     //-------------------- Private Implementation -------------------
-
 	private void _requestPhotoComplete( WWW p_www )
 	{
 		if (p_www.error == null && p_www.texture.width != 8 && p_www.texture.height != 8)
@@ -239,7 +279,6 @@ public class Kid : System.Object
 
 	private bool m_photoRequested = false;
 }
-
 
 public class KidsTable
 {
@@ -269,3 +308,4 @@ public class KidsTable
 	public const string VIDEO_WATCHED_COUNT					= "videos_watched_count";
 	public const string GAME_PLAYED_COUNT					= "games_played_coun";
 }
+

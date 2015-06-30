@@ -15,9 +15,13 @@ public class CongratsState : GameState
 
 		l_ui.createScreen(UIScreen.CONGRATS_BACKGROUND, false, -1);
 
+
 		m_screen = l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;
 		UILabel l_info = m_screen.getView("zpInfo") as UILabel;
 		l_info.text = Localization.getString(Localization.TXT_STATE_49_ZP);
+
+		UILabel l_pointNumber = m_screen.getView("zpNumberInfo") as UILabel;
+		l_pointNumber.text = "5"; 
 
 		UILabel l_requestInfo = m_screen.getView("requestInfo") as UILabel;
 		l_requestInfo.text = Localization.getString(Localization.TXT_STATE_49_UPLOADING);
@@ -42,34 +46,47 @@ public class CongratsState : GameState
 	{
 		base.update(p_gameController, p_time);
 
-		m_time += p_time;
-		if (m_time < 1250)
-		{
-			float l_fillAmount = Mathf.Lerp(0, 1.0f, m_time / 1250.0f);
-			m_loadingBarImg.fillAmount = l_fillAmount;
-		}
-		else
-			m_loadingBarImg.fillAmount = 1.0f;
+//		m_time += p_time;
+//		if (m_time < 1250)
+//		{
+//			float l_fillAmount = Mathf.Lerp(0, 1.0f, m_time / 1250.0f);
+//			m_loadingBarImg.fillAmount = l_fillAmount;
+//		}
+//		else
+//			m_loadingBarImg.fillAmount = 1.0f;
 
-		if( !m_requested )
-		{
-			m_clicked = false;
-		}
+//		if( !m_requested )
+//		{
+//			m_clicked = false;		
+//		}
 
-		if (m_clicked)
-		{
-			m_clicked = false;
+		if (m_requested) {
+
 			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
 			if (l_nextState != -1)
 				p_gameController.changeState(l_nextState);
+
 		}
+
+
+
+
+
+
+//		if (m_clicked)
+//		{
+//			m_clicked = false;
+//			int l_nextState = p_gameController.getConnectedState(ZoodleState.CONGRATS_STATE);
+//			if (l_nextState != -1)
+//				p_gameController.changeState(l_nextState);
+//		}
 	}
 
 	public override void exit(GameController p_gameController)
 	{
-		UIManager l_ui = p_gameController.getUI();
-		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
-		l_ui.removeScreen(UIScreen.CONGRATS);
+//		UIManager l_ui = p_gameController.getUI();
+//		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
+//		l_ui.removeScreen(UIScreen.CONGRATS);
 
 		base.exit(p_gameController);
 	}

@@ -336,14 +336,14 @@ public class GameViewState : WebViewState
 			switch (m_subState)
 			{
 			case SubState.GO_CONGRATS:
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.GAME_VIEW);
+				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
 				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
 				
 				break;
 				
 			case SubState.No_Points:
 				
-				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+				p_gameController.changeState(ZoodleState.REGION_GAME);
 				
 				break;
 			}
