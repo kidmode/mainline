@@ -9,12 +9,17 @@ public class ParticleSortingLayer : MonoBehaviour {
 	void Start ()
 	{
 		// Set the sorting layer of the particle system.
-		particleSystem.renderer.sortingLayerName = "Default";
+
+//		return;
+		particleSystem.renderer.sortingLayerName = "Particles";
 		particleSystem.renderer.sortingOrder = startSortingOrder;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+//		return;
+		particleSystem.renderer.sortingLayerName = "Particles";
+		particleSystem.renderer.sortingOrder = startSortingOrder;
 	
 	}
 }

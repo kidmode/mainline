@@ -13,10 +13,10 @@ public class CongratsState : GameState
 
 		UIManager l_ui = p_gameController.getUI();
 
-		l_ui.createScreen(UIScreen.CONGRATS_BACKGROUND, false, 6);
+		l_ui.createScreen(UIScreen.CONGRATS_BACKGROUND, false, -1);
 
 
-		m_screen = l_ui.createScreen(UIScreen.CONGRATS, false, 8) as UICanvas;
+		m_screen = l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;
 		UILabel l_info = m_screen.getView("zpInfo") as UILabel;
 		l_info.text = Localization.getString(Localization.TXT_STATE_49_ZP);
 
