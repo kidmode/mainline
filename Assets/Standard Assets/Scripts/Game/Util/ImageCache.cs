@@ -15,7 +15,14 @@ public class ImageCache : Object
 			return null;
 
 		byte[] bytes = File.ReadAllBytes(file); 
-		Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+
+		string[] splitArray = p_file.Split('.');
+		string fileExt = splitArray[splitArray.Length-1];
+		TextureFormat texFormat = TextureFormat.ARGB32;
+		if (fileExt.Equals("jpg"))
+			texFormat = TextureFormat.RGB24;
+
+		Texture2D texture = new Texture2D(1, 1, texFormat, false);
 		texture.LoadImage(bytes);
 		return texture;
 	}
@@ -49,7 +56,7 @@ public class ImageCache : Object
 	
 		string l_file = _composeFileName(p_file);
 
-		string[] splitArray = p_file.Split(' ');
+		string[] splitArray = p_file.Split('.');
 		string fileExt = splitArray[splitArray.Length-1];
 
 		byte[] bytes;
