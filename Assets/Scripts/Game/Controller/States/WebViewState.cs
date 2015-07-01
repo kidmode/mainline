@@ -32,7 +32,7 @@ public class WebViewState : GameState
 		m_text = (l_asset).text;
 		string l_url = getURL();
 
-		Debug.Log ("                          enter       ===========================      l_url " + l_url);
+//		Debug.Log ("                          enter       ===========================      l_url " + l_url);
 
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
 
@@ -142,6 +142,9 @@ public class WebViewState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		GameObject.Destroy(m_webObj);
+
+
+
 		m_webObj = null;
 		m_webView = null;
 

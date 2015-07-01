@@ -12,6 +12,10 @@ public class RegionLandingState : RegionBaseState
 		m_regionState 	= RegionState.Left;
 
 		_setupMainViews( p_gameController );
+
+//		_setupCongratViews ( p_gameController );
+
+
 	}
 	
 	private void _setupMainViews( GameController p_gameController )
@@ -19,6 +23,33 @@ public class RegionLandingState : RegionBaseState
 		m_activityPanelCanvas.tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 		m_regionLandingCanvas.tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 		m_regionBackgroundCanvas.tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+	}
+
+	private void _setupCongratViews(GameController p_gameController)
+	{
+
+		UIManager uiManager = p_gameController.getUI();
+
+		if (uiManager.findScreen (UIScreen.CONGRATS_BACKGROUND) == null) {
+		
+			UICanvas backGround = uiManager.createScreen (UIScreen.CONGRATS_BACKGROUND, false, 6) as UICanvas;
+
+			ShowAndHide show = backGround.getView ("holder").gameObject.GetComponent<ShowAndHide>();
+
+			show.hide();
+
+		}
+
+		if (uiManager.findScreen (UIScreen.CONGRATS) == null){
+
+			UICanvas screen = uiManager.createScreen (UIScreen.CONGRATS, false, 8);
+
+			ShowAndHide show = screen.getView ("holder").gameObject.GetComponent<ShowAndHide>();
+			
+			show.hide();
+
+		}
+
 	}
 }
 

@@ -33,8 +33,10 @@ public class CornerProfileCanvas : UICanvas
 
 //------------------ Private Implementation --------------------
 	
-	private void refreshInfo()
+	public void refreshInfo()
 	{
+
+		Debug.Log ("  refreshInfo  ======= corner profile canvas");
 		if (m_kid == null)
 			return;
 

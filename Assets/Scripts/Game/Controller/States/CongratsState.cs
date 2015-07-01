@@ -14,9 +14,23 @@ public class CongratsState : GameState
 		UIManager l_ui = p_gameController.getUI();
 
 		l_ui.createScreen(UIScreen.CONGRATS_BACKGROUND, false, -1);
+//		m_screenBackground = l_ui.findScreen (UIScreen.CONGRATS_BACKGROUND) as UICanvas;
+
+//		m_screenBackground.getView ("holder").gameObject.SetActive (true);
+//		ShowAndHide showBackGround = m_screenBackground.getView ("holder").gameObject.GetComponent<ShowAndHide>();
+//		
+//		showBackGround.show();
 
 
-		m_screen = l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;
+
+		m_screen =  l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;//l_ui.findScreen (UIScreen.CONGRATS) as UICanvas;// l_ui.createScreen(UIScreen.CONGRATS, false, 1) as UICanvas;
+
+//		ShowAndHide showScreen = m_screen.getView ("holder").gameObject.GetComponent<ShowAndHide>();
+//		
+//		showScreen.show();
+
+
+
 		UILabel l_info = m_screen.getView("zpInfo") as UILabel;
 		l_info.text = Localization.getString(Localization.TXT_STATE_49_ZP);
 
@@ -33,13 +47,21 @@ public class CongratsState : GameState
 
 		SoundManager.getInstance().playVolume("win", 0, -1, "", null, false, 0.2f);
 
+//		m_screen.getView("holder").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
 //		SoundManager.getInstance().play("win", 0, -1, "", null, true);
 
-		m_queue = new RequestQueue();
-		m_queue.add(new GetZPs(2, _requestComplete));
-		m_queue.request(RequestType.RUSH);
+//		m_queue = new RequestQueue();
+//		m_queue.add(new GetZPs(2, _requestComplete));
+//		m_queue.request(RequestType.RUSH);
 
 		GAUtil.logScreen("CongratsScreen");
+	}
+
+	void startScreen(){
+
+
+
 	}
 
 	public override void update(GameController p_gameController, int p_time)
@@ -55,10 +77,10 @@ public class CongratsState : GameState
 		else
 			m_loadingBarImg.fillAmount = 1.0f;
 
-		if( !m_requested )
-		{
-			m_clicked = false;		
-		}
+//		if( !m_requested )
+//		{
+//			m_clicked = false;		
+//		}
 
 		if (m_requested && m_loadingBarImg.fillAmount == 1.0f) {
 
@@ -67,11 +89,6 @@ public class CongratsState : GameState
 //				p_gameController.changeState(l_nextState);
 
 		}
-
-
-
-
-
 
 		if (m_clicked)
 		{
@@ -128,4 +145,5 @@ public class CongratsState : GameState
 	private bool m_requested = false;
 	private RequestQueue m_queue = null;
 	private UICanvas m_screen;
+	private UICanvas m_screenBackground;
 }

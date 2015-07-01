@@ -33,8 +33,8 @@ public class BookInfo : object
 			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
 			request.request(RequestType.RUSH);
 		}
-		else
-			Debug.Log(contentName + " cached");
+//		else
+//			Debug.Log(contentName + " cached");
     }
 
 	private void _requestBookIconComplete(WWW p_response)
