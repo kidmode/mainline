@@ -32,7 +32,7 @@ public class WebViewState : GameState
 		m_text = (l_asset).text;
 		string l_url = getURL();
 
-		Debug.Log ("                          enter       ===========================      l_url " + l_url);
+//		Debug.Log ("                          enter       ===========================      l_url " + l_url);
 
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
 

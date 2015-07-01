@@ -51,9 +51,9 @@ public class CongratsState : GameState
 
 //		SoundManager.getInstance().play("win", 0, -1, "", null, true);
 
-		m_queue = new RequestQueue();
-		m_queue.add(new GetZPs(2, _requestComplete));
-		m_queue.request(RequestType.RUSH);
+//		m_queue = new RequestQueue();
+//		m_queue.add(new GetZPs(2, _requestComplete));
+//		m_queue.request(RequestType.RUSH);
 
 		GAUtil.logScreen("CongratsScreen");
 	}
@@ -77,10 +77,10 @@ public class CongratsState : GameState
 		else
 			m_loadingBarImg.fillAmount = 1.0f;
 
-		if( !m_requested )
-		{
-			m_clicked = false;		
-		}
+//		if( !m_requested )
+//		{
+//			m_clicked = false;		
+//		}
 
 		if (m_requested && m_loadingBarImg.fillAmount == 1.0f) {
 
@@ -89,11 +89,6 @@ public class CongratsState : GameState
 //				p_gameController.changeState(l_nextState);
 
 		}
-
-
-
-
-
 
 		if (m_clicked)
 		{
@@ -109,17 +104,6 @@ public class CongratsState : GameState
 		UIManager l_ui = p_gameController.getUI();
 		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
 		l_ui.removeScreen(UIScreen.CONGRATS);
-
-//		ShowAndHide showBackGround = m_screenBackground.getView ("holder").gameObject.GetComponent<ShowAndHide>();
-//		
-//		showBackGround.hide();
-//
-//
-//
-//		ShowAndHide showScreen = m_screen.getView ("holder").gameObject.GetComponent<ShowAndHide>();
-//		
-//		showScreen.hide();
-
 
 		base.exit(p_gameController);
 	}

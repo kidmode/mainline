@@ -8,6 +8,9 @@ public class CongratsScreen : MonoBehaviour {
 
 	private GameObject gameLogic;
 
+	[SerializeField]
+	private GameObject zoodlePointRequestPrefab;
+
 
 	//===============================
 	//Moved the animation from CongratState to screen sprcific
@@ -32,7 +35,9 @@ public class CongratsScreen : MonoBehaviour {
 
 		congratsScreenBackGround = uiManager.findScreen (UIScreen.CONGRATS_BACKGROUND);
 
-		Invoke ("startCongratsScreen", 0.8f);
+		GameObject.Instantiate (zoodlePointRequestPrefab);
+
+		Invoke ("startCongratsScreen", 0.6f);
 //
 //		m_loadingBarImg = congratsScreen.getView("loadingBarSprite") as UIImage;
 	

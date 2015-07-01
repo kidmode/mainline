@@ -940,6 +940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23f53c1355f24cbd8fdb4517f8eafd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoodlePointRequestPrefab: {fileID: 139680, guid: 4029778e316544eafb08164c6bf6e214,
+    type: 2}
 --- !u!114 &11417212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4167,7 +4169,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 342.804749, y: 184.761185}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22417252
 RectTransform:
@@ -4177,7 +4179,7 @@ RectTransform:
   m_GameObject: {fileID: 117252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .468164265, y: .468164206, z: .468164206}
   m_Children: []
   m_Father: {fileID: 22417250}
   m_RootOrder: 0
