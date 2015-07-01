@@ -24,7 +24,7 @@ public class BookInfo : object
 		iconUrl = p_iconUrl;
 
 		//honda: check icon existed or not. if not, load icon from server
-		string contentName = "book_" + bookId + ".png";
+		string contentName = "book_" + bookId + ".jpg";
 		Texture2D texture = ImageCache.getCacheImage(contentName);
 		icon = texture;
 		if (icon == null)
@@ -45,7 +45,7 @@ public class BookInfo : object
 		{
 			icon = p_response.texture;
 
-			string name = "book_" + bookId + ".png";
+			string name = "book_" + bookId + ".jpg";
 			Debug.Log(name);
 			ImageCache.saveCacheImage(name, icon);
 		}
@@ -69,7 +69,7 @@ public class BookInfo : object
 		disposeRequest();
 
 		//honda: check icon existed or not. if not, load icon from server
-		string contentName = "book_" + bookId + ".png";
+		string contentName = "book_" + bookId + ".jpg";
 		Texture2D texture = ImageCache.getCacheImage(contentName);
 		icon = texture;
 		if (icon == null)
