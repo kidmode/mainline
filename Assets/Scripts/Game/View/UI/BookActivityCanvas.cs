@@ -22,17 +22,32 @@ public class BookInfo : object
 		bookReadingId = p_bookReadingId;
 		bookState = p_state;
 		iconUrl = p_iconUrl;
-		request = new RequestQueue();
-		request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
-		request.request(RequestType.RUSH);
+
+		//honda: check icon existed or not. if not, load icon from server
+		string contentName = "book_" + bookId + ".jpg";
+		Texture2D texture = ImageCache.getCacheImage(contentName);
+		icon = texture;
+		if (icon == null)
+		{
+			request = new RequestQueue();
+			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
+			request.request(RequestType.RUSH);
+		}
+//		else
+//			Debug.Log(contentName + " cached");
     }
 
 	private void _requestBookIconComplete(WWW p_response)
 	{
 		if (p_response.error == null
+		  
 		    && false == disposed)
 		{
 			icon = p_response.texture;
+
+			string name = "book_" + bookId + ".jpg";
+			Debug.Log(name);
+			ImageCache.saveCacheImage(name, icon);
 		}
 		disposeRequest();
 	}
@@ -53,9 +68,18 @@ public class BookInfo : object
 		disposed = false;
 		disposeRequest();
 
-		request = new RequestQueue();
-		request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
-		request.request(RequestType.RUSH);
+		//honda: check icon existed or not. if not, load icon from server
+		string contentName = "book_" + bookId + ".jpg";
+		Texture2D texture = ImageCache.getCacheImage(contentName);
+		icon = texture;
+		if (icon == null)
+		{
+			request = new RequestQueue();
+			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
+			request.request(RequestType.RUSH);
+		}
+		else
+			Debug.Log("reload function " + contentName + " cached");
 	}
 
 	private void disposeRequest()
@@ -161,7 +185,6 @@ public class BookActivityCanvas : UICanvas
 			m_bookFavorateInfo.active = false;
         }
     }
-
 
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{

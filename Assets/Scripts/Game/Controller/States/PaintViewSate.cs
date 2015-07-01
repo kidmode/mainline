@@ -171,8 +171,10 @@ public class PaintViewSate : GameState
 
 	private void onBackButtonClick( UIButton p_button )
 	{
-		int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
-		m_gameController.changeState (l_state);
+//		int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
+//		m_gameController.changeState (l_state);
+
+		m_gameController.changeState (ZoodleState.REGION_FUN);
 	}
 
 	private void onEditButtonClick( UIButton p_button )
