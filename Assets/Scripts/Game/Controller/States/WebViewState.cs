@@ -142,6 +142,9 @@ public class WebViewState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		GameObject.Destroy(m_webObj);
+
+
+
 		m_webObj = null;
 		m_webView = null;
 
