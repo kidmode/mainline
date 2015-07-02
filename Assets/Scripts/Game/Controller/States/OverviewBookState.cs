@@ -33,8 +33,8 @@ public class OverviewBookState : GameState
 				_setupRecommendedBookCanvas();
 			}
 		}
-		if(null != m_gemCountLabelInBook)
-			m_gemCountLabelInBook.text = SessionHandler.getInstance ().currentKid.gems.ToString();
+//		if(null != m_gemCountLabelInBook)
+//			m_gemCountLabelInBook.text = SessionHandler.getInstance ().currentKid.gems.ToString();
 	}
 
 	public override void exit (GameController p_gameController)
@@ -93,7 +93,7 @@ public class OverviewBookState : GameState
 
 		m_dashboardControllerCanvas.setupDotList( 7 );
 		m_dashboardControllerCanvas.setCurrentIndex( 4 );
-		m_gemCountLabelInBook = m_recommendedBookCanvas.getView ("gemCountText") as UILabel;
+//		m_gemCountLabelInBook = m_recommendedBookCanvas.getView ("gemCountText") as UILabel;
 		m_moreBookButton = m_recommendedBookCanvas.getView( "bookListButton" ) as UIButton;
 		m_moreBookButton.addClickCallback( onMoreBookButtonClick );
 		m_exitBookListButton = m_bookListCanvas.getView( "exitButton" ) as UIButton;
@@ -808,7 +808,7 @@ public class OverviewBookState : GameState
 	private UIButton 				  m_moreBookButton;
 	private UIButton				  m_exitBookListButton;
 	private UIButton				  m_exitBookDetailsButton;
-	private UILabel 			      m_gemCountLabelInBook;
+//	private UILabel 			      m_gemCountLabelInBook;
 	private Book	 			      m_wantedBook;
 	private UISwipeList 			  m_bookList;
 	private bool 					  isLoadBook = false;

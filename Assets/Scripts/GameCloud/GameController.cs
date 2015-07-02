@@ -57,6 +57,8 @@ public class GameController
 		
 		if( m_uiManager != null )
 			m_uiManager.update();
+
+//		Debug.Log("     m_state " + m_state.ToString());
 	}
 	
 	public void changeState( int p_stateType )

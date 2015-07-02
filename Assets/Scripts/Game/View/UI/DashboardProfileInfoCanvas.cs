@@ -37,7 +37,7 @@ public class DashBoardProfileInfoCanvas : UICanvas
 		m_childAvatar.setTexture( l_kid.kid_photo );
 		m_childNameLabel.text 	= l_kid.name;
 		m_starNumberLabel.text 	= l_kid.stars.ToString("N0");
-		m_gemNumberLabel.text 	= l_kid.gems.ToString("N0");
+//		m_gemNumberLabel.text 	= l_kid.gems.ToString("N0");
 		m_levelLabel.text 		= l_kid.level.ToString ();
 		int l_age = 0;
 		DateTime l_date = DateTime.Parse (l_kid.birthday);
@@ -77,7 +77,7 @@ public class DashBoardProfileInfoCanvas : UICanvas
 		m_childAvatar 			= getView( "avatarIcon" ) 	as UIImage;
 		m_childNameLabel 		= getView( "childName" 	) 	as UILabel;
 		m_starNumberLabel 		= getView( "zoodlePointsText" ) 	as UILabel;
-		m_gemNumberLabel 		= getView( "gemsText" 	) 	as UILabel;
+//		m_gemNumberLabel 		= getView( "gemsText" 	) 	as UILabel;
 		m_ageLabel 				= getView( "ageText" ) 		as UILabel;
 		m_levelLabel 			= getView( "levelText" ) 	as UILabel;
 	}
@@ -87,7 +87,7 @@ public class DashBoardProfileInfoCanvas : UICanvas
 		UILabel l_title = getView("titleText") as UILabel;
 		UILabel l_edit = getView("editProfileButton").getView("Text") as UILabel;
 		UILabel l_zp = getView("zoodlePointsTitle") as UILabel;
-		UILabel l_gems = getView("gemsTitle") as UILabel;
+//		UILabel l_gems = getView("gemsTitle") as UILabel;
 		UILabel l_app = getView("appPartTitle") as UILabel;
 		UILabel l_subjects = getView("subjectsText") as UILabel;
 		UILabel l_free = getView("appFreeText") as UILabel;
@@ -98,7 +98,7 @@ public class DashBoardProfileInfoCanvas : UICanvas
 		l_title.text = Localization.getString( Localization.TXT_56_LABEL_TITLE );
 		l_edit.text = Localization.getString( Localization.TXT_56_LABEL_EDIT );
 		l_zp.text = Localization.getString( Localization.TXT_56_LABEL_ZP );
-		l_gems.text = Localization.getString( Localization.TXT_56_LABEL_GEMS );
+//		l_gems.text = Localization.getString( Localization.TXT_56_LABEL_GEMS );
 		l_app.text = Localization.getString( Localization.TXT_56_LABEL_APP );
 		l_subjects.text = Localization.getString( Localization.TXT_56_LABEL_SUBJECTS );
 		l_free.text = Localization.getString( Localization.TXT_56_LABEL_FREE );
@@ -112,7 +112,7 @@ public class DashBoardProfileInfoCanvas : UICanvas
 	
 	private UILabel m_childNameLabel;
 	private UILabel m_starNumberLabel;
-	private UILabel m_gemNumberLabel;
+//	private UILabel m_gemNumberLabel;
 	private UILabel m_ageLabel;
 	private UILabel m_levelLabel;
 }
