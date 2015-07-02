@@ -23,15 +23,21 @@ public class Kid : System.Object
 	public Kid( Hashtable p_table )
     {
         fromHashtable( p_table );
+		if (SessionHandler.getInstance().selectAvatar !=  null)
+			kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
     }
 
 	public void requestPhoto()
 	{
 		if (!m_photoRequested)
 		{
-			kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
-			if( photo != null )
-				Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+			kid_photo = ImageCache.getCacheImage(wholeName);
+			if (kid_photo == null)
+			{
+				kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
+				if( photo != null )
+					Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+			}
 		}
 	}
 
@@ -147,6 +153,37 @@ public class Kid : System.Object
 
 
     }
+
+	public Hashtable toHashTable()
+	{
+		Hashtable ret = new Hashtable();
+
+		ret.Add(KidsTable.COLUMN_ID, id);
+		if (wholeName != null)
+			ret.Add(KidsTable.COLUMN_NAME, wholeName);
+		if (birthday != null)
+			ret.Add(KidsTable.COLUMN_BIRTHDAY, birthday);
+		ret.Add(KidsTable.COLUMN_MAX_VIOLENCE, (double)maxViolence);
+		if (allowVideoMail != null)
+			ret.Add(KidsTable.COLUMN_ALLOW_VIDEO_MAIL, allowVideoMail);
+		ret.Add(KidsTable.COLUMN_WEIGHT_MATH, weightMath);
+		ret.Add(KidsTable.COLUMN_WEIGHT_READING, weightReading);
+		ret.Add(KidsTable.COLUMN_WEIGHT_SCIENCE, weightScience);
+		ret.Add(KidsTable.COLUMN_WEIGHT_SOCIAL_STUDIES, weightSocialStudies);
+		ret.Add(KidsTable.COLUMN_WEIGHT_COGNITIVE_DEVELOPMENT, weightCognitiveDevelopment);
+		ret.Add(KidsTable.COLUMN_WEIGHT_CREATIVE_DEVELOPMENT, weightCreativeDevelopment);
+		ret.Add(KidsTable.COLUMN_WEIGHT_LIFE_SKILLS, weightLifeSkills);
+		ret.Add(KidsTable.COLUMN_LEVEL, level);
+		ret.Add(KidsTable.COLUMN_GEM, gems);
+		ret.Add(KidsTable.COLUMN_STAR, stars);
+		if (photo != null)
+			ret.Add(KidsTable.COLUMN_PHOTO, photo);
+		ret.Add(KidsTable.LANGUAGE_COUNT, languageCount);
+		ret.Add(KidsTable.VIDEO_WATCHED_COUNT, videoWatchedCount);
+		ret.Add(KidsTable.GAME_PLAYED_COUNT, gamePlayedCount);
+
+		return ret;
+	}
 
 //	private List<DataItem> HashtableToDataItem ( Hashtable p_table )
 //	{
@@ -265,6 +302,7 @@ public class Kid : System.Object
 		{
 			kid_photo = p_www.texture;
 			m_photoRequested = true;
+			ImageCache.saveCacheImage(wholeName, kid_photo);
 		}
 	}	
 

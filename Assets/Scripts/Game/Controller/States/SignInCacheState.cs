@@ -12,12 +12,12 @@ public class SignInCacheState : GameState
 		m_loginSuccess = false;
 		_setupScreen(p_gameController.getUI());
 
-		if (SessionHandler.getInstance().token.isExist()) //cynthia
-		{
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
-			m_loginSuccess = true;
-		}
-		else
+//		if (SessionHandler.getInstance().token.isExist()) //cynthia
+//		{
+//			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+//			m_loginSuccess = true;
+//		}
+//		else
 		{
 			//	SessionHandler.getInstance ().clientId = 600;
 			m_queue = new RequestQueue();

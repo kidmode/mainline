@@ -541,7 +541,6 @@ public class SessionHandler
 		m_deviceName = string.Empty;
 		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
-		m_kidcount = 0;
 	}
 
 	private void _load()
@@ -555,23 +554,24 @@ public class SessionHandler
 		m_verifyBirth = l_setting.getBool (ZoodlesConstants.USER_VERIFY_BIRTHYEAR,true);
 		m_childLockPassword = l_setting.getString (ZoodlesConstants.CHILD_LOCK_PASSWORD,string.Empty);
 		m_childLockSwitch = l_setting.getBool (ZoodlesConstants.USER_CHILDLOCK_SWITCH,false);
-		m_kidcount = l_setting.getInt(ZoodlesConstants.USER_KIDCOUNT, 0);
 
-//		List<Kid> l_kidList = new List<Kid>();
-//		if(m_kidcount > 0)
-//		{
-//			for (int i = 0; i < m_kidcount; i++)
+//		try {
+//
+//			List<Kid> l_kidList = new List<Kid>();
+//			String str;
+//			if (PlayerPrefs.HasKey("kidList") && (str = PlayerPrefs.GetString("kidList")).Length > 0)
 //			{
-//				String str = PlayerPrefs.GetString("kid"+Convert.ToString(i+1));
-//				if (str != null)
+//				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
+//				foreach (object o in l_data)
 //				{
-//					Hashtable h = MiniJSON.MiniJSON.jsonDecode(str) as Hashtable;
-//					Kid l_kid = new Kid(h);
-//					l_kidList.Add(l_kid);
-//					m_kidList = l_kidList;
+//					Kid l_kid = new Kid( o as Hashtable );
+//					l_kidList.Add( l_kid );
 //				}
+//				m_kidList = l_kidList;
 //			}
+//		} catch {
 //		}
+		
 	}
 
 	public void addBook (int p_id, Book p_book)
@@ -768,7 +768,6 @@ public class SessionHandler
 	private string  m_selectedAvatar = null;
 	private bool 	m_hasPin = false;
 	private int 	m_pin;
-	private int 	m_kidcount; //cynthia
 	private string m_username;
 
 	private string m_errorName;

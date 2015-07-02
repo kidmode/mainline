@@ -217,7 +217,7 @@ public class KidsProfileState : GameState
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 		
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-		
+
 		foreach( Kid l_kidData in SessionHandler.getInstance().kidList )
 		{
 			if( l_kidData.id == l_kid.id )
@@ -225,7 +225,8 @@ public class KidsProfileState : GameState
 				l_kidData.kid_photo = l_kid.kid_photo;
 			}
 		}
-		
+		ImageCache.saveCacheImage(SessionHandler.getInstance().selectAvatar, l_kid.kid_photo);//cynthia
+
 		SessionHandler.getInstance ().currentKid = l_kid;
 		
 		if(null != m_avatarImage)

@@ -385,12 +385,12 @@ public class SignInState : GameState
 				SessionHandler.getInstance().getBooklist();
 			}
 			//cynthia
-//			LocalSetting l_setting = LocalSetting.find( "User" );
-//			l_setting.setInt( ZoodlesConstants.USER_KIDCOUNT, SessionHandler.getInstance().kidList.Count);
-//			for (int i = 0 ; i < l_kidList.Count ; i ++)
-//			{
-//				PlayerPrefs.SetString("kid"+Convert.ToString(i), MiniJSON.MiniJSON.jsonEncode(l_data[i]));
+//			ArrayList l_list = new ArrayList();
+//			foreach (Kid k in l_kidList) {
+//				l_list.Add(k.toHashTable());
 //			}
+//			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+//			PlayerPrefs.SetString("kidList", encodedString);
 //			PlayerPrefs.Save();
 
 			m_loginSuccess = true;
