@@ -128,6 +128,7 @@ GameObject:
   - 224: {fileID: 22482518}
   - 222: {fileID: 22282518}
   - 114: {fileID: 11482518}
+  - 114: {fileID: 11420480}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -179,6 +180,7 @@ GameObject:
   - 224: {fileID: 22482526}
   - 222: {fileID: 22282526}
   - 114: {fileID: 11482526}
+  - 114: {fileID: 11420478}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -233,6 +235,30 @@ Transform:
   - {fileID: 22457078}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11420478
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e35b0dcea3dd4aaabbe1c061915722c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: TXT_TUTORIAL_ADD_APP_DIALOG_1
+--- !u!114 &11420480
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e35b0dcea3dd4aaabbe1c061915722c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: TXT_TUTORIAL_ADD_APP_DIALOG_2
 --- !u!114 &11457080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -689,7 +715,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41.9998741, y: -176.000015}
+  m_AnchoredPosition: {x: 42, y: -176}
   m_SizeDelta: {x: -201.700073, y: -163.100006}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &22482518

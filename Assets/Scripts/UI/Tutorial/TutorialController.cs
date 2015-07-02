@@ -27,7 +27,7 @@ public class TutorialController : MonoBehaviour {
 
 //		showTutorial (TutorialSequenceName.VIOLENCE_LEVEL);
 
-//		clearTutorialPlayerPref (); //FIXME // emove this latter
+		clearTutorialPlayerPref (); //FIXME // emove this latter
 
 	}
 	
