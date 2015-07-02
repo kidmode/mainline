@@ -249,7 +249,8 @@ public class ClientIdRequest : RequestQueue.Request
 		AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
 		m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_DI.Call<string>("getRelease");
 		m_params [ZoodlesConstants.PARAM_BRAND] = l_DI.Call<string>("getBrand");
-		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_DI.Call<string>("getManufacturer");
+//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_DI.Call<string>("getManufacturer");
+		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "HTC";
 		m_params [ZoodlesConstants.PARAM_DEVICE] = l_DI.Call<string>("getDevice");
 		m_params [ZoodlesConstants.PARAM_MODEL] = l_DI.Call<string>("getModel");
 

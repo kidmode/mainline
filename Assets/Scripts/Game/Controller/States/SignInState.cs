@@ -385,13 +385,13 @@ public class SignInState : GameState
 				SessionHandler.getInstance().getBooklist();
 			}
 			//cynthia
-//			ArrayList l_list = new ArrayList();
-//			foreach (Kid k in l_kidList) {
-//				l_list.Add(k.toHashTable());
-//			}
-//			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-//			PlayerPrefs.SetString("kidList", encodedString);
-//			PlayerPrefs.Save();
+			ArrayList l_list = new ArrayList();
+			foreach (Kid k in l_kidList) {
+				l_list.Add(k.toHashTable());
+			}
+			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+			PlayerPrefs.SetString("kidList", encodedString);
+			PlayerPrefs.Save();
 
 			m_loginSuccess = true;
 		}

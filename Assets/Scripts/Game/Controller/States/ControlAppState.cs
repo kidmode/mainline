@@ -13,6 +13,8 @@ public class ControlAppState : GameState
 		m_appList = new ArrayList ();
 		_setupScreen( p_gameController );
 		_setupElment();
+
+		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
 	}
 	
 	public override void update (GameController p_gameController, int p_time)

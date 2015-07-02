@@ -52,8 +52,8 @@ public class KidMode
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
 		bool l_incomingCallsEnabled = jo.Call<bool>("_incomingCallsEnabled"); 
 		return l_incomingCallsEnabled;
-		#else
-		return false;		
+//		#else
+//		return false;		
 		#endif
 	}
 

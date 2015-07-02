@@ -555,22 +555,22 @@ public class SessionHandler
 		m_childLockPassword = l_setting.getString (ZoodlesConstants.CHILD_LOCK_PASSWORD,string.Empty);
 		m_childLockSwitch = l_setting.getBool (ZoodlesConstants.USER_CHILDLOCK_SWITCH,false);
 
-//		try {
-//
-//			List<Kid> l_kidList = new List<Kid>();
-//			String str;
-//			if (PlayerPrefs.HasKey("kidList") && (str = PlayerPrefs.GetString("kidList")).Length > 0)
-//			{
-//				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
-//				foreach (object o in l_data)
-//				{
-//					Kid l_kid = new Kid( o as Hashtable );
-//					l_kidList.Add( l_kid );
-//				}
-//				m_kidList = l_kidList;
-//			}
-//		} catch {
-//		}
+		try {
+
+			List<Kid> l_kidList = new List<Kid>();
+			String str;
+			if (PlayerPrefs.HasKey("kidList") && (str = PlayerPrefs.GetString("kidList")).Length > 0)
+			{
+				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
+				foreach (object o in l_data)
+				{
+					Kid l_kid = new Kid( o as Hashtable );
+					l_kidList.Add( l_kid );
+				}
+				m_kidList = l_kidList;
+			}
+		} catch {
+		}
 		
 	}
 

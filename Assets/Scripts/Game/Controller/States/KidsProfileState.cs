@@ -225,7 +225,7 @@ public class KidsProfileState : GameState
 				l_kidData.kid_photo = l_kid.kid_photo;
 			}
 		}
-		ImageCache.saveCacheImage(SessionHandler.getInstance().selectAvatar, l_kid.kid_photo);//cynthia
+		//ImageCache.saveCacheImage(SessionHandler.getInstance().selectAvatar, l_kid.kid_photo);//cynthia
 
 		SessionHandler.getInstance ().currentKid = l_kid;
 		

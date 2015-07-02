@@ -1042,6 +1042,16 @@ public class RegionBaseState : GameState
 		// end vzw
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
+
+
+		//==============
+		//Update corner profile since getting zoodles point could get done when the profile is up already
+		//
+		CornerProfileCanvas cornerProfile = (CornerProfileCanvas)m_cornerProfileCanvas;
+
+		cornerProfile.refreshInfo ();
+
+			//refreshInfo
 	}
 
 	// Sean: vzw

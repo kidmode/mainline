@@ -31,7 +31,7 @@ public class Kid : System.Object
 	{
 		if (!m_photoRequested)
 		{
-			kid_photo = ImageCache.getCacheImage(wholeName);
+			kid_photo = ImageCache.getCacheImage(wholeName+".png");
 			if (kid_photo == null)
 			{
 				kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
@@ -302,7 +302,7 @@ public class Kid : System.Object
 		{
 			kid_photo = p_www.texture;
 			m_photoRequested = true;
-			ImageCache.saveCacheImage(wholeName, kid_photo);
+			ImageCache.saveCacheImage(wholeName+".png", kid_photo);
 		}
 	}	
 
