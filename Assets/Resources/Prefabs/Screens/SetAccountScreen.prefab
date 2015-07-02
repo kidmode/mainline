@@ -626,6 +626,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &150464
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22450464}
+  - 222: {fileID: 22250464}
+  - 114: {fileID: 11450464}
+  - 114: {fileID: 11450258}
+  m_Layer: 5
+  m_Name: textButtonGoogleAccount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &168814
 GameObject:
   m_ObjectHideFlags: 1
@@ -2185,6 +2203,44 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Choose a password
+--- !u!114 &11450258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e35b0dcea3dd4aaabbe1c061915722c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: TXT_SCREEN_102_SIGN_WITH_GOOGLE
+--- !u!114 &11450464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: fef76e3f5de354e8a83a3809fbaeba96, type: 3}
+    m_FontSize: 19
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Sign in with Google
 --- !u!114 &11468814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2803,7 +2859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 21300000, guid: aeceb606902aa463a9f37d26263c5a7a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e9fd49898831a4387b3488bfb75e4710, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2838,7 +2894,7 @@ MonoBehaviour:
     m_FadeDuration: .100000001
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 21300000, guid: aeceb606902aa463a9f37d26263c5a7a, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 24016d84645154588a8e61cb77e9aef6, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -5120,6 +5176,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 134154}
+--- !u!222 &22250464
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150464}
 --- !u!222 &22268814
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -5941,6 +6003,23 @@ RectTransform:
   m_AnchoredPosition: {x: -2.99993896, y: -.999969482}
   m_SizeDelta: {x: -24, y: -28}
   m_Pivot: {x: .5, y: .5}
+--- !u!224 &22450464
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150464}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22499622}
+  m_RootOrder: 1
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
 --- !u!224 &22468814
 RectTransform:
   m_ObjectHideFlags: 1
@@ -6432,6 +6511,7 @@ RectTransform:
   m_LocalScale: {x: 2.50960827, y: 2.50960827, z: 2.50960827}
   m_Children:
   - {fileID: 22499620}
+  - {fileID: 22450464}
   m_Father: {fileID: 22431258}
   m_RootOrder: 9
   m_AnchorMin: {x: .5, y: .5}

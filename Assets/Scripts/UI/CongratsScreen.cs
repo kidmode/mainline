@@ -12,7 +12,9 @@ public class CongratsScreen : MonoBehaviour {
 	private GameObject zoodlePointRequestPrefab;
 
 
-	//===============================
+
+	//
+	//=============================== 
 	//Moved the animation from CongratState to screen sprcific
 	private UIImage m_loadingBarImg;
 
