@@ -49,7 +49,7 @@ public class OverviewAppState : GameState
 		}
 		if (null != m_appCountLabel)
 			m_appCountLabel.text = m_currentAppList.Count.ToString ();
-		m_gemCountLabel.text = SessionHandler.getInstance().currentKid.gems.ToString();
+//		m_gemCountLabel.text = SessionHandler.getInstance().currentKid.gems.ToString();
 	}
 
 	public override void exit(GameController p_gameController)
@@ -122,7 +122,7 @@ public class OverviewAppState : GameState
 		m_rightButton.addClickCallback( onRightButtonClick );
 		m_dashboardControllerCanvas.setupDotList( 7 );
 		m_dashboardControllerCanvas.setCurrentIndex( 3 );
-		m_gemCountLabel = m_recommendedAppCanvas.getView("gemCountText") as UILabel;
+//		m_gemCountLabel = m_recommendedAppCanvas.getView("gemCountText") as UILabel;
 		m_moreAppButton = m_recommendedAppCanvas.getView( "appListButton" ) as UIButton;
 		m_moreAppButton.addClickCallback( onMoreAppButtonClick );
 		m_exitAppListButton = m_appListCanvas.getView( "exitButton" ) as UIButton;
@@ -1020,7 +1020,7 @@ public class OverviewAppState : GameState
 	private UICanvas				  m_appDetailsCanvas;
 	private UICanvas				  m_appListCanvas;
 	private UICanvas				  m_confirmDialogCanvas;
-	private UILabel 			      m_gemCountLabel;
+//	private UILabel 			      m_gemCountLabel;
 	private UIButton 				  m_moreAppButton;
 	private UIButton 				  m_exitAppListButton;
 	private UIManager 				  m_uiManager;
