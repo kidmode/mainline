@@ -121,7 +121,10 @@ public class LoadingEntranceState : GameState
 	{
 		if (p_response.error != null)
 		{
-			//m_gameController.changeState(ZoodleState.SERVER_ERROR);  cynthia
+			//if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				m_gameController.changeState(ZoodleState.SERVER_ERROR);  
+			}
 		}
 		else
 		{
