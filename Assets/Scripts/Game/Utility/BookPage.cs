@@ -14,6 +14,14 @@ public class BookPage : System.Object
         fromHashtable( p_table );
     }
 
+	public void getImage()
+	{
+		string contentName = "bookpage_" + id + "_" + position;
+		string imagePath = "Books/Images/" + contentName;
+		Texture2D texture = Resources.Load(imagePath) as Texture2D;
+		pageImage = texture;
+	}
+
 	public void requestImage()
 	{
 		Debug.Log("Book page " + id + "_" + position);
@@ -42,9 +50,9 @@ public class BookPage : System.Object
 		if (pageImage != null)
 		{
 			GameObject.Destroy(pageImage);
+			Resources.UnloadAsset(pageImage);
+			pageImage = null;
 		}
-
-		pageImage = null;
 	}
 
 	private void onPageImageRecieved(WWW p_response)
@@ -70,6 +78,7 @@ public class BookPage : System.Object
     public string content   { get; set; }
     public string imageUrl   { get; set; }
 	public Texture2D pageImage { get; set; }
+	public string imageName   { get; set; }
 
 	private bool m_requested = false;
     
@@ -94,6 +103,9 @@ public class BookPage : System.Object
         if( p_table.ContainsKey( BookPageTable.COLUMN_PAGE_URL ) )
             imageUrl = p_table[ BookPageTable.COLUMN_PAGE_URL ] as string;
 
+		if( p_table.ContainsKey( BookPageTable.COLUMN_IMAGE ) )
+			imageName = p_table[ BookPageTable.COLUMN_IMAGE ] as string;
+
 		m_requested = false;
 	}
 }
@@ -106,4 +118,5 @@ public class BookPageTable
     public const string COLUMN_CONTENT = "content";
     public const string COLUMN_PAGE_URL = "page_url";
     public const string COLUMN_POSITION = "position";
+	public const string COLUMN_IMAGE = "page_image";
 }
