@@ -15,6 +15,12 @@ public class InitializeGameState : GameState
 		base.enter(p_gameController);
 
 		Application.targetFrameRate = 30;
+
+		QualitySettings.vSyncCount = 0; 
+
+		QualitySettings.antiAliasing = 0;
+
+
 		m_gotoLogin = false;
 		m_time = 0;
 

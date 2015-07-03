@@ -143,6 +143,13 @@ public class SetUpAccountState : GameState
 		m_rePassword.onValueChange.AddListener (onRepasswordChange);
 		m_password.onValueChange.AddListener (onPasswordChange);
 	//	#endif	
+
+
+		//TODO
+		//localization for google account
+		UILabel l_signInWithGoogle    = m_signUpCanvas.getView("textButtonGoogleAccount") as UILabel;
+
+		l_signInWithGoogle.text       = Localization.getString(Localization.TXT_SCREEN_102_SIGN_WITH_GOOGLE);
 	}
 
 	private void onFinsihedEdit(string p_value)

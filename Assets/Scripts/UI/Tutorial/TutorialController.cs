@@ -27,8 +27,8 @@ public class TutorialController : MonoBehaviour {
 
 //		showTutorial (TutorialSequenceName.VIOLENCE_LEVEL);
 
-//		clearTutorialPlayerPref (); //FIXME // remove this latter
-	
+//		clearTutorialPlayerPref (); //FIXME // remove this latter, uncomment this to test how it looks. Just remember to comment it out
+
 	}
 	
 	// Update is called once per frame
