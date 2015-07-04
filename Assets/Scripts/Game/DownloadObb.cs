@@ -20,11 +20,11 @@ public class DownloadObb : MonoBehaviour {
 	void OnGUI()
 	{
 		GUI.skin = mySkin;
-		GUI.DrawTexture(new Rect(0,0,background.width,background.height),background);
+//		GUI.DrawTexture(new Rect(0,0,background.width,background.height), background);
 		
 		if (!GooglePlayDownloader.RunningOnAndroid())
 		{
-			GUI.Label(new Rect(10, 10, Screen.width-10, 20), "Use GooglePlayDownloader only on Android device!");
+//			GUI.Label(new Rect(10, 10, Screen.width-10, 20), "Use GooglePlayDownloader only on Android device!");
 			return;
 		}
 		
