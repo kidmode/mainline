@@ -300,8 +300,7 @@ public class CreateChildProfileState : GameState
 				l_list.Add(k.toHashTable());
 			}
 			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-			PlayerPrefs.SetString("kidList", encodedString);
-			PlayerPrefs.Save();
+			SessionHandler.SaveKidList(encodedString);
 
 		}
 		else

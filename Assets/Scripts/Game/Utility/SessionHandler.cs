@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using System;
-using System.Xml;
-using System.Xml.Schema;
 
 public class SessionHandler 
 {
@@ -558,16 +556,19 @@ public class SessionHandler
 		try {
 
 			List<Kid> l_kidList = new List<Kid>();
-			String str;
-			if (PlayerPrefs.HasKey("kidList") && (str = PlayerPrefs.GetString("kidList")).Length > 0)
+			String str = SessionHandler.LoadKidList();
+			if (str.Length > 0 && str != null)
 			{
 				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
-				foreach (object o in l_data)
+				if (l_data != null)
 				{
-					Kid l_kid = new Kid( o as Hashtable );
-					l_kidList.Add( l_kid );
+					foreach (object o in l_data)
+					{
+						Kid l_kid = new Kid( o as Hashtable );
+						l_kidList.Add( l_kid );
+					}
+					m_kidList = l_kidList;
 				}
-				m_kidList = l_kidList;
 			}
 		} catch {
 		}
@@ -742,25 +743,18 @@ public class SessionHandler
 		readingTable = null;
 	}
 
-	public void Save<T> (string name, T instance)
+	public static void SaveKidList(String str) 
 	{
-		XmlSerializer serializer = new XmlSerializer (typeof(T));
-		using (var ms = new MemoryStream ()) {
-			serializer.Serialize (ms, instance);
-			PlayerPrefs.SetString (name, System.Text.ASCIIEncoding.ASCII.GetString (ms.ToArray ()));
-		}
+		File.WriteAllText(KIDLIST_PATH, str);
 	}
 	
-	public T Load<T> (string name)
+	public static String LoadKidList() 
 	{
-		if(!PlayerPrefs.HasKey(name)) return default(T);
-		XmlSerializer serializer = new XmlSerializer (typeof(T));
-		T instance;
-		using (var ms = new MemoryStream (System.Text.ASCIIEncoding.ASCII.GetBytes (PlayerPrefs.GetString (name)))) {
-			instance = (T)serializer.Deserialize (ms);
-		}
-		return instance;
+		String str = File.ReadAllText(KIDLIST_PATH);
+		return str;	
 	}
+	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";
+
 	private Kid     m_kid   = null;
     private Token   m_token = null;
 	private List<Kid> m_kidList = null;
@@ -839,82 +833,4 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
-}
-
-public class DictionarySerializer : IXmlSerializable
-{
-	private IDictionary dictionary = null;
-	
-	public DictionarySerializer()
-	{
-		this.dictionary = new Hashtable();
-	}
-	
-	private DictionarySerializer(IDictionary dictionary)
-	{
-		this.dictionary = dictionary;
-	}
-	
-	public static void Serialize(IDictionary dictionary, Stream stream)
-	{
-		DictionarySerializer ds = new DictionarySerializer(dictionary);
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		xs.Serialize(stream, ds);
-	}
-
-	public static void Serialize(IDictionary dictionary, TextWriter textWriter)
-	{
-		DictionarySerializer ds = new DictionarySerializer(dictionary);
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		xs.Serialize(textWriter, ds);
-	}
-	
-	public static IDictionary Deserialize(Stream stream)
-	{
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(stream);
-		return ds.dictionary;
-	}
-
-	public static IDictionary Deserialize(TextReader textReader)
-	{
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(textReader);
-		return ds.dictionary;
-	}
-
-	XmlSchema IXmlSerializable.GetSchema()
-	{
-		return null;
-	}
-	
-	void IXmlSerializable.ReadXml(XmlReader reader)
-	{
-		reader.Read();
-		reader.ReadStartElement("dictionary");
-		while (reader.NodeType != XmlNodeType.EndElement)
-		{
-			reader.ReadStartElement("item");
-			string key = reader.ReadElementString("key");
-			string value = reader.ReadElementString("value");
-			reader.ReadEndElement();
-			reader.MoveToContent();
-			dictionary.Add(key, value);
-		}
-		reader.ReadEndElement();
-	}
-	
-	void IXmlSerializable.WriteXml(XmlWriter writer)
-	{
-		writer.WriteStartElement("dictionary");
-		foreach (object key in dictionary.Keys)
-		{
-			object value = dictionary[key];
-			writer.WriteStartElement("item");
-			writer.WriteElementString("key", key.ToString());
-			writer.WriteElementString("value", value.ToString());
-			writer.WriteEndElement();
-		}
-		writer.WriteEndElement();
-	}
 }

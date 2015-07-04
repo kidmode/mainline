@@ -390,8 +390,7 @@ public class SignInState : GameState
 				l_list.Add(k.toHashTable());
 			}
 			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-			PlayerPrefs.SetString("kidList", encodedString);
-			PlayerPrefs.Save();
+			SessionHandler.SaveKidList(encodedString);
 
 			m_loginSuccess = true;
 		}
