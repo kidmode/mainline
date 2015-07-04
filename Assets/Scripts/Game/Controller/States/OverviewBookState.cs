@@ -647,7 +647,7 @@ public class OverviewBookState : GameState
 
 	private void goToControls( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_APP);
+		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 	}
 	
 	private void goToStarChart( UIButton p_button )
