@@ -28,12 +28,14 @@ public class LoadingEntranceState : GameState
 
 		m_triggerNextScreen = false;
 
+		//honda: kid photo, app list and top recommended app request
 		RequestQueue l_request = new RequestQueue ();
 		l_request.add (new GetKidRequest(SessionHandler.getInstance().currentKid.id, onRequestComplete));
 		l_request.request ();
 
 		m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
 
+		//honda: videos, games and books lists request
 		l_game.user.contentCache.startRequests();
 	}
 	

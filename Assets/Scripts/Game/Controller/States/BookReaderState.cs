@@ -49,6 +49,7 @@ public class BookReaderState : GameState {
 
 		m_duration = 0;
 
+		//honda: send book clicked post to server 
 		RequestQueue l_queue = new RequestQueue();
 		l_queue.add(new VisitBookRequest());
 		l_queue.request(RequestType.RUSH);
@@ -244,7 +245,8 @@ public class BookReaderState : GameState {
 		_loadCurrentPageContent();
 //		if(m_bookReading != null)
 //		{
-		_loadCurrentAudio ();
+		//honda: comment out request audio file from server, use local audio file
+//		_loadCurrentAudio ();
 //		}
 //		else
 //		{
@@ -370,7 +372,10 @@ public class BookReaderState : GameState {
 	private void _loadCurrentPageContent( )
 	{
 		m_pageImage.active = false;
-		currentPage.requestImage();
+		//honda: due to book data in the local place, use getImage to set book content
+		currentPage.getImage();
+		//honda: if book data online, use requestImage()
+//		currentPage.requestImage();
 	}
 
 	private void _loadCurrentAudio( )

@@ -21,9 +21,12 @@ public class WebContentCache : object
 		m_webContentRequest.add(new WebContentRequest(_requestWebContentComplete));
 		m_webContentRequest.request();
 
-		m_bookListRequest = new RequestQueue();
-		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
-		m_bookListRequest.request();
+		addBookList();
+
+		//honda: comment out request book list due to book list is put in the local place
+//		m_bookListRequest = new RequestQueue();
+//		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
+//		m_bookListRequest.request();
 	}
 
 	public void clear()
@@ -43,11 +46,12 @@ public class WebContentCache : object
 			m_webContentRequest = null;
 		}
 
-		if (null != m_bookListRequest)
-		{
-			m_bookListRequest.dispose();
-			m_bookListRequest = null;
-		}
+		//honda: comment out request book list due to book list is put in the local place
+//		if (null != m_bookListRequest)
+//		{
+//			m_bookListRequest.dispose();
+//			m_bookListRequest = null;
+//		}
 
 		if (null != m_bookContentList)
 		{
@@ -88,21 +92,18 @@ public class WebContentCache : object
 		if (p_response.error == null)
 		{
 			string l_string = p_response.text;
-			
 			l_string = UnicodeDecoder.Unicode (l_string);
 			l_string = UnicodeDecoder.UnicodeToChinese (l_string);
 			l_string = UnicodeDecoder.CoverHtmlLabel (l_string);
-			
 			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode (l_string) as Hashtable;
+
 			if (l_jsonResponse.ContainsKey ("jsonResponse"))
 			{
 				Hashtable l_response = l_jsonResponse ["jsonResponse"] as Hashtable;
 				if (l_response.ContainsKey ("response"))
 				{
 					Hashtable l_bookData = l_response ["response"] as Hashtable;
-					
 					ArrayList l_books = l_bookData ["books"] as ArrayList;
-					
 					foreach (object o in l_books)
 					{
 						Book l_book = new Book (o as Hashtable);
@@ -197,7 +198,92 @@ public class WebContentCache : object
 		}
 	}
 
-	private RequestQueue m_bookListRequest;
+	private void addBookList()
+	{
+
+		string language = "en";
+		if (Application.systemLanguage == SystemLanguage.Spanish)
+			language = "es";
+		else
+			language = "en";
+		string fileName = "Books_" + language;
+		string filePath = "Books/Data/" + fileName;
+		TextAsset booklist = Resources.Load(filePath) as TextAsset;
+
+		string l_string = booklist.text;
+		l_string = UnicodeDecoder.Unicode (l_string);
+		l_string = UnicodeDecoder.UnicodeToChinese (l_string);
+		l_string = UnicodeDecoder.CoverHtmlLabel (l_string);
+		Hashtable l_bookData = MiniJSON.MiniJSON.jsonDecode (l_string) as Hashtable;
+
+		ArrayList l_books = l_bookData ["books"] as ArrayList;
+		foreach (object o in l_books)
+		{
+			Book l_book = new Book (o as Hashtable);
+			m_sessionHandler.addBook(l_book.id, l_book);
+		}
+		
+		ArrayList l_readings = l_bookData ["readings"] as ArrayList;
+		foreach (object o in l_readings)
+		{
+			BookReading l_bookReading = new BookReading (o as Hashtable);
+			
+			if (0 == l_bookReading.readingPageTable.Count)
+			{
+				continue;
+			}
+			
+			m_sessionHandler.readingTable[l_bookReading.id] = l_bookReading;
+		}
+		
+		List<object> l_contentList = new List<object>();
+		List<int> l_recordedBookList = new List<int>();
+		
+		foreach (BookReading l_bookReading in m_sessionHandler.readingTable.Values)
+		{
+			string l_bookName = (m_sessionHandler.bookTable[l_bookReading.bookId] as Book).title;
+			BookInfo l_bookInfo = new BookInfo(l_bookName, BookState.Recorded, l_bookReading.coverUrl, l_bookReading.bookId, l_bookReading.id);
+			l_contentList.Add(l_bookInfo);
+			l_recordedBookList.Add (l_bookReading.bookId);
+		}
+		
+		foreach (Book l_book in m_sessionHandler.bookTable.Values)
+		{
+			BookState l_state = BookState.NotRecorded;
+			
+			string l_record = LocalSetting.find("User").getString(l_book.id.ToString(), string.Empty);
+			if (!l_record.Equals(string.Empty))
+			{
+				ArrayList l_list = MiniJSON.MiniJSON.jsonDecode(l_record) as ArrayList;
+				
+				foreach(object l_id in l_list)
+				{
+					if (l_id.ToString() == m_sessionHandler.currentKid.id.ToString() 
+					    && l_state == BookState.NotRecorded)
+					{
+						l_state = BookState.Recorded;
+					}
+				}
+			}
+			
+			BookInfo l_bookInfo = new BookInfo(l_book.title, l_state, l_book.coverUrl, l_book.id);
+			
+			if (l_recordedBookList.Contains(l_book.id))
+			{
+				continue;
+			}
+			
+			l_contentList.Add(l_bookInfo);
+		}
+		
+		m_sessionHandler.bookContentList = l_contentList;
+		m_bookContentList = l_contentList;
+		
+		isFinishedLoadingBooks = true;
+	}
+	
+	//honda: comment out request book list due to book list is put in the local place
+//	private RequestQueue m_bookListRequest;
 	private RequestQueue m_webContentRequest;
 	private List<object> m_bookContentList;
 	private SessionHandler m_sessionHandler;
