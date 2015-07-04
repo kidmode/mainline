@@ -468,7 +468,7 @@ public class ProfileState : GameState
 //			}
 //			else
 			{
-				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+				m_gameController.changeState(ZoodleState.CONTROL_APP);
 			}
 		}
 		else
