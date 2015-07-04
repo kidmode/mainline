@@ -44,6 +44,7 @@ GameObject:
   - 224: {fileID: 22400004}
   - 222: {fileID: 22200004}
   - 114: {fileID: 11400004}
+  - 114: {fileID: 11466432}
   m_Layer: 5
   m_Name: quitButton
   m_TagString: Untagged
@@ -387,7 +388,7 @@ MonoBehaviour:
   m_Color: {r: .996078432, g: .996078432, b: .996078432, a: 1}
   m_FontData:
     m_Font: {fileID: 12800000, guid: 117e352a5dda155448e7007724a81c94, type: 3}
-    m_FontSize: 42
+    m_FontSize: 24
     m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 10
@@ -397,7 +398,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Oops! \nThere is no internet connection"
+  m_Text: Oops, try this again later when your device is connected to the internet.
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -489,6 +490,27 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &11466432
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!114 &11476618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -616,8 +638,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -11.5129995, y: 62.3429985}
-  m_SizeDelta: {x: 127.199997, y: 155}
+  m_AnchoredPosition: {x: 15, y: 90}
+  m_SizeDelta: {x: 244, y: 267}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &22400006
 RectTransform:
@@ -667,8 +689,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.3999996, y: -.000537869986}
-  m_SizeDelta: {x: 576.200012, y: 312.929993}
+  m_AnchoredPosition: {x: 44.5, y: -41}
+  m_SizeDelta: {x: 447, y: 199}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22400028
 RectTransform:
@@ -705,8 +727,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -8, y: 0}
-  m_SizeDelta: {x: -2, y: -73.2924805}
+  m_AnchoredPosition: {x: -38, y: 28}
+  m_SizeDelta: {x: -76, y: -119}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &22400052
 RectTransform:
@@ -724,7 +746,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 306, y: -200}
-  m_SizeDelta: {x: 600, y: 400}
+  m_SizeDelta: {x: 612, y: 400}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &22400056
 RectTransform:

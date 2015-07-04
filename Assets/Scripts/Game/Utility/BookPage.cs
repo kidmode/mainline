@@ -49,7 +49,7 @@ public class BookPage : System.Object
 	{
 		if (pageImage != null)
 		{
-			GameObject.Destroy(pageImage);
+//			GameObject.Destroy(pageImage);
 			Resources.UnloadAsset(pageImage);
 			pageImage = null;
 		}
