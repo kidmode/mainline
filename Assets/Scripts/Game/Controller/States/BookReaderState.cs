@@ -49,7 +49,7 @@ public class BookReaderState : GameState {
 
 		m_duration = 0;
 
-		//honda: send book clicked post to server 
+		//honda: send book clicked post to server
 		RequestQueue l_queue = new RequestQueue();
 		l_queue.add(new VisitBookRequest());
 		l_queue.request(RequestType.RUSH);
@@ -81,18 +81,19 @@ public class BookReaderState : GameState {
 //					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
 //				}
 
-				if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
-					
-					p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
-					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
-					
-				} else {
+				//honda: now, kids will not get any reward from books
+				//honda: uncomment it after sprint2
+//				if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+//					
+//					p_gameController.connectState( ZoodleState.CONGRATS_STATE, l_nextState );
+//					p_gameController.changeState( ZoodleState.CONGRATS_STATE );
+//					
+//				} else {
 					
 					PointSystemController.Instance.stopPointSystemTimer();
-					
 					p_gameController.changeState( l_nextState );
 					
-				}
+//				}
 
 
 			}
@@ -219,7 +220,7 @@ public class BookReaderState : GameState {
 
 	private void onNextPage(UIButton p_button)
 	{
-		Debug.Log ("    onNextPage  ");
+//		Debug.Log ("    onNextPage  ");
 
 		_nextPage();
 	}

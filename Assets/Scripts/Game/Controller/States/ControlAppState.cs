@@ -307,10 +307,15 @@ public class ControlAppState : GameState
 	
 	private void goToOverview( UIButton p_button )
 	{
-//		Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-//		game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-
-		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+//		if (Application.internetReachability == NetworkReachability.NotReachable)
+//		{
+//			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+//			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+//		}
+//		else
+//		{
+			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+//		}
 	}
 
 	private void goToSubject( UIButton p_button )
