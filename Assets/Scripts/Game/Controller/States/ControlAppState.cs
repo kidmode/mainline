@@ -307,20 +307,28 @@ public class ControlAppState : GameState
 	
 	private void goToOverview( UIButton p_button )
 	{
-//		if (Application.internetReachability == NetworkReachability.NotReachable)
-//		{
-//			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-//			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-//		}
-//		else
-//		{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
 			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
-//		}
+		}
 	}
 
 	private void goToSubject( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		}
 	}
 	
 	private void goToStarChart( UIButton p_button )
