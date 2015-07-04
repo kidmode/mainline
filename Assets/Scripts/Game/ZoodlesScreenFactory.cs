@@ -123,7 +123,8 @@ public class UIScreen
 	public const int TUTORIAL_MAIN_PROCESS				= 1101;
 	public const int TUTORIAL_CONTROL_VIOLENCE			= 1102;
 
-	//
+	//Error Message
+	public const int ERROR_MESSAGE			= 1201;	
 }
 
 
@@ -252,6 +253,9 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.TUTORIAL_MAIN_PROCESS,				SCREEN_DIRECTORY + "Tutorials/TutMainProcess" );
 		m_directoryMap.Add( UIScreen.TUTORIAL_CONTROL_VIOLENCE,				SCREEN_DIRECTORY + "Tutorials/TutControlViolenceScreen" );
 		// end vzw
+
+		//honda
+		m_directoryMap.Add( UIScreen.ERROR_MESSAGE,				SCREEN_DIRECTORY + "ErrorMessage" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -376,6 +380,9 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.TUTORIAL_MAIN_PROCESS:			return new UICanvas() 			as UICanvas;
 			case UIScreen.TUTORIAL_CONTROL_VIOLENCE:			return new UICanvas() 			as UICanvas;
 			// end vzw
+
+			//honda: vzw
+			case UIScreen.ERROR_MESSAGE:			return new UICanvas() 			as UICanvas;
 		}
 		return new UICanvas();
 	}
