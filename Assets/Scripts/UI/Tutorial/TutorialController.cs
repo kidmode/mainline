@@ -42,7 +42,7 @@ public class TutorialController : MonoBehaviour {
 
 //		showTutorial (TutorialSequenceName.VIOLENCE_LEVEL);
 
-//		clearTutorialPlayerPref (); //FIXME // remove this latter, uncomment this to test how it looks. Just remember to comment it out
+		clearTutorialPlayerPref (); //FIXME // remove this latter, uncomment this to test how it looks. Just remember to comment it out
 
 	}
 	
@@ -112,6 +112,8 @@ public class TutorialController : MonoBehaviour {
 		UIManager uiManager = gameLogic.gameController.getUI();
 		
 		uiManager.removeScreen(currSequence.screenID);
+
+		showingTutorial = false;
 
 	}
 
