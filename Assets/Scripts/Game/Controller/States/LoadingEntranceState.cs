@@ -45,7 +45,7 @@ public class LoadingEntranceState : GameState
 			const float COMPLETE_TIME = 0.5f;
 
 			m_backCanvas.tweener.addAlphaTrack(     1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
-			m_loadingCanvas.tweener.addAlphaTrack(  1.0f, 0.0f, COMPLETE_TIME, null );
+			m_loadingCanvas.tweener.addAlphaTrack(  1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
 		}
 	}
 	
