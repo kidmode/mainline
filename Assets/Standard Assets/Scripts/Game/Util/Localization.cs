@@ -708,6 +708,7 @@ public class Localization : object
 
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_1 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_1";
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_2 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_2";
+	public const string TXT_TUTORIAL_ADD_APP_TOGGLE 	    						= "TXT_TUTORIAL_ADD_APP_TOGGLE"; //new
 
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1";
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2";
@@ -715,7 +716,12 @@ public class Localization : object
 	public const string TXT_TUTORIAL_PLEASE_CLICK_PARENT	    						= "TXT_TUTORIAL_PLEASE_CLICK_PARENT";
 	public const string TXT_TUTORIAL_PLEASE_TAP_CONTROLS	    						= "TXT_TUTORIAL_PLEASE_TAP_CONTROLS";
 	public const string TXT_TUTORIAL_TAP_NAVIGATION	    						= "TXT_TUTORIAL_TAP_NAVIGATION";
-	public const string TXT_TUTORIAL_CONTROL_TIME    						= "TXT_TUTORIAL_CONTROL_TIME";
+	public const string TXT_TUTORIAL_CONTROL_TIME    						= "TXT_TUTORIAL_CONTROL_TIME"; //new
+
+
+	public const string TXT_TUTORIAL_PROMOTE_SUBJECTS	    						= "TXT_TUTORIAL_PROMOTE_SUBJECTS";//new
+	public const string TXT_TUTORIAL_PROMOTE_LAUNGUAGE	    						= "TXT_TUTORIAL_PROMOTE_LAUNGUAGE";//new
+	public const string TXT_TUTORIAL_END    										= "TXT_TUTORIAL_END";//new
 
 	public const string TXT_SCREEN_102_SIGN_WITH_GOOGLE	    						= "TXT_SCREEN_102_SIGN_WITH_GOOGLE";
 
