@@ -23,15 +23,16 @@ public class Kid : System.Object
 	public Kid( Hashtable p_table )
     {
         fromHashtable( p_table );
-		if (SessionHandler.getInstance().selectAvatar !=  null)
-			kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
     }
 
 	public void requestPhoto()
 	{
 		if (!m_photoRequested)
 		{
-			kid_photo = ImageCache.getCacheImage(wholeName+".png");
+			m_photoRequested = true;
+
+			string hash = _getPhotoHash();
+			kid_photo = ImageCache.getCacheImage(hash+".png");
 			if (kid_photo == null)
 			{
 				kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
@@ -296,13 +297,23 @@ public class Kid : System.Object
 //	public List<DataItem> tempdataitems;
 
     //-------------------- Private Implementation -------------------
+
+	private string _getPhotoHash() 
+	{
+		if (photo == null) {
+			return "";
+		}
+		string hash = wholeName + "_" + id.ToString() + "_" + photo.GetHashCode().ToString();
+		return hash;
+	}
+
 	private void _requestPhotoComplete( WWW p_www )
 	{
 		if (p_www.error == null && p_www.texture.width != 8 && p_www.texture.height != 8)
 		{
 			kid_photo = p_www.texture;
-			m_photoRequested = true;
-			ImageCache.saveCacheImage(wholeName+".png", kid_photo);
+			string hash = _getPhotoHash();
+			ImageCache.saveCacheImage(hash+".png", kid_photo);
 		}
 	}	
 

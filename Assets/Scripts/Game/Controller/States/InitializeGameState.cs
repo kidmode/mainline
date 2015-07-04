@@ -60,7 +60,7 @@ public class InitializeGameState : GameState
 			{
 				if(SessionHandler.getInstance().childLockSwitch)
 				{
-					m_gameController.connectState(ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
+					p_gameController.connectState(ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
 					p_gameController.changeState(ZoodleState.BIRTHYEAR);
 				}
 				else

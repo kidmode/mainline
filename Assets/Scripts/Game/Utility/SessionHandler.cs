@@ -557,6 +557,7 @@ public class SessionHandler
 
 			List<Kid> l_kidList = new List<Kid>();
 			String str = SessionHandler.LoadKidList();
+
 			if (str.Length > 0 && str != null)
 			{
 				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
@@ -565,12 +566,16 @@ public class SessionHandler
 					foreach (object o in l_data)
 					{
 						Kid l_kid = new Kid( o as Hashtable );
+//						if (this.selectAvatar !=  null)
+//							kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+
 						l_kidList.Add( l_kid );
 					}
 					m_kidList = l_kidList;
 				}
 			}
-		} catch {
+		} catch (Exception e) {
+			Debug.Log(e);
 		}
 		
 	}
@@ -743,17 +748,49 @@ public class SessionHandler
 		readingTable = null;
 	}
 
+	// Cynthia: vzw
 	public static void SaveKidList(String str) 
 	{
-		File.WriteAllText(KIDLIST_PATH, str);
+		try {
+
+			StreamWriter sw = File.CreateText (KIDLIST_PATH_TEMP);
+			sw.Write (str);
+			sw.Flush ();
+			sw.Close ();
+
+			if (File.Exists(KIDLIST_PATH))
+			{
+				File.Replace (KIDLIST_PATH_TEMP, KIDLIST_PATH, KIDLIST_PATH_BACKUP); 
+			}
+			else
+			{
+				File.Move(KIDLIST_PATH_TEMP, KIDLIST_PATH);
+			}
+
+		}
+		catch (Exception e) {
+
+			Debug.Log(e);
+		}
 	}
 	
 	public static String LoadKidList() 
 	{
-		String str = File.ReadAllText(KIDLIST_PATH);
+		string str = null;
+		try {
+
+			str = File.ReadAllText(KIDLIST_PATH);
+		}
+		catch (Exception e) {
+			Debug.Log(e);
+		}
 		return str;	
 	}
 	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";
+	private static string KIDLIST_PATH_TEMP	= Application.persistentDataPath + "/kidList_temp.txt";
+	private static string KIDLIST_PATH_BACKUP	= Application.persistentDataPath + "/kidList_backup.txt";
+
+	// end vzw
 
 	private Kid     m_kid   = null;
     private Token   m_token = null;

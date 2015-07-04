@@ -572,6 +572,8 @@ public class UISwipeList : UIElement
 	
 	private void drawElement(UIElement p_element)
 	{
+		try {
+
         if (m_data == null || p_element.gameObject == null )
             return;
 
@@ -589,6 +591,13 @@ public class UISwipeList : UIElement
 				m_drawFunction(p_element, l_data, l_index);
 			}
 		}
+
+		}
+		catch (Exception e) 
+		{
+			Debug.Log(e);
+		}
+
 	}
 	
 	private void getInitialScrollPosition()

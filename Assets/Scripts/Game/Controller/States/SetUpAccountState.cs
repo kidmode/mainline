@@ -42,6 +42,12 @@ public class SetUpAccountState : GameState
 	public override void update( GameController p_gameController, int p_time )
 	{
 		base.update( p_gameController, p_time );
+
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			// TODO: Sean
+		}
+
 		if (ScreenChange.None != changeToState) 
 		{
 			switch(changeToState)
