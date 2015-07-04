@@ -11,14 +11,7 @@ public class SignInCacheState : GameState
 
 		m_loginSuccess = false;
 		_setupScreen(p_gameController.getUI());
-
-//		if (SessionHandler.getInstance().token.isExist()) //cynthia
-//		{
-//			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
-//			m_loginSuccess = true;
-//		}
-//		else
-//		{
+		{
 			//	SessionHandler.getInstance ().clientId = 600;
 			m_queue = new RequestQueue();
 			//		m_queue.add(new ClientIdRequest(getclientIdComplete));
@@ -39,7 +32,7 @@ public class SignInCacheState : GameState
 			m_queue.add(new GetKidListRequest(onGetKidsComplete));
 			m_queue.request(RequestType.SEQUENCE);
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
-//		}
+		}
 
 	}
 
@@ -145,9 +138,16 @@ public class SignInCacheState : GameState
 	{
 		if(null != p_response.error)
 		{
-			m_queue.reset();
-			SessionHandler.getInstance().SignInFail = true;
-			m_toSignInState = true;
+			if (SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				m_loginSuccess = true;
+			}
+			else
+			{
+				m_queue.reset();
+				SessionHandler.getInstance().SignInFail = true;
+				m_toSignInState = true;
+			}
 		}
 	}
 

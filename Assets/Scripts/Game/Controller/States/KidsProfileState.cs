@@ -33,9 +33,13 @@ public class KidsProfileState : GameState
 		_createMainView ( m_gameController );
 		_setupElements();
 
-		RequestQueue l_request = new RequestQueue ();
-		l_request.add (new GetKidRequest(SessionHandler.getInstance().currentKid.id, onRequestComplete));
-		l_request.request ();
+
+		if( null != m_kidsProfileCanvas )
+		{
+			//			m_kidsProfileCanvas.refreshInfo ();
+			m_profileActivityCanvas.SetupLocalizition ();
+			m_infoSwipeList.active = true;
+		}
 
 		GAUtil.logScreen("KidsProfileScreen");
 	}
@@ -53,46 +57,7 @@ public class KidsProfileState : GameState
 
 	//----------------- Private Implementation -------------------
 
-	private void onRequestComplete(WWW p_response)
-	{
-		if (p_response.error != null)
-			m_gameController.changeState(ZoodleState.SERVER_ERROR);
-		else
-		{
-			string l_string = "";
-			
-			l_string = UnicodeDecoder.Unicode(p_response.text);
-			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
 
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
-			Kid l_currentKid = new Kid(l_data);
-			l_currentKid.requestPhoto();
-
-			SessionHandler.getInstance().currentKid = l_currentKid;
-
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			for (int i = 0; i < l_kidList.Count; ++i)
-			{
-				if (l_kidList[i].id == l_currentKid.id)
-				{
-					if(null != l_kidList[i].appList)
-						l_currentKid.appList = l_kidList[i].appList;
-					if(null != l_kidList[i].topRecommendedApp)
-						l_currentKid.topRecommendedApp = l_kidList[i].topRecommendedApp;
-					l_kidList[i] = l_currentKid;
-					break;
-				}
-			}
-
-			if( null != m_kidsProfileCanvas )
-			{
-				//			m_kidsProfileCanvas.refreshInfo ();
-				m_profileActivityCanvas.SetupLocalizition ();
-				m_infoSwipeList.active = true;
-			}
-		}
-	}
 
 	private void onBackButtonClick( UIButton p_button )
 	{
@@ -217,7 +182,7 @@ public class KidsProfileState : GameState
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 		
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-		
+
 		foreach( Kid l_kidData in SessionHandler.getInstance().kidList )
 		{
 			if( l_kidData.id == l_kid.id )
@@ -225,7 +190,8 @@ public class KidsProfileState : GameState
 				l_kidData.kid_photo = l_kid.kid_photo;
 			}
 		}
-		
+		//ImageCache.saveCacheImage(SessionHandler.getInstance().selectAvatar, l_kid.kid_photo);//cynthia
+
 		SessionHandler.getInstance ().currentKid = l_kid;
 		
 		if(null != m_avatarImage)

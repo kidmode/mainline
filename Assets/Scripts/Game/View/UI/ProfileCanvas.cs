@@ -43,7 +43,7 @@ public class ProfileCanvas : UICanvas
 		
 		UILabel l_label = l_button.getView( "name" ) as UILabel;
 		l_label.text = l_kid.name;
-		
+		l_kid.requestPhoto();
 		if( l_kid.gems != ProfileInfo.ADD_PROFILE_CODE && null != l_kid.kid_photo )
 		{
 			UIImage l_image = l_button.getView( "avatarIcon" ) as UIImage;

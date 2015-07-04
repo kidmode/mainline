@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using System;
-using System.Xml;
-using System.Xml.Schema;
 
 public class SessionHandler 
 {
@@ -541,7 +539,6 @@ public class SessionHandler
 		m_deviceName = string.Empty;
 		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
-		m_kidcount = 0;
 	}
 
 	private void _load()
@@ -555,22 +552,32 @@ public class SessionHandler
 		m_verifyBirth = l_setting.getBool (ZoodlesConstants.USER_VERIFY_BIRTHYEAR,true);
 		m_childLockPassword = l_setting.getString (ZoodlesConstants.CHILD_LOCK_PASSWORD,string.Empty);
 		m_childLockSwitch = l_setting.getBool (ZoodlesConstants.USER_CHILDLOCK_SWITCH,false);
-		m_kidcount = l_setting.getInt(ZoodlesConstants.USER_KIDCOUNT, 0);
-//		if(m_kidcount > 0)
-//		{
-//			for (int i = 0; i < m_kidcount; i++)
-//			{
-//				String str = PlayerPrefs.GetString("kid"+Convert.ToString(i+1)) as String;
-//				Hashtable h = MiniJSON.MiniJSON.jsonDecode(str) as Hashtable;
-//
-////				TextReader textReader = new StreamReader(Path.Combine(Application.dataPath, "kid"+ Convert.ToString(i+1)));
-////				Hashtable h = DictionarySerializer.Deserialize(textReader) as Hashtable;
-//				Kid l_kid = new Kid(h);
-//				List<Kid> l_kidList = new List<Kid>();
-//				l_kidList.Add(l_kid);
-//				m_kidList = l_kidList;
-//			}
-//		}
+
+		try {
+
+			List<Kid> l_kidList = new List<Kid>();
+			String str = SessionHandler.LoadKidList();
+
+			if (str.Length > 0 && str != null)
+			{
+				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
+				if (l_data != null)
+				{
+					foreach (object o in l_data)
+					{
+						Kid l_kid = new Kid( o as Hashtable );
+//						if (this.selectAvatar !=  null)
+//							kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+
+						l_kidList.Add( l_kid );
+					}
+					m_kidList = l_kidList;
+				}
+			}
+		} catch (Exception e) {
+			Debug.Log(e);
+		}
+		
 	}
 
 	public void addBook (int p_id, Book p_book)
@@ -741,25 +748,50 @@ public class SessionHandler
 		readingTable = null;
 	}
 
-	public void Save<T> (string name, T instance)
+	// Cynthia: vzw
+	public static void SaveKidList(String str) 
 	{
-		XmlSerializer serializer = new XmlSerializer (typeof(T));
-		using (var ms = new MemoryStream ()) {
-			serializer.Serialize (ms, instance);
-			PlayerPrefs.SetString (name, System.Text.ASCIIEncoding.ASCII.GetString (ms.ToArray ()));
+		try {
+
+			StreamWriter sw = File.CreateText (KIDLIST_PATH_TEMP);
+			sw.Write (str);
+			sw.Flush ();
+			sw.Close ();
+
+			if (File.Exists(KIDLIST_PATH))
+			{
+				File.Replace (KIDLIST_PATH_TEMP, KIDLIST_PATH, KIDLIST_PATH_BACKUP); 
+			}
+			else
+			{
+				File.Move(KIDLIST_PATH_TEMP, KIDLIST_PATH);
+			}
+
+		}
+		catch (Exception e) {
+
+			Debug.Log(e);
 		}
 	}
 	
-	public T Load<T> (string name)
+	public static String LoadKidList() 
 	{
-		if(!PlayerPrefs.HasKey(name)) return default(T);
-		XmlSerializer serializer = new XmlSerializer (typeof(T));
-		T instance;
-		using (var ms = new MemoryStream (System.Text.ASCIIEncoding.ASCII.GetBytes (PlayerPrefs.GetString (name)))) {
-			instance = (T)serializer.Deserialize (ms);
+		string str = null;
+		try {
+
+			str = File.ReadAllText(KIDLIST_PATH);
 		}
-		return instance;
+		catch (Exception e) {
+			Debug.Log(e);
+		}
+		return str;	
 	}
+	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";
+	private static string KIDLIST_PATH_TEMP	= Application.persistentDataPath + "/kidList_temp.txt";
+	private static string KIDLIST_PATH_BACKUP	= Application.persistentDataPath + "/kidList_backup.txt";
+
+	// end vzw
+
 	private Kid     m_kid   = null;
     private Token   m_token = null;
 	private List<Kid> m_kidList = null;
@@ -767,7 +799,6 @@ public class SessionHandler
 	private string  m_selectedAvatar = null;
 	private bool 	m_hasPin = false;
 	private int 	m_pin;
-	private int 	m_kidcount; //cynthia
 	private string m_username;
 
 	private string m_errorName;
@@ -839,82 +870,62 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
-}
 
-public class DictionarySerializer : IXmlSerializable
-{
-	private IDictionary dictionary = null;
-	
-	public DictionarySerializer()
-	{
-		this.dictionary = new Hashtable();
-	}
-	
-	private DictionarySerializer(IDictionary dictionary)
-	{
-		this.dictionary = dictionary;
-	}
-	
-	public static void Serialize(IDictionary dictionary, Stream stream)
-	{
-		DictionarySerializer ds = new DictionarySerializer(dictionary);
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		xs.Serialize(stream, ds);
-	}
 
-	public static void Serialize(IDictionary dictionary, TextWriter textWriter)
+
+
+
+	// get kid info except app list, top recommend apps
+	public void fetchCurrentKidDetail()
 	{
-		DictionarySerializer ds = new DictionarySerializer(dictionary);
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		xs.Serialize(textWriter, ds);
+		RequestQueue l_request = new RequestQueue ();
+		l_request.add (new GetKidRequest(currentKid.id, onRequestComplete));
+		l_request.request ();
 	}
 	
-	public static IDictionary Deserialize(Stream stream)
+	// private
+	private void onRequestComplete(WWW p_response)
 	{
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(stream);
-		return ds.dictionary;
-	}
-
-	public static IDictionary Deserialize(TextReader textReader)
-	{
-		XmlSerializer xs = new XmlSerializer(typeof(DictionarySerializer));
-		DictionarySerializer ds = (DictionarySerializer)xs.Deserialize(textReader);
-		return ds.dictionary;
-	}
-
-	XmlSchema IXmlSerializable.GetSchema()
-	{
-		return null;
-	}
-	
-	void IXmlSerializable.ReadXml(XmlReader reader)
-	{
-		reader.Read();
-		reader.ReadStartElement("dictionary");
-		while (reader.NodeType != XmlNodeType.EndElement)
+		if (p_response.error != null)
 		{
-			reader.ReadStartElement("item");
-			string key = reader.ReadElementString("key");
-			string value = reader.ReadElementString("value");
-			reader.ReadEndElement();
-			reader.MoveToContent();
-			dictionary.Add(key, value);
+			//if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+//				m_gameController.changeState(ZoodleState.SERVER_ERROR);  
+			}
 		}
-		reader.ReadEndElement();
-	}
-	
-	void IXmlSerializable.WriteXml(XmlWriter writer)
-	{
-		writer.WriteStartElement("dictionary");
-		foreach (object key in dictionary.Keys)
+		else
 		{
-			object value = dictionary[key];
-			writer.WriteStartElement("item");
-			writer.WriteElementString("key", key.ToString());
-			writer.WriteElementString("value", value.ToString());
-			writer.WriteEndElement();
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Kid l_currentKid = new Kid(l_data);
+
+			SessionHandler.getInstance().currentKid = l_currentKid;
+			
+			for (int i = 0; i < kidList.Count; ++i)
+			{
+				if (kidList[i].id == l_currentKid.id)
+				{
+					if(null != kidList[i].appList)
+						l_currentKid.appList = kidList[i].appList;
+					if(null != kidList[i].topRecommendedApp)
+						l_currentKid.topRecommendedApp = kidList[i].topRecommendedApp;
+					kidList[i] = l_currentKid;
+					break;
+				}
+			}
 		}
-		writer.WriteEndElement();
 	}
+
+
+
+
+
+
+
+
 }

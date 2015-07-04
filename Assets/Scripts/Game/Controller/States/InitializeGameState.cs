@@ -24,19 +24,12 @@ public class InitializeGameState : GameState
 		m_gotoLogin = false;
 		m_time = 0;
 
-//		if (SessionHandler.getInstance().token.isExist()) //cynthia
-//		{
-//			_setupScreen(p_gameController.getUI());
-//			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
-//		} 
-//		else 
-		{
-			m_request = new RequestQueue ();
-			m_request.add ( new ClientIdRequest(getClientIdComplete) );
-			m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
-			m_request.request ( RequestType.SEQUENCE );
-			_setupScreen(p_gameController.getUI());
-		}
+		m_request = new RequestQueue ();
+		m_request.add ( new ClientIdRequest(getClientIdComplete) );
+		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
+		m_request.request ( RequestType.SEQUENCE );
+		_setupScreen(p_gameController.getUI());
+		m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
 
 
 		GAUtil.logScreen("SplashScreen");
@@ -66,7 +59,7 @@ public class InitializeGameState : GameState
 			{
 				if(SessionHandler.getInstance().childLockSwitch)
 				{
-					m_gameController.connectState(ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
+					p_gameController.connectState(ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
 					p_gameController.changeState(ZoodleState.BIRTHYEAR);
 				}
 				else
@@ -163,8 +156,11 @@ public class InitializeGameState : GameState
 		}
 		else
 		{
-			m_request.reset();
-			setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+			if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				m_request.reset();
+				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+			}
 		}
 	}
 
@@ -181,8 +177,11 @@ public class InitializeGameState : GameState
 		}
 		else
 		{
-			m_request.reset();
-			setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+			if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				m_request.reset();
+				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+			} 
 		}
 	}
 	
