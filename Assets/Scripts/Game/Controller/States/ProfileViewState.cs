@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+// Sean: After create kid, show kid profile
+
 public class ProfileViewState : GameState 
 {
 	

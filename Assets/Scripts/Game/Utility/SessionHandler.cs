@@ -870,4 +870,62 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
+
+
+
+
+
+	// get kid info except app list, top recommend apps
+	public void fetchCurrentKidDetail()
+	{
+		RequestQueue l_request = new RequestQueue ();
+		l_request.add (new GetKidRequest(currentKid.id, onRequestComplete));
+		l_request.request ();
+	}
+	
+	// private
+	private void onRequestComplete(WWW p_response)
+	{
+		if (p_response.error != null)
+		{
+			//if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+//				m_gameController.changeState(ZoodleState.SERVER_ERROR);  
+			}
+		}
+		else
+		{
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Kid l_currentKid = new Kid(l_data);
+
+			SessionHandler.getInstance().currentKid = l_currentKid;
+			
+			for (int i = 0; i < kidList.Count; ++i)
+			{
+				if (kidList[i].id == l_currentKid.id)
+				{
+					if(null != kidList[i].appList)
+						l_currentKid.appList = kidList[i].appList;
+					if(null != kidList[i].topRecommendedApp)
+						l_currentKid.topRecommendedApp = kidList[i].topRecommendedApp;
+					kidList[i] = l_currentKid;
+					break;
+				}
+			}
+		}
+	}
+
+
+
+
+
+
+
+
 }

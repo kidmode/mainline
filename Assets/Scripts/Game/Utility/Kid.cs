@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-
 public class Kid : System.Object
 {
     public Kid()
