@@ -129,6 +129,7 @@ public class RegionBaseState : GameState
 
 	private int LAYER_GAME = 5;
 	private int LAYER_MESSAGE = 6;
+	private int LAYER_ERROR = 7;
 
 	protected enum RegionState
 	{
@@ -1065,6 +1066,24 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
+
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, LAYER_ERROR);
+			m_nextActivity = ActivityType.None;
+
+			setInputEnabled(false);
+
+			// Sean: I just need it go back after it reaches the point
+			p_toggle.tweener.addAlphaTrack(1.0f, 1.0f, 0.31f, (UIElement p_element, Tweener.TargetVar p_targetVar) => {
+				ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
+				l_panel.untoggleActivities();
+				setInputEnabled(true);
+			});
+			return;
+		}
+
 		if (m_transitioning || !p_isToggled)
 			return;
 		
