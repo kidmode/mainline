@@ -15,6 +15,19 @@ public class TutorialController : MonoBehaviour {
 	[SerializeField]
 	private TutorialSequence currSequence;
 
+	[SerializeField]
+	private GameObject currTutorialScreenCanvasObject;
+
+	private UICanvas currTutorialCanvas;
+
+	private bool showingTutorial = false;
+
+	public bool ShowingTutorial {
+		get {
+			return showingTutorial;
+		}
+	}
+
 	void Awake(){
 
 		Instance = this;
@@ -25,9 +38,11 @@ public class TutorialController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		showingTutorial = false;
+
 //		showTutorial (TutorialSequenceName.VIOLENCE_LEVEL);
 
-//		clearTutorialPlayerPref (); //FIXME // remove this latter, uncomment this to test how it looks. Just remember to comment it out
+		clearTutorialPlayerPref (); //FIXME // remove this latter, uncomment this to test how it looks. Just remember to comment it out
 
 	}
 	
@@ -54,9 +69,13 @@ public class TutorialController : MonoBehaviour {
 
 				UIManager uiManager = gameLogic.gameController.getUI();
 
-				uiManager.createScreen(currSequence.screenID, false, 6);
+				currTutorialCanvas = uiManager.createScreen(currSequence.screenID, false, 10) as UICanvas;
+
+				currTutorialScreenCanvasObject = currTutorialCanvas.gameObject;
 
 				PlayerPrefs.SetInt(sequenceName.ToString(), 1);
+
+				showingTutorial = true;
 
 
 			}
@@ -64,6 +83,27 @@ public class TutorialController : MonoBehaviour {
 
 		}
 
+	}
+
+
+	public void showNextPage(){
+
+		if(showingTutorial){
+
+			currTutorialScreenCanvasObject.transform.parent.gameObject.GetComponent<TutorialScreen>().showNextIndexPanel();
+
+		}
+
+	}
+
+	public void showIndex(int Index){
+
+		if(showingTutorial){
+		
+			currTutorialScreenCanvasObject.transform.parent.gameObject.GetComponent<TutorialScreen>().showPanel(Index);	
+
+		}
+		
 	}
 
 
@@ -122,7 +162,7 @@ public class TutorialSequence{
 
 public enum TutorialSequenceName{
 	
-	Add_YOUR_APP,
+	MAIN_PROCESS,
 	VIOLENCE_LEVEL
 	
 	

@@ -1,7 +1,11 @@
 fileFormatVersion: 2
 guid: 68305799a50f14f35b1fa0ebae5ae94d
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: corner_b_r
+    21300002: corner_b_l
+    21300004: corner_t_r
+    21300006: corner_t_l
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -31,7 +35,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -42,6 +46,46 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: corner_b_r
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 120
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: corner_b_l
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 119
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: corner_t_r
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 204
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: corner_t_l
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 204
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

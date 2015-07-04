@@ -120,7 +120,7 @@ public class UIScreen
 	public const int TABLET_SETTINGS			= 1001;
 
 	//Tutorials
-	public const int TUTORIAL_ADD_YOUR_APP				= 1101;
+	public const int TUTORIAL_MAIN_PROCESS				= 1101;
 	public const int TUTORIAL_CONTROL_VIOLENCE			= 1102;
 
 	//
@@ -249,7 +249,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.TABLET_SETTINGS,				SCREEN_DIRECTORY + "DashBoard/TabletSettingsScreen" );
 
 		//Add_YOUR_APP
-		m_directoryMap.Add( UIScreen.TUTORIAL_ADD_YOUR_APP,				SCREEN_DIRECTORY + "Tutorials/TutAddYourAppScreen" );
+		m_directoryMap.Add( UIScreen.TUTORIAL_MAIN_PROCESS,				SCREEN_DIRECTORY + "Tutorials/TutMainProcess" );
 		m_directoryMap.Add( UIScreen.TUTORIAL_CONTROL_VIOLENCE,				SCREEN_DIRECTORY + "Tutorials/TutControlViolenceScreen" );
 		// end vzw
 	}
@@ -373,7 +373,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 			//Kevin : vzw
 			case UIScreen.TABLET_SETTINGS:			return new UICanvas() 			as UICanvas;
-			case UIScreen.TUTORIAL_ADD_YOUR_APP:			return new UICanvas() 			as UICanvas;
+			case UIScreen.TUTORIAL_MAIN_PROCESS:			return new UICanvas() 			as UICanvas;
 			case UIScreen.TUTORIAL_CONTROL_VIOLENCE:			return new UICanvas() 			as UICanvas;
 			// end vzw
 		}
