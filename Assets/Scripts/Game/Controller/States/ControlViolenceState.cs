@@ -66,14 +66,14 @@ public class ControlViolenceState : GameState
 		m_helpButton = m_violenceFiltersCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		
-		int l_listCount = 5;
+		int l_listCount = 4;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (4);
+		m_dashboardControllerCanvas.setCurrentIndex (3);
 
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-		m_rightButton.	addClickCallback( onRightButtonClick );
+		m_rightButton.enabled = false;
 		m_leftButton.	addClickCallback( onLeftButtonClick );
 		
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -97,7 +97,10 @@ public class ControlViolenceState : GameState
 		m_childrenList.			addClickListener ("Prototype",onSelectThisChild);
 		m_tryPremiumButton.		addClickCallback (toPremiumScreen);
 		m_buyGemsButton.		addClickCallback (toBuyGemsScreen);
-		
+
+		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
+		m_appsButton.addClickCallback(goToAddApps);
+
 		m_leftSideMenuButton = 	m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
 		m_childModeButton = 	m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
 		m_overviewButton = 		m_dashboardCommonCanvas.getView ("overviewButton") 	as UIButton;
@@ -309,6 +312,11 @@ public class ControlViolenceState : GameState
 		canMoveLeftMenu = true;
 	}
 
+	private void goToAddApps( UIButton p_button )
+	{
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
+	}
+
 	private void goToOverview( UIButton p_button )
 	{
 		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
@@ -430,6 +438,7 @@ public class ControlViolenceState : GameState
 	private UIButton		m_closeLeftMenuButton;
 	private UIButton	    m_childModeButton;
 	private UIButton	    m_settingButton;
+	private UIButton 		m_appsButton;
 	private UIButton 		m_overviewButton;
 	private UIButton		m_controlsButton;
 	private UIButton		m_statChartButton;

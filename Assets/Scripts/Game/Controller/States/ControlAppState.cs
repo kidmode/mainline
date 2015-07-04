@@ -66,15 +66,16 @@ public class ControlAppState : GameState
 		m_helpButton = m_addAppCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		
-		int l_listCount = 5;
+		int l_listCount = 1;
 
 		m_dashboardControllerCanvas.setupDotList (l_listCount);
 		m_dashboardControllerCanvas.setCurrentIndex (0);
 		
 		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-		m_rightButton.	addClickCallback( onRightButtonClick );
-		m_leftButton.	addClickCallback( onLeftButtonClick );
+		m_leftButton.enabled = false;
+		m_rightButton.enabled = false;
+
 		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_addAppCanvas.getView ("mainPanel");
@@ -97,7 +98,10 @@ public class ControlAppState : GameState
 		m_childrenList.			addClickListener ("Prototype",onSelectThisChild);
 		m_tryPremiumButton.		addClickCallback (toPremiumScreen);
 		m_buyGemsButton.		addClickCallback (toBuyGemsScreen);
-		
+
+		m_appsButton = m_dashboardCommonCanvas.getView("appsButton") as UIButton;
+		m_appsButton.enabled = false;
+
 		m_leftSideMenuButton = 	m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
 		m_childModeButton = 	m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
 		m_overviewButton = 		m_dashboardCommonCanvas.getView ("overviewButton") 	as UIButton;
@@ -107,7 +111,7 @@ public class ControlAppState : GameState
 		m_childModeButton.		addClickCallback (toChildMode);
 		m_overviewButton.		addClickCallback (goToOverview);
 		m_statChartButton.		addClickCallback (goToStarChart);
-		m_controlsButton.		enabled = false;
+		m_controlsButton.		addClickCallback (goToSubject);
 		
 		//app part
 		m_appSwipeList = m_addAppCanvas.getView ( "appSwipeList" ) as UISwipeList;
@@ -303,7 +307,15 @@ public class ControlAppState : GameState
 	
 	private void goToOverview( UIButton p_button )
 	{
+//		Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+//		game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+
 		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+	}
+
+	private void goToSubject( UIButton p_button )
+	{
+		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 	}
 	
 	private void goToStarChart( UIButton p_button )
@@ -478,6 +490,7 @@ public class ControlAppState : GameState
 	private UIButton		m_closeLeftMenuButton;
 	private UIButton	    m_childModeButton;
 	private UIButton	    m_settingButton;
+	private UIButton 		m_appsButton;
 	private UIButton 		m_overviewButton;
 	private UIButton		m_controlsButton;
 	private UIButton		m_statChartButton;

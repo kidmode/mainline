@@ -99,7 +99,10 @@ public class OverviewProgressState : GameState {
 		
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
 		m_settingButton.addClickCallback (toSettingScreen);
-		
+
+		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
+		m_appsButton.addClickCallback(goToAddApps);
+
 		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
 		m_overviewButton.enabled = false;
 		
@@ -163,10 +166,15 @@ public class OverviewProgressState : GameState {
 	{
 		m_gameController.changeState( ZoodleState.OVERVIEW_APP );
 	}
-	
-	private void goToControls( UIButton p_button )
+
+	private void goToAddApps( UIButton p_button )
 	{
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
+	}
+
+	private void goToControls( UIButton p_button )
+	{
+		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 	}
 	
 	private void goToStarChart( UIButton p_button )
@@ -386,7 +394,8 @@ public class OverviewProgressState : GameState {
 	private UIButton m_settingButton;
 	private UIButton m_helpButton;
 	private UIButton m_upgradeButton;
-	
+
+	private UIButton m_appsButton;
 	private UIButton m_overviewButton;
 	private UIButton m_controlsButton;
 	private UIButton m_statChartButton;
