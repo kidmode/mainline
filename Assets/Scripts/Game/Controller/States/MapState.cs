@@ -90,8 +90,10 @@ public class MapState : GameState
 			m_mapCanvas.active = true;
 			m_mapCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 
+			// Sean: vzw
 			m_entranceButton.enabled = false;
 			m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+			// end vzw
 			return;
 		}
 
@@ -101,8 +103,10 @@ public class MapState : GameState
 
 		m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 		m_entranceButton.addClickCallback(onBackClicked);
+		// Sean: vzw
 		m_entranceButton.enabled = false;
 		m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+		// end vzw
 
 		UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
 		l_jungleButton.addClickCallback(onJungleClicked);
