@@ -23,18 +23,8 @@ public class BookInfo : object
 		bookState = p_state;
 		iconUrl = p_iconUrl;
 
-		//honda: check icon existed or not. if not, load icon from server
-		string contentName = "book_" + bookId + ".jpg";
-		Texture2D texture = ImageCache.getCacheImage(contentName);
-		icon = texture;
-		if (icon == null)
-		{
-			request = new RequestQueue();
-			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
-			request.request(RequestType.RUSH);
-		}
-//		else
-//			Debug.Log(contentName + " cached");
+		//honda: added
+		loadImage();
     }
 
 	private void _requestBookIconComplete(WWW p_response)
@@ -57,6 +47,7 @@ public class BookInfo : object
 		if (null != icon)
 		{
 			GameObject.Destroy(icon);
+			Resources.UnloadAsset(icon);
 			icon = null;
 		}
 		disposed = true;
@@ -67,19 +58,29 @@ public class BookInfo : object
 	{
 		disposed = false;
 		disposeRequest();
+	
+		//honda: added
+		loadImage();
+	}
 
-		//honda: check icon existed or not. if not, load icon from server
-		string contentName = "book_" + bookId + ".jpg";
-		Texture2D texture = ImageCache.getCacheImage(contentName);
+	private void loadImage()
+	{
+		//honda: Now, books are all in the local place. So, don't need to request cover image from server
+		//honda: cover images are loaded directly locally
+		string contentName = "book_" + bookId;
+		string imagePath = "Books/Images/" + contentName;
+		Texture2D texture = Resources.Load(imagePath) as Texture2D;
 		icon = texture;
-		if (icon == null)
-		{
-			request = new RequestQueue();
-			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
-			request.request(RequestType.RUSH);
-		}
-		else
-			Debug.Log("reload function " + contentName + " cached");
+		//honda: comment out the code due to above reason
+		//honda: check icon existed or not. if not, load icon from server
+//		Texture2D texture = ImageCache.getCacheImage(contentName);
+//		icon = texture;
+//		if (icon == null)
+//		{
+//			request = new RequestQueue();
+//			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
+//			request.request(RequestType.RUSH);
+//		}
 	}
 
 	private void disposeRequest()

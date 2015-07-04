@@ -20,25 +20,41 @@ public class TutorialScreen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(Input.GetMouseButtonDown(0)){
-
-			if(currIndex >= sequencePanels.Length - 1){
-
-				TutorialController.Instance.sequenceScreenFinished();
-
-				return;
-
-			}
-
-			currIndex++;
-
-			showPanel(currIndex);
-
-		}
+//		if(Input.GetMouseButtonDown(0)){
+//
+//			if(currIndex >= sequencePanels.Length - 1){
+//
+//				TutorialController.Instance.sequenceScreenFinished();
+//
+//				return;
+//
+//			}
+//
+//			currIndex++;
+//
+//			showPanel(currIndex);
+//
+//		}
 	
 	}
 
-	void showPanel(int index){
+	public void showNextIndexPanel(){
+
+		if(currIndex >= sequencePanels.Length - 1){
+
+			TutorialController.Instance.sequenceScreenFinished();
+
+			return;
+
+		}
+
+		currIndex++;
+
+		showPanel(currIndex);
+
+	}
+
+	public void showPanel(int index){
 
 		hideAll ();
 
@@ -55,6 +71,12 @@ public class TutorialScreen : MonoBehaviour {
 			sequencePanels[i].SetActive(false);
 				
 		}
+
+	}
+
+	public void closeTutorialScreen(){
+
+		TutorialController.Instance.sequenceScreenFinished();
 
 	}
 

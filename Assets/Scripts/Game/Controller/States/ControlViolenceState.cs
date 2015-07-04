@@ -13,7 +13,8 @@ public class ControlViolenceState : GameState
 		_setupScreen( p_gameController );
 		_setupElment();
 
-		TutorialController.Instance.showTutorial(TutorialSequenceName.VIOLENCE_LEVEL);
+//		TutorialController.Instance.showTutorial(TutorialSequenceName.VIOLENCE_LEVEL);
+		TutorialController.Instance.showNextPage();
 
 	}
 	

@@ -15,6 +15,8 @@ public class ProfileState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
+
+		TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
 		
 		m_requestQueue = new RequestQueue ();
 
