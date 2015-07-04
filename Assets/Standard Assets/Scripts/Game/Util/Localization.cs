@@ -695,6 +695,31 @@ public class Localization : object
 	public const string TXT_STATE_1_REGISTERED 	    			= "TXT_STATE_1_REGISTERED";
 	public const string TXT_STATE_1_ADD_CHILD 	    			= "TXT_STATE_1_ADD_CHILD";
 	public const string TXT_8_DATE_VERIFIY 	    				= "TXT_8_DATE_VERIFIY";
+
+	//============================================================================================
+	//New localization keys
+	//1001
+	public const string TXT_SCREEN_1001_TABLET_SETTINGS_TITLE 	    				= "TXT_SCREEN_1001_TABLET_SETTINGS_TITLE";
+	public const string TXT_SCREEN_1001_TABLET_SETTINGS_SETTINGS 	    			= "TXT_SCREEN_1001_TABLET_SETTINGS_SETTINGS";
+	public const string TXT_SCREEN_1001_TABLET_SETTINGS_EXIT 	    				= "TXT_SCREEN_1001_TABLET_SETTINGS_EXIT";
+	public const string TXT_SCREEN_1001_TABLET_SETTINGS_WIFI 	    				= "TXT_SCREEN_1001_TABLET_SETTINGS_WIFI";
+	public const string TXT_SCREEN_1001_TABLET_SETTINGS_GOOGLE 	    				= "TXT_SCREEN_1001_TABLET_SETTINGS_GOOGLE";
+
+
+	public const string TXT_TUTORIAL_ADD_APP_DIALOG_1 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_1";
+	public const string TXT_TUTORIAL_ADD_APP_DIALOG_2 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_2";
+
+	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1";
+	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2";
+
+	public const string TXT_TUTORIAL_PLEASE_CLICK_PARENT	    						= "TXT_TUTORIAL_PLEASE_CLICK_PARENT";
+	public const string TXT_TUTORIAL_PLEASE_TAP_CONTROLS	    						= "TXT_TUTORIAL_PLEASE_TAP_CONTROLS";
+	public const string TXT_TUTORIAL_TAP_NAVIGATION	    						= "TXT_TUTORIAL_TAP_NAVIGATION";
+	public const string TXT_TUTORIAL_CONTROL_TIME    						= "TXT_TUTORIAL_CONTROL_TIME";
+
+	public const string TXT_SCREEN_102_SIGN_WITH_GOOGLE	    						= "TXT_SCREEN_102_SIGN_WITH_GOOGLE";
+
+
 	
 	private string m_currLanguage   = "EN";
 	private Hashtable m_dictionary  = new Hashtable();

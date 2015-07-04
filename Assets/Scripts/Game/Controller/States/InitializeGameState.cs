@@ -15,15 +15,21 @@ public class InitializeGameState : GameState
 		base.enter(p_gameController);
 
 		Application.targetFrameRate = 30;
+
+		QualitySettings.vSyncCount = 0; 
+
+		QualitySettings.antiAliasing = 0;
+
+
 		m_gotoLogin = false;
 		m_time = 0;
 
-		if (SessionHandler.getInstance().token.isExist()) //cynthia
-		{
-			_setupScreen(p_gameController.getUI());
-			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
-		} 
-		else 
+//		if (SessionHandler.getInstance().token.isExist()) //cynthia
+//		{
+//			_setupScreen(p_gameController.getUI());
+//			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
+//		} 
+//		else 
 		{
 			m_request = new RequestQueue ();
 			m_request.add ( new ClientIdRequest(getClientIdComplete) );

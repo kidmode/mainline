@@ -247,7 +247,9 @@ public class GCSBuild : EditorWindow
 			return;
 		
 		PlayerSettings.bundleIdentifier = System.Environment.GetEnvironmentVariable("BUNDLE_ID");
-		
+
+//		PlayerSettings.Android.bundleVersionCode++;
+
 		string useAPKExpansion = System.Environment.GetEnvironmentVariable("SPLIT");
 		
 		if(useAPKExpansion == "true")

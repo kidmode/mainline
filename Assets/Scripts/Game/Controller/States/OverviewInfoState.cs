@@ -21,6 +21,8 @@ public class OverviewInfoState : GameState {
 		_setupScreen( p_gameController );
 		_setupElment();
 		turnOffChildLock();
+
+		TutorialController.Instance.showNextPage();
 	}
 
 	private void turnOffChildLock()

@@ -4,51 +4,46 @@ using System.Collections;
 public class TabletSettingsScreen : MonoBehaviour {
 
 	[SerializeField]
-	private GameObject highlightKidmodeLauncher;
-
-	[SerializeField]
-	private GameObject highlightDeaultLauncher;
-
-	[SerializeField]
-	private GameObject homeSettingsPanel;
-
-	[SerializeField]
 	private GameObject gameLogic;
 
-
+	private UICanvas m_TabletSettingsCanvas;
 
 	// Use this for initialization
 	void Start () {
 
 		gameLogic = GameObject.Find ("GameLogic");
 
-		//=========================
-		//Add localisation here
+		GameController gameController = gameLogic.GetComponent<Game>().gameController;
 
+		UIManager l_ui = gameController.getUI();
 
-		//Set Home settings panel
-		homeSettingsPanel.SetActive (false);
+		m_TabletSettingsCanvas = l_ui.findScreen(UIScreen.TABLET_SETTINGS) as UICanvas;
+
+		SetupLocalization();
 	
 	}
 
-	void showHomeSettingsHighLights(){
 
-		if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.Default) {
 
-			highlightKidmodeLauncher.SetActive(false);
+	//=========================
+	//Add localisation here
 
-			highlightDeaultLauncher.SetActive(true);
-
-		}else if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.KidMode) {
-
-			highlightKidmodeLauncher.SetActive(true);
-			
-			highlightDeaultLauncher.SetActive(false);
-
-			
-		}
-
+	private void SetupLocalization()
+	{
+		UILabel l_tabletSettingsTitle    = m_TabletSettingsCanvas.getView("textTabletSettingsTitle") as UILabel;
+		UILabel l_settingsLabel    = m_TabletSettingsCanvas.getView("textButtonSettings") as UILabel;
+		UILabel l_exitLabel    = m_TabletSettingsCanvas.getView("textButtonExit") as UILabel;
+		UILabel l_wifiLabel      = m_TabletSettingsCanvas.getView("textButtonWifi") as UILabel;
+		UILabel l_googleplayLabel      = m_TabletSettingsCanvas.getView("textButtonGooglePlay") as UILabel;
+		
+		l_tabletSettingsTitle.text       = Localization.getString(Localization.TXT_SCREEN_1001_TABLET_SETTINGS_TITLE);
+		l_settingsLabel.text       = Localization.getString(Localization.TXT_SCREEN_1001_TABLET_SETTINGS_SETTINGS);
+		l_exitLabel.text       = Localization.getString(Localization.TXT_SCREEN_1001_TABLET_SETTINGS_EXIT);
+		l_wifiLabel.text       = Localization.getString(Localization.TXT_SCREEN_1001_TABLET_SETTINGS_WIFI);
+		l_googleplayLabel.text       = Localization.getString(Localization.TXT_SCREEN_1001_TABLET_SETTINGS_GOOGLE);
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -63,9 +58,8 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonHome(){
 
-		homeSettingsPanel.SetActive (true);
 
-		showHomeSettingsHighLights ();
+		KidMode.openDefaultLauncher ();
 		
 	}
 
@@ -73,16 +67,7 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 		KidModeLockController.Instance.swith2DefaultLauncher ();
 
-//		KidModeLockController.Instance.stateHomeLauncher = KidModeLockController.StateHomeLauncher.Default;
-//		
-//		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
-//
-//		KidMode.disablePluginComponent ();
-
 		KidMode.openDefaultLauncher ();
-
-//		KidMode.startActivity ("com.android.launcher3");
-//		KidMode.openDefaultLauncher ();
 
 	}
 
@@ -119,23 +104,17 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void closeHomeSettings(){
 
-		homeSettingsPanel.SetActive (false);
-
 	}
 
 	public void setLauncherKidmode(){
 
 		KidModeLockController.Instance.swith2KidModeLauncher ();
 
-		showHomeSettingsHighLights ();
-
 	}
 
 	public void setLauncherDefault(){
 
 		KidModeLockController.Instance.swith2DefaultLauncher ();
-
-		showHomeSettingsHighLights ();
 
 	}
 

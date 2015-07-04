@@ -27,7 +27,7 @@ public class OverviewReadingState : GameState
 	{
 		base.update (p_gameController, p_time);
 
-		m_gemCountLabelInBook.text = SessionHandler.getInstance ().currentKid.gems.ToString();
+//		m_gemCountLabelInBook.text = SessionHandler.getInstance ().currentKid.gems.ToString();
 	}
 	
 	public override void exit (GameController p_gameController)
@@ -89,7 +89,7 @@ public class OverviewReadingState : GameState
 		
 		m_dashboardControllerCanvas.setupDotList( 7 );
 		m_dashboardControllerCanvas.setCurrentIndex( 5 );
-		m_gemCountLabelInBook = m_recordAReadingCanvas.getView ("gemCountText") as UILabel;
+//		m_gemCountLabelInBook = m_recordAReadingCanvas.getView ("gemCountText") as UILabel;
 		m_moreBookButton = m_recordAReadingCanvas.getView( "bookListButton" ) as UIButton;
 		m_memberButton = m_recordAReadingCanvas.getView( "memberButton" ) as UIButton;
 		m_moreBookButton.addClickCallback( onMoreBookButtonClick );
@@ -972,7 +972,7 @@ public class OverviewReadingState : GameState
 	private UIButton 				  m_moreBookButton;
 	private UIButton				  m_exitBookListButton;
 	private UIButton				  m_exitBookDetailsButton;
-	private UILabel 			      m_gemCountLabelInBook;
+//	private UILabel 			      m_gemCountLabelInBook;
 	private Book	 			      m_wantedBook;
 	private UISwipeList 			  m_bookList;
 	private UIElement  				  m_costArea;

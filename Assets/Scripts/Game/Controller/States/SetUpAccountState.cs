@@ -95,6 +95,12 @@ public class SetUpAccountState : GameState
 //		m_getPremiumButton = m_signUpCanvas.getView("getPremiumButton") as UIButton;
 //		m_getPremiumButton.addClickCallback (onClickGetPremium);
 
+		// Sean: vzw
+		m_GoogleAccountButton = m_signUpCanvas.getView ("buttonGoogleAccount") as UIButton;
+		m_GoogleAccountButton.addClickCallback (toLoginWithGoogle);
+		// end vzw
+
+
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
 		m_passwordCheckImage = m_signUpCanvas.getView ("passwordInputConfirm") as UIImage;
 		m_premiumLogoArea = m_signUpCanvas.getView ("premiumLogoArea") as UIElement;
@@ -137,6 +143,13 @@ public class SetUpAccountState : GameState
 		m_rePassword.onValueChange.AddListener (onRepasswordChange);
 		m_password.onValueChange.AddListener (onPasswordChange);
 	//	#endif	
+
+
+		//TODO
+		//localization for google account
+		UILabel l_signInWithGoogle    = m_signUpCanvas.getView("textButtonGoogleAccount") as UILabel;
+
+		l_signInWithGoogle.text       = Localization.getString(Localization.TXT_SCREEN_102_SIGN_WITH_GOOGLE);
 	}
 
 	private void onFinsihedEdit(string p_value)
@@ -248,6 +261,77 @@ public class SetUpAccountState : GameState
 		string l_email = m_account.text;
 		return IsMatch(ZoodlesConstants.EMAIL_REGULAR_STRING,l_email);
 	}
+
+	// Sean: vzw
+	private bool isLoaded = false;
+	private void toLoginWithGoogle(UIButton p_button)
+	{
+		if (!isLoaded) {
+			isLoaded = true;
+			GooglePlayManager.ActionOAuthTokenLoaded += ActionOAuthTokenLoaded;
+			GooglePlayManager.ActionAvailableDeviceAccountsLoaded += ActionAvailableDeviceAccountsLoaded;
+
+			GooglePlayConnection.instance.addEventListener (GooglePlayConnection.PLAYER_CONNECTED, OnPlayerConnected);
+			GooglePlayConnection.instance.addEventListener (GooglePlayConnection.PLAYER_DISCONNECTED, OnPlayerDisconnected);
+			GooglePlayConnection.ActionConnectionResultReceived += ActionConnectionResultReceived;
+
+		}
+		GooglePlayManager.instance.RetrieveDeviceGoogleAccounts();
+	}
+	private void ActionConnectionResultReceived(GooglePlayConnectionResult result) {
+		
+		if (result.IsSuccess) {
+			Debug.Log ("Connected!");
+		} else {
+			Debug.Log ("Cnnection failed with code: " + result.code.ToString ());
+		}
+//		SA_StatusBar.text = "ConnectionResul:  " + result.code.ToString ();
+	}
+
+	private void ActionOAuthTokenLoaded(string token) {
+
+		AndroidDialog dialog = AndroidDialog.Create("Authentication token", token, GooglePlayManager.instance.loadedAuthToken, "Close");
+
+//		AN_PoupsProxy.showMessage("Token Loaded", GooglePlayManager.instance.loadedAuthToken);
+	}
+
+	private void ActionAvailableDeviceAccountsLoaded(List<string> accounts) {
+		string msg = "Device contains following google accounts:" + "\n";
+		foreach(string acc in GooglePlayManager.instance.deviceGoogleAccountList) {
+			msg += acc + "\n";
+		} 
+		
+		AndroidDialog dialog = AndroidDialog.Create("Accounts Loaded", msg, "Sign With Fitst one", "Do Nothing");
+		dialog.OnComplete += SignDialogComplete;	
+	}
+
+	private void SignDialogComplete (AndroidDialogResult res) {
+		if(res == AndroidDialogResult.YES) {
+
+
+			GooglePlayConnection.instance.connect(GooglePlayManager.instance.deviceGoogleAccountList[0]);
+
+			if (GooglePlayConnection.state == GPConnectionState.STATE_CONNECTED) {
+				string scope = "oauth2:server:client_id:1093303544366-lavp8gpk436prjivuhfm828436q5nsp6.apps.googleusercontent.com:api_scope:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email";
+				GooglePlayManager.instance.LoadToken(GooglePlayManager.instance.deviceGoogleAccountList[0], scope);
+			}
+		}
+		
+	}
+
+	private void OnPlayerDisconnected() {
+
+	}
+	
+	private void OnPlayerConnected() {
+		string scope = "oauth2:server:client_id:1093303544366-lavp8gpk436prjivuhfm828436q5nsp6.apps.googleusercontent.com:api_scope:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email";
+		GooglePlayManager.instance.LoadToken(GooglePlayManager.instance.deviceGoogleAccountList[0], scope);
+		AndroidDialog dialog = AndroidDialog.Create("connected", "cool", "OK", "Close");
+	}
+
+
+	// end vzw
+
 
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
@@ -364,6 +448,10 @@ public class SetUpAccountState : GameState
 	private UILabel		m_errorTitle;
 	private UILabel		m_errorContent;
 	private UIButton 	m_closeDialogButton;
+
+	// Sean: vzw
+	private UIButton    m_GoogleAccountButton;
+	// end vzw
 
 	private UICanvas    m_signUpCanvas;
 	private UICanvas	m_createAccountBackgroundCanvas;

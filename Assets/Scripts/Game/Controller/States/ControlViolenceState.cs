@@ -12,6 +12,10 @@ public class ControlViolenceState : GameState
 		m_requestQueue = new RequestQueue();
 		_setupScreen( p_gameController );
 		_setupElment();
+
+//		TutorialController.Instance.showTutorial(TutorialSequenceName.VIOLENCE_LEVEL);
+		TutorialController.Instance.showNextPage();
+
 	}
 	
 	public override void update (GameController p_gameController, int p_time)

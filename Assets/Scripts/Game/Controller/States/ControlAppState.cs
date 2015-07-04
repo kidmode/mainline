@@ -13,6 +13,9 @@ public class ControlAppState : GameState
 		m_appList = new ArrayList ();
 		_setupScreen( p_gameController );
 		_setupElment();
+
+//		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
+		TutorialController.Instance.showNextPage();
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -321,6 +324,8 @@ public class ControlAppState : GameState
 	private void onAppButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
 //		p_list.removeClickListener ( "controlButton", onAppButtonClicked );
+
+		TutorialController.Instance.showNextPage();
 		
 		AppInfo l_appInfo = p_data as AppInfo;
 		DebugUtils.Assert ( l_appInfo != null );
