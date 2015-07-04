@@ -709,6 +709,7 @@ public class Localization : object
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_1 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_1";
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_2 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_2";
 	public const string TXT_TUTORIAL_ADD_APP_TOGGLE 	    						= "TXT_TUTORIAL_ADD_APP_TOGGLE"; //new
+	public const string TXT_TUTORIAL_ADD_APP_TOGGLE2 	    						= "TXT_TUTORIAL_ADD_APP_TOGGLE2"; //new
 
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1";
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2";
