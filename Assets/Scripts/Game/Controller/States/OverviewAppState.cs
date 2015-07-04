@@ -144,7 +144,10 @@ public class OverviewAppState : GameState
 		
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
 		m_settingButton.addClickCallback (toSettingScreen);
-		
+
+		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
+		m_appsButton.addClickCallback(goToAddApps);
+
 		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
 		m_overviewButton.enabled = false;
 		
@@ -409,6 +412,11 @@ public class OverviewAppState : GameState
 	{
 		p_button.removeClickCallback (toSettingScreen);
 		m_gameController.changeState (ZoodleState.SETTING_STATE);
+	}
+
+	private void goToAddApps( UIButton p_button )
+	{
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
 	private void goToControls( UIButton p_button )
@@ -1057,7 +1065,8 @@ public class OverviewAppState : GameState
 	private UIButton 				  m_settingButton;
 	private UISwipeList				  m_childrenList;
 	private UIButton 				  m_tryPremiumButton;
-	
+
+	private UIButton m_appsButton;
 	private UIButton				  m_overviewButton;
 	private UIButton 				  m_controlsButton;
 	private UIButton				  m_statChartButton;
