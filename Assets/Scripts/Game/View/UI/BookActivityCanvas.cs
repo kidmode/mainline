@@ -46,7 +46,7 @@ public class BookInfo : object
 	{
 		if (null != icon)
 		{
-			GameObject.Destroy(icon);
+//			GameObject.Destroy(icon);
 			Resources.UnloadAsset(icon);
 			icon = null;
 		}

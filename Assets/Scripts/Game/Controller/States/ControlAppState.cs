@@ -307,15 +307,28 @@ public class ControlAppState : GameState
 	
 	private void goToOverview( UIButton p_button )
 	{
-//		Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-//		game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-
-		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+		}
 	}
 
 	private void goToSubject( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		}
 	}
 	
 	private void goToStarChart( UIButton p_button )
@@ -402,7 +415,15 @@ public class ControlAppState : GameState
 	{
 //		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
 //		{
-		m_addAppCanvas.firstLoadApp();
+
+		try 
+		{
+			m_addAppCanvas.firstLoadApp();
+		}
+		catch (System.Exception e)
+		{
+
+		}
 //		m_appSwipeList.removeClickListener( "controlButton", onAppButtonClicked );
 //		}
 //		else

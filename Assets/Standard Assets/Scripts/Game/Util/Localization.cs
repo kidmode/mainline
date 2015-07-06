@@ -709,6 +709,7 @@ public class Localization : object
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_1 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_1";
 	public const string TXT_TUTORIAL_ADD_APP_DIALOG_2 	    						= "TXT_TUTORIAL_ADD_APP_DIALOG_2";
 	public const string TXT_TUTORIAL_ADD_APP_TOGGLE 	    						= "TXT_TUTORIAL_ADD_APP_TOGGLE"; //new
+	public const string TXT_TUTORIAL_ADD_APP_TOGGLE2 	    						= "TXT_TUTORIAL_ADD_APP_TOGGLE2"; //new
 
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1";
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2";
@@ -725,6 +726,7 @@ public class Localization : object
 
 	public const string TXT_SCREEN_102_SIGN_WITH_GOOGLE	    						= "TXT_SCREEN_102_SIGN_WITH_GOOGLE";
 
+	public const string ERROR_MESSAGE_ERROR_TEXT = "ERROR_MESSAGE_ERROR_TEXT";
 
 	
 	private string m_currLanguage   = "EN";

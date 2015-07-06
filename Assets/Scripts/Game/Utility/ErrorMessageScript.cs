@@ -19,6 +19,7 @@ public class ErrorMessageScript : MonoBehaviour {
 		
 		m_errorMessageCanvas = l_ui.findScreen(UIScreen.ERROR_MESSAGE) as UICanvas;
 	
+		SetupLocalization();
 	}
 	
 	public void leaveErrorMessage()
@@ -30,5 +31,11 @@ public class ErrorMessageScript : MonoBehaviour {
 			game.gameController.getUI().removeScreen(UIScreen.ERROR_MESSAGE);
 			
 		}
+	}
+
+	private void SetupLocalization()
+	{
+		UILabel errorLabel = m_errorMessageCanvas.getView("errorLabel") as UILabel;
+		errorLabel.text = Localization.getString(Localization.ERROR_MESSAGE_ERROR_TEXT);
 	}
 }

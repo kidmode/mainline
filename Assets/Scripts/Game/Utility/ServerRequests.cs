@@ -680,6 +680,7 @@ public class CreateChildRequest : RequestQueue.Request
 		if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
 			SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+
 		if (null == SessionHandler.getInstance ().kidList)
 			SessionHandler.getInstance ().kidList = new List<Kid> ();
 
@@ -689,15 +690,16 @@ public class CreateChildRequest : RequestQueue.Request
 		SessionHandler.getInstance().kidList.Add(l_kid);
 		SessionHandler.getInstance().getSingleKidApplist(l_kid);
 
-		LocalSetting l_setting = LocalSetting.find( "User" );
-		l_setting.setInt( ZoodlesConstants.USER_KIDCOUNT, SessionHandler.getInstance().kidList.Count);
-		int count = SessionHandler.getInstance().kidList.Count;
-		PlayerPrefs.SetString("kid"+Convert.ToString(count), p_response.text);
+		//cynthia
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
 
-//		TextWriter WriteFileStream = new StreamWriter(Path.Combine(Application.dataPath, "kid"+Convert.ToString(count)));
-//		DictionarySerializer.Serialize (l_data, WriteFileStream);
 	}
-
+	
 	private string m_name;
 	private string m_birthday;
 	private string m_imageVariable;

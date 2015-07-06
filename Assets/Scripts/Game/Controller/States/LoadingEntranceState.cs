@@ -26,12 +26,7 @@ public class LoadingEntranceState : GameState
 		KidModeLockController.Instance.swith2KidMode();
 		SessionHandler.getInstance().resetKidCache();
 
-		m_triggerNextScreen = false;
-
-		//honda: kid photo, app list and top recommended app request
-		RequestQueue l_request = new RequestQueue ();
-		l_request.add (new GetKidRequest(SessionHandler.getInstance().currentKid.id, onRequestComplete));
-		l_request.request ();
+		m_counterToNextScreen = 0;
 
 		m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
 
@@ -42,17 +37,15 @@ public class LoadingEntranceState : GameState
 	public override void update( GameController p_gameController, int p_time )
 	{
 		base.update( p_gameController, p_time );		
-		
-		if (m_triggerNextScreen)
+
+		if (m_counterToNextScreen++ == 5) 
 		{
 			p_gameController.changeState( ZoodleState.MAP );
-
+			
 			const float COMPLETE_TIME = 0.5f;
 
 			m_backCanvas.tweener.addAlphaTrack(     1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
 			m_loadingCanvas.tweener.addAlphaTrack(  1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
-
-			m_triggerNextScreen = false;
 		}
 	}
 	
@@ -88,11 +81,6 @@ public class LoadingEntranceState : GameState
 
 
 //Listeners
-	private void onNextClicked( UIButton p_button )
-	{
-		m_triggerNextScreen = true;
-	}	
-
 	private void onTransitionEnter( UICanvas p_canvas )
 	{
 		p_canvas.graphicRaycaster.enabled = false;
@@ -118,45 +106,8 @@ public class LoadingEntranceState : GameState
 	{
 		m_loadingLabel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f, onLoadingFadeInFinish );
 	}
-	
-	private void onRequestComplete(WWW p_response)
-	{
-		if (p_response.error != null)
-			m_gameController.changeState(ZoodleState.SERVER_ERROR);
-		else
-		{
-			string l_string = "";
-			
-			l_string = UnicodeDecoder.Unicode(p_response.text);
-			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
 
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
-			Kid l_currentKid = new Kid(l_data);
-			l_currentKid.requestPhoto();
-			
-			SessionHandler.getInstance().currentKid = l_currentKid;
-			
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			for (int i = 0; i < l_kidList.Count; ++i)
-			{
-				if (l_kidList[i].id == l_currentKid.id)
-				{
-					if(null != l_kidList[i].appList)
-						l_currentKid.appList = l_kidList[i].appList;
-					if(null != l_kidList[i].topRecommendedApp)
-						l_currentKid.topRecommendedApp = l_kidList[i].topRecommendedApp;
-					l_kidList[i] = l_currentKid;
-					break;
-				}
-			}
-		}
-
-		m_triggerNextScreen = true;
-	}
-
-	//Private variables
-	private bool m_triggerNextScreen = false;
+	private int m_counterToNextScreen = 0;
 
 	private UICanvas	m_backCanvas;
 	private UICanvas	m_loadingCanvas;

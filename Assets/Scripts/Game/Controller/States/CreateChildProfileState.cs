@@ -293,6 +293,15 @@ public class CreateChildProfileState : GameState
 				}
 			}
 			SessionHandler.getInstance ().currentKid = SessionHandler.getInstance ().kidList [0];
+
+			//cynthia
+			ArrayList l_list = new ArrayList();
+			foreach (Kid k in SessionHandler.getInstance ().kidList) {
+				l_list.Add(k.toHashTable());
+			}
+			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+			SessionHandler.SaveKidList(encodedString);
+
 		}
 		else
 		{
