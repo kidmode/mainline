@@ -95,6 +95,18 @@ public class BirthYearState : GameState
 		m_birthCanvas = p_uiManager.createScreen( UIScreen.BIRTHYEAR, true, 1 );
 		m_backButton = m_birthCanvas.getView("exitButton") as UIButton;
 		m_backButton.addClickCallback (toBack);
+
+		// Sean: vzw
+		// if this app is A launcher, we should go back to nowhere
+		int l_nextState = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
+		// re-set it because I took it.
+		m_gameController.connectState(ZoodleState.BIRTHYEAR, l_nextState);
+		if (l_nextState == ZoodleState.INITIALIZE_GAME) {
+			m_backButton.active = false;
+		}
+		// end: vzw
+
+
 		List<Vector3> l_posList = new List<Vector3>();
 		l_posList.Add( m_backButton.transform.localPosition + new Vector3( -100, 0, 0 ) );
 		l_posList.Add( m_backButton.transform.localPosition );
@@ -208,6 +220,7 @@ public class BirthYearState : GameState
 	private void changeStateAfterVerify()
 	{
 		int l_previous = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
+		Debug.Log("BirthYearState -> previous? " + l_previous);
 		if(GameController.UNDEFINED_STATE != l_previous)
 		{
 			if(l_previous == ZoodleState.PROFILE_SELECTION)

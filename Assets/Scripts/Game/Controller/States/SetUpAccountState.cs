@@ -42,6 +42,12 @@ public class SetUpAccountState : GameState
 	public override void update( GameController p_gameController, int p_time )
 	{
 		base.update( p_gameController, p_time );
+
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			// TODO: Sean
+		}
+
 		if (ScreenChange.None != changeToState) 
 		{
 			switch(changeToState)
@@ -266,6 +272,7 @@ public class SetUpAccountState : GameState
 	private bool isLoaded = false;
 	private void toLoginWithGoogle(UIButton p_button)
 	{
+		return;
 		if (!isLoaded) {
 			isLoaded = true;
 			GooglePlayManager.ActionOAuthTokenLoaded += ActionOAuthTokenLoaded;
@@ -301,7 +308,7 @@ public class SetUpAccountState : GameState
 			msg += acc + "\n";
 		} 
 		
-		AndroidDialog dialog = AndroidDialog.Create("Accounts Loaded", msg, "Sign With Fitst one", "Do Nothing");
+		AndroidDialog dialog = AndroidDialog.Create("Accounts Loaded", msg, "Sign With First one", "Do Nothing");
 		dialog.OnComplete += SignDialogComplete;	
 	}
 

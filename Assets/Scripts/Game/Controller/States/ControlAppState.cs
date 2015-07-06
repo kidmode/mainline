@@ -415,7 +415,15 @@ public class ControlAppState : GameState
 	{
 //		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
 //		{
-		m_addAppCanvas.firstLoadApp();
+
+		try 
+		{
+			m_addAppCanvas.firstLoadApp();
+		}
+		catch (System.Exception e)
+		{
+
+		}
 //		m_appSwipeList.removeClickListener( "controlButton", onAppButtonClicked );
 //		}
 //		else

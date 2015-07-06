@@ -71,6 +71,11 @@ public class MapState : GameState
 
 	//------------------ Private Implementation ----------------------
 
+	private void onTransitionDone()
+	{
+		m_entranceButton.enabled = true;
+	}
+
 	private void _setupMap(GameController p_gameController)
 	{
 		UIManager l_ui = p_gameController.getUI();
@@ -84,6 +89,11 @@ public class MapState : GameState
 		{
 			m_mapCanvas.active = true;
 			m_mapCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
+
+			// Sean: vzw
+			m_entranceButton.enabled = false;
+			m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+			// end vzw
 			return;
 		}
 
@@ -91,9 +101,13 @@ public class MapState : GameState
 		m_mapCanvas.enterTransitionEvent += onTransitionEnter;
 		m_mapCanvas.exitTransitionEvent += onTransitionExit;
 
-		UIButton l_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
-		l_entranceButton.addClickCallback(onBackClicked);
-		
+		m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
+		m_entranceButton.addClickCallback(onBackClicked);
+		// Sean: vzw
+		m_entranceButton.enabled = false;
+		m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+		// end vzw
+
 		UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
 		l_jungleButton.addClickCallback(onJungleClicked);
 		
@@ -199,6 +213,7 @@ public class MapState : GameState
 		m_subState = SubState.GO_KIDPROFILE;
 	}
 
+	private UIButton m_entranceButton;
 	private UICanvas m_mapCanvas;
 	private UICanvas m_cornerProfileCanvas;
 	private SubState m_subState = SubState.NONE;

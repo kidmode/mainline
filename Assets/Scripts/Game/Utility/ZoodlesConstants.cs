@@ -349,7 +349,6 @@ public class ZoodlesConstants
 	public const string USER_CURRENT		= "UserCurrent";
 	public const string USER_VERIFY_BIRTHYEAR = "UserVerifyBirthYear";
 	public const string USER_CHILDLOCK_SWITCH = "UserChildLockSwitch";
-	public const string USER_KIDCOUNT		= "UserKidCount"; //cynthia
 
 	/////////////////////////////////////////////////////////////////
 	// Symbol
