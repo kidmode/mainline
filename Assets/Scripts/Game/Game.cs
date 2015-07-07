@@ -55,8 +55,15 @@ public class Game : MonoBehaviour
 	public void Awake () 
 	{
 		// Sean: vzw
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		Application.targetFrameRate = 30;
+		
+		QualitySettings.vSyncCount = 0; 
+		
+		QualitySettings.antiAliasing = 0;
 		QualitySettings.SetQualityLevel (0);
-		// vzw end
+		#endif
+ 		// vzw end
 
 		GCS.Environment.init();
 		FB.Init(_initFacebookComplete);
