@@ -419,7 +419,7 @@ public class SetUpAccountState : GameState
 		}
 		else
 		{
-			invokeDialog(Localization.getString(Localization.TXT_STATE_9_FAIL), Localization.getString(Localization.TXT_STATE_9_NETWORK));
+			invokeDialog(Localization.getString(Localization.TXT_STATE_9_FAIL), Localization.getString(Localization.ERROR_MESSAGE_ERROR_TEXT));
 		}
 	}
 
