@@ -119,8 +119,16 @@ public class InitializeGameState : GameState
 //Listeners
 	private void onNextClicked(UIButton p_button)
 	{
-		m_gotoLogin = true;
-        m_splashBackCanvas.transitionDown(2.5f);
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia vzw
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else //vzw end
+		{
+			m_gotoLogin = true;
+	        m_splashBackCanvas.transitionDown(2.5f);
+		}
 	}	
 
 	private void onTransitionEnter(UICanvas p_canvas)
@@ -159,7 +167,11 @@ public class InitializeGameState : GameState
 			if (!SessionHandler.getInstance().token.isExist()) //cynthia
 			{
 				m_request.reset();
-				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//cynthia vzw
+				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
 			}
 		}
 	}
@@ -180,7 +192,11 @@ public class InitializeGameState : GameState
 			if (!SessionHandler.getInstance().token.isExist()) //cynthia
 			{
 				m_request.reset();
-				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//cynthia vzw
+				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
 			} 
 		}
 	}
