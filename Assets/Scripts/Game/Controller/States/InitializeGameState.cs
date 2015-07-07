@@ -119,16 +119,8 @@ public class InitializeGameState : GameState
 //Listeners
 	private void onNextClicked(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia vzw
-		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-		}
-		else //vzw end
-		{
-			m_gotoLogin = true;
-	        m_splashBackCanvas.transitionDown(2.5f);
-		}
+		m_gotoLogin = true;
+        m_splashBackCanvas.transitionDown(2.5f);
 	}	
 
 	private void onTransitionEnter(UICanvas p_canvas)
