@@ -28,7 +28,7 @@ public class DownloadObb : MonoBehaviour {
 			return;
 		}
 		
-		expPath = GooglePlayDownloader.GetExpansionFilePath();
+		expPath = GooglePlayDownloader.GetExpansionFilePath();;
 		if (expPath == null)
 		{
 			GUI.Label(new Rect(10, 10, Screen.width-10, 20), "External storage is not available!");
@@ -40,16 +40,12 @@ public class DownloadObb : MonoBehaviour {
 			if( alreadyLogged == false )
 			{
 				alreadyLogged = true;
-				log( "expPath = "  + expPath );
-				log( "Main = "  + mainPath );
-				log( "Main = " + mainPath.Substring(expPath.Length));
 				
 				if (mainPath != null)
 					StartCoroutine(loadLevel());
 				
 			}
 			//GUI.Label(new Rect(10, 10, Screen.width-10, Screen.height-10), logtxt );
-			
 			if (mainPath == null)
 			{
 				GUI.Label(new Rect(Screen.width-600, Screen.height-230, 430, 60), "The game needs to download 200MB of game content. It's recommanded to use WIFI connexion.");
