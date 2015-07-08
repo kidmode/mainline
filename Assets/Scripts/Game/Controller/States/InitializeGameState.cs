@@ -152,7 +152,11 @@ public class InitializeGameState : GameState
 			if (!SessionHandler.getInstance().token.isExist()) //cynthia
 			{
 				m_request.reset();
-				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//cynthia vzw
+				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
 			}
 		}
 	}
@@ -173,7 +177,11 @@ public class InitializeGameState : GameState
 			if (!SessionHandler.getInstance().token.isExist()) //cynthia
 			{
 				m_request.reset();
-				setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//cynthia vzw
+				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
 			} 
 		}
 	}
