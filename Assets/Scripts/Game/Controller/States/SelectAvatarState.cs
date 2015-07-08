@@ -107,6 +107,12 @@ public class SelectAvatarState : GameState
 
 	private void toSaveAvatar( UIButton p_button )
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		if( !SessionHandler.getInstance ().CreateChild )
 		{
 			SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
