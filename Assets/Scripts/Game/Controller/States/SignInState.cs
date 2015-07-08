@@ -305,7 +305,7 @@ public class SignInState : GameState
 		}
 		else
 		{
-			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.TXT_STATE_11_PASSWORD));
+			invokeDialog(Localization.getString(Localization.TXT_STATE_11_FAIL_LOGIN),Localization.getString(Localization.ERROR_MESSAGE_ERROR_TEXT));
 		}
 
 	}
