@@ -88,7 +88,7 @@ public class OverviewInfoState : GameState {
 	private void _setupElment()
 	{
 		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
+		m_leftButton.enabled = false;
 		
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
 		m_rightButton.addClickCallback( onRightButtonClick );
@@ -620,14 +620,21 @@ public class OverviewInfoState : GameState {
 		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
 	}
 
-	private void onLeftButtonClick( UIButton p_button )
-	{
-		return;
-	}
-	
 	private void onRightButtonClick( UIButton p_button )
 	{
-		m_gameController.changeState( ZoodleState.OVERVIEW_TIMESPENT );
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+		}
+		else
+		{
+			m_gameController.changeState( ZoodleState.OVERVIEW_TIMESPENT );
+		}
 	}
 
 	private void goToAddApps( UIButton p_button )
@@ -635,14 +642,35 @@ public class OverviewInfoState : GameState {
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
-	private void goToOverviewInfo( UIButton p_button )
-	{
-		m_gameController.changeState( ZoodleState.OVERVIEW_INFO );
-	}
-	
 	private void goToControls( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		if (checkInternet())
+		{
+			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
+		}
+	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+			
+			return false;
+		}
+		return true;
+	}
+
+	private void onClickExit()
+	{
+		ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+		error.onClick -= onClickExit;;
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 	
 	private void goToStarChart( UIButton p_button )
@@ -657,8 +685,11 @@ public class OverviewInfoState : GameState {
 	
 	private void toSettingScreen(UIButton p_button)
 	{
-		p_button.removeClickCallback (toSettingScreen);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
+		if (checkInternet())
+		{
+			p_button.removeClickCallback (toSettingScreen);
+			m_gameController.changeState (ZoodleState.SETTING_STATE);
+		}
 	}
 	
 	private void onCloseMenu(UIButton p_button)
@@ -710,7 +741,7 @@ public class OverviewInfoState : GameState {
 	
 	private void toShowMenu(UIButton p_button)
 	{
-		if(canMoveLeftMenu)
+		if(canMoveLeftMenu && checkInternet())
 		{
 			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -735,6 +766,17 @@ public class OverviewInfoState : GameState {
 
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+			return;
+		}
+
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{

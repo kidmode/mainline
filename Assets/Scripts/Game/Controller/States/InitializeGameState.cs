@@ -153,7 +153,7 @@ public class InitializeGameState : GameState
 			{
 				m_request.reset();
 				//cynthia vzw
-				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
 				//vzw end
@@ -178,7 +178,7 @@ public class InitializeGameState : GameState
 			{
 				m_request.reset();
 				//cynthia vzw
-				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
 				//vzw end

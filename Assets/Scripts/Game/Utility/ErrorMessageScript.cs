@@ -3,6 +3,9 @@ using System.Collections;
 
 public class ErrorMessageScript : MonoBehaviour {
 
+	public delegate void onClickEvent();
+	public event onClickEvent onClick;
+
 	[SerializeField]
 	private GameObject gameLogic;
 	
@@ -29,7 +32,11 @@ public class ErrorMessageScript : MonoBehaviour {
 			Game game = gameLogic.GetComponent<Game>();
 
 			game.gameController.getUI().removeScreen(UIScreen.ERROR_MESSAGE);
-			
+		}
+
+		if (onClick != null)
+		{
+			onClick();
 		}
 	}
 
