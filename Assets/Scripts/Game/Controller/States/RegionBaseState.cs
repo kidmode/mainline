@@ -870,12 +870,7 @@ public class RegionBaseState : GameState
 	
 	private void onFunActivityClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
-		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
-		}
+		showMsgIfNoInternet(); //cynthia
 		Drawing l_drawing = (p_data as ActivityInfo).drawing;
 		SessionHandler.getInstance().currentDrawing = l_drawing;
 
@@ -884,12 +879,8 @@ public class RegionBaseState : GameState
 
 	private void onVideoClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
-		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
-		}
+		showMsgIfNoInternet(); //cynthia
+
 		WebContent l_webContent = (p_data as WebViewInfo).webData;
 		SessionHandler.getInstance().currentContent = l_webContent;
 
@@ -917,12 +908,8 @@ public class RegionBaseState : GameState
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
-		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
-		}
+		showMsgIfNoInternet(); //cynthia
+
 		GameInfo l_game = p_data as GameInfo;
 
 		if( l_game.isWebView )
@@ -977,12 +964,8 @@ public class RegionBaseState : GameState
 	
 	private void onBookClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
-		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
-		}
+		showMsgIfNoInternet(); //cynthia
+
 		BookInfo l_bookInfo = p_data as BookInfo;
 
 		if( l_bookInfo.bookState == BookState.Recorded )
@@ -1093,8 +1076,9 @@ public class RegionBaseState : GameState
 
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, LAYER_ERROR);
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+
 			m_nextActivity = ActivityType.None;
 
 			setInputEnabled(false);
@@ -1603,6 +1587,16 @@ public class RegionBaseState : GameState
 	private void _oscillateLightsUp(UIElement p_element, Tweener.TargetVar p_targetVar)
 	{
 		p_element.tweener.addRotationTrack(2.0f, -2.0f, 5.0f, _oscillateLightsDown);
+	}
+
+	private void showMsgIfNoInternet () 
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 	}
 
 	// Sean: vzw
