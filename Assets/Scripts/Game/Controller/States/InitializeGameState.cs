@@ -24,7 +24,6 @@ public class InitializeGameState : GameState
 		_setupScreen(p_gameController.getUI());
 		m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
 
-
 		GAUtil.logScreen("SplashScreen");
 	}
 	
@@ -153,7 +152,7 @@ public class InitializeGameState : GameState
 			{
 				m_request.reset();
 				//cynthia vzw
-				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
 				//vzw end
@@ -178,7 +177,7 @@ public class InitializeGameState : GameState
 			{
 				m_request.reset();
 				//cynthia vzw
-				Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
 				//vzw end

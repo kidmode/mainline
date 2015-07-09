@@ -188,12 +188,26 @@ public class ControlAppState : GameState
 	
 	private void toSettingScreen(UIButton p_button)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
+
 		p_button.removeClickCallback (toSettingScreen);
 		m_gameController.changeState (ZoodleState.SETTING_STATE);
 	}
 	
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
+
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
@@ -287,7 +301,12 @@ public class ControlAppState : GameState
 	
 	private void toShowMenu(UIButton p_button)
 	{
-		if(canMoveLeftMenu)
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else if(canMoveLeftMenu)
 		{
 			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -309,7 +328,7 @@ public class ControlAppState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 		}
 		else
@@ -322,7 +341,7 @@ public class ControlAppState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 		}
 		else
@@ -330,7 +349,7 @@ public class ControlAppState : GameState
 			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 		}
 	}
-	
+
 	private void goToStarChart( UIButton p_button )
 	{
 		m_gameController.changeState (ZoodleState.DASHBOARD_STAR_CHART);
@@ -343,7 +362,7 @@ public class ControlAppState : GameState
 	
 	private void onRightButtonClick( UIButton p_button )
 	{
-		m_gameController.changeState( ZoodleState.CONTROL_SUBJECT );
+		return;
 	}
 
 	private void onAppButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)

@@ -446,7 +446,15 @@ public class ProfileState : GameState
 
 	private void onCreateChild(UIButton p_button)
 	{
-		m_gotoCREATE_CHILD_NEW = true;
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_gotoCREATE_CHILD_NEW = true;
+		}
 	}
 
 	private void onGotoDashboard(UIButton p_button)
@@ -532,24 +540,46 @@ public class ProfileState : GameState
 //		AndroidJavaObject l_joActivity = l_jcPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 //		l_joActivity.Call("startActivity", jo_chooser );
 //		#endif 
-
-		m_gameController.getUI ().changeScreen (UIScreen.TELL_FRIEND,true);
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		UIElement l_newPanel = m_tellFriendCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack(l_pointListIn, 0.0f);
-
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_gameController.getUI ().changeScreen (UIScreen.TELL_FRIEND,true);
+			List<Vector3> l_pointListIn = new List<Vector3>();
+			UIElement l_newPanel = m_tellFriendCanvas.getView ("mainPanel");
+			l_pointListIn.Add( l_newPanel.transform.localPosition );
+			l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+			l_newPanel.tweener.addPositionTrack(l_pointListIn, 0.0f);
+		}
 	}
 	
 	private void _onTermsButtonClick(UIButton p_button)
 	{
-		_setupWebview("http://www.zoodles.com/en-US/home/legal/terms");
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			_setupWebview("http://www.zoodles.com/en-US/home/legal/terms");
+		}
 	}
 
 	private void _onPolicyButtonClick(UIButton p_button)
 	{
-		_setupWebview("http://www.zoodles.com/en-US/home/legal/privacy");
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			_setupWebview("http://www.zoodles.com/en-US/home/legal/privacy");
+		}
 	}
 
 	private void _setupWebview(string p_url)
