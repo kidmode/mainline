@@ -122,6 +122,9 @@ public class ControlAppState : GameState
 
 	private void checkRequest()
 	{
+		if (checkInternet() == false)
+			return;
+
 		if( m_isValueChanged )
 		{
 			m_isValueChanged = false;
@@ -188,12 +191,8 @@ public class ControlAppState : GameState
 	
 	private void toSettingScreen(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		if (checkInternet() == false)
 			return;
-		}
 
 		p_button.removeClickCallback (toSettingScreen);
 		m_gameController.changeState (ZoodleState.SETTING_STATE);
@@ -201,12 +200,8 @@ public class ControlAppState : GameState
 	
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		if (checkInternet() == false)
 			return;
-		}
 
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
@@ -301,12 +296,7 @@ public class ControlAppState : GameState
 	
 	private void toShowMenu(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-		}
-		else if(canMoveLeftMenu)
+		if(canMoveLeftMenu && checkInternet())
 		{
 			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -326,12 +316,7 @@ public class ControlAppState : GameState
 	
 	private void goToOverview( UIButton p_button )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-		}
-		else
+		if (checkInternet())
 		{
 			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
 		}
@@ -339,12 +324,7 @@ public class ControlAppState : GameState
 
 	private void goToSubject( UIButton p_button )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-		}
-		else
+		if (checkInternet())
 		{
 			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 		}
@@ -501,6 +481,18 @@ public class ControlAppState : GameState
 		{
 			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
+	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			return false;
+		}
+		return true;
 	}
 	
 	private UIManager 		m_uiManager;
