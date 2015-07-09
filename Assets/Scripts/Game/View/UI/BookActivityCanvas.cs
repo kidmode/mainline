@@ -73,6 +73,7 @@ public class BookInfo : object
 		icon = texture;
 		//honda: comment out the code due to above reason
 		//honda: check icon existed or not. if not, load icon from server
+//		string contentName = "book_" + bookId + ".jpg";
 //		Texture2D texture = ImageCache.getCacheImage(contentName);
 //		icon = texture;
 //		if (icon == null)
