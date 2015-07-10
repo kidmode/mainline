@@ -57,8 +57,8 @@ public class CreateAccountSelectState : GameState
 			changeToState = ScreenChange.None;
 		}
 
-		if (Application.platform == RuntimePlatform.Android && Input.GetKeyUp(KeyCode.Escape))
-			toExitApplication(null);
+//		if (Application.platform == RuntimePlatform.Android && Input.GetKeyUp(KeyCode.Escape))
+//			toExitApplication(null);
 	}
 	
 	public override void exit( GameController p_gameController )
@@ -154,11 +154,23 @@ public class CreateAccountSelectState : GameState
 
 	private void gotoSetUpScreen(UIButton p_button)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		changeToState = ScreenChange.SetUp;
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.start");
 	}
 	private void gotoSignInScreen(UIButton p_button)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		changeToState = ScreenChange.SignInScreen;
 	}
 

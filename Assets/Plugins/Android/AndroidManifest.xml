@@ -78,10 +78,7 @@
 
         <receiver android:name="com.unity3d.plugin.downloader.UnityAlarmReceiver" />
         <!-- For OOB loader end -->        
-		
-		<activity android:name="com.unity3d.plugin.downloader.UnityDownloaderActivity" />
-        <service android:name="com.unity3d.plugin.downloader.UnityDownloaderService" />
-        <receiver android:name="com.unity3d.plugin.downloader.UnityAlarmReceiver" />
+	
         
         <activity
             android:name="com.zoodles.ellipsiskids.activity.LauncherActivity"

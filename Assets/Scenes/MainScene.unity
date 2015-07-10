@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712659e9c426947fabf634dc690df2a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointSystemRewardTime: 30
+  pointSystemRewardTime: 5
   pointState: 0
 --- !u!1 &543804331
 GameObject:
@@ -320,7 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
-  m_DragThreshold: 38
+  m_DragThreshold: 5
 --- !u!4 &543804335
 Transform:
   m_ObjectHideFlags: 0
@@ -478,10 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba54008997fcb47faa8b3def928103f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutPopupSequence:
-  - sequenceName: 0
-    screenID: 1101
-  gameLogic: {fileID: 341691266}
+  tutPopupSequence: []
+  gameLogic: {fileID: 0}
   currSequence:
     sequenceName: 0
     screenID: 0
@@ -761,11 +759,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
-    m_HighlightedColor: {r: .501960814, g: .501960814, b: .501960814, a: .698039234}
-    m_PressedColor: {r: .345098048, g: .345098048, b: .345098048, a: .698039234}
-    m_DisabledColor: {r: .250980407, g: .250980407, b: .250980407, a: .501960814}
-    m_ColorMultiplier: 2
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
     m_FadeDuration: .100000001
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}

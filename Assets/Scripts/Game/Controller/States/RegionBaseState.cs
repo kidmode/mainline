@@ -870,6 +870,12 @@ public class RegionBaseState : GameState
 	
 	private void onFunActivityClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		Drawing l_drawing = (p_data as ActivityInfo).drawing;
 		SessionHandler.getInstance().currentDrawing = l_drawing;
 
@@ -878,6 +884,12 @@ public class RegionBaseState : GameState
 
 	private void onVideoClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		WebContent l_webContent = (p_data as WebViewInfo).webData;
 		SessionHandler.getInstance().currentContent = l_webContent;
 
@@ -905,6 +917,12 @@ public class RegionBaseState : GameState
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		GameInfo l_game = p_data as GameInfo;
 
 		if( l_game.isWebView )
@@ -959,6 +977,12 @@ public class RegionBaseState : GameState
 	
 	private void onBookClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
 		BookInfo l_bookInfo = p_data as BookInfo;
 
 		if( l_bookInfo.bookState == BookState.Recorded )
@@ -1069,7 +1093,7 @@ public class RegionBaseState : GameState
 
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, LAYER_ERROR);
 			m_nextActivity = ActivityType.None;
 

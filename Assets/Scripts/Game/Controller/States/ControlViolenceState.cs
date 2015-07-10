@@ -128,6 +128,9 @@ public class ControlViolenceState : GameState
 
 	private void checkRequest()
 	{
+		if (checkInternet() == false)
+			return;
+
 		if( m_isValueChanged )
 		{
 			m_isValueChanged = false;
@@ -195,12 +198,18 @@ public class ControlViolenceState : GameState
 
 	private void toSettingScreen(UIButton p_button)
 	{
-		p_button.removeClickCallback (toSettingScreen);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
+		if (checkInternet())
+		{
+			p_button.removeClickCallback (toSettingScreen);
+			m_gameController.changeState (ZoodleState.SETTING_STATE);
+		}
 	} 
 
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
+		if (checkInternet() == false)
+			return;
+
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
@@ -295,7 +304,7 @@ public class ControlViolenceState : GameState
 	
 	private void toShowMenu(UIButton p_button)
 	{
-		if(canMoveLeftMenu)
+		if (canMoveLeftMenu && checkInternet())
 		{
 			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -319,7 +328,33 @@ public class ControlViolenceState : GameState
 
 	private void goToOverview( UIButton p_button )
 	{
-		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+		if (checkInternet())
+		{
+			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
+		}
+	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+
+			return false;
+		}
+		return true;
+	}
+
+	private void onClickExit()
+	{
+		ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+		error.onClick -= onClickExit;;
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 	
 	private void goToStarChart( UIButton p_button )
@@ -330,7 +365,10 @@ public class ControlViolenceState : GameState
 	
 	private void onLeftButtonClick( UIButton p_button )
 	{
-		m_gameController.changeState( ZoodleState.CONTROL_TIME );
+		if (checkInternet())
+		{
+			m_gameController.changeState( ZoodleState.CONTROL_TIME );
+		}
 	}
 	
 	private void onRightButtonClick( UIButton p_button )

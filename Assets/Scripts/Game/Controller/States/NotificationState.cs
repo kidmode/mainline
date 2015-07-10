@@ -33,7 +33,7 @@ public class NotificationState : GameState
 		if (SessionHandler.getInstance().settingCache.active && 
 		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
 		  l_changedStateName == ZoodleState.DEVICE_OPTIONS_STATE || 
-		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE))
+		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE) && checkInternet())
 			updateSetting ();
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_notificationCanvas );
@@ -242,6 +242,9 @@ public class NotificationState : GameState
 
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
+		if (checkInternet() == false)
+			return;
+
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
 		{
@@ -258,7 +261,7 @@ public class NotificationState : GameState
 
 	private void toShowMenu(UIButton p_button)
 	{
-		if(canMoveLeftMenu)
+		if(canMoveLeftMenu && checkInternet())
 		{
 			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -272,6 +275,9 @@ public class NotificationState : GameState
 
 	private void toDeviceOptions(UIButton p_button)
 	{
+		if (checkInternet() == false)
+			return;
+
 		p_button.addClickCallback (toDeviceOptions);
 		m_gameController.changeState (ZoodleState.DEVICE_OPTIONS_STATE);
 	}
@@ -326,6 +332,9 @@ public class NotificationState : GameState
 
 	private void toGeneralScreen(UIButton p_button)
 	{
+		if (checkInternet() == false)
+			return;
+
 		p_button.removeClickCallback (toGeneralScreen);
 		m_gameController.changeState (ZoodleState.SETTING_STATE);
 	}
@@ -416,6 +425,31 @@ public class NotificationState : GameState
 			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+			
+			return false;
+		}
+		return true;
+	}
+	
+	private void onClickExit()
+	{
+		ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+		error.onClick -= onClickExit;;
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
+	}
+
+
 	//Private variables
 	
 	private UICanvas    m_notificationCanvas;

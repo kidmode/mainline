@@ -258,20 +258,28 @@ public class CreateChildProfileState : GameState
 
 	private void toDeleteChild(UIButton p_button)
 	{
-		m_confirmPanel.active = false;
-		m_loadingPanel.active = true;
-		if (!SessionHandler.getInstance ().CreateChild)
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
-			if(SessionHandler.getInstance().kidList.Count <= 1)
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+		else
+		{
+			m_confirmPanel.active = false;
+			m_loadingPanel.active = true;
+			if (!SessionHandler.getInstance ().CreateChild)
 			{
-				m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_MIN);
-				m_closeDialogButton.active = true;
-			}
-			else
-			{
-				m_queue.reset();
-				m_queue.add(new DeleteChildRequest(_requestComplete));
-				m_queue.request();
+				if(SessionHandler.getInstance().kidList.Count <= 1)
+				{
+					m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_MIN);
+					m_closeDialogButton.active = true;
+				}
+				else
+				{
+					m_queue.reset();
+					m_queue.add(new DeleteChildRequest(_requestComplete));
+					m_queue.request();
+				}
 			}
 		}
 	}
@@ -505,6 +513,14 @@ public class CreateChildProfileState : GameState
 
 	private void toCreateProfile(UIButton p_button)
 	{
+		//cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			return;
+		}
+		//cynthia
 		p_button.removeClickCallback(toCreateProfile);
 		int l_count = null != SessionHandler.getInstance ().kidList?SessionHandler.getInstance ().kidList.Count:0;
 		
