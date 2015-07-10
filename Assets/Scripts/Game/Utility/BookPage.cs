@@ -24,12 +24,8 @@ public class BookPage : System.Object
 
 	public void requestImage()
 	{
-		Debug.Log("Book page " + id + "_" + position);
-
 		if( null != pageImage || m_requested )
 			return;
-
-		_Debug.log("URL: " + imageUrl);
 
 		string contentName = "bookpage_" + id + "_" + position + ".jpg";
 		Texture2D texture = ImageCache.getCacheImage(contentName);

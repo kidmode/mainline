@@ -1079,16 +1079,16 @@ public class RegionBaseState : GameState
 			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 
-			m_nextActivity = ActivityType.None;
-
-			setInputEnabled(false);
-
-			// Sean: I just need it go back after it reaches the point
-			p_toggle.tweener.addAlphaTrack(1.0f, 1.0f, 0.31f, (UIElement p_element, Tweener.TargetVar p_targetVar) => {
-				ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
-				l_panel.untoggleActivities();
-				setInputEnabled(true);
-			});
+//			m_nextActivity = ActivityType.None;
+//
+//			setInputEnabled(false);
+//
+//			// Sean: I just need it go back after it reaches the point
+//			p_toggle.tweener.addAlphaTrack(1.0f, 1.0f, 0.31f, (UIElement p_element, Tweener.TargetVar p_targetVar) => {
+//				ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
+//				l_panel.untoggleActivities();
+//				setInputEnabled(true);
+//			});
 			return;
 		}
 

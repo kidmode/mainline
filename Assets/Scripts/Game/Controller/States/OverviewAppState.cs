@@ -460,16 +460,8 @@ public class OverviewAppState : GameState
 
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			
-			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
-			if (error != null)
-				error.onClick += onClickExit;
+		if (checkInternet() == false)
 			return;
-		}
 
 		Kid l_kid = p_data as Kid;
 		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))

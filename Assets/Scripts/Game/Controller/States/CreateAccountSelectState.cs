@@ -57,8 +57,8 @@ public class CreateAccountSelectState : GameState
 			changeToState = ScreenChange.None;
 		}
 
-		if (Application.platform == RuntimePlatform.Android && Input.GetKeyUp(KeyCode.Escape))
-			toExitApplication(null);
+//		if (Application.platform == RuntimePlatform.Android && Input.GetKeyUp(KeyCode.Escape))
+//			toExitApplication(null);
 	}
 	
 	public override void exit( GameController p_gameController )

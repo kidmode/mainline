@@ -163,7 +163,7 @@ public class FAQState : GameState
 
 	private void toShowMenu(UIButton p_button)
 	{
-		if(canMoveLeftMenu)
+		if(canMoveLeftMenu &&  checkInternet())
 		{
 			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
 			Vector3 l_position = m_menu.transform.localPosition;
@@ -177,12 +177,18 @@ public class FAQState : GameState
 
 	private void toDeviceOptions(UIButton p_button)
 	{
+		if (checkInternet() == false)
+			return;
+
 		p_button.removeAllCallbacks ();
 		m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
 	}
 
 	private void toGeneralOptions(UIButton p_button)
 	{
+		if (checkInternet() == false)
+			return;
+
 		p_button.removeClickCallback (toGeneralOptions);
 		m_gameController.changeState (ZoodleState.SETTING_STATE);
 	}
@@ -278,6 +284,30 @@ public class FAQState : GameState
 		p_button.removeAllCallbacks();
 		m_leftMenuCanvas.showKids (addButtonClickCall);
 	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable)
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			if (error != null)
+				error.onClick += onClickExit;
+			
+			return false;
+		}
+		return true;
+	}
+	
+	private void onClickExit()
+	{
+		ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+		error.onClick -= onClickExit;;
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
+	}
+
 
 	//Private variables
 
