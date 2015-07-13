@@ -63,6 +63,7 @@ public class GameController
 	
 	public void changeState( int p_stateType )
 	{
+		Debug.Log("m_state = " + p_stateType);
 		m_stateName = p_stateType.ToString();
 		if (null != m_state)
 			m_state.exit(this);
