@@ -40,8 +40,11 @@ public class LoadingEntranceState : GameState
 
 		if (m_counterToNextScreen++ == 5) 
 		{
-			p_gameController.changeState( ZoodleState.REGION_LANDING );
-			
+			//first time launch, reboot device(not select kid)
+			p_gameController.changeState( ZoodleState.MAP );
+			//reboot device/restart(selected kid)
+//			p_gameController.changeState( ZoodleState.REGION_LANDING );
+
 			const float COMPLETE_TIME = 0.5f;
 
 			m_backCanvas.tweener.addAlphaTrack(     1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
