@@ -11,7 +11,7 @@ public class TabletSettingsScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		gameLogic = GameObject.Find ("GameLogic");
+		gameLogic = GameObject.FindWithTag("GameController");
 
 		GameController gameController = gameLogic.GetComponent<Game>().gameController;
 

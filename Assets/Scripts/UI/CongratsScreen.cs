@@ -27,7 +27,7 @@ public class CongratsScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		gameLogic = GameObject.Find ("GameLogic");
+		gameLogic = GameObject.FindWithTag("GameController");
 
 		Game game = gameLogic.GetComponent<Game>();
 //		
