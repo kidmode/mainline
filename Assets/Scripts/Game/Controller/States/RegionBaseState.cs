@@ -1076,7 +1076,7 @@ public class RegionBaseState : GameState
 
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 
 //			m_nextActivity = ActivityType.None;
@@ -1593,7 +1593,7 @@ public class RegionBaseState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return;
 		}
