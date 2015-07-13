@@ -157,7 +157,7 @@ public class CreateAccountSelectState : GameState
 		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
 			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SetUp;
@@ -168,7 +168,7 @@ public class CreateAccountSelectState : GameState
 		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
 			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SignInScreen;

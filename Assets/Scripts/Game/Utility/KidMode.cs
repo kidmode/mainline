@@ -476,7 +476,7 @@ public class KidMode
 	}
 
 
-	public static void openWifi(){
+	public static void openWifi(bool check){
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -484,7 +484,7 @@ public class KidMode
 		
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
 		
-		jo.Call("openWifiSettings"); 
+		jo.Call("openWifiSettings", check);
 		
 		#endif
 		

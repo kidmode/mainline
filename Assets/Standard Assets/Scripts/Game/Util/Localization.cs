@@ -727,6 +727,7 @@ public class Localization : object
 	public const string TXT_SCREEN_102_SIGN_WITH_GOOGLE	    						= "TXT_SCREEN_102_SIGN_WITH_GOOGLE";
 
 	public const string ERROR_MESSAGE_ERROR_TEXT = "ERROR_MESSAGE_ERROR_TEXT";
+	public const string NO_INTERNET_TEXT = "NO_INTERNET_TEXT";
 
 	
 	private string m_currLanguage   = "EN";

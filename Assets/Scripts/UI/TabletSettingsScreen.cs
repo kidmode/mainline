@@ -79,7 +79,7 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonWifi(){
 
-		KidMode.openWifi ();
+		KidMode.openWifi(false);
 		
 	}
 
