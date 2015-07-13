@@ -40,7 +40,7 @@ public class LoadingEntranceState : GameState
 
 		if (m_counterToNextScreen++ == 5) 
 		{
-			p_gameController.changeState( ZoodleState.MAP );
+			p_gameController.changeState( ZoodleState.REGION_LANDING );
 			
 			const float COMPLETE_TIME = 0.5f;
 
