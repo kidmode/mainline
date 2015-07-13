@@ -87,19 +87,19 @@ public class CreateAccountSelectState : GameState
 			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
 			l_mainPanel.active = false;
 
-			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
-			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
-			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
-			l_continueButton.addClickCallback( onContinueClick );
-			l_exitButton.addClickCallback( onContinueClick );
+//			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
+//			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
+//			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
+//			l_continueButton.addClickCallback( onContinueClick );
+//			l_exitButton.addClickCallback( onContinueClick );
 
-			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
+//			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
 
 			string l_deviceName = SessionHandler.getInstance().deviceName;
 			int l_renewalPeriod = SessionHandler.getInstance().renewalPeriod;
 
-			string l_messageText = string.Format( Localization.getString (Localization.TXT_105_LABEL_CONTENT_NOTICE), l_deviceName, l_renewalPeriod);
-			l_message.text = l_messageText;
+			//string l_messageText = string.Format( Localization.getString (Localization.TXT_105_LABEL_CONTENT_NOTICE), l_deviceName, l_renewalPeriod);
+			//l_message.text = l_messageText;
 			m_startButton.addClickCallback (gotoCreatePremiumScreen);
 		}
 		else
