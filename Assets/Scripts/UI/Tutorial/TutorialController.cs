@@ -58,7 +58,6 @@ public class TutorialController : MonoBehaviour {
 		if (sequence != null) {
 
 
-
 			int prefSetting = PlayerPrefs.GetInt(sequenceName.ToString());
 
 			if(prefSetting == 0){

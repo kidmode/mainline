@@ -145,12 +145,12 @@ public class CreateAccountSelectState : GameState
         m_createAccountBackgroundCanvas.transitionUp(2.5f);
 	}
 
-	private void onContinueClick(UIButton p_button)
-	{
-		m_gameController.getUI ().removeScreen ( UIScreen.PREMIUM_ELIGIBLE );
-		UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
-		l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
-	}
+//	private void onContinueClick(UIButton p_button)
+//	{
+//		m_gameController.getUI ().removeScreen ( UIScreen.PREMIUM_ELIGIBLE );
+//		UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+//		l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
+//	}
 
 	private void gotoSetUpScreen(UIButton p_button)
 	{

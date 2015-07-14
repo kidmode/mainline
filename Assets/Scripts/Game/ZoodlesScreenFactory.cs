@@ -108,7 +108,7 @@ public class UIScreen
 	public const int SIGN_UP_AFTER_INPUT_CREDITCARD = 102;
 	public const int TRIAL_MESSAGE 				= 103;
 	public const int CONGRATURATION				= 104;
-	public const int PREMIUM_ELIGIBLE 			= 105;
+//	public const int PREMIUM_ELIGIBLE 			= 105;
 	public const int PAY_GEMS_COMFIRM			= 106;
 
 
@@ -240,7 +240,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.PANEL_MARKETING_SCREEN,	SCREEN_DIRECTORY + "PanelMarketingScreen"      );
 		m_directoryMap.Add( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD,	SCREEN_DIRECTORY + "SetAccountScreen"  );
 		m_directoryMap.Add( UIScreen.CONGRATURATION,			SCREEN_DIRECTORY + "CongraturationScreen"  );
-		m_directoryMap.Add( UIScreen.PREMIUM_ELIGIBLE,			SCREEN_DIRECTORY + "PremiumEligibleScreen"  );
+//		m_directoryMap.Add( UIScreen.PREMIUM_ELIGIBLE,			SCREEN_DIRECTORY + "PremiumEligibleScreen"  );
 
 
 		// Sean: vzw
@@ -369,7 +369,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.PANEL_MARKETING_SCREEN: return new PanelMarkingScreenCanvas() as UICanvas;
 			case UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD: return new SignUpAfterInoutCreditCardCanvas() as UICanvas;
 			case UIScreen.CONGRATURATION:		 return new CongratulationCanvas() 		as UICanvas;
-			case UIScreen.PREMIUM_ELIGIBLE:		 return new PremiumEligibleCanvas() 	as UICanvas;
+//			case UIScreen.PREMIUM_ELIGIBLE:		 return new PremiumEligibleCanvas() 	as UICanvas;
 
 
 			// Sean: vzw

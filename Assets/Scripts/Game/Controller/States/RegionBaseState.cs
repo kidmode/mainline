@@ -1077,7 +1077,7 @@ public class RegionBaseState : GameState
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
 			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, true, 6);
 
 //			m_nextActivity = ActivityType.None;
 //
