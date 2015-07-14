@@ -76,7 +76,9 @@ public class TutorialController : MonoBehaviour {
 
 				showingTutorial = true;
 
-
+				SwrveComponent.Instance.SDK.NamedEvent("Tutorial.start");
+			
+				
 			}
 
 
@@ -114,8 +116,9 @@ public class TutorialController : MonoBehaviour {
 
 		showingTutorial = false;
 
+		SwrveComponent.Instance.SDK.NamedEvent("Tutorial.end");
 	}
-
+	
 
 	TutorialSequence findTutorialSequence(TutorialSequenceName sequenceName){
 
