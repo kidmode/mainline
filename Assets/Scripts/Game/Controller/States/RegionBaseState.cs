@@ -844,7 +844,7 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		if (Application.internetReachability != NetworkReachability.NotReachable && 
 		    p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
@@ -854,7 +854,7 @@ public class RegionBaseState : GameState
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		if (Application.internetReachability != NetworkReachability.NotReachable && 
 		    p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
@@ -870,7 +870,7 @@ public class RegionBaseState : GameState
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable &&
+		if (Application.internetReachability != NetworkReachability.NotReachable &&
 		    p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;

@@ -27,7 +27,8 @@ public class SessionHandler
 		{
 			if(m_kid == null) {
 				int currentKidId = LoadCurrentKid();
-				if(currentKidId != null) {
+				if(currentKidId != null &&
+				   m_kidList != null) {
 					for(int i = 0; i < m_kidList.Count; i++) {
 						if(currentKidId == m_kidList[i].id) {
 							m_kid = m_kidList[i];
@@ -570,7 +571,7 @@ public class SessionHandler
 			List<Kid> l_kidList = new List<Kid>();
 			String str = SessionHandler.LoadKidList();
 
-			if (str.Length > 0 && str != null)
+			if (str != null && str.Length > 0)
 			{
 				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
 				if (l_data != null)
