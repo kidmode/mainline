@@ -260,7 +260,7 @@ public class CreateChildProfileState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 		}
 		else
@@ -516,7 +516,7 @@ public class CreateChildProfileState : GameState
 		//cynthia
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return;
 		}

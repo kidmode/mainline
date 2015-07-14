@@ -16,7 +16,7 @@ public class DashboardCommonScreen : MonoBehaviour {
 
 		updateToggleButtons ();
 
-		gameLogic = GameObject.Find ("GameLogic");
+		gameLogic = GameObject.FindWithTag("GameController");
 	
 	}
 	

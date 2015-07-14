@@ -10,7 +10,7 @@ public class ZoodlesPointRequest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		GameObject gameLogic = GameObject.Find ("GameLogic");
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
 		
 		Game game = gameLogic.GetComponent<Game>();
 

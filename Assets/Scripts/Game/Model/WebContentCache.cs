@@ -200,7 +200,6 @@ public class WebContentCache : object
 
 	private void addBookList()
 	{
-
 		string language = "en";
 		if (Application.systemLanguage == SystemLanguage.Spanish)
 			language = "es";

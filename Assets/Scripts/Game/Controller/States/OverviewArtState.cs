@@ -209,7 +209,7 @@ public class OverviewArtState : GameState {
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			
-			ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
 			if (error != null)
 				error.onClick += onClickExit;
 			
@@ -220,7 +220,7 @@ public class OverviewArtState : GameState {
 
 	private void onClickExit()
 	{
-		ErrorMessageScript error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessageScript>() as ErrorMessageScript;
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}

@@ -124,7 +124,8 @@ public class UIScreen
 	public const int TUTORIAL_CONTROL_VIOLENCE			= 1102;
 
 	//Error Message
-	public const int ERROR_MESSAGE			= 1201;	
+	public const int ERROR_MESSAGE			= 1201;
+	public const int NO_INTERNET            = 1202;
 }
 
 
@@ -256,6 +257,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 		//honda
 		m_directoryMap.Add( UIScreen.ERROR_MESSAGE,				SCREEN_DIRECTORY + "ErrorMessage" );
+		m_directoryMap.Add( UIScreen.NO_INTERNET,				SCREEN_DIRECTORY + "NoInternetScreen" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -383,6 +385,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 			//honda: vzw
 			case UIScreen.ERROR_MESSAGE:			return new UICanvas() 			as UICanvas;
+			case UIScreen.NO_INTERNET:              return new UICanvas()			as UICanvas;
 		}
 		return new UICanvas();
 	}

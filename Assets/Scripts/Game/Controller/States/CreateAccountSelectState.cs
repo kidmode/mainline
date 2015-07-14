@@ -84,22 +84,22 @@ public class CreateAccountSelectState : GameState
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 		if( SessionHandler.getInstance().renewalPeriod > 0 )
 		{
-			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
-			l_mainPanel.active = false;
+//			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+//			l_mainPanel.active = false;
+//			l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
 
-			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
-			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
-			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
-			l_continueButton.addClickCallback( onContinueClick );
-			l_exitButton.addClickCallback( onContinueClick );
-
-			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
+//			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
+//			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
+//			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
+//			l_continueButton.addClickCallback( onContinueClick );
+//			l_exitButton.addClickCallback( onContinueClick );
+//			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
 
 			string l_deviceName = SessionHandler.getInstance().deviceName;
 			int l_renewalPeriod = SessionHandler.getInstance().renewalPeriod;
 
-			string l_messageText = string.Format( Localization.getString (Localization.TXT_105_LABEL_CONTENT_NOTICE), l_deviceName, l_renewalPeriod);
-			l_message.text = l_messageText;
+			//string l_messageText = string.Format( Localization.getString (Localization.TXT_105_LABEL_CONTENT_NOTICE), l_deviceName, l_renewalPeriod);
+			//l_message.text = l_messageText;
 			m_startButton.addClickCallback (gotoCreatePremiumScreen);
 		}
 		else
@@ -112,16 +112,16 @@ public class CreateAccountSelectState : GameState
 //		#endif
 
 		m_signInButton = m_createAccountSelectCanvas.getView("signInButton") as UIButton;
-
-
-		m_quitButton = m_createAccountSelectCanvas.getView ("exitButton") as UIButton;
-		m_quitButton.addClickCallback (toExitApplication);
-		List< Vector3 > l_quitPosList = new List< Vector3 >();
-		l_quitPosList.Add( m_quitButton.transform.localPosition + new Vector3(  100, 0, 0 ) );
-		l_quitPosList.Add( m_quitButton.transform.localPosition );
-		m_quitButton.tweener.addPositionTrack( l_quitPosList, 1.0f );
 		m_signInButton.addClickCallback (gotoSignInScreen);
-		m_createAccountBackgroundCanvas.setDown ();
+
+//		m_quitButton = m_createAccountSelectCanvas.getView ("exitButton") as UIButton;
+//		m_quitButton.addClickCallback (toExitApplication);
+//		List< Vector3 > l_quitPosList = new List< Vector3 >();
+//		l_quitPosList.Add( m_quitButton.transform.localPosition + new Vector3(  100, 0, 0 ) );
+//		l_quitPosList.Add( m_quitButton.transform.localPosition );
+//		m_quitButton.tweener.addPositionTrack( l_quitPosList, 1.0f );
+
+		m_createAccountBackgroundCanvas.setDown();
 	}
 
 	private void removeListeners()
@@ -156,8 +156,8 @@ public class CreateAccountSelectState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SetUp;
@@ -167,8 +167,8 @@ public class CreateAccountSelectState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SignInScreen;
@@ -183,7 +183,7 @@ public class CreateAccountSelectState : GameState
 	
 	private UIButton 	m_startButton;
 	private UIButton 	m_signInButton;
-	private UIButton 	m_quitButton;
+//	private UIButton 	m_quitButton;
 	
 	private UICanvas    m_createAccountSelectCanvas;
 	private SplashBackCanvas	m_createAccountBackgroundCanvas;
