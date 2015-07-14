@@ -32,6 +32,7 @@ public class NoInternetScreen : MonoBehaviour {
 
 	public void removeScreen()
 	{
+
 		if (gameLogic != null) 
 		{
 			Game game = gameLogic.GetComponent<Game>();	
