@@ -96,9 +96,13 @@ public class ScreenLockTest : MonoBehaviour {
 
 	public void startTempleRunGeneric()
 	{
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		string l_packageName = "com.imangi.templerun2";
 		string l_activityName = "com.prime31.UnityPlayerProxyActivity";
+
+		gameLogic.GetComponent<Game> ().IsReLaunch = 1;
 
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
@@ -108,6 +112,7 @@ public class ScreenLockTest : MonoBehaviour {
 		l_params[1] = l_activityName;
 		
 		jo.Call("startApp", l_params); 
+
 		#endif
 	}
 

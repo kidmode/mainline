@@ -25,10 +25,22 @@ public class SessionHandler
     {
         get 
 		{
+			if(m_kid == null) {
+				int currentKidId = LoadCurrentKid();
+				if(currentKidId != null) {
+					for(int i = 0; i < m_kidList.Count; i++) {
+						if(currentKidId == m_kidList[i].id) {
+							m_kid = m_kidList[i];
+							break;
+						}
+					}
+				}
+			}
 			if(null == m_kid)
 			{
-				if(null != m_kidList && m_kidList.Count > 0)
+				if(null != m_kidList && m_kidList.Count > 0) {
 					m_kid = m_kidList[0];
+				}
 			}
 			return m_kid;   
 		}
@@ -37,7 +49,7 @@ public class SessionHandler
 			m_appList = null;
 			Kid l_lastKid = m_kid;
 			m_kid = value;
-			
+			SaveCurrentKid(m_kid.id);
 			SessionHandler.getInstance().drawingList = null;
 
 			if (l_lastKid != m_kid)
@@ -786,9 +798,39 @@ public class SessionHandler
 		}
 		return str;	
 	}
+
+	public static int LoadCurrentKid() 
+	{
+		string str = null;
+		try {
+			
+			str = File.ReadAllText(KID_CURRENT);
+		}
+		catch (Exception e) {
+			Debug.Log(e);
+			return -1;
+		}
+		return Int32.Parse(str);	
+	}
+
+	public static void SaveCurrentKid(int kidId) 
+	{
+		try {
+			
+			File.WriteAllText(KID_CURRENT,  Convert.ToString(kidId));
+		}
+		catch (Exception e) {
+			
+			Debug.Log(e);
+		}
+	}
+
+
 	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";
 	private static string KIDLIST_PATH_TEMP	= Application.persistentDataPath + "/kidList_temp.txt";
 	private static string KIDLIST_PATH_BACKUP	= Application.persistentDataPath + "/kidList_backup.txt";
+
+	private static string KID_CURRENT	= Application.persistentDataPath + "/current.txt";
 
 	// end vzw
 

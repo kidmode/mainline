@@ -6,6 +6,29 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour 
 {
+
+	private static String IS_RELAUNCH		=	"IS_RELAUCH";
+	private static String IS_FIRST_LAUNCH	=	"IS_FIRST_LAUNCH";
+
+	private static int isReLaunch			=	0;  // 0: Normal launch, 1: Relaunch
+	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
+
+	public int IsReLaunch
+	{
+		get { 
+			return PlayerPrefs.GetInt(IS_RELAUNCH, 0);   
+		}
+		set { PlayerPrefs.SetInt(IS_RELAUNCH, value);  }
+	}
+
+	public int IsFirstLaunch
+	{
+		get { 
+			return PlayerPrefs.GetInt(IS_FIRST_LAUNCH, 0);   
+		}
+		set { PlayerPrefs.SetInt(IS_FIRST_LAUNCH, value); }
+	}
+
 	public Game()
 	{
 		delayedParentDashboard = false;
@@ -23,6 +46,8 @@ public class Game : MonoBehaviour
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
+		Debug.Log ("!!!!!!!@@@@@@@@@IsFirstLaunch = " + IsFirstLaunch);
+		Debug.Log ("!!!!!!!@@@@@@@@@IsReLaunch = " + IsReLaunch);
 		switch (Input.deviceOrientation) 
 		{
 		case DeviceOrientation.FaceDown:
@@ -103,6 +128,7 @@ public class Game : MonoBehaviour
 	public User user
 	{
 		get { return m_user; }
+		set { m_user = value;}
 	}
 	
 	public GameController gameController
