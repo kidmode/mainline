@@ -77,6 +77,13 @@ public class ActivityPanelCanvas : UICanvas
 
 	private void onToggleChanged( UIToggle p_toggle, bool p_isToggled )
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		    !p_toggle.name.Equals("booksButton"))
+		{
+			m_currentToggle = p_toggle;
+			return;
+		}
+
 		//If we click on an activity tab that is already selected, don't do anything
 		if( m_currentToggle == p_toggle && p_isToggled )
 			return;
@@ -92,8 +99,6 @@ public class ActivityPanelCanvas : UICanvas
 		UICanvas l_canvas = p_element as UICanvas;
 		l_canvas.isTransitioning = false;
 	}
-
-	
 
 	private void _toggleOn( UIToggle p_toggle )
 	{

@@ -107,7 +107,7 @@
             <meta-data
             android:name="unityplayer.ForwardNativeEventsToDalvik"
             android:value="true" />
-            
+            <intent-filter android:priority="1000" />
             <intent-filter>
             </intent-filter>
             <intent-filter>

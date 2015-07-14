@@ -844,14 +844,22 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		m_nextActivity = ActivityType.Video;
-		SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
+		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		    p_toggles == true)
+		{
+			m_nextActivity = ActivityType.Video;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
+		}
 	}
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		m_nextActivity = ActivityType.Game;
-		SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
+		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		    p_toggles == true)
+		{
+			m_nextActivity = ActivityType.Game;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
+		}
 	}
 	
 	private void bookCallback(UIToggle p_element, bool p_toggles)
@@ -862,8 +870,12 @@ public class RegionBaseState : GameState
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		m_nextActivity = ActivityType.Fun;
-		SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
+		if (Application.internetReachability == NetworkReachability.NotReachable &&
+		    p_toggles == true)
+		{
+			m_nextActivity = ActivityType.Fun;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
+		}
 	}
 	
 	#region Callbacks
@@ -964,7 +976,8 @@ public class RegionBaseState : GameState
 	
 	private void onBookClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
+		// if currently on no internet status, user should still can access book tab
+//		showMsgIfNoInternet(); //cynthia
 
 		BookInfo l_bookInfo = p_data as BookInfo;
 
@@ -1073,16 +1086,21 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
-
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable && 
+		    !p_toggle.name.Equals("booksButton"))
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, true, 6);
+			if (!p_isToggled)
+				return;
 
-//			m_nextActivity = ActivityType.None;
-//
+			m_nextActivity = ActivityType.None;
+			ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
+			l_panel.untoggleActivities();
+
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6); 
+
 //			setInputEnabled(false);
-//
+//			// Honda: Now, when you tap any tab except books tab, it will not do any transition.
 //			// Sean: I just need it go back after it reaches the point
 //			p_toggle.tweener.addAlphaTrack(1.0f, 1.0f, 0.31f, (UIElement p_element, Tweener.TargetVar p_targetVar) => {
 //				ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
@@ -1593,7 +1611,7 @@ public class RegionBaseState : GameState
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable)
 		{
-			Game game = GameObject.Find("GameLogic").GetComponent<Game>();
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return;
 		}

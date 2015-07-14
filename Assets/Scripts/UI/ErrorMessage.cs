@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ErrorMessageScript : MonoBehaviour {
+public class ErrorMessage : MonoBehaviour {
 
 	public delegate void onClickEvent();
 	public event onClickEvent onClick;
@@ -14,7 +14,7 @@ public class ErrorMessageScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		gameLogic = GameObject.Find ("GameLogic");
+		gameLogic = GameObject.FindWithTag("GameController");
 		
 		GameController gameController = gameLogic.GetComponent<Game>().gameController;
 		
