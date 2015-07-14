@@ -478,8 +478,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba54008997fcb47faa8b3def928103f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutPopupSequence: []
-  gameLogic: {fileID: 0}
+  tutPopupSequence:
+  - sequenceName: 0
+    screenID: 1101
+  gameLogic: {fileID: 341691266}
   currSequence:
     sequenceName: 0
     screenID: 0

@@ -77,7 +77,7 @@ public class TutorialScreen : MonoBehaviour {
 	public void closeTutorialScreen(){
 
 		TutorialController.Instance.sequenceScreenFinished();
-
+		SwrveComponent.Instance.SDK.NamedEvent("Tutorial.skip");
 	}
 
 }
