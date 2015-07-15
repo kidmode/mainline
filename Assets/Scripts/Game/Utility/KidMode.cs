@@ -172,10 +172,13 @@ public class KidMode
 	public static void startActivity(string p_packageName, string p_activityName)
 	{
 
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
+		gameLogic.GetComponent<Game> ().IsReLaunch = 1;
+
 		object[] l_params = new object[2];
 		l_params[0] = p_packageName;
 		l_params[1] = p_activityName;
@@ -186,11 +189,13 @@ public class KidMode
 
 	public static void startActivity(string p_packageName)
 	{
-
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
+
+		gameLogic.GetComponent<Game> ().IsReLaunch = 1;
+
 		object[] l_params = new object[1];
 		l_params[0] = p_packageName;
 
