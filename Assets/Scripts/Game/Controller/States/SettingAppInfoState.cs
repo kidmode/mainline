@@ -451,6 +451,8 @@ public class SettingAppInfoState : GameState
 			Game game = gameLogic.GetComponent<Game>();	
 			game.IsReLaunch = 0;
 			game.IsFirstLaunch = 0;
+			game.IsLogin = 0;
+			SessionHandler.SaveCurrentKid(-1);
 			canClick = false;
 			m_gameController.getUI ().changeScreen (UIScreen.SIGN_OUT,true);
 			m_signOutConfirmCanvas.setOriginalPosition ();

@@ -884,6 +884,7 @@ public class WebContentRequest : RequestQueue.Request
 
 	protected override void init()
 	{
+		Debug.Log ("@@@@@@" + SessionHandler.getInstance ().currentKid.id);
 		m_call = "/api/kids" + ZoodlesConstants.SLASH + SessionHandler.getInstance().currentKid.id + ZoodlesConstants.REST_LINKS_LIST_URL_SUFFIX;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;

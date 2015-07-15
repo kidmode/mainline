@@ -128,20 +128,27 @@ public class ZoodlesAnimatedIntroState : GameState
 				}
 				else {
 					if(SessionHandler.LoadCurrentKid() != -1) {
-						if (game.user.contentCache.isFinishedLoadingWebContent) {
-							p_gameController.changeState(ZoodleState.REGION_LANDING);
+						if(SessionHandler.getInstance().currentKid != null) {
+							if (game.user.contentCache.isFinishedLoadingWebContent) {
+								p_gameController.changeState(ZoodleState.REGION_LANDING);
+								m_isFinished = true;
+							}
+							
+							if(!isRequest) {
+								isRequest = true;
+								KidModeLockController.Instance.swith2KidMode();
+								SessionHandler.getInstance().resetKidCache();
+								//			m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
+								
+								//honda: videos, games and books lists request
+								game.user.contentCache.startRequests();
+							}
+						}
+						else {
+							p_gameController.changeState (ZoodleState.INITIALIZE_GAME);
 							m_isFinished = true;
 						}
-						
-						if(!isRequest) {
-							isRequest = true;
-							KidModeLockController.Instance.swith2KidMode();
-							SessionHandler.getInstance().resetKidCache();
-							//			m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
-							
-							//honda: videos, games and books lists request
-							game.user.contentCache.startRequests();
-						}
+
 					}
 					else {
 						p_gameController.changeState (ZoodleState.INITIALIZE_GAME);

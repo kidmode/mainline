@@ -9,9 +9,19 @@ public class Game : MonoBehaviour
 
 	private static String IS_RELAUNCH		=	"IS_RELAUCH";
 	private static String IS_FIRST_LAUNCH	=	"IS_FIRST_LAUNCH";
+	private static String IS_LOGING			=	"IS_LOGING";
 
 	private static int isReLaunch			=	0;  // 0: Normal launch, 1: Relaunch
 	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
+	private static int isLogin				=	0;	// 0: Not login , 1: Logined
+
+	public int IsLogin
+	{
+		get { 
+			return PlayerPrefs.GetInt(IS_LOGING, 0);   
+		}
+		set { PlayerPrefs.SetInt(IS_LOGING, value);  }
+	}
 
 	public int IsReLaunch
 	{
@@ -46,8 +56,6 @@ public class Game : MonoBehaviour
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
-		Debug.Log ("!!!!!!!@@@@@@@@@IsFirstLaunch = " + IsFirstLaunch);
-		Debug.Log ("!!!!!!!@@@@@@@@@IsReLaunch = " + IsReLaunch);
 		switch (Input.deviceOrientation) 
 		{
 		case DeviceOrientation.FaceDown:

@@ -418,6 +418,8 @@ public class ProfileState : GameState
 			SessionHandler.getInstance().currentKid = l_kid;
             
 			m_gotoEntrance = true;
+
+			SessionHandler.SaveCurrentKid(l_kid.id);
 		}
 		else
 		{
