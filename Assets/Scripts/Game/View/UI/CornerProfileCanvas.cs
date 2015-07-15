@@ -39,7 +39,7 @@ public class CornerProfileCanvas : UICanvas
 		Debug.Log ("  refreshInfo  ======= corner profile canvas");
 		if (m_kid == null)
 			return;
-
+		m_kid.requestPhoto(); //cynthia
 		m_childAvatar.setTexture( m_kid.kid_photo );
 		
 		m_childNameLabel.text 	= m_kid.name;

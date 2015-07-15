@@ -22,7 +22,6 @@ public class MapState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
-
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
 		m_subState = SubState.NONE;
