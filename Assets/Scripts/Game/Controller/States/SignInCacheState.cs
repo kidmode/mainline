@@ -123,6 +123,14 @@ public class SignInCacheState : GameState
 				SessionHandler.getInstance().currentKid = l_kidList[0];
 				SessionHandler.getInstance().getBooklist();
 			}
+			//cynthia
+			ArrayList l_list = new ArrayList();
+			foreach (Kid k in l_kidList) {
+				l_list.Add(k.toHashTable());
+			}
+			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+			SessionHandler.SaveKidList(encodedString);
+
 			m_loginSuccess = true;
 		}
 		else
