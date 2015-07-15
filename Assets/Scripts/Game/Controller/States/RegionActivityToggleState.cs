@@ -98,12 +98,17 @@ public class RegionVideoState : RegionBaseState
 {
 	public override void enter( GameController p_gameController )
 	{
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+
 		base.enter( p_gameController );
+
 		
 		_setupMainViews( p_gameController );
 		
 		m_createActivity = ActivityType.Video;
 		m_regionState = RegionState.Right;
+
 	}
 	
 	private void _setupMainViews( GameController p_gameController )
@@ -138,6 +143,9 @@ public class RegionGameState : RegionBaseState
 {
 	public override void enter( GameController p_gameController )
 	{
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+
 		base.enter( p_gameController );
 		
 		_setupMainViews( p_gameController );

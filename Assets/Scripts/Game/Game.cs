@@ -15,6 +15,18 @@ public class Game : MonoBehaviour
 	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
 	private static int isLogin				=	0;	// 0: Not login , 1: Logined
 
+
+	private static bool isPause = false;
+
+
+	public bool IsPause {
+		get { 
+			return isPause;   
+		}
+		set { isPause = value;  }
+
+	}
+
 	public int IsLogin
 	{
 		get { 
@@ -51,6 +63,18 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
+
+
+	public void closeYoutube() {
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+		WebViewState._clickBackBtn ();
+	}
+
+	public void OnLoadYoutubeComplete() {
+		WebViewState.HandleOnLoadComplete ();
+	}
+
 
 	public void Start()
 	{
@@ -143,13 +167,21 @@ public class Game : MonoBehaviour
 	{
 		get { return m_gameController; }
 	}
+
+	public void gameSwitcher(Boolean isPlay) {
+		if(isPlay)
+			Time.timeScale = 1;
+		else
+			Time.timeScale = 0;
+	}
 	
-	public void Update ()
+	public void FixedUpdate ()
 	{
 		int l_time = (int)(Time.deltaTime * 1000.0f);
 		Server.update(l_time);
 		m_gameController.update(l_time);
 		SoundManager.getInstance().updateSystemSound();
+
 	}
 	
 	public string getVersion()
