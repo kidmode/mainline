@@ -27,8 +27,7 @@ public class SessionHandler
 		{
 			if(m_kid == null) {
 				int currentKidId = LoadCurrentKid();
-				if(currentKidId != null &&
-				   m_kidList != null) {
+				if(currentKidId != null && m_kidList != null) {
 					for(int i = 0; i < m_kidList.Count; i++) {
 						if(currentKidId == m_kidList[i].id) {
 							m_kid = m_kidList[i];
@@ -50,7 +49,6 @@ public class SessionHandler
 			m_appList = null;
 			Kid l_lastKid = m_kid;
 			m_kid = value;
-			SaveCurrentKid(m_kid.id);
 			SessionHandler.getInstance().drawingList = null;
 
 			if (l_lastKid != m_kid)
@@ -593,6 +591,30 @@ public class SessionHandler
 		
 	}
 
+	private void LoadKidListDatas() {
+		try {
+			
+			List<Kid> l_kidList = new List<Kid>();
+			String str = SessionHandler.LoadKidList();
+			
+			if (str != null && str.Length > 0)
+			{
+				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
+				if (l_data != null)
+				{
+					foreach (object o in l_data)
+					{
+						Kid l_kid = new Kid( o as Hashtable );
+
+						l_kidList.Add( l_kid );
+					}
+					m_kidList = l_kidList;
+				}
+			}
+		} catch (Exception e) {
+		}
+	}
+ 
 	public void addBook (int p_id, Book p_book)
 	{
 		if (null == m_bookTable) 
