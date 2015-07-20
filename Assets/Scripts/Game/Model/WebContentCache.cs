@@ -19,7 +19,7 @@ public class WebContentCache : object
 
 		m_webContentRequest = new RequestQueue();
 		m_webContentRequest.add(new WebContentRequest(_requestWebContentComplete));
-		m_webContentRequest.request();
+		m_webContentRequest.request(RequestType.SEQUENCE);
 
 		addBookList();
 

@@ -23,10 +23,10 @@ public class InitializeGameState : GameState
 		m_gotoLogin = false;
 		m_time = 0;
 		
-		m_request = new RequestQueue ();
-		m_request.add ( new ClientIdRequest(getClientIdComplete) );
-		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
-		m_request.request ( RequestType.SEQUENCE );
+//		m_request = new RequestQueue ();
+//		m_request.add ( new ClientIdRequest(getClientIdComplete) );
+//		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
+//		m_request.request ( RequestType.SEQUENCE );
 		_setupScreen(p_gameController.getUI());
 		if(m_loadingLabel != null)
 			m_loadingLabel.tweener.addAlphaTrack(1.0f, 0.0f, 1.0f, onLoadingTweenFinish);
@@ -55,7 +55,8 @@ public class InitializeGameState : GameState
 		
 		if (m_gotoLogin)
 		{
-			if( SessionHandler.getInstance().token.isExist() )
+//			SessionHandler.getInstance().token.clear();
+				if( SessionHandler.getInstance().token.isExist() )
 			{
 				if(SessionHandler.getInstance().childLockSwitch)
 				{
@@ -69,7 +70,7 @@ public class InitializeGameState : GameState
 			}
 			else
 			{
-				p_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+				p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 			}
 			m_gotoLogin = false;
 		}
@@ -86,8 +87,6 @@ public class InitializeGameState : GameState
 	
 	private void _setupScreen(UIManager p_uiManager)
 	{
-
-	
 		if (mGame.IsFirstLaunch == -1) {
 			m_splashForeCanvas = p_uiManager.createScreen (
 				(SessionHandler.getInstance ().token.isPremium () || SessionHandler.getInstance ().token.isCurrent ()) ? UIScreen.SPLASH_PREMIUM : UIScreen.SPLASH,
@@ -118,9 +117,10 @@ public class InitializeGameState : GameState
 			if (m_splashBackCanvas == null)
 				m_splashBackCanvas = p_uiManager.createScreen (UIScreen.SPLASH_BACKGROUND, true, -1) as SplashBackCanvas;
 			m_splashBackCanvas.transitionDown (2.5f);
-		} else if (mGame.IsFirstLaunch == 0){
-			mGame.IsFirstLaunch = 1;
-		}
+		} 
+//		else if (mGame.IsFirstLaunch == 0){
+//			mGame.IsFirstLaunch = 1;
+//		}
 
 		
 		SessionHandler.getInstance().flashInstall = KidMode.hasFlashInstalled();

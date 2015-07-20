@@ -527,6 +527,8 @@ public class SessionHandler
 		m_masterVolum = 0;
 		m_allowCall = true;
 		m_tip = true;
+		//need to clear token. if not, previous token info still exists after new Token(). 
+		m_token.clear();
 		m_token = new Token();
 		m_username = "";
 		m_callMethod = CallMethod.NULL;

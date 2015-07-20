@@ -478,6 +478,7 @@ public class ProfileState : GameState
 //			}
 //			else
 			{
+				m_uiManager.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 				m_gameController.changeState(ZoodleState.CONTROL_APP);
 			}
 		}
