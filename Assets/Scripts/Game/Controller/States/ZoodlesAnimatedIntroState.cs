@@ -129,8 +129,6 @@ public class ZoodlesAnimatedIntroState : GameState
 							//			m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
 
 							game.clientIdAndPremiumRequests(toDoActivityRequest);
-//							honda: videos, games and books lists request
-//							game.user.contentCache.startRequests();
 						}
 					}
 				}
@@ -180,6 +178,7 @@ public class ZoodlesAnimatedIntroState : GameState
 		Game game = gameLogic.GetComponent<Game>();
 		//honda: videos, games and books lists request
 		game.user.contentCache.startRequests();
+		SessionHandler.getInstance().getAllKidApplist();
 	}
 	
 	private void evaluateSounds(GameController p_gameController)
