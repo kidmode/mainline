@@ -62,7 +62,7 @@ public class MapState : GameState
         UIManager l_ui = p_gameController.getUI();
 		//not hide map, remove map to have more space
 //		m_mapCanvas.active = false; // DO NOT remove map, but cache map temporarily
-		l_ui.removeScreen(UIScreen.MAP);
+		l_ui.removeScreenImmediately(UIScreen.MAP);
         l_ui.removeScreen(UIScreen.CORNER_PROFILE_INFO);
 		//if( m_removeCornerProfile )
 		//	p_gameController.getUI().removeScreen( UIScreen.CORNER_PROFILE_INFO );
