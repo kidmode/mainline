@@ -118,7 +118,7 @@ public class InitializeGameState : GameState
 			if (m_splashBackCanvas == null)
 				m_splashBackCanvas = p_uiManager.createScreen (UIScreen.SPLASH_BACKGROUND, true, -1) as SplashBackCanvas;
 			m_splashBackCanvas.transitionDown (2.5f);
-		} else {
+		} else if (mGame.IsFirstLaunch == 0){
 			mGame.IsFirstLaunch = 1;
 		}
 

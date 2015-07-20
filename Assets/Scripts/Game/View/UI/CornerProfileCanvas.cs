@@ -74,6 +74,7 @@ public class CornerProfileCanvas : UICanvas
 		m_starMeter				= getView( "starMeter" ).gameObject.GetComponent<RectTransform>();
 
 		m_kid 					= SessionHandler.getInstance().currentKid;
+		m_kid.requestPhoto();
 	}
 
 	private Kid m_kid;

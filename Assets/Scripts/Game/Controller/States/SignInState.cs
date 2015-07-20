@@ -321,6 +321,10 @@ public class SignInState : GameState
 			}
 			else
 			{
+				GameObject gameLogic = GameObject.FindWithTag("GameController");
+				Game game = gameLogic.GetComponent<Game>();
+				game.IsLogin = 1;
+
 				string l_secret = l_data.ContainsKey(ZoodlesConstants.PARAM_TOKEN) ? l_data[ZoodlesConstants.PARAM_TOKEN].ToString() : "";
 				//bool l_premium = l_data.ContainsKey("premium") && "True".Equals(l_data["premium"].ToString());
 				bool l_premium = l_data.ContainsKey("premium") && (bool)l_data["premium"];

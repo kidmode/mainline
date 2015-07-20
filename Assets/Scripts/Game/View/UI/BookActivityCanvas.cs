@@ -229,6 +229,7 @@ public class BookActivityCanvas : UICanvas
 		}
 
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
+		UIImage shadowImage = p_element.getView("shadow") as UIImage;
         if (l_rawImage == null)
             return;
 
