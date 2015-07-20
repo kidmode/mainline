@@ -419,10 +419,11 @@ public class RegionBaseState : GameState
 		
 		m_backButton = m_regionLandingCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(onBackButtonClicked);
+
 		m_backButtonPosition = m_backButton.transform.localPosition;
 		m_backButton.transform.localPosition += new Vector3(0, 200, 0);
 
-		
+
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
 
