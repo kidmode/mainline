@@ -282,13 +282,14 @@ public class ClientIdRequest : RequestQueue.Request
 			m_params [ZoodlesConstants.PARAM_BRAND] = l_brand;
 			m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_brand;
 		}
-
-
-		m_params [ZoodlesConstants.PARAM_BRAND] = "Quanta";
-		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
-
 		m_params [ZoodlesConstants.PARAM_DEVICE] = SystemInfo.deviceName;
-		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";//SystemInfo.deviceModel;
+		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
+
+		//honda: add these to test create premium screen on unity editor
+//		m_params [ZoodlesConstants.PARAM_BRAND] = "Quanta";
+//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
+//		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
+		//end
 
 		#endif
 
