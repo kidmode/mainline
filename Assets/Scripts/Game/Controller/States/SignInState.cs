@@ -34,7 +34,8 @@ public class SignInState : GameState
 		switch (m_subState)
 		{
 		case SubState.GO_PREVIOUS:
-			p_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+			int nextState = p_gameController.getConnectedState(ZoodleState.SIGN_IN);
+			p_gameController.changeState(nextState);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
@@ -323,6 +324,7 @@ public class SignInState : GameState
 			{
 				GameObject gameLogic = GameObject.FindWithTag("GameController");
 				Game game = gameLogic.GetComponent<Game>();
+				game.IsFirstLaunch = 1;
 				game.IsLogin = 1;
 
 				string l_secret = l_data.ContainsKey(ZoodlesConstants.PARAM_TOKEN) ? l_data[ZoodlesConstants.PARAM_TOKEN].ToString() : "";
@@ -362,6 +364,7 @@ public class SignInState : GameState
 		}
 
 	}
+
 	private void allRequestComplete(WWW p_response)
 	{
 		if(null == p_response.error)

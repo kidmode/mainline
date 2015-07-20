@@ -251,7 +251,7 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_BRAND] = l_DI.Call<string>("getBrand");
 		// Sean: vzw
 //		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_DI.Call<string>("getManufacturer");
-		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "HTC";
+		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
 		// end vzw
 		m_params [ZoodlesConstants.PARAM_DEVICE] = l_DI.Call<string>("getDevice");
 		m_params [ZoodlesConstants.PARAM_MODEL] = l_DI.Call<string>("getModel");
@@ -284,6 +284,12 @@ public class ClientIdRequest : RequestQueue.Request
 		}
 		m_params [ZoodlesConstants.PARAM_DEVICE] = SystemInfo.deviceName;
 		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
+
+		//honda: add these to test create premium screen on unity editor
+//		m_params [ZoodlesConstants.PARAM_BRAND] = "Quanta";
+//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
+//		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
+		//end
 
 		#endif
 

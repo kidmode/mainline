@@ -12,6 +12,9 @@ public class ZoodlesAnimatedIntroState : GameState
 	private const float ANIMATION_PIXEL_HEIGHT = 640;
 
 	private GameObject gameLogic;
+	private GameObject loadingPage;
+	private GameObject l_animationObject;
+
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
@@ -26,8 +29,7 @@ public class ZoodlesAnimatedIntroState : GameState
 		
 		GAUtil.logScreen("ZoodlesIntroScreen");
 
-		Game game = gameLogic.GetComponent<Game>();	
-
+//		Game game = gameLogic.GetComponent<Game>();	
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
@@ -68,8 +70,8 @@ public class ZoodlesAnimatedIntroState : GameState
 	{
 		m_animationCanvas = p_uiManager.createScreen (UIScreen.ZOODLES_INTRO, false, 1);
 		UIElement l_animationElement = m_animationCanvas.getView ("ZoodlesAnimation") as UIElement;
-		GameObject loadingPage = GameObject.FindWithTag ("LoadingEntrance");
-		GameObject l_animationObject = l_animationElement.gameObject;
+		loadingPage = GameObject.FindWithTag ("LoadingEntrance");
+		l_animationObject = l_animationElement.gameObject;
 		m_clip = l_animationObject.GetComponent<GAFMovieClip> ();
 		Game game = gameLogic.GetComponent<Game>();	
 		if (game.IsFirstLaunch == 0) {
@@ -103,7 +105,12 @@ public class ZoodlesAnimatedIntroState : GameState
 		Game game = gameLogic.GetComponent<Game>();
 		if (game.IsFirstLaunch == 0) {
 			if ((false == m_isFinished && m_timeFinished > WAIT_TIME_ON_FINISH)) {
-				p_gameController.changeState (ZoodleState.INITIALIZE_GAME);
+
+				l_animationObject.SetActive(false);
+				loadingPage.SetActive(true);
+				game.clientIdAndPremiumRequests(onRequestsCompleted);
+
+//				p_gameController.changeState (ZoodleState.INITIALIZE_GAME);
 				m_isFinished = true;
 			}
 		} else {
@@ -120,13 +127,14 @@ public class ZoodlesAnimatedIntroState : GameState
 							KidModeLockController.Instance.swith2KidMode();
 							SessionHandler.getInstance().resetKidCache();
 							//			m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
-							
-							//honda: videos, games and books lists request
-							game.user.contentCache.startRequests();
+
+							game.clientIdAndPremiumRequests(toDoActivityRequest);
 						}
 					}
 				}
+				//normal launch
 				else {
+					//has kids
 					if(SessionHandler.LoadCurrentKid() != -1) {
 						if(SessionHandler.getInstance().currentKid != null) {
 							if (game.user.contentCache.isFinishedLoadingWebContent) {
@@ -139,24 +147,38 @@ public class ZoodlesAnimatedIntroState : GameState
 								KidModeLockController.Instance.swith2KidMode();
 								SessionHandler.getInstance().resetKidCache();
 								//			m_loadingLabel.tweener.addAlphaTrack( 1.0f, 0.0f, 0.5f, onLoadingFadeOutFinish );
-								
-								//honda: videos, games and books lists request
-								game.user.contentCache.startRequests();
+
+								game.clientIdAndPremiumRequests(toDoActivityRequest);
 							}
 						}
+						//honda: it should not enter here
 						else {
-							p_gameController.changeState (ZoodleState.INITIALIZE_GAME);
+							game.clientIdAndPremiumRequests(onRequestsCompleted);
 							m_isFinished = true;
 						}
 
 					}
+					//honda: currently, if have user account but no kid list, enter here
 					else {
-						p_gameController.changeState (ZoodleState.INITIALIZE_GAME);
+						game.clientIdAndPremiumRequests(onRequestsCompleted);
 						m_isFinished = true;
 					}
 				}
 			}
 		}
+	}
+
+	private void onRequestsCompleted(bool isComplated)
+	{
+		m_gameController.changeState(ZoodleState.INITIALIZE_GAME);
+	}
+
+	private void toDoActivityRequest(bool isCompleted)
+	{
+		Game game = gameLogic.GetComponent<Game>();
+		//honda: videos, games and books lists request
+		game.user.contentCache.startRequests();
+		SessionHandler.getInstance().getAllKidApplist();
 	}
 	
 	private void evaluateSounds(GameController p_gameController)

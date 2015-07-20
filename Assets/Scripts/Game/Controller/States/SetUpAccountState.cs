@@ -11,7 +11,8 @@ public class SetUpAccountState : GameState
 	{
 		None,
 		CreateAccountSelectScreen,
-		NextScreen
+		NextScreen,
+		SignInAccountScreen,
 	}
 	
 	//Public variables
@@ -62,6 +63,11 @@ public class SetUpAccountState : GameState
 				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER,false,2);
 				changeToState = ScreenChange.None;
 				break;
+			case ScreenChange.SignInAccountScreen:
+				p_gameController.connectState(ZoodleState.SIGN_IN, ZoodleState.SET_UP_ACCOUNT);
+				p_gameController.changeState(ZoodleState.SIGN_IN);
+				changeToState = ScreenChange.None;
+				break;
 			default:
 				changeToState = ScreenChange.None;
 				break;
@@ -86,10 +92,12 @@ public class SetUpAccountState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
-		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
+		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND ) as SplashBackCanvas;
 		if( m_createAccountBackgroundCanvas == null )
-            m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 );
-		
+            m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 ) as SplashBackCanvas;
+
+		m_createAccountBackgroundCanvas.setDown();
+
 		m_signUpCanvas = p_uiManager.createScreen( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD, true, 1 );
 
 		m_backButton = m_signUpCanvas.getView("backButton") as UIButton;
@@ -106,6 +114,10 @@ public class SetUpAccountState : GameState
 		m_GoogleAccountButton.addClickCallback (toLoginWithGoogle);
 		// end vzw
 
+		//Honda
+		m_SignInAccountButton = m_signUpCanvas.getView("signInAccountButton") as UIButton;
+		m_SignInAccountButton.addClickCallback(onSignInAccountButtonClicked);
+		//end
 
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
 		m_passwordCheckImage = m_signUpCanvas.getView ("passwordInputConfirm") as UIImage;
@@ -339,9 +351,30 @@ public class SetUpAccountState : GameState
 
 	// end vzw
 
+	//honda
+	private void onSignInAccountButtonClicked(UIButton p_button)
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			return;
+		}
+
+		changeToState = ScreenChange.SignInAccountScreen;
+	}
+
+	//end
 
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
+		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			return;
+		}
+
 		bool l_emailPasses = emailPasses();
 		bool l_passwordPasses = passwordPasses();
 
@@ -391,6 +424,11 @@ public class SetUpAccountState : GameState
 			}
 			else
 			{
+				GameObject gameLogic = GameObject.FindWithTag("GameController");
+				Game game = gameLogic.GetComponent<Game>();
+				game.IsFirstLaunch = 1;
+				game.IsLogin = 1;
+
 				string l_secret = l_data.ContainsKey(ZoodlesConstants.PARAM_TOKEN) ? l_data[ZoodlesConstants.PARAM_TOKEN].ToString() : "";
 				bool l_premium = l_data.ContainsKey("premium") && (bool)l_data["premium"];
 				bool l_current = l_data.ContainsKey("is_current") && null != l_data["is_current"] && (bool)l_data["is_current"];
@@ -460,8 +498,12 @@ public class SetUpAccountState : GameState
 	private UIButton    m_GoogleAccountButton;
 	// end vzw
 
+	// Honda
+	private UIButton  	m_SignInAccountButton;
+	// end
+
 	private UICanvas    m_signUpCanvas;
-	private UICanvas	m_createAccountBackgroundCanvas;
+	private SplashBackCanvas	m_createAccountBackgroundCanvas;
 
 	private InputField 	m_account;
 	private InputField 	m_password;
