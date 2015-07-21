@@ -66,29 +66,34 @@ public class Game : MonoBehaviour
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
-		switch (Input.deviceOrientation) 
-		{
-		case DeviceOrientation.FaceDown:
-		case DeviceOrientation.FaceUp:
-		case DeviceOrientation.Portrait:
-		case DeviceOrientation.PortraitUpsideDown:
-		case DeviceOrientation.Unknown:
-		case DeviceOrientation.LandscapeLeft:
-			// None landscape orientation, set it manually
-			Screen.orientation = ScreenOrientation.LandscapeLeft;
-			// Wait a bit
-			//yield WaitForSeconds(0.1f);
-			// Set back to autorotation, it should be alright by now
-			Screen.orientation = ScreenOrientation.AutoRotation;
-			break;
-		case DeviceOrientation.LandscapeRight:
-			Screen.orientation = ScreenOrientation.LandscapeRight;
-			// Wait a bit
-			//yield WaitForSeconds(0.1f);
-			// Set back to autorotation, it should be alright by now
-			Screen.orientation = ScreenOrientation.AutoRotation;
-			break;    	    
-		}
+		Screen.autorotateToLandscapeLeft = true;
+		Screen.autorotateToLandscapeRight = true;
+		Screen.autorotateToPortrait = false;
+		Screen.autorotateToPortraitUpsideDown = false;
+		Screen.orientation = ScreenOrientation.AutoRotation;
+//		switch (Input.deviceOrientation) 
+//		{
+//		case DeviceOrientation.FaceDown:
+//		case DeviceOrientation.FaceUp:
+//		case DeviceOrientation.Portrait:
+//		case DeviceOrientation.PortraitUpsideDown:
+//		case DeviceOrientation.Unknown:
+//		case DeviceOrientation.LandscapeLeft:
+//			// None landscape orientation, set it manually
+//			Screen.orientation = ScreenOrientation.LandscapeLeft;
+//			// Wait a bit
+//			//yield WaitForSeconds(0.1f);
+//			// Set back to autorotation, it should be alright by now
+//			Screen.orientation = ScreenOrientation.AutoRotation;
+//			break;
+//		case DeviceOrientation.LandscapeRight:
+//			Screen.orientation = ScreenOrientation.LandscapeRight;
+//			// Wait a bit
+//			//yield WaitForSeconds(0.1f);
+//			// Set back to autorotation, it should be alright by now
+//			Screen.orientation = ScreenOrientation.AutoRotation;
+//			break;    	    
+//		}
 
 	//	if( Application.platform == RuntimePlatform.Android )
 	//		_loadTestWebpage( "https://www.youtube.com/embed/G1UdkMDAdsU" );
