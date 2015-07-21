@@ -16,6 +16,7 @@ public class ControlAppState : GameState
 
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
 		TutorialController.Instance.showNextPage();
+		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
