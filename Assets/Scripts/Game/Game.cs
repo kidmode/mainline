@@ -71,6 +71,7 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
 //		switch (Input.deviceOrientation) 
 //		{
 //		case DeviceOrientation.FaceDown:
