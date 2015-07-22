@@ -134,6 +134,15 @@ public class Game : MonoBehaviour
 		#endif
  		// vzw end
 
+		//honda
+//		PlayerPrefs.DeleteAll();
+		
+		m_request = new RequestQueue ();
+		isClientIdCompleted = false;
+		isPremiumCompleted = false;
+		testTimes = 0;
+		//end
+
 		GCS.Environment.init();
 		FB.Init(_initFacebookComplete);
 
