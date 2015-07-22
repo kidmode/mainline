@@ -205,8 +205,8 @@ public class RegionFunState : RegionBaseState
 		m_mapButton.transform.localPosition = m_cornerPosition + new Vector3( 0, 200.0f, 0 );
 		
 		List< Vector3 > l_backPositions = new List< Vector3 >();
-		l_backPositions.Add( m_cornerPosition  + new Vector3( 0, 200.0f, 0 ) );
-		l_backPositions.Add( m_cornerPosition );
+		l_backPositions.Add( m_backButtonPosition  + new Vector3( 0, 200.0f, 0 ) );
+		l_backPositions.Add( m_backButtonPosition );
 		m_backButton.tweener.addPositionTrack( l_backPositions, ZoodlesScreenFactory.FADE_SPEED );
 		
 		m_activityPanelCanvas.canvasGroup.interactable = false;

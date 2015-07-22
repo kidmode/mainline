@@ -470,7 +470,7 @@ public class SettingAppInfoState : GameState
 	{
 		m_session.clearUserData ();
 		LocalSetting.find ("User").delete ();
-		m_gameController.changeState (ZoodleState.CREATE_ACCOUNT_SELECTION);
+		m_gameController.changeState (ZoodleState.ZOODLES_ANIMATION);
 	}
 
 	private void onCloseThankDialog(UIButton p_button)
