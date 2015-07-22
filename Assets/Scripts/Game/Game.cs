@@ -14,10 +14,18 @@ public class Game : MonoBehaviour
 	private static int isReLaunch			=	0;  // 0: Normal launch, 1: Relaunch
 	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
 	private static int isLogin				=	0;	// 0: Not login , 1: Logined
-
-
+	
 	private static bool isPause = false;
 
+	//honda
+	public delegate void onRequestCompletedEvent(bool isCOmpleted);
+	public event onRequestCompletedEvent onRequestCompleted;
+	
+	private RequestQueue m_request;
+	private bool isClientIdCompleted;
+	private bool isPremiumCompleted;
+	private int testTimes;
+	//end
 
 	public bool IsPause {
 		get { 
@@ -63,8 +71,7 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-
-
+	
 	public void closeYoutube() {
 		GameObject gameLogic = GameObject.FindWithTag("GameController");
 		gameLogic.GetComponent<Game> ().gameSwitcher (true);
@@ -74,8 +81,7 @@ public class Game : MonoBehaviour
 	public void OnLoadYoutubeComplete() {
 		WebViewState.HandleOnLoadComplete ();
 	}
-
-
+	
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
@@ -206,7 +212,6 @@ public class Game : MonoBehaviour
 		
 	}
 
-
     public void onEnglishToggle()
     {
         Localization.changeLanguage("EN");
@@ -271,6 +276,109 @@ public class Game : MonoBehaviour
 	{
 		get; set;
 	}
+
+	//honda
+	public void clientIdAndPremiumRequests(onRequestCompletedEvent completedEvent)
+	{
+		if (completedEvent != null)
+		{
+			onRequestCompleted += completedEvent;
+		}
+		
+		if (Application.internetReachability != NetworkReachability.NotReachable)
+		{
+			setClientIdAndPremiumRequests();
+		}
+		else
+		{
+			if (onRequestCompleted != null)
+			{
+				onRequestCompleted(false);
+				onRequestCompleted = null;
+			}
+		}
+	}
+	
+	private void setClientIdAndPremiumRequests()
+	{
+		m_request.add ( new ClientIdRequest(getClientIdComplete) );
+		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
+		m_request.request ( RequestType.SEQUENCE );
+	}
+	
+	private void getClientIdComplete(WWW p_response)
+	{
+		if(p_response.error == null)
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
+			
+			isClientIdCompleted = true;
+			checkRequestCompleted();
+		}
+		else
+		{
+			if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				testTimes++;
+				if (testTimes <= 3)
+				{
+					m_request.reset();
+					clientIdAndPremiumRequests(null);
+				}
+				else
+				{
+					Game game = m_gameController.game;;
+					game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+				}
+				//cynthia vzw
+//				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+//				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
+			}
+		}
+	}
+	
+	private void getCheckComplete(WWW p_response)
+	{
+		if(p_response.error == null)
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
+			SessionHandler.getInstance().renewalPeriod = (int)((double)l_data["renewal_period"]);
+		}
+		else
+		{
+			if (!SessionHandler.getInstance().token.isExist()) //cynthia
+			{
+				m_request.reset();
+				//cynthia vzw
+//				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+//				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+				//setErrorMessage( m_gameController, Localization.getString(Localization.TXT_STATE_0_FAIL), Localization.getString(Localization.TXT_STATE_0_FAIL_MESSAGE) );
+				//vzw end
+			} 
+		}
+		isPremiumCompleted = true;
+		checkRequestCompleted();
+	}
+	
+	private void checkRequestCompleted()
+	{
+		if (isClientIdCompleted && isPremiumCompleted)
+		{
+			if (onRequestCompleted != null)
+			{
+				onRequestCompleted(true);
+				onRequestCompleted = null;
+			}
+			isClientIdCompleted = false;
+			isPremiumCompleted = false;
+		}
+	}
+	
+	//end
 
 	#if SHOW_STATS
 	private function ShowStatistics():void
