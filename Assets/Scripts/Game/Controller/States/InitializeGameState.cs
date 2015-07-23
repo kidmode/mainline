@@ -8,8 +8,7 @@ public class InitializeGameState : GameState
 	//consts
 	private const float LOADING_WEIGHT 	= 1;
 	private const float LOADING_START 	= 100;
-
-	private GameObject mGameLogic;
+	
 	private Game mGame;
 
 	//Standard state flow	
@@ -17,8 +16,7 @@ public class InitializeGameState : GameState
 	{
 		base.enter(p_gameController);
 
-		mGameLogic = GameObject.FindWithTag("GameController");
-		mGame = mGameLogic.GetComponent<Game>();	
+		mGame = p_gameController.game;	
 		
 		m_gotoLogin = false;
 		m_time = 0;

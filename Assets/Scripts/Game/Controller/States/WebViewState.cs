@@ -36,8 +36,7 @@ public class WebViewState : GameState
 
 		#endif
 
-		GameObject gameLogic = GameObject.FindWithTag("GameController");
-		gameLogic.GetComponent<Game> ().gameSwitcher (false);
+		p_gameController.game.gameSwitcher (false);
 
 	}
 

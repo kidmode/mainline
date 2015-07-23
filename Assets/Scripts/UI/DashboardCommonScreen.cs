@@ -8,29 +8,20 @@ using System.Collections;
 
 public class DashboardCommonScreen : MonoBehaviour {
 
-	[SerializeField]
-	private GameObject gameLogic;
+//	[SerializeField]
+	private Game game;
 
 	// Use this for initialization
-	void Start () {
-
+	void Start () 
+	{
 		updateToggleButtons ();
-
-		gameLogic = GameObject.FindWithTag("GameController");
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		game = gameLogic.GetComponent<Game>();
 	}
 
-	void updateToggleButtons(){
-
+	void updateToggleButtons()
+	{
 		Debug.Log ("  updateToggleButtons  " + KidModeLockController.Instance.stateHomeLauncher.ToString() );
-
-
-
 		return;
 
 //		if (KidModeLockController.Instance.stateHomeLauncher == KidModeLockController.StateHomeLauncher.Default) {
@@ -50,37 +41,25 @@ public class DashboardCommonScreen : MonoBehaviour {
 
 	}
 
-	public void switchToDefaultLauncher(){
-
+	public void switchToDefaultLauncher()
+	{
 		KidModeLockController.Instance.swith2DefaultLauncher ();
-
 		updateToggleButtons ();
-
-
-
 	}
 
-	public void switchToKidModeLauncher(){
-
+	public void switchToKidModeLauncher()
+	{
 		KidModeLockController.Instance.swith2KidModeLauncher ();
-
 		updateToggleButtons ();
 
 //		PlayerPrefs.SetString ("settingsLauncher", KidModeLockController.Instance.stateHomeLauncher.ToString());
-
 	}
 
-	public void openTabletSettings(){
-
-		if (gameLogic != null) {
-
-			Game game = gameLogic.GetComponent<Game>();
-
-			game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false,6);
-
+	public void openTabletSettings()
+	{
+		if (game != null) 
+		{
+			game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false, 6);
 		}
-
 	}
-
-
 }
