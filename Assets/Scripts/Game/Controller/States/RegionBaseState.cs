@@ -404,10 +404,10 @@ public class RegionBaseState : GameState
 	
 	private void _setupElements()
 	{
-		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
+//		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
 
 		// Sean: vzw
-		m_speechBubble.active = false;
+//		m_speechBubble.active = false;
 		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
 
 		this._setupAppContentList();
@@ -448,15 +448,16 @@ public class RegionBaseState : GameState
 
 		m_foregroundGafGroup = m_regionLandingCanvas.getView("gafGroup");
 		// Sean: vzw
-		this._setupGafGroup(false);
+//		this._setupGafGroup(false);
 
 		m_triggers.Clear();
 		// Sean: vzw
-		if (false) {
-			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
-			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
-			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
-		} // vzw end
+//		if (false) {
+//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
+//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
+//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+//		} 
+		// vzw end
 
 		UIButton l_butterfly = m_regionLandingCanvas.getView("Butterfly") as UIButton;
 		List<Vector3> l_butterflyPosList = new List<Vector3>();
@@ -467,12 +468,12 @@ public class RegionBaseState : GameState
 		_oscillateLightsDown(m_regionLandingCanvas.getView("light"), Tweener.TargetVar.Rotation);
 	}
 
-	private void _setupGafGroup(bool active)
-	{
-		m_foregroundGafGroup.getView("monkeyTrigger").active = active;
-		m_foregroundGafGroup.getView("snakeTrigger").active = active;
-		m_foregroundGafGroup.getView("toucanTrigger").active = active;
-	}
+//	private void _setupGafGroup(bool active)
+//	{
+//		m_foregroundGafGroup.getView("monkeyTrigger").active = active;
+//		m_foregroundGafGroup.getView("snakeTrigger").active = active;
+//		m_foregroundGafGroup.getView("toucanTrigger").active = active;
+//	}
 	
 	private void _handleDynamicActivities()
 	{
@@ -1643,7 +1644,7 @@ public class RegionBaseState : GameState
 	
 	protected UIButton	m_backButton;
 	protected UIButton 	m_mapButton;
-	protected UIButton  m_speechBubble;
+//	protected UIButton  m_speechBubble;
 	protected UIButton 	m_profileButton;
 	protected UIButton	m_quitMessageButton;
 	
