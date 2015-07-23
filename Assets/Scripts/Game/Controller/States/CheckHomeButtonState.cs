@@ -6,16 +6,27 @@ using System.Collections.Generic;
 
 public class CheckHomeButtonState: GameState 
 {
+	private Game game;
+
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		game = p_gameController.game;
 	}
 
 	public override void update( GameController p_gameController, int p_time )
 	{
 		base.update( p_gameController, p_time );	
 
-		p_gameController.changeState(ZoodleState.ZOODLES_ANIMATION);
+		if (game.IsFirstLaunch == 0) 
+		{
+			p_gameController.changeState(ZoodleState.ZOODLES_ANIMATION);
+		} 
+		else 
+		{
+			p_gameController.changeState(ZoodleState.LOADING_PAGE);
+		}
 
 //#if UNITY_EDITOR
 //		p_gameController.changeState(ZoodleState.ZOODLES_ANIMATION);

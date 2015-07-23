@@ -110,9 +110,7 @@ public class UIScreen
 	public const int CONGRATURATION				= 104;
 //	public const int PREMIUM_ELIGIBLE 			= 105;
 	public const int PAY_GEMS_COMFIRM			= 106;
-
-
-
+	
 	// Sean: vzw
 	public const int REGION_APP					= 901;
 
@@ -123,9 +121,10 @@ public class UIScreen
 	public const int TUTORIAL_MAIN_PROCESS				= 1101;
 	public const int TUTORIAL_CONTROL_VIOLENCE			= 1102;
 
-	//Error Message
+	//Honda: Error Message
 	public const int ERROR_MESSAGE			= 1201;
 	public const int NO_INTERNET            = 1202;
+	public const int LOADING_PAGE           = 1203;
 }
 
 
@@ -243,7 +242,6 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.CONGRATURATION,			SCREEN_DIRECTORY + "CongraturationScreen"  );
 //		m_directoryMap.Add( UIScreen.PREMIUM_ELIGIBLE,			SCREEN_DIRECTORY + "PremiumEligibleScreen"  );
 
-
 		// Sean: vzw
 		m_directoryMap.Add( UIScreen.REGION_APP,				SCREEN_DIRECTORY + "RegionAppScreen" );
 
@@ -258,6 +256,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		//honda
 		m_directoryMap.Add( UIScreen.ERROR_MESSAGE,				SCREEN_DIRECTORY + "ErrorMessage" );
 		m_directoryMap.Add( UIScreen.NO_INTERNET,				SCREEN_DIRECTORY + "NoInternetScreen" );
+		m_directoryMap.Add( UIScreen.LOADING_PAGE,				SCREEN_DIRECTORY + "LoadingPage" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -386,6 +385,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			//honda: vzw
 			case UIScreen.ERROR_MESSAGE:			return new UICanvas() 			as UICanvas;
 			case UIScreen.NO_INTERNET:              return new UICanvas()			as UICanvas;
+			case UIScreen.LOADING_PAGE:             return new UICanvas()			as UICanvas;
 		}
 		return new UICanvas();
 	}

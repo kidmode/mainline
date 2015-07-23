@@ -15,40 +15,66 @@ public class WebViewState : GameState
 
 	string m_text = "";
 
-	public override void enter(GameController p_gameController)
-	{
+	public override void enter(GameController p_gameController) {
 		base.enter(p_gameController);
-
 		SoundManager.getInstance().stopMusic();
-
 		m_subState = SubState.NONE;
-
-		UICanvas l_screen = p_gameController.getUI().createScreen(UIScreen.WEBVIEW);
-		UIButton l_button = l_screen.getView("backButton") as UIButton;
-		l_button.addClickCallback(_clickBack);
-
-		m_inset = calculateInset(l_button);
-		TextAsset l_asset = Resources.Load( "Data/removeFullScreenButton" ) as TextAsset;
-		m_text = (l_asset).text;
 		string l_url = getURL();
-
-//		Debug.Log ("                          enter       ===========================      l_url " + l_url);
-
+		
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
-
+		
 		m_isLoaded = false;
-		_setupWebView("Prefabs/Web/YoutubeWebview", m_inset);
-		m_webView.OnLoadComplete += HandleOnLoadComplete;
-		m_webView.OnLoadBegin += HandleOnLoadBegin;
-		m_webView.OnReceivedKeyCode += HandelOnReceivedKeyCode;
-		m_webView.Load(l_url);
-		m_webView.Show();
-
+		
 		m_linkId = SessionHandler.getInstance().currentContent.id;
 		m_duration = 0;
 
-		GAUtil.logScreen("WebViewScreen");
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		
+		jc.CallStatic("startPlayYoutube", l_url);
+
+		#endif
+
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (false);
+
 	}
+
+//	public override void enter(GameController p_gameController)
+//	{
+//		base.enter(p_gameController);
+//
+//		SoundManager.getInstance().stopMusic();
+//
+//		m_subState = SubState.NONE;
+//
+//		UICanvas l_screen = p_gameController.getUI().createScreen(UIScreen.WEBVIEW);
+//		UIButton l_button = l_screen.getView("backButton") as UIButton;
+//		l_button.addClickCallback(_clickBack);
+//
+//		m_inset = calculateInset(l_button);
+//		TextAsset l_asset = Resources.Load( "Data/removeFullScreenButton" ) as TextAsset;
+//		m_text = (l_asset).text;
+//		string l_url = getURL();
+//
+////		Debug.Log ("                          enter       ===========================      l_url " + l_url);
+//
+//		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
+//
+//		m_isLoaded = false;
+//		_setupWebView("Prefabs/Web/YoutubeWebview", m_inset);
+//		m_webView.OnLoadComplete += HandleOnLoadComplete;
+//		m_webView.OnLoadBegin += HandleOnLoadBegin;
+//		m_webView.OnReceivedKeyCode += HandelOnReceivedKeyCode;
+//		m_webView.Load(l_url);
+//		m_webView.Show();
+//
+//		m_linkId = SessionHandler.getInstance().currentContent.id;
+//		m_duration = 0;
+//
+//		GAUtil.logScreen("WebViewScreen");
+//	}
 
 	void HandleOnLoadBegin (UniWebView webView, string loadingUrl)
 	{
@@ -97,6 +123,14 @@ public class WebViewState : GameState
 
 		m_webView.AddJavaScript (m_text);
 		m_webView.EvaluatingJavaScript ("disableFullScreen()");
+		m_isLoaded = true;
+	}
+
+	public static void HandleOnLoadComplete ()
+	{
+		
+		PointSystemController.Instance.startPointSystemTimer();
+
 		m_isLoaded = true;
 	}
 
@@ -247,10 +281,25 @@ public class WebViewState : GameState
 		}
 	}
 
+	public static void _clickBackBtn()
+	{
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+			
+			m_subState = SubState.GO_CONGRATS;
+			
+		} else {
+			
+			PointSystemController.Instance.stopPointSystemTimer();
+			
+			m_subState = SubState.No_Points;
+			
+		}
+	}
+
 	private GameObject	m_webObj;
 	protected UniWebView m_webView;
-	protected SubState m_subState = SubState.NONE;
-	private bool m_isLoaded;
+	protected static SubState m_subState = SubState.NONE;
+	private static bool m_isLoaded;
 	private int m_linkId = -1;
 	protected int m_duration = 0;
 
@@ -281,12 +330,11 @@ public class VideoViewState : WebViewState
 				break;
 
 			case SubState.No_Points:
-
 				p_gameController.changeState(ZoodleState.REGION_VIDEO);
-
 				break;
 
 			}
+
 			
 			m_subState = SubState.NONE;
 		}

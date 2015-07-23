@@ -780,6 +780,7 @@ public class RegionBaseState : GameState
 		if (m_currentActivityCanvas != null)
 			p_gameController.getUI().removeScreenImmediately(m_currentActivityCanvas);
 
+		Debug.Log("######");
 		p_gameController.changeState(ZoodleState.VIDEO_VIEW);
 	}
 
@@ -1154,7 +1155,7 @@ public class RegionBaseState : GameState
 			m_createActivity = m_nextActivity;
 		}
 	}
-	
+	bool isrun = true;
 	private void onBackButtonClicked(UIButton p_button)
 	{
 		if (m_transitioning)

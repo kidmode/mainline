@@ -11,6 +11,11 @@ public class WebContentCache : object
 	public bool loadWebContentFail;
 	public bool loadBookFail;
 
+	//honda
+	public delegate void onLoadingCompletedEvent();
+	public event onLoadingCompletedEvent onLoadingCompleted;
+	//end
+
 	public void startRequests()
 	{
 		m_sessionHandler = SessionHandler.getInstance();
@@ -21,13 +26,25 @@ public class WebContentCache : object
 		m_webContentRequest.add(new WebContentRequest(_requestWebContentComplete));
 		m_webContentRequest.request(RequestType.SEQUENCE);
 
+		//honda
 		addBookList();
-
 		//honda: comment out request book list due to book list is put in the local place
 //		m_bookListRequest = new RequestQueue();
 //		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
 //		m_bookListRequest.request();
+		//end
 	}
+
+	//honda
+	public void startRequests(onLoadingCompletedEvent completedEvent)
+	{
+		if (completedEvent != null)
+		{
+			onLoadingCompleted += completedEvent;
+		}
+		startRequests();
+	}
+	//end
 
 	public void clear()
 	{
@@ -66,6 +83,11 @@ public class WebContentCache : object
 	private void _requestWebContentComplete(WWW p_response)
 	{
 		isFinishedLoadingWebContent = true;
+		if (onLoadingCompleted != null)
+		{
+			onLoadingCompleted();
+			onLoadingCompleted = null;
+		}
 
 		if (p_response.error == null)
 		{

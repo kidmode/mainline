@@ -72,6 +72,9 @@ public class ZoodleState
 	public const int SIGN_IN_FREE 		= 70;
 	public const int CONGRATURATION		= 71;
 	public const int PAY_GEMS_CONFIRM	= 72;
+	//honda
+	public const int LOADING_PAGE       = 101;
+	//end
 }
 
 public class ZoodlesStateFactory : IGameStateFactory
@@ -146,6 +149,9 @@ public class ZoodlesStateFactory : IGameStateFactory
 		p_gameController.addState( ZoodleState.SIGN_IN_FREE,		new SignInFreeState() 			);
 		p_gameController.addState( ZoodleState.CONGRATURATION,		new CongraturationsState() 		);
 		p_gameController.addState( ZoodleState.PAY_GEMS_CONFIRM,	new PayGemsConfirmState()		);
+		//honda
+		p_gameController.addState( ZoodleState.LOADING_PAGE,   		new LoadingPageState()			);
+		//end
 	}
 
 	public int initialState

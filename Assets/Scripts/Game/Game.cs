@@ -14,16 +14,26 @@ public class Game : MonoBehaviour
 	private static int isReLaunch			=	0;  // 0: Normal launch, 1: Relaunch
 	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
 	private static int isLogin				=	0;	// 0: Not login , 1: Logined
+	
+	private static bool isPause = false;
 
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
-
+	
 	private RequestQueue m_request;
 	private bool isClientIdCompleted;
 	private bool isPremiumCompleted;
 	private int testTimes;
 	//end
+
+	public bool IsPause {
+		get { 
+			return isPause;   
+		}
+		set { isPause = value;  }
+
+	}
 
 	public int IsLogin
 	{
@@ -61,7 +71,17 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
+	
+	public void closeYoutube() {
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+		WebViewState._clickBackBtn ();
+	}
 
+	public void OnLoadYoutubeComplete() {
+		WebViewState.HandleOnLoadComplete ();
+	}
+	
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
@@ -71,6 +91,7 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
 //		switch (Input.deviceOrientation) 
 //		{
 //		case DeviceOrientation.FaceDown:
@@ -115,7 +136,7 @@ public class Game : MonoBehaviour
 
 		//honda
 //		PlayerPrefs.DeleteAll();
-
+		
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
@@ -167,13 +188,21 @@ public class Game : MonoBehaviour
 	{
 		get { return m_gameController; }
 	}
+
+	public void gameSwitcher(Boolean isPlay) {
+		if(isPlay)
+			Time.timeScale = 1;
+		else
+			Time.timeScale = 0;
+	}
 	
-	public void Update ()
+	public void FixedUpdate ()
 	{
 		int l_time = (int)(Time.deltaTime * 1000.0f);
 		Server.update(l_time);
 		m_gameController.update(l_time);
 		SoundManager.getInstance().updateSystemSound();
+
 	}
 	
 	public string getVersion()
@@ -191,7 +220,7 @@ public class Game : MonoBehaviour
 	{
 		
 	}
-	
+
     public void onEnglishToggle()
     {
         Localization.changeLanguage("EN");
@@ -242,7 +271,8 @@ public class Game : MonoBehaviour
 		KidModeLockController.Instance.onAndroidPause ();
 		
 	}
-
+	
+	
 	public void onAndroidResume(string info){
 		
 		Debug.LogWarning (" onAndroidResume " + info);
@@ -277,21 +307,21 @@ public class Game : MonoBehaviour
 			}
 		}
 	}
-
+	
 	private void setClientIdAndPremiumRequests()
 	{
 		m_request.add ( new ClientIdRequest(getClientIdComplete) );
 		m_request.add ( new CheckFreePremiumRequest(getCheckComplete) );
 		m_request.request ( RequestType.SEQUENCE );
 	}
-
+	
 	private void getClientIdComplete(WWW p_response)
 	{
 		if(p_response.error == null)
 		{
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
-		
+			
 			isClientIdCompleted = true;
 			checkRequestCompleted();
 		}
@@ -307,10 +337,9 @@ public class Game : MonoBehaviour
 				}
 				else
 				{
-					Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+					Game game = m_gameController.game;;
 					game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 				}
-
 				//cynthia vzw
 //				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 //				game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
@@ -343,7 +372,7 @@ public class Game : MonoBehaviour
 		isPremiumCompleted = true;
 		checkRequestCompleted();
 	}
-
+	
 	private void checkRequestCompleted()
 	{
 		if (isClientIdCompleted && isPremiumCompleted)
@@ -357,7 +386,7 @@ public class Game : MonoBehaviour
 			isPremiumCompleted = false;
 		}
 	}
-
+	
 	//end
 
 	#if SHOW_STATS
