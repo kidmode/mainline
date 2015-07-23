@@ -73,8 +73,7 @@ public class Game : MonoBehaviour
 */
 	
 	public void closeYoutube() {
-		GameObject gameLogic = GameObject.FindWithTag("GameController");
-		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+		this.gameSwitcher (true);
 		WebViewState._clickBackBtn ();
 	}
 

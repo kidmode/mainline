@@ -3,17 +3,13 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CongratsScreen : MonoBehaviour {
-
-//	public Image
-
-	private GameObject gameLogic;
+	
+//	[SerializeField]
+	private Game game;
 
 	[SerializeField]
 	private GameObject zoodlePointRequestPrefab;
 
-
-
-	//
 	//=============================== 
 	//Moved the animation from CongratState to screen sprcific
 	private UIImage m_loadingBarImg;
@@ -23,14 +19,11 @@ public class CongratsScreen : MonoBehaviour {
 	private UICanvas congratsScreen;
 
 	private UICanvas congratsScreenBackGround;
-
-	// Use this for initialization
-	void Start () {
-
-		gameLogic = GameObject.FindWithTag("GameController");
-
+	
+	void Start () 
+	{
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
 		Game game = gameLogic.GetComponent<Game>();
-//		
 		UIManager uiManager = game.gameController.getUI();
 
 		congratsScreen = uiManager.findScreen (UIScreen.CONGRATS);
@@ -39,14 +32,14 @@ public class CongratsScreen : MonoBehaviour {
 
 		GameObject.Instantiate (zoodlePointRequestPrefab);
 
-		Invoke ("startCongratsScreen", 0.6f);
+		startCongratsScreen();
+//		Invoke ("startCongratsScreen", 0.6f);
 //
 //		m_loadingBarImg = congratsScreen.getView("loadingBarSprite") as UIImage;
-	
 	}
 
-	void startCongratsScreen(){
-
+	void startCongratsScreen()
+	{
 //		return;
 		congratsScreen.getView ("holder").gameObject.SetActive (true);
 //
@@ -55,11 +48,10 @@ public class CongratsScreen : MonoBehaviour {
 		congratsScreenBackGround.getView ("holder").gameObject.SetActive (true);
 //		
 //		congratsScreen.gameObject.SetActive (true);
-
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update () 
+	{
 
 //		int p_time = (int)(Time.deltaTime * 1000.0f);
 //
@@ -71,23 +63,15 @@ public class CongratsScreen : MonoBehaviour {
 //		}
 //		else
 //			m_loadingBarImg.fillAmount = 1.0f;
-
-//	
 	}
 
-	public void closeCongratsScreen(){
-
+	public void closeCongratsScreen()
+	{
 		return;
 
-		Game game = gameLogic.GetComponent<Game>();
-
+//		Game game = gameLogic.GetComponent<Game>();
 		UIManager l_ui = game.gameController.getUI();
-
 		l_ui.removeScreen(UIScreen.CONGRATS_BACKGROUND);
-
 		l_ui.removeScreen(UIScreen.CONGRATS);
-
 	}
-
-
 }

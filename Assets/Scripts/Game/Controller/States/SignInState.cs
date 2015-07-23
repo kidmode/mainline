@@ -21,6 +21,9 @@ public class SignInState : GameState
 		m_controller = p_gameController;
 		m_subState = SubState.NONE;
 		m_loginSuccess = false;
+
+		game = p_gameController.game;
+
 		_setupScreen(p_gameController.getUI());
 
 		GAUtil.logScreen("SignInScreen");
@@ -322,8 +325,6 @@ public class SignInState : GameState
 			}
 			else
 			{
-				GameObject gameLogic = GameObject.FindWithTag("GameController");
-				Game game = gameLogic.GetComponent<Game>();
 				game.IsFirstLaunch = 1;
 				game.IsLogin = 1;
 
@@ -470,4 +471,8 @@ public class SignInState : GameState
 
 	private SubState	m_subState = SubState.NONE;
 	private RequestQueue m_queue = null;
+
+	//honda
+	private Game game;
+
 }
