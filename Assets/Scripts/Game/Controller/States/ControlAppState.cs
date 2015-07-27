@@ -16,6 +16,7 @@ public class ControlAppState : GameState
 
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
 		TutorialController.Instance.showNextPage();
+		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -404,6 +405,8 @@ public class ControlAppState : GameState
 			#endif
 			
 			m_appList.Add( l_appData );
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"AppName", l_appInfo.appName}};
+			SwrveComponent.Instance.SDK.NamedEvent("AddApps",payload);
 		}
 		_Debug.log ( MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
 		
