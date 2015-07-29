@@ -78,6 +78,7 @@ public class ProfileState : GameState
 		m_uiManager.removeScreen(m_profileScreen);
 		m_uiManager.removeScreen(m_addFriendCanvas);
 		m_uiManager.removeScreen(m_tellFriendCanvas);
+		m_uiManager.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 		base.exit(p_gameController);
 	}
 

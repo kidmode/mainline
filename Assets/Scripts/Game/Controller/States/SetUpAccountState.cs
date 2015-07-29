@@ -31,7 +31,7 @@ public class SetUpAccountState : GameState
 
 		m_repasswordText = string.Empty;
 
-//		m_game = p_gameController.game;
+		game = p_gameController.game;
 //
 //		if (null == m_postData) 
 //		{
@@ -424,8 +424,6 @@ public class SetUpAccountState : GameState
 			}
 			else
 			{
-				GameObject gameLogic = GameObject.FindWithTag("GameController");
-				Game game = gameLogic.GetComponent<Game>();
 				game.IsFirstLaunch = 1;
 				game.IsLogin = 1;
 
@@ -500,6 +498,7 @@ public class SetUpAccountState : GameState
 
 	// Honda
 	private UIButton  	m_SignInAccountButton;
+	private Game 		game;
 	// end
 
 	private UICanvas    m_signUpCanvas;

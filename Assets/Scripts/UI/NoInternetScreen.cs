@@ -2,17 +2,17 @@
 using System.Collections;
 
 public class NoInternetScreen : MonoBehaviour {
-	
-	private GameObject gameLogic;
+
+//	[SerializeField]
+	private Game game;
+
 	private UICanvas noInternetCanvas;
 	
-	void Start () {
-
-		gameLogic = GameObject.FindWithTag("GameController");
-
-		GameController gameController = gameLogic.GetComponent<Game>().gameController;
-
-		UIManager l_ui = gameController.getUI();
+	void Start () 
+	{
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		game = gameLogic.GetComponent<Game>();
+		UIManager l_ui = game.gameController.getUI();
 
 		noInternetCanvas = l_ui.findScreen(UIScreen.NO_INTERNET) as UICanvas;
 
@@ -32,9 +32,8 @@ public class NoInternetScreen : MonoBehaviour {
 
 	public void removeScreen()
 	{
-		if (gameLogic != null) 
+		if (game != null) 
 		{
-			Game game = gameLogic.GetComponent<Game>();	
 			game.gameController.getUI().removeScreen(UIScreen.NO_INTERNET);
 		}
 	}

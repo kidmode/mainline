@@ -15,6 +15,8 @@ public class SettingAppInfoState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		game = p_gameController.game;
 		m_session = SessionHandler.getInstance ();
 		m_requestQueue = new RequestQueue ();
 		_setupScreen( p_gameController.getUI() );
@@ -446,9 +448,7 @@ public class SettingAppInfoState : GameState
 			return;
 
 		if(canClick)
-		{
-			GameObject gameLogic = GameObject.FindWithTag("GameController");
-			Game game = gameLogic.GetComponent<Game>();	
+		{	
 			game.IsReLaunch = 0;
 			game.IsFirstLaunch = 0;
 			game.IsLogin = 0;
@@ -666,4 +666,7 @@ public class SettingAppInfoState : GameState
 	private bool		canClick = true;
 
 	private RequestQueue m_requestQueue;
+
+	//honda
+	Game game;
 }

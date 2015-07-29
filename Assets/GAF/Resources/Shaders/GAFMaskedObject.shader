@@ -18,6 +18,14 @@ Shader "GAF/GAFMaskedObject"
 			"RenderType"="Transparent"
 		}
 		
+   		Stencil {
+		  	Comp Equal
+		  	ZFail Zero
+		  	Fail Zero
+		  	Pass Keep
+
+		}
+
 		Blend SrcAlpha OneMinusSrcAlpha
 		AlphaTest Greater .01
 		Cull Off
