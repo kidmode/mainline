@@ -222,23 +222,26 @@ public class ClientIdRequest : RequestQueue.Request
 		//Server can't get 'screen_size' if I post this param and I don't konw why. So I send it on URL.
 		m_call = ZoodlesConstants.REST_CLIENT_ID_URL+"?"+ZoodlesConstants.PARAM_SIZE+"="+Math.Round(Math.Sqrt(Screen.width * Screen.width + Screen.height * Screen.height) / Screen.dpi,1);
 		m_params [ZoodlesConstants.PARAM_FLASH] = SessionHandler.getInstance().flashInstall;
+		Debug.Log(Application.platform);
 		if(Application.platform == RuntimePlatform.Android)
 		{
 			m_params [ZoodlesConstants.PARAM_FAMILY] = "android";
 		}
-		else if(Application.platform == RuntimePlatform.IPhonePlayer)
+		else if (Application.platform == RuntimePlatform.IPhonePlayer || 
+		         Application.platform == RuntimePlatform.OSXEditor)
 		{
 			m_params [ZoodlesConstants.PARAM_FAMILY] = "apple";
 		}
-		else if(Application.platform == RuntimePlatform.WindowsEditor)
+		else if (Application.platform == RuntimePlatform.WindowsEditor)
 		{
 			m_params [ZoodlesConstants.PARAM_FAMILY] = "windows";
 		}
-		else if(Application.platform == RuntimePlatform.WindowsWebPlayer)
+		else if (Application.platform == RuntimePlatform.WindowsWebPlayer)
 		{
 			//TODO
 			m_params [ZoodlesConstants.PARAM_FAMILY] = "chrome"; 
 		}
+
 		m_params [ZoodlesConstants.PARAM_SCREEN_WIDTH] = Screen.width;
 		m_params [ZoodlesConstants.PARAM_SCREEN_HEIGHT] = Screen.height;
 		m_params [ZoodlesConstants.PARAM_DENSITY] = (int)Screen.dpi;
@@ -290,7 +293,6 @@ public class ClientIdRequest : RequestQueue.Request
 //		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
 //		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
 		//end
-
 		#endif
 
 		m_method = CallMethod.POST;
