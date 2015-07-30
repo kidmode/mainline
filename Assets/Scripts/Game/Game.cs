@@ -15,7 +15,7 @@ public class Game : MonoBehaviour
 	private static int isFirstLaunch		=	0;	// 0: First launch, 1: Not first launch
 	private static int isLogin				=	0;	// 0: Not login , 1: Logined
 	
-	private static bool isPause = false;
+	private static bool mIsPlay = true;
 
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
@@ -26,14 +26,6 @@ public class Game : MonoBehaviour
 	private bool isPremiumCompleted;
 	private int testTimes;
 	//end
-
-	public bool IsPause {
-		get { 
-			return isPause;   
-		}
-		set { isPause = value;  }
-
-	}
 
 	public int IsLogin
 	{
@@ -189,19 +181,32 @@ public class Game : MonoBehaviour
 	}
 
 	public void gameSwitcher(Boolean isPlay) {
-		if(isPlay)
-			Time.timeScale = 1;
-		else
-			Time.timeScale = 0;
+
+		mIsPlay = isPlay;
+//		if(isPlay)
+//			Time.timeScale = 1;
+//		else
+//			Time.timeScale = 0;
 	}
 	
 	public void FixedUpdate ()
 	{
-		int l_time = (int)(Time.deltaTime * 1000.0f);
-		Server.update(l_time);
-		m_gameController.update(l_time);
-		SoundManager.getInstance().updateSystemSound();
+//		int l_time = (int)(Time.deltaTime * 1000.0f);
+//		Server.update(l_time);
+//		m_gameController.update(l_time);
+//		SoundManager.getInstance().updateSystemSound();
 
+	}
+
+	public void Update ()
+	{
+		if (mIsPlay) {
+			int l_time = (int)(Time.deltaTime * 1000.0f);
+			Server.update(l_time);
+			m_gameController.update(l_time);
+			SoundManager.getInstance().updateSystemSound();
+		}
+		
 	}
 	
 	public string getVersion()
