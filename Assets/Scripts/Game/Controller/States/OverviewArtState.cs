@@ -80,8 +80,8 @@ public class OverviewArtState : GameState {
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
 		m_rightButton.addClickCallback( onRightButtonClick );
 
-		m_dashboardControllerCanvas.setupDotList( 7 );
-		m_dashboardControllerCanvas.setCurrentIndex( 6 );
+		m_dashboardControllerCanvas.setupDotList( 6 );
+		m_dashboardControllerCanvas.setCurrentIndex( 5 );
 		
 		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -180,7 +180,7 @@ public class OverviewArtState : GameState {
 	{
 		if (checkInternet())
 		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
+			m_gameController.changeState (ZoodleState.OVERVIEW_BOOK);
 		}
 	}
 	

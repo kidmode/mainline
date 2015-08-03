@@ -67,7 +67,7 @@ public class OverviewTimeSpentState : GameState {
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
 		m_rightButton.addClickCallback( onRightButtonClick );
 
-		m_dashboardControllerCanvas.setupDotList( 7 );
+		m_dashboardControllerCanvas.setupDotList( 6 );
 		m_dashboardControllerCanvas.setCurrentIndex( 1 );
 		
 		UIElement l_newPanel = m_timeSpendCanvas.getView ("mainPanel");

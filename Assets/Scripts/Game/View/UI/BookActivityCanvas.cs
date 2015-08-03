@@ -232,10 +232,16 @@ public class BookActivityCanvas : UICanvas
 		case BookState.NotRecorded :
 			l_stateLabel.text = "Not Recorded";
 			l_stateIcon.setTexture(m_recordableIcon);
+			//honda: play voice recording, currently hide recording icon
+			l_stateLabel.active = false;
+			l_stateIcon.active = false;
 			break;
 		case BookState.Recorded :
 			l_stateLabel.text = "Recorded";
 			l_stateIcon.setTexture(m_playIcon);
+			//honda: play voice recording, currently hide recording icon
+			l_stateLabel.active = false;
+			l_stateIcon.active = false;
 			break;
 		}
 
