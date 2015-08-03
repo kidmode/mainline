@@ -92,6 +92,12 @@ public class VideoActivityCanvas : UICanvas
         if (l_rawImage == null)
             return;
 
+		//honda comment: requestIcon check icon from local or server
+		if( !l_info.iconRequested )
+		{
+			l_info.requestIcon();
+		}
+
 		if( l_info.icon == null )
 		{
 			l_rawImage.setTexture( m_emptyTexture );

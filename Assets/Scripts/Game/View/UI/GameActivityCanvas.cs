@@ -122,6 +122,12 @@ public class GameActivityCanvas : UICanvas
 		{
 			WebViewInfo l_info = l_game.webViewData;
 
+			//honda comment: requestIcon check icon from local or server
+			if( !l_info.iconRequested )
+			{
+				l_info.requestIcon();
+			}
+
 			if (l_appName.active)
 			{
 				l_appName.active = false;
