@@ -100,7 +100,7 @@ public class OverviewInfoState : GameState {
 		m_editProfileButton = m_dashboardInfoCanvas.getView ("editProfileButton") as UIButton;
 		m_editProfileButton.addClickCallback (editProfile);
 
-		m_dashboardControllerCanvas.setupDotList( 7 );
+		m_dashboardControllerCanvas.setupDotList( 6 );
 		m_dashboardControllerCanvas.setCurrentIndex( 0 );
 
 		UIElement l_newPanel = m_dashboardInfoCanvas.getView ("mainPanel");

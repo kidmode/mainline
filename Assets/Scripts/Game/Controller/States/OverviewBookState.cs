@@ -91,7 +91,7 @@ public class OverviewBookState : GameState
 		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
 		m_rightButton.addClickCallback( onRightButtonClick );
 
-		m_dashboardControllerCanvas.setupDotList( 7 );
+		m_dashboardControllerCanvas.setupDotList( 6 );
 		m_dashboardControllerCanvas.setCurrentIndex( 4 );
 //		m_gemCountLabelInBook = m_recommendedBookCanvas.getView ("gemCountText") as UILabel;
 		m_moreBookButton = m_recommendedBookCanvas.getView( "bookListButton" ) as UIButton;
@@ -726,7 +726,7 @@ public class OverviewBookState : GameState
 	{
 		if (checkInternet())
 		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
+			m_gameController.changeState (ZoodleState.OVERVIEW_ART);
 		}
 	}
 	

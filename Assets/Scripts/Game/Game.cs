@@ -116,7 +116,7 @@ public class Game : MonoBehaviour
 	{
 		// Sean: vzw
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		Application.targetFrameRate = 60;
+		Application.targetFrameRate = 30;
 		
 		QualitySettings.vSyncCount = 0; 
 		

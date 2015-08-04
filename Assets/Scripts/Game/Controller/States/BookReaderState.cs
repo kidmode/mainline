@@ -21,8 +21,9 @@ public class BookReaderState : GameState {
 
 		m_book          = SessionHandler.getInstance().currentBook;
 		m_bookReading 	= SessionHandler.getInstance ().currentBookReading;
-		
-		m_audioSource   = GameObject.FindObjectOfType<AudioSource>();
+
+		//honda: play voice recording, currently comment it out
+//		m_audioSource   = GameObject.FindObjectOfType<AudioSource>();
 		
 		_setupPageAudio();
 		
@@ -115,14 +116,15 @@ public class BookReaderState : GameState {
 		}
 		else
 		{
-			if(!m_isPlayed 
-//			   && null != m_bookReading
-			   && null != m_book
-			   && null != currentPage
-			   && File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav") )
-			{
-				m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
-			}
+			//honda: play voice recording, currently comment it out
+//			if(!m_isPlayed 
+////			   && null != m_bookReading
+//			   && null != m_book
+//			   && null != currentPage
+//			   && File.Exists(Application.persistentDataPath + "//" +  m_book.id + "//" + currentPage.id + ".wav") )
+//			{
+//				m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
+//			}
 		}
 	}
 	
@@ -465,8 +467,9 @@ public class BookReaderState : GameState {
 	{
 		if( m_book == null ) 
 			return;
-		
-		m_audioSource.pitch = 1.0f;
+
+		if (m_audioSource != null)
+			m_audioSource.pitch = 1.0f;
 	}
 
 	private Book        m_book;
