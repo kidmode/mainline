@@ -38,16 +38,14 @@ public class LoadingEntranceState : GameState
 	{
 		base.update( p_gameController, p_time );		
 
-		if (m_counterToNextScreen++ == 5) 
+		m_counterToNextScreen += p_time;
+		if (m_counterToNextScreen >= 1000) 
 		{
-			//first time launch, reboot device(not select kid)
 			p_gameController.changeState( ZoodleState.MAP );
-			//reboot device/restart(selected kid)
-//			p_gameController.changeState( ZoodleState.REGION_LANDING );
 
 			const float COMPLETE_TIME = 0.5f;
 
-			m_backCanvas.tweener.addAlphaTrack(     1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
+//			m_backCanvas.tweener.addAlphaTrack(     1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
 			m_loadingCanvas.tweener.addAlphaTrack(  1.0f, 0.0f, COMPLETE_TIME, onFadeFinish );
 		}
 	}
@@ -56,7 +54,7 @@ public class LoadingEntranceState : GameState
 	{
 		base.exit( p_gameController );
 
-        p_gameController.getUI().removeScreen( m_backCanvas     );
+//        p_gameController.getUI().removeScreen( m_backCanvas     );
 		p_gameController.getUI().removeScreen( m_loadingCanvas  );
 	}
 
@@ -67,12 +65,12 @@ public class LoadingEntranceState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
-		m_backCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
-        if (m_backCanvas == null)
-        {
-            m_backCanvas = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND, true, -1);
-            (m_backCanvas as SplashBackCanvas).setDown();
-        }
+//		m_backCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
+//        if (m_backCanvas == null)
+//        {
+//            m_backCanvas = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND, true, -1);
+//            (m_backCanvas as SplashBackCanvas).setDown();
+//        }
 
 		m_loadingCanvas = p_uiManager.createScreen( UIScreen.LOADING_ENTRANCE, true, 1 );
 		m_loadingCanvas.enterTransitionEvent    += onTransitionEnter;
@@ -112,7 +110,7 @@ public class LoadingEntranceState : GameState
 
 	private int m_counterToNextScreen = 0;
 
-	private UICanvas	m_backCanvas;
+//	private UICanvas	m_backCanvas;
 	private UICanvas	m_loadingCanvas;
 	private UILabel		m_loadingLabel;
 }

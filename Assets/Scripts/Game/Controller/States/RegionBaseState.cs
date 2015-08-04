@@ -30,31 +30,54 @@ public class WebViewInfo : System.Object
 	
 	public Texture2D    icon;
 	public string       urlString;
-	
 	public WebContent   webData;
+	//honda: new property
+	public bool 		iconRequested;
 	
 	public WebViewInfo(Texture2D p_icon, WebContent p_content = null, string p_urlString = DEFAULT_URL)
 	{
 		icon 		= p_icon;
 		urlString 	= p_urlString;
 		webData     = p_content;
+		//honda
+		iconRequested = false;
+	}
 
-		if (icon == null)
+	public void requestIcon()
+	{
+		//honda: check icon in local folder or not. if YES, get it from local 
+		string contentName = "link_" + webData.id + ".png";
+		Texture2D texture = ImageCache.getCacheImage(contentName);
+		if (texture != null)
 		{
-			if( webData.icon != null )
+			icon = texture;
+			if (m_retriveHandler != null)
 			{
-				RequestQueue l_queue = new RequestQueue();
-				l_queue.add(new ImageRequest("icon", webData.icon, _requestIconComplete));
-				l_queue.request(RequestType.RUSH);
-				m_queue = l_queue;
+				m_retriveHandler(icon);
+				m_retriveHandler = null;
 			}
-			else if( webData.iconMedium != null )
-			{
-				RequestQueue l_queue = new RequestQueue();
-				l_queue.add(new ImageRequest("icon", webData.iconMedium, _requestIconComplete));
-				l_queue.request(RequestType.RUSH);
-				m_queue = l_queue;
-			}
+			iconRequested = true;
+			return;
+		}
+		//end
+		//honda comment: if can not get icon from local, do icon from server
+		if( webData.icon != null )
+		{
+			RequestQueue l_queue = new RequestQueue();
+			l_queue.add(new ImageRequest("icon", webData.icon, _requestIconComplete));
+			l_queue.request(RequestType.RUSH);
+			m_queue = l_queue;
+			
+			iconRequested = true;
+		}
+		else if( webData.iconMedium != null )
+		{
+			RequestQueue l_queue = new RequestQueue();
+			l_queue.add(new ImageRequest("icon", webData.iconMedium, _requestIconComplete));
+			l_queue.request(RequestType.RUSH);
+			m_queue = l_queue;
+			
+			iconRequested = true;
 		}
 	}
 
@@ -1364,16 +1387,16 @@ public class RegionBaseState : GameState
 	}
 	// end vzw
 
-	private string getLocalContentNmae(WebContent l_content)
-	{
-		if (l_content.category == WebContent.GAME_TYPE || 
-		    l_content.category == WebContent.VIDEO_TYPE)
-		{
-			string file = "link_" + l_content.id + ".png";
-			return file;
-		}
-		return null;
-	}
+//	private string getLocalContentNmae(WebContent l_content)
+//	{
+//		if (l_content.category == WebContent.GAME_TYPE || 
+//		    l_content.category == WebContent.VIDEO_TYPE)
+//		{
+//			string file = "link_" + l_content.id + ".png";
+//			return file;
+//		}
+//		return null;
+//	}
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
@@ -1420,9 +1443,9 @@ public class RegionBaseState : GameState
 				string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
 					ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
 
-				string contentName = getLocalContentNmae(l_content);
-				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
+//				string contentName = getLocalContentNmae(l_content);
+//				Texture2D texture = ImageCache.getCacheImage(contentName);
+				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
 				
 				if (l_content.favorite)
 					m_videoFavoritesList.Add(l_info);
@@ -1440,9 +1463,9 @@ public class RegionBaseState : GameState
 				
 				string l_url = l_content.url;
 
-				string contentName = getLocalContentNmae(l_content);
-				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(texture, l_content, l_url);
+//				string contentName = getLocalContentNmae(l_content);
+//				Texture2D texture = ImageCache.getCacheImage(contentName);
+				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
 
 				GameInfo l_game = new GameInfo(l_info);
 

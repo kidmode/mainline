@@ -14,6 +14,7 @@ public class BookInfo : object
 	public bool disposed;
 	public RequestQueue request;
 	public string iconUrl;
+	public bool iconRequested;
 
 	public BookInfo(string p_bookName, BookState p_state, string p_iconUrl, int p_bookId, int p_bookReadingId = 0 )
     {
@@ -22,25 +23,16 @@ public class BookInfo : object
 		bookReadingId = p_bookReadingId;
 		bookState = p_state;
 		iconUrl = p_iconUrl;
-
-		//honda: added
-		loadImage();
+		iconRequested = false;
     }
 
-	private void _requestBookIconComplete(WWW p_response)
+	//honda: added
+	public void requestIcon()
 	{
-		if (p_response.error == null
-		  
-		    && false == disposed)
-		{
-			icon = p_response.texture;
-
-			string name = "book_" + bookId + ".jpg";
-			Debug.Log(name);
-			ImageCache.saveCacheImage(name, icon);
-		}
-		disposeRequest();
+		if (loadImage())
+			return;
 	}
+	//end
 
 	public void dispose()
 	{
@@ -55,15 +47,16 @@ public class BookInfo : object
 	}
 
 	public void reload ()
-	{
+	{	
+		//honda: added
+		if (loadImage())
+			return;
+
 		disposed = false;
 		disposeRequest();
-	
-		//honda: added
-		loadImage();
 	}
 
-	private void loadImage()
+	private bool loadImage()
 	{
 		//honda: Now, books are all in the local place. So, don't need to request cover image from server
 		//honda: cover images are loaded directly locally
@@ -71,6 +64,8 @@ public class BookInfo : object
 		string imagePath = "Books/Images/" + contentName;
 		Texture2D texture = Resources.Load(imagePath) as Texture2D;
 		icon = texture;
+		iconRequested = true;
+		return true;
 		//honda: comment out the code due to above reason
 		//honda: check icon existed or not. if not, load icon from server
 //		string contentName = "book_" + bookId + ".jpg";
@@ -81,7 +76,23 @@ public class BookInfo : object
 //			request = new RequestQueue();
 //			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
 //			request.request(RequestType.RUSH);
+//			iconRequested = true;
 //		}
+	}
+
+	private void _requestBookIconComplete(WWW p_response)
+	{
+		if (p_response.error == null
+		    
+		    && false == disposed)
+		{
+			icon = p_response.texture;
+			
+			string name = "book_" + bookId + ".jpg";
+			Debug.Log(name);
+			ImageCache.saveCacheImage(name, icon);
+		}
+		disposeRequest();
 	}
 
 	private void disposeRequest()
@@ -221,10 +232,16 @@ public class BookActivityCanvas : UICanvas
 		case BookState.NotRecorded :
 			l_stateLabel.text = "Not Recorded";
 			l_stateIcon.setTexture(m_recordableIcon);
+			//honda: play voice recording, currently hide recording icon
+			l_stateLabel.active = false;
+			l_stateIcon.active = false;
 			break;
 		case BookState.Recorded :
 			l_stateLabel.text = "Recorded";
 			l_stateIcon.setTexture(m_playIcon);
+			//honda: play voice recording, currently hide recording icon
+			l_stateLabel.active = false;
+			l_stateIcon.active = false;
 			break;
 		}
 
@@ -232,6 +249,13 @@ public class BookActivityCanvas : UICanvas
 		UIImage shadowImage = p_element.getView("shadow") as UIImage;
         if (l_rawImage == null)
             return;
+
+		//honda: added
+		if( !l_info.iconRequested )
+		{
+			l_info.requestIcon();
+		}
+		//end
 
 		if( l_info.icon == null )
 		{
