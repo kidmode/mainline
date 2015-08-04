@@ -13,6 +13,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@android:color/black" >
+        
 
         <ImageView
             android:layout_width="74dp"
@@ -28,17 +29,47 @@
             android:src="@drawable/arrow_nav_left" />
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/youtube_webview"
+    <RelativeLayout
+        android:id="@+id/btn_back_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/btn_back" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/black"
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="74dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="11dp"
+            android:src="@drawable/bt_circle_up" />
+
+        <ImageView
+            android:layout_width="47dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/arrow_nav_left" />
+    </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/webview_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:layout_toRightOf="@id/btn_back" />
+        android:layout_below="@id/btn_back_top"
+        android:layout_toRightOf="@id/btn_back" >
+
+        <WebView
+            android:id="@+id/youtube_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/webview_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+    </RelativeLayout>
 
 </RelativeLayout>
