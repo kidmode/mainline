@@ -95,12 +95,20 @@ public class RegionAppCanvas: UICanvas
 		RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
 		float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
 		l_transform.localScale = new Vector3(l_scale, l_scale, 1);
-		
+
+
 		if( l_info.appIcon == null )
 		{
-			l_appImage.setTexture( m_emptyTexture );
+			l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
+			if(l_info.appIcon == null)
+				l_appImage.setTexture( m_emptyTexture );
+			else {
+				l_appImage.setTexture(l_info.appIcon);
+				l_appImage.active = true;
+				l_rawImage.active = false;
+			}
 		}
-		else if (l_info.appIcon != null)
+		else
 		{
 			l_appImage.setTexture(l_info.appIcon);
 			l_appImage.active = true;
