@@ -17,6 +17,8 @@ public class Game : MonoBehaviour
 	
 	private static bool mIsPlay = true;
 
+	private static bool mAppIsLoad = false;
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
@@ -26,6 +28,14 @@ public class Game : MonoBehaviour
 	private bool isPremiumCompleted;
 	private int testTimes;
 	//end
+
+	public bool IsAppLoad
+	{
+		get { 
+			return mAppIsLoad;   
+		}
+		set { mAppIsLoad = value;  }
+	}
 
 	public int IsLogin
 	{
@@ -68,7 +78,11 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	
+
+	public void onActivityRestart() {
+		KidMode.onActivityRestart ();
+	}
+
 	public void closeYoutube() {
 		this.gameSwitcher (true);
 		WebViewState._clickBackBtn ();
@@ -77,11 +91,16 @@ public class Game : MonoBehaviour
 	public void OnLoadYoutubeComplete() {
 		WebViewState.HandleOnLoadComplete ();
 	}
+
+	public void getAllSystemApps() {
+		KidMode.getAllSystemApps();
+	}
 	
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
+		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
 		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
