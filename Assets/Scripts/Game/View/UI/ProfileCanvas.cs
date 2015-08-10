@@ -40,7 +40,9 @@ public class ProfileCanvas : UICanvas
 		DebugUtils.Assert( l_button != null );
 		
 		Kid l_kid = p_data as Kid;
-		
+
+		UIImage noTimeIcon = l_button.getView("noTimeIcon") as UIImage;
+		noTimeIcon.active = (l_kid.timeLeft == 0)?true:false;
 		UILabel l_label = l_button.getView( "name" ) as UILabel;
 		l_label.text = l_kid.name;
 		l_kid.requestPhoto();

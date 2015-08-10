@@ -574,6 +574,12 @@ public class SessionHandler
 			if (str != null && str.Length > 0)
 			{
 				ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(str) as ArrayList;
+				//honda: get kids time left data
+				string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+				ArrayList timeLeftList = null;
+				if (timeLeftStr != null && timeLeftStr.Length > 0)
+					timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+				//end
 				if (l_data != null)
 				{
 					foreach (object o in l_data)
@@ -581,7 +587,21 @@ public class SessionHandler
 						Kid l_kid = new Kid( o as Hashtable );
 //						if (this.selectAvatar !=  null)
 //							kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-
+						//honda: add time left info back to kid if needed
+						if (timeLeftList != null)
+						{
+							foreach (object i in timeLeftList)
+							{
+								Hashtable item = i as Hashtable;
+								if (l_kid.id == Convert.ToInt32(item["id"]))
+								{
+									l_kid.timeLeft = Convert.ToInt32(item["timeLeft"]);
+									l_kid.lastPlay = item["lastPlay"].ToString();
+									break;
+								}
+							}
+						}
+						//end
 						l_kidList.Add( l_kid );
 					}
 					m_kidList = l_kidList;
@@ -592,7 +612,8 @@ public class SessionHandler
 		}
 		
 	}
-
+	
+	//honda: no use, do this in _load()
 	private void LoadKidListDatas() {
 		try {
 			
@@ -790,19 +811,21 @@ public class SessionHandler
 	{
 		try {
 
-			StreamWriter sw = File.CreateText (KIDLIST_PATH_TEMP);
-			sw.Write (str);
-			sw.Flush ();
-			sw.Close ();
+			File.WriteAllText(KIDLIST_PATH, str);
 
-			if (File.Exists(KIDLIST_PATH))
-			{
-				File.Replace (KIDLIST_PATH_TEMP, KIDLIST_PATH, KIDLIST_PATH_BACKUP); 
-			}
-			else
-			{
-				File.Move(KIDLIST_PATH_TEMP, KIDLIST_PATH);
-			}
+//			StreamWriter sw = File.CreateText (KIDLIST_PATH_TEMP);
+//			sw.Write (str);
+//			sw.Flush ();
+//			sw.Close ();
+//
+//			if (File.Exists(KIDLIST_PATH))
+//			{
+//				File.Replace (KIDLIST_PATH_TEMP, KIDLIST_PATH, KIDLIST_PATH_BACKUP); 
+//			}
+//			else
+//			{
+//				File.Move(KIDLIST_PATH_TEMP, KIDLIST_PATH);
+//			}
 
 		}
 		catch (Exception e) {
@@ -850,12 +873,133 @@ public class SessionHandler
 		}
 	}
 
+	//honda: added
+	public static string LoadKidsTimeLeft() 
+	{
+		string str = null;
+		try {
+			
+			str = File.ReadAllText(KIDS_TIMELEFT);
+		}
+		catch (Exception e) {
+			Debug.Log(e);
+			return "";
+		}
+		return str;	
+	}
+
+	public static void SaveKidsTimeLeft(string kidsTimeLeft) 
+	{
+		try 
+		{
+			File.WriteAllText(KIDS_TIMELEFT, kidsTimeLeft);
+		}
+		catch (Exception e) {
+			
+			Debug.Log(e);
+		}
+	}
+
+	//check last play date expired or not, if expired, remove it
+	public static void updateKidsTimeLeft()
+	{
+		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+		ArrayList timeLeftList = null;
+		if (timeLeftStr != null && timeLeftStr.Length > 0)
+			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+
+		if (timeLeftList == null)
+			return;
+		else
+		{
+			for (int i = timeLeftList.Count-1; i >= 0; i--)
+			{
+				Hashtable item = timeLeftList[i] as Hashtable;
+				string lastPlayString = item["lastPlay"].ToString();
+				DateTime lastPlay = Convert.ToDateTime(lastPlayString);
+				DateTime now = DateTime.Now;
+				int compareDate = now.Date.CompareTo(lastPlay.Date);
+
+				if (compareDate > 0)
+				{
+					Debug.Log("clean data from time left list");
+					timeLeftList.RemoveAt(i);
+				}
+				else if (compareDate == 0)
+				{
+					Debug.Log("same date. keep data");
+				}
+				else// if (compareDate < 0)
+				{
+					Debug.Log("impossible case");
+				}
+			}
+			string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+			if (encodedString.Equals("[]"))
+				encodedString = "";
+			SessionHandler.SaveKidsTimeLeft(encodedString);
+		}
+	}
+
+	//honda: move to kid
+	public static void SaveCurrentKidTimeLeft(float timeLeft, bool timesUp)
+	{
+		Kid currentKid = SessionHandler.getInstance().currentKid;
+		currentKid.timeLeft = timeLeft;
+		currentKid.timesUp = timesUp;
+
+		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+		ArrayList timeLeftList = null;
+		if (timeLeftStr != null && timeLeftStr.Length > 0)
+			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+		if (timeLeftList == null)
+		{
+			timeLeftList = new ArrayList();
+			Hashtable newData = new Hashtable();
+			newData.Add("id", currentKid.id);
+			newData.Add("timeLeft", currentKid.timeLeft);
+			newData.Add("lastPlay", currentKid.lastPlay);
+			timeLeftList.Add(newData);
+		}
+		else
+		{
+			bool isFound = false;
+			for (int i = 0; i < timeLeftList.Count; i++)
+			{
+				Hashtable item = timeLeftList[i] as Hashtable;
+				if (currentKid.id == Convert.ToInt32(item["id"]))
+				{
+					isFound = true;
+					item["timeLeft"] = currentKid.timeLeft;
+					item["lastPlay"] = currentKid.lastPlay;
+					timeLeftList[i] = item;
+					break;
+				}
+			}
+			if (!isFound)
+			{
+				Hashtable newData = new Hashtable();
+				newData.Add("id", currentKid.id);
+				newData.Add("timeLeft", currentKid.timeLeft);
+				newData.Add("lastPlay", currentKid.lastPlay);
+				timeLeftList.Add(newData);
+			}
+		}
+		
+		string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+		SessionHandler.SaveKidsTimeLeft(encodedString);
+	}
+	//end
 
 	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";
 	private static string KIDLIST_PATH_TEMP	= Application.persistentDataPath + "/kidList_temp.txt";
 	private static string KIDLIST_PATH_BACKUP	= Application.persistentDataPath + "/kidList_backup.txt";
 
 	private static string KID_CURRENT	= Application.persistentDataPath + "/current.txt";
+	//honda: added
+	//only save time left info of kids entering map/jungle
+	private static string KIDS_TIMELEFT	= Application.persistentDataPath + "/kids_TimeLeft.txt";
+	//end
 
 	// end vzw
 
@@ -938,10 +1082,6 @@ public class SessionHandler
 	private RequestQueue m_bookRequest;
     private static SessionHandler m_instance = null;
 
-
-
-
-
 	// get kid info except app list, top recommend apps
 	public void fetchCurrentKidDetail()
 	{
@@ -987,12 +1127,5 @@ public class SessionHandler
 			}
 		}
 	}
-
-
-
-
-
-
-
 
 }

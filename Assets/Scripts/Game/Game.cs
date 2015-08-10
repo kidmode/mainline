@@ -51,6 +51,11 @@ public class Game : MonoBehaviour
 		set { PlayerPrefs.SetInt(IS_FIRST_LAUNCH, value); }
 	}
 
+	public bool isNotPlayingNativeWebView
+	{
+		get{ return mIsPlay;}
+	}
+
 	public Game()
 	{
 		delayedParentDashboard = false;
@@ -126,12 +131,14 @@ public class Game : MonoBehaviour
  		// vzw end
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 		
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
 		testTimes = 0;
+		//check if time left data expired or not, if expired, remove the item
+		SessionHandler.updateKidsTimeLeft();
 		//end
 
 		GCS.Environment.init();

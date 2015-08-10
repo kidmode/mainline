@@ -688,13 +688,16 @@ public class CreateChildRequest : RequestQueue.Request
 		if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
 			SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+		//honda: request time limits info
+		l_kid.requestTimeLimits();
+		//end
 
 		if (null == SessionHandler.getInstance ().kidList)
 			SessionHandler.getInstance ().kidList = new List<Kid> ();
 
-		SessionHandler.getInstance ().inputedChildName = string.Empty;
-		SessionHandler.getInstance ().inputedbirthday = string.Empty;
-		SessionHandler.getInstance ().selectAvatar = null;
+		SessionHandler.getInstance().inputedChildName = string.Empty;
+		SessionHandler.getInstance().inputedbirthday = string.Empty;
+		SessionHandler.getInstance().selectAvatar = null;
 		SessionHandler.getInstance().kidList.Add(l_kid);
 		SessionHandler.getInstance().getSingleKidApplist(l_kid);
 
@@ -1097,6 +1100,25 @@ public class GetTimeLimitsRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 	}
 }
+
+//honda: added
+public class GetKidTimeLimitsRequest : RequestQueue.Request
+{
+	private int kid_id;
+
+	public GetKidTimeLimitsRequest(int kidId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		kid_id = kidId;
+	}
+	
+	protected override void init()
+	{
+		m_call = "/api/kids/" + kid_id + ZoodlesConstants.REST_TIMER_INFO_SUFFIX;
+		m_method = CallMethod.GET;
+		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+	}
+}
+//end
 
 //added by joshua 11-28
 public class SetSubjectsRequest : RequestQueue.Request

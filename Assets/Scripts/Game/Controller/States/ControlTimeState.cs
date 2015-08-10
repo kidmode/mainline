@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -405,9 +406,10 @@ public class ControlTimeState : GameState
 
 	private void _getTimeLimitRequestComplete(WWW p_response)
 	{
-		m_timeLimitsCanvas.setTimeLimits(MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable);
+		Hashtable table = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+		m_timeLimitsCanvas.setTimeLimits(table);
 		UIElement l_panel = m_timeLimitsCanvas.getView("panel");
-		
+
 		if( null == l_panel )
 		{
 			return;
@@ -417,50 +419,58 @@ public class ControlTimeState : GameState
 		m_isValueChanged = false;
 	}
 
+	//honda: update TimeLimits to currentkid and save kidinfo to local
 	private void updateTimeLimits ()
 	{
 		Hashtable l_param = new Hashtable ();
 		l_param [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance ().token.getSecret ();
-		
+
+		int weekdayTimeLimits = -1;
+		int weekendTimeLimits = -1;
 		if( m_weekUnlimited.isOn )
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = true;
 			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "";
+			weekdayTimeLimits = -1;
 		}
 		else
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = false;
 			if( m_weekThirtyMin.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "30";
-			if( m_weekOneHour.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "60";
-			if( m_weekTwoHours.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "120";
-			if( m_weekFourHours.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "240";
+				weekdayTimeLimits = 30;
+			else if( m_weekOneHour.isOn )
+				weekdayTimeLimits = 60;
+			else if( m_weekTwoHours.isOn )
+				weekdayTimeLimits = 120;
+			else if( m_weekFourHours.isOn )
+				weekdayTimeLimits = 240;
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = weekdayTimeLimits.ToString();
 		}
 		
 		if( m_weekendUnlimited.isOn )
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = true;
 			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "";
+			weekendTimeLimits = -1;
 		}
 		else
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = false;
 			if( m_weekendThirtyMin.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "30";
+				weekendTimeLimits = 30;
 			if( m_weekendOneHour.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "60";
+				weekendTimeLimits = 60;
 			if( m_weekendTwoHours.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "120";
+				weekendTimeLimits = 120;
 			if( m_weekendFourHours.isOn )
-				l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "240";
+				weekendTimeLimits = 240;
+			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = weekendTimeLimits.ToString();
 		}
+		SessionHandler.getInstance().currentKid.updateTimeLimitsInfo(weekdayTimeLimits, weekendTimeLimits);
 
 		m_requestQueue.reset ();
 		m_requestQueue.add ( new SetTimeLimitsRequest(l_param));
-		m_requestQueue.request (RequestType.SEQUENCE);
+		m_requestQueue.request (RequestType.RUSH);
 	}
 
 	private void onUpgradeButtonClick(UIButton p_button)

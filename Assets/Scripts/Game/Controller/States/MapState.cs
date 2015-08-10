@@ -26,6 +26,15 @@ public class MapState : GameState
 		_setupKidProfile(p_gameController);
 		m_subState = SubState.NONE;
 
+		if (!TimerController.Instance.isRunning)
+		{
+			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
+			                                     SessionHandler.getInstance().currentKid.timeLimits,
+			                                     SessionHandler.getInstance().currentKid.timeLeft);
+			TimerController.Instance.startTimer();
+			SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+		}
+
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("MapScreen");

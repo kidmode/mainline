@@ -378,10 +378,36 @@ public class SignInState : GameState
 			
 			List<Kid> l_kidList = new List<Kid>();
 			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as ArrayList;
+			//honda: get kids time left data
+			string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+			ArrayList timeLeftList = null;
+			if (timeLeftStr != null && timeLeftStr.Length > 0)
+				timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+			//end
 			foreach(object o in l_data)
 			{
 				Kid l_kid = new Kid( o as Hashtable );
 				l_kid.requestPhoto();
+				//honda: request time limits and add time left info
+				l_kid.requestTimeLimits();
+				if (timeLeftList != null)
+				{
+					foreach (object i in timeLeftList)
+					{
+						Hashtable item = i as Hashtable;
+						foreach(string key in item.Keys)
+						{
+							Debug.Log(key + ": " + item[key]);
+						}
+						if (l_kid.id == Convert.ToInt32(item["id"]))
+						{
+							l_kid.timeLeft = Convert.ToInt32(item["timeLeft"]);
+							l_kid.lastPlay = item["lastPlay"].ToString();
+							break;
+						}
+					}
+				}
+				//end
 				l_kidList.Add( l_kid );
 			}
 			

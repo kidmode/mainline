@@ -12,7 +12,8 @@ public class fpsCalculator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_text = GameObject.FindObjectOfType<Text>();
+//		m_text = GameObject.FindObjectOfType<Text>();
+		m_text = GameObject.FindGameObjectWithTag("FPS").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
