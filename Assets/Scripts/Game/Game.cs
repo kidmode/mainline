@@ -73,7 +73,11 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	
+
+	public void onActivityRestart() {
+		KidMode.onActivityRestart ();
+	}
+
 	public void closeYoutube() {
 		this.gameSwitcher (true);
 		WebViewState._clickBackBtn ();
