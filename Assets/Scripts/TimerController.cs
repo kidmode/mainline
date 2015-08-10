@@ -34,6 +34,18 @@ public class TimerController : MonoBehaviour {
 		}
 	}
 
+	public bool timesUp
+	{
+		get
+		{
+			return closeNativeView;
+		}
+		set 
+		{
+			closeNativeView = value;
+		}
+	}
+
 	[SerializeField]
 	private Game game;
 
@@ -44,6 +56,7 @@ public class TimerController : MonoBehaviour {
 	private int kid_id;
 	private bool isTimesUp;
 	private Text m_text;
+	private bool closeNativeView = false;
 
 	void Awake()
 	{
@@ -92,6 +105,7 @@ public class TimerController : MonoBehaviour {
 			{
 				//honda
 				//TODO: froce to stop native webview
+				closeNativeView = true;
 				KidMode.closeNativeWebview();
 				createTimesUpScreen();
 			}

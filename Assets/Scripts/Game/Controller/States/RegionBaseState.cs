@@ -195,13 +195,17 @@ public class RegionBaseState : GameState
 		//set buttons for jungle view
 		_setupElements();
 
-		if (!TimerController.Instance.isRunning)
+		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
 		{
 			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
 			                                     SessionHandler.getInstance().currentKid.timeLimits,
 			                                     SessionHandler.getInstance().currentKid.timeLeft);
 			TimerController.Instance.startTimer();
 			SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+		}
+		else if (TimerController.Instance.timesUp)
+		{
+			TimerController.Instance.timesUp = false;
 		}
 
 		if (m_queue == null)
