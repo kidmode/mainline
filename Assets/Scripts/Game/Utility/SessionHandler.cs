@@ -499,6 +499,8 @@ public class SessionHandler
 	}
 	public void clearUserData()
 	{
+		//honda: clean kids local time left list when user does sign out
+		removeKidsTimeLeftWhenSignOut();
 		m_kid   = null;
 		m_kidList = null;
 		m_passwordVerified = false;
@@ -941,54 +943,86 @@ public class SessionHandler
 		}
 	}
 
-	//honda: move to kid
-	public static void SaveCurrentKidTimeLeft(float timeLeft, bool timesUp)
+	public void removeKidsTimeLeftWhenSignOut()
 	{
-		Kid currentKid = SessionHandler.getInstance().currentKid;
-		currentKid.timeLeft = timeLeft;
-		currentKid.timesUp = timesUp;
-
 		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
 		ArrayList timeLeftList = null;
 		if (timeLeftStr != null && timeLeftStr.Length > 0)
 			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+		
 		if (timeLeftList == null)
-		{
-			timeLeftList = new ArrayList();
-			Hashtable newData = new Hashtable();
-			newData.Add("id", currentKid.id);
-			newData.Add("timeLeft", currentKid.timeLeft);
-			newData.Add("lastPlay", currentKid.lastPlay);
-			timeLeftList.Add(newData);
-		}
+			return;
 		else
 		{
-			bool isFound = false;
-			for (int i = 0; i < timeLeftList.Count; i++)
+			for (int i = timeLeftList.Count-1; i >= 0; i--)
 			{
 				Hashtable item = timeLeftList[i] as Hashtable;
-				if (currentKid.id == Convert.ToInt32(item["id"]))
+
+				foreach (Kid kid in m_kidList)
 				{
-					isFound = true;
-					item["timeLeft"] = currentKid.timeLeft;
-					item["lastPlay"] = currentKid.lastPlay;
-					timeLeftList[i] = item;
-					break;
+					if (Convert.ToInt32(item["id"]) == kid.id)
+					{
+						timeLeftList.RemoveAt(i);
+						Debug.Log("remove kid " + kid.id + " from time left list");
+						break;
+					}
 				}
 			}
-			if (!isFound)
-			{
-				Hashtable newData = new Hashtable();
-				newData.Add("id", currentKid.id);
-				newData.Add("timeLeft", currentKid.timeLeft);
-				newData.Add("lastPlay", currentKid.lastPlay);
-				timeLeftList.Add(newData);
-			}
+			string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+			if (encodedString.Equals("[]"))
+				encodedString = "";
+			SessionHandler.SaveKidsTimeLeft(encodedString);
 		}
-		
-		string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
-		SessionHandler.SaveKidsTimeLeft(encodedString);
 	}
+
+	//honda: move to kid
+//	public static void SaveCurrentKidTimeLeft(float timeLeft, bool timesUp)
+//	{
+//		Kid currentKid = SessionHandler.getInstance().currentKid;
+//		currentKid.timeLeft = timeLeft;
+//		currentKid.timesUp = timesUp;
+//
+//		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+//		ArrayList timeLeftList = null;
+//		if (timeLeftStr != null && timeLeftStr.Length > 0)
+//			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+//		if (timeLeftList == null)
+//		{
+//			timeLeftList = new ArrayList();
+//			Hashtable newData = new Hashtable();
+//			newData.Add("id", currentKid.id);
+//			newData.Add("timeLeft", currentKid.timeLeft);
+//			newData.Add("lastPlay", currentKid.lastPlay);
+//			timeLeftList.Add(newData);
+//		}
+//		else
+//		{
+//			bool isFound = false;
+//			for (int i = 0; i < timeLeftList.Count; i++)
+//			{
+//				Hashtable item = timeLeftList[i] as Hashtable;
+//				if (currentKid.id == Convert.ToInt32(item["id"]))
+//				{
+//					isFound = true;
+//					item["timeLeft"] = currentKid.timeLeft;
+//					item["lastPlay"] = currentKid.lastPlay;
+//					timeLeftList[i] = item;
+//					break;
+//				}
+//			}
+//			if (!isFound)
+//			{
+//				Hashtable newData = new Hashtable();
+//				newData.Add("id", currentKid.id);
+//				newData.Add("timeLeft", currentKid.timeLeft);
+//				newData.Add("lastPlay", currentKid.lastPlay);
+//				timeLeftList.Add(newData);
+//			}
+//		}
+//		
+//		string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+//		SessionHandler.SaveKidsTimeLeft(encodedString);
+//	}
 	//end
 
 	private static string KIDLIST_PATH	= Application.persistentDataPath + "/kidList.txt";

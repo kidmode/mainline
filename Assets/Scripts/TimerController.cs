@@ -131,8 +131,8 @@ public class TimerController : MonoBehaviour {
 		if (timer.Enabled == false)
 		{
 			timer.Start();
-			Debug.Log("Countdown Timer starts: " + timeLeft);
 			m_text.text = timeLeft.ToString() + " seconds left(start)"; 
+			Debug.Log("Countdown Timer starts: " + timeLeft);
 		}
 		else
 		{
@@ -152,10 +152,11 @@ public class TimerController : MonoBehaviour {
 			timeLeft = (timeLeft < 0)?0:timeLeft;
 			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimesUp);
 
+			//honda:
+			//TODO: fix this when stopTimer is not in main thread
+			m_text.text = timeLeft.ToString() + " seconds left(stop)"; 
 			Debug.Log("Countdown Timer stops: " + timeLeft);
 			timeLeft = countdownTime;
-
-			m_text.text = timeLeft.ToString() + " seconds left(stop)"; 
 		}
 		else
 		{
@@ -172,10 +173,8 @@ public class TimerController : MonoBehaviour {
 		{
 			timer.Stop();
 			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimesUp);
-
-			Debug.Log("Countdown Timer pauses: " + timeLeft);
-
 			m_text.text = timeLeft.ToString() + " seconds left(pause)";
+			Debug.Log("Countdown Timer pauses: " + timeLeft);
 		}
 		else
 		{
@@ -191,9 +190,8 @@ public class TimerController : MonoBehaviour {
 		if (timer.Enabled == false)
 		{
 			timer.Start();
-			Debug.Log("Countdown Timer resumes: " + timeLeft);
-
 			m_text.text = timeLeft.ToString() + " seconds left(resume)";
+			Debug.Log("Countdown Timer resumes: " + timeLeft);
 		}
 		else
 		{
@@ -219,7 +217,7 @@ public class TimerController : MonoBehaviour {
 
 		kid_id = kidId;
 		countdownTime = timelimit;
-		timeLeft = 30;//timeleft;
+		timeLeft = timeleft;
 	}
 
 	public void resetKidTimer()
