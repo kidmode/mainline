@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -42,6 +43,7 @@ public class TimerController : MonoBehaviour {
 	private float timeLeft;
 	private int kid_id;
 	private bool isTimesUp;
+	private Text m_text;
 
 	void Awake()
 	{
@@ -63,6 +65,7 @@ public class TimerController : MonoBehaviour {
 	void Start () 
 	{
 		UIManager uiManager = game.gameController.getUI();
+		m_text = GameObject.FindGameObjectWithTag("TimerUI").GetComponent<Text>();
 
 		isTimesUp = false;
 		countdownTime = 0;
@@ -70,6 +73,8 @@ public class TimerController : MonoBehaviour {
 		//Initialize timer with 1 second intervals
 		timer = new System.Timers.Timer (1000);
 		timer.Elapsed += timeElapsed;
+
+		m_text.text = "time left";
 	}
 
 	void Update()
@@ -77,6 +82,7 @@ public class TimerController : MonoBehaviour {
 		if (isTimesUp)
 		{
 			isTimesUp = false;
+			m_text.text = "time's up"; 
 
 			if (game.isNotPlayingNativeWebView)
 			{
@@ -86,7 +92,20 @@ public class TimerController : MonoBehaviour {
 			{
 				//honda
 				//TODO: froce to stop native webview
+				KidMode.closeNativeWebview();
+				createTimesUpScreen();
 			}
+		}
+		else
+		{
+			if (timer.Enabled)
+			{
+				m_text.text = timeLeft.ToString() + " seconds left"; 
+			}
+//			else
+//			{
+//				m_text.text = "";
+//			}
 		}
 	}
 
@@ -99,6 +118,7 @@ public class TimerController : MonoBehaviour {
 		{
 			timer.Start();
 			Debug.Log("Countdown Timer starts: " + timeLeft);
+			m_text.text = timeLeft.ToString() + " seconds left(start)"; 
 		}
 		else
 		{
@@ -120,6 +140,8 @@ public class TimerController : MonoBehaviour {
 
 			Debug.Log("Countdown Timer stops: " + timeLeft);
 			timeLeft = countdownTime;
+
+			m_text.text = timeLeft.ToString() + " seconds left(stop)"; 
 		}
 		else
 		{
@@ -132,12 +154,14 @@ public class TimerController : MonoBehaviour {
 		if (countdownTime <= 0)
 			return;
 
-		if (timer.Enabled == false)
+		if (timer.Enabled == true)
 		{
 			timer.Stop();
 			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimesUp);
 
 			Debug.Log("Countdown Timer pauses: " + timeLeft);
+
+			m_text.text = timeLeft.ToString() + " seconds left(pause)";
 		}
 		else
 		{
@@ -154,6 +178,8 @@ public class TimerController : MonoBehaviour {
 		{
 			timer.Start();
 			Debug.Log("Countdown Timer resumes: " + timeLeft);
+
+			m_text.text = timeLeft.ToString() + " seconds left(resume)";
 		}
 		else
 		{
@@ -179,7 +205,7 @@ public class TimerController : MonoBehaviour {
 
 		kid_id = kidId;
 		countdownTime = timelimit;
-		timeLeft = timeleft;
+		timeLeft = 30;//timeleft;
 	}
 
 	public void resetKidTimer()

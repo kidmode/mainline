@@ -42,6 +42,9 @@ public class KidMode
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
 		jc.CallStatic("removeYoutubeView");
 		#endif
+
+		//honda: back from native app, resume timer
+		TimerController.Instance.resumeTimer();
 	}
 
 	public static void closeNativeWebview()
