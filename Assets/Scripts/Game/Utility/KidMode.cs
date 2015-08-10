@@ -38,10 +38,7 @@ public class KidMode
 
 
 	public static void onActivityRestart() {
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
-		jc.CallStatic("removeYoutubeView");
-		#endif
+
 	}
 
 	public static void closeNativeWebview()
@@ -49,7 +46,7 @@ public class KidMode
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		jo.Call("_showAllWebViews"); 
+		jo.Call("removeYoutubeView"); 
 		#endif
 	}
 
