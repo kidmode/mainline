@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -165,6 +167,13 @@ public class Game : MonoBehaviour
 		testTimes = 0;
 		//check if time left data expired or not, if expired, remove the item
 		SessionHandler.updateKidsTimeLeft();
+
+		//set version text
+		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
+		versionText.text = PlayerSettings.bundleVersion;
+		#if UNITY_ANDROID || UNITY_EDITOR
+		versionText.text = PlayerSettings.bundleVersion + "("+ PlayerSettings.Android.bundleVersionCode +")";
+		#endif
 		//end
 
 		GCS.Environment.init();

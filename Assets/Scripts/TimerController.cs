@@ -87,7 +87,7 @@ public class TimerController : MonoBehaviour {
 		timer = new System.Timers.Timer (1000);
 		timer.Elapsed += timeElapsed;
 
-		m_text.text = "time left";
+		m_text.text = "";
 	}
 
 	void Update()
