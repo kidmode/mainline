@@ -36,6 +36,13 @@ public class KidMode
 		#endif
 	}
 
+	public static void onScreenOff() {
+		
+	}
+
+	public static void onScreenOn() {
+		
+	}
 
 	public static void onActivityRestart() {
 
