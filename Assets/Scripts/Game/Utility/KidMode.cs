@@ -36,6 +36,8 @@ public class KidMode
 		#endif
 	}
 
+	//honda
+	//TODO: to be deleted later
 	public static void onScreenOff() {
 		//honda
 		TimerController.Instance.pauseTimer();
@@ -79,10 +81,10 @@ public class KidMode
 
 		}
 	}
+	//end
 	
 	public static void onActivityPause() {
 
-		
 	}
 
 	public static void onActivityRestart() {
