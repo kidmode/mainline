@@ -35,12 +35,8 @@ public class KidMode
 		jo.Call("_setKidsModeActive", l_args); 
 		#endif
 	}
-
-	public static void onScreenOff() {
-		
-	}
-
-	public static void onScreenOn() {
+	
+	public static void onActivityPause() {
 		
 	}
 
