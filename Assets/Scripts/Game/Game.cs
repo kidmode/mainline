@@ -79,12 +79,9 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	public void onScreenOff() {
-		KidMode.onScreenOff ();
-	}
 
-	public void onScreenOn() {
-		KidMode.onScreenOn ();
+	public void onActivityPause() {
+		KidMode.onActivityPause ();
 	}
 
 	public void onActivityRestart() {

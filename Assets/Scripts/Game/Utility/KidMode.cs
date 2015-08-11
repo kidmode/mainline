@@ -78,6 +78,10 @@ public class KidMode
 			}
 
 		}
+	}
+	
+	public static void onActivityPause() {
+
 		
 	}
 
