@@ -105,6 +105,10 @@ public class NotificationState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
+		//honda 
+		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
+		m_settingButton.addClickCallback(onCloseMenu);
+		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
@@ -459,6 +463,9 @@ public class NotificationState : GameState
 	private UIButton 	m_leftSideMenuButton;
 	private UIButton 	m_showProfileButton;
 	private UIElement 	m_menu;
+	//honda
+	private UIButton	m_settingButton;
+	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_rightButton;
 	private UIButton    m_childModeButton;

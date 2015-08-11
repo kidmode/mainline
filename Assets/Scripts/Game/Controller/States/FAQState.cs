@@ -64,6 +64,10 @@ public class FAQState : GameState
 		m_exitButton 	= m_faqDialogCanvas.getView("exitButton") 	as UIButton;
 		m_exitButton.addClickCallback (onCloseDialog);
 
+		//honda 
+		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
+		m_settingButton.addClickCallback(onCloseMenu);
+		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
@@ -325,6 +329,9 @@ public class FAQState : GameState
 	private UIButton 	m_showProfileButton;
 	private UIElement 	m_menu;
 
+	//honda
+	private UIButton	m_settingButton;
+	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_childModeButton;
 

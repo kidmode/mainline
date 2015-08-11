@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -170,10 +169,7 @@ public class Game : MonoBehaviour
 
 		//set version text
 		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
-		versionText.text = PlayerSettings.bundleVersion;
-		#if UNITY_ANDROID || UNITY_EDITOR
-		versionText.text = PlayerSettings.bundleVersion + "("+ PlayerSettings.Android.bundleVersionCode +")";
-		#endif
+		versionText.text = CurrentBundleVersion.version;
 		//end
 
 		GCS.Environment.init();
