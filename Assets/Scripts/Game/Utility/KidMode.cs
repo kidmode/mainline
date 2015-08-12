@@ -83,18 +83,26 @@ public class KidMode
 	}
 	//end
 	
-	public static void onActivityPause() {
 
+//	public static void onActivityPause() {
+//
+//	}
+//
+//	public static void onActivityRestart() {
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+//		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+//		jc.CallStatic("removeYoutubeView");
+//		#endif
+//
+//		//honda: back from native app, resume timer
+//		TimerController.Instance.resumeTimer();
+//	}
+
+	public static void onActivityStop() {
 	}
 
 	public static void onActivityRestart() {
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
-		jc.CallStatic("removeYoutubeView");
-		#endif
 
-		//honda: back from native app, resume timer
-		TimerController.Instance.resumeTimer();
 	}
 
 	public static void closeNativeWebview()
