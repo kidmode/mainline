@@ -236,7 +236,9 @@ public class WebViewState : GameState
 		p_view.CleanCache();
 		p_view.Load("about:blank");
 
-		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK
+		    && !TimerController.Instance.timesUp) 
+		{
 
 			m_subState = SubState.GO_CONGRATS;
 
@@ -282,7 +284,9 @@ public class WebViewState : GameState
 
 	public static void _clickBackBtn()
 	{
-		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK
+		    && !TimerController.Instance.timesUp) 
+		{
 			
 			m_subState = SubState.GO_CONGRATS;
 			

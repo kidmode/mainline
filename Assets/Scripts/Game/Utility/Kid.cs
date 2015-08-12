@@ -21,6 +21,7 @@ public class Kid : System.Object
 
 	public Kid( Hashtable p_table )
     {
+		timesUp = false;
         fromHashtable( p_table );
     }
 
@@ -39,6 +40,15 @@ public class Kid : System.Object
 					Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
 			}
 		}
+	}
+
+	public void requestTimeLimits()
+	{
+		if (m_requestQueue == null)
+			m_requestQueue = new RequestQueue();
+		m_requestQueue.reset ();
+		m_requestQueue.add (new GetKidTimeLimitsRequest(id, _getKidTimeLimitRequestComplete));
+		m_requestQueue.request( RequestType.RUSH );
 	}
 
     public void print()
@@ -64,6 +74,11 @@ public class Kid : System.Object
 	public void fromHashtable( Hashtable p_table )
     {
         DebugUtils.Assert( p_table != null );
+
+		foreach(string key in p_table.Keys)
+		{
+			Debug.Log("~~~~~" + key + ": " + p_table[key] + "~~~~~");
+		}
 	
 		if (p_table.ContainsKey(KidsTable.COLUMN_ID))
             id = (int)((double)p_table[KidsTable.COLUMN_ID]);
@@ -151,7 +166,11 @@ public class Kid : System.Object
 		if (p_table.ContainsKey(KidsTable.GAME_PLAYED_COUNT))
 			gamePlayedCount = int.Parse(p_table[KidsTable.GAME_PLAYED_COUNT].ToString());
 
+		if (p_table.ContainsKey(KidsTable.WEEKDAY_TIMELIMITS))
+			weekdayTimeLimits = (int)((double)p_table[KidsTable.WEEKDAY_TIMELIMITS]);
 
+		if (p_table.ContainsKey(KidsTable.WEEKEND_TIMELIMITS))
+			weekendTimeLimits = (int)((double)p_table[KidsTable.WEEKEND_TIMELIMITS]);
     }
 
 	public Hashtable toHashTable()
@@ -181,6 +200,8 @@ public class Kid : System.Object
 		ret.Add(KidsTable.LANGUAGE_COUNT, languageCount);
 		ret.Add(KidsTable.VIDEO_WATCHED_COUNT, videoWatchedCount);
 		ret.Add(KidsTable.GAME_PLAYED_COUNT, gamePlayedCount);
+		ret.Add(KidsTable.WEEKDAY_TIMELIMITS, weekdayTimeLimits);
+		ret.Add(KidsTable.WEEKEND_TIMELIMITS, weekendTimeLimits);
 
 		return ret;
 	}
@@ -264,6 +285,15 @@ public class Kid : System.Object
 		return l_nameList;
 	}
 
+	public void dispose()
+	{
+		if (null != kid_photo)
+		{
+			GameObject.Destroy(kid_photo);
+			kid_photo = null;
+		}
+	}
+
 
     public int      id              { get; set; }
     public string   photo           { get; set; }
@@ -284,7 +314,6 @@ public class Kid : System.Object
 	public int		level						{ get; set; }
 	public int      gems         				{ get; set; }
 	public int      stars         				{ get; set; }
-    public bool     timesUp                     { get; set; }
 
 	public int		languageCount				{ get; set; }
 	public int		videoWatchedCount			{ get; set; }
@@ -295,7 +324,53 @@ public class Kid : System.Object
     public ViolenceRating maxViolence           { get; set; }
 //	public List<DataItem> tempdataitems;
 
+	//honda: set up time limits
+	public float 	timeLimits 					
+	{ 	
+		get
+		{
+			if (System.DateTime.Now.DayOfWeek == System.DayOfWeek.Saturday ||
+			    System.DateTime.Now.DayOfWeek == System.DayOfWeek.Sunday)
+			{
+				float newTimeLimits = (weekendTimeLimits == -1)?-1:weekendTimeLimits*60;
+				return newTimeLimits;
+			}
+			else
+			{
+				float newTimeLimits = (weekdayTimeLimits == -1)?-1:weekdayTimeLimits*60;
+				return newTimeLimits;
+			}
+		}
+	}
+	public bool     timesUp                      { get; set; }
+	public float 	timeLeft					
+	{
+		get
+		{
+			if (_timeLeft == undefineValue)
+				return timeLimits;
+			else
+				return _timeLeft;
+		}
+		set 
+		{
+			_timeLeft = value;
+		}
+	}
+	public string   lastPlay					{ get; set; }
+	//end
+
     //-------------------- Private Implementation -------------------
+
+	private bool m_photoRequested = false;
+	//honda
+	private static float undefineValue = -100000;
+	private float 		 _timeLimits = -1;
+	private int 		 weekdayTimeLimits = -1;		
+	private int 		 weekendTimeLimits = -1;
+	private float 		 _timeLeft = undefineValue;//it means undefine the value
+	private RequestQueue m_requestQueue;
+	//end
 
 	private string _getPhotoHash() 
 	{
@@ -316,16 +391,219 @@ public class Kid : System.Object
 		}
 	}	
 
-	public void dispose()
+	private void _getKidTimeLimitRequestComplete(WWW p_response)
 	{
-		if (null != kid_photo)
+		if (p_response.error == null)
 		{
-			GameObject.Destroy(kid_photo);
-			kid_photo = null;
+			Hashtable hashTable = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			foreach (DictionaryEntry entry in hashTable)
+			{
+				Debug.Log(entry.Key + ": " + entry.Value);
+			}
+			setTimeLimits(hashTable);
+		}
+		else
+		{
+			weekdayTimeLimits = -1;
+			weekendTimeLimits = -1;
+			//error handling
 		}
 	}
 
-	private bool m_photoRequested = false;
+	private void setTimeLimits(Hashtable hashTable)
+	{
+		_setTimeLimits("weekday", hashTable);
+		_setTimeLimits("weekend", hashTable);
+		updateKidInfoToLocal();
+	}
+
+	private void _setTimeLimits(string weekdayOrWeekend, Hashtable hashTable)
+	{
+		int limit = -1;
+
+		if ((bool)hashTable[ weekdayOrWeekend + "_disabled"])
+		{
+			limit = -1;
+		}
+		else
+		{
+			switch(hashTable[weekdayOrWeekend + "_limit"].ToString())
+			{
+			case "30" :
+				limit = 30;
+				break;
+			case "60" :
+				limit = 60;
+				break;
+			case "120" :
+				limit = 120;
+				break;
+			case "240" :
+				limit = 240;
+				break;
+			default :
+				limit = -1;
+				break;
+			}
+		}
+
+		if (weekdayOrWeekend.Equals("weekday"))
+		{
+			weekdayTimeLimits = limit;
+		}
+		else
+		{
+			weekendTimeLimits = limit;
+		}
+	}
+
+	private void updateKidInfoToLocal()
+	{
+		string localkidliststr = SessionHandler.LoadKidList();
+		ArrayList localkidlist = MiniJSON.MiniJSON.jsonDecode(localkidliststr) as ArrayList;
+		for (int i = 0; i < localkidlist.Count; i++)
+		{
+			Hashtable item = localkidlist[i] as Hashtable;
+			if (this.id == Convert.ToInt32(item["id"]))
+			{
+				item.Clear();
+				item = toHashTable();
+				localkidlist[i] = item;
+				break;
+			}
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(localkidlist);
+		SessionHandler.SaveKidList(encodedString);
+		Debug.Log("kid id: " + id + " updated");
+	}
+
+	public void updateTimeLimitsInfo(int weekdaytimelimits, int weekendtimelimits)
+	{
+		DateTime currentDate = DateTime.Now;
+		//monday is 0 ~ sunday is 6
+		int dayOfWeek = (int)(currentDate.DayOfWeek + 6) % 7;
+
+		float newTimeLeft = -1;
+		int tempOldTimeLimits = -1;
+		int tempNewTimeLimits = -1;
+		//weekday
+		if (dayOfWeek <= 4)
+		{
+			tempOldTimeLimits = weekdayTimeLimits;
+			tempNewTimeLimits = weekdaytimelimits;
+		}
+		//weekend
+		else
+		{
+			tempOldTimeLimits = weekendTimeLimits;
+			tempNewTimeLimits = weekendtimelimits;
+		}
+
+		if (tempNewTimeLimits == -1)
+			newTimeLeft = -1;
+		else
+		{
+			if (tempOldTimeLimits == -1 && tempNewTimeLimits > 0)
+				newTimeLeft = tempNewTimeLimits * 60;
+			else if (tempOldTimeLimits > 0 && tempNewTimeLimits > 0)
+			{
+				float tempValue = (tempNewTimeLimits - tempOldTimeLimits) * 60;
+				float tempValue2 = timeLeft + tempValue;
+				if (tempValue2 <= 0)
+					newTimeLeft = 0;
+				else
+					newTimeLeft = tempValue2;
+			}
+		}
+		weekdayTimeLimits = weekdaytimelimits;
+		weekendTimeLimits = weekendtimelimits;
+		updateKidInfoToLocal();
+		updateAndSaveTimeLeftIfNeeded(newTimeLeft, (newTimeLeft == 0)?true:false);
+	}
+
+	//honda comments
+	//when parents update time limits form parent dashboard, kids may not play the game before.
+	//Therefore, kids time left data may not found in local. 
+	//If kids can not be found in time left data, we don't dave time left data to local
+	//If kids can be found in time left data, we save new time left data.
+	private void updateAndSaveTimeLeftIfNeeded(float timeleft, bool timesup) 
+	{
+		timeLeft = timeleft;
+		timesUp = timesup;
+
+		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+		ArrayList timeLeftList = null;
+		if (timeLeftStr != null && timeLeftStr.Length > 0)
+			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+		if (timeLeftList == null)
+			return;
+		else
+		{
+			for (int i = 0; i < timeLeftList.Count; i++)
+			{
+				Hashtable item = timeLeftList[i] as Hashtable;
+				if (id == Convert.ToInt32(item["id"]))
+				{
+					item["timeLeft"] = timeLeft;
+					item["lastPlay"] = lastPlay;
+					timeLeftList[i] = item;
+					break;
+				}
+			}
+		}
+		
+		string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+		SessionHandler.SaveKidsTimeLeft(encodedString);
+	}
+
+	//honda comments
+	//this method would be used from map to profile switch when stop timer success
+	public void updateAndSaveTimeLeft(float timeleft, bool timesup)
+	{
+		timeLeft = timeleft;
+		timesUp = timesup;
+		
+		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
+		ArrayList timeLeftList = null;
+		if (timeLeftStr != null && timeLeftStr.Length > 0)
+			timeLeftList = MiniJSON.MiniJSON.jsonDecode(timeLeftStr) as ArrayList;
+		if (timeLeftList == null)
+		{
+			timeLeftList = new ArrayList();
+			Hashtable newData = new Hashtable();
+			newData.Add("id", id);
+			newData.Add("timeLeft", timeLeft);
+			newData.Add("lastPlay", lastPlay);
+			timeLeftList.Add(newData);
+		}
+		else
+		{
+			bool isFound = false;
+			for (int i = 0; i < timeLeftList.Count; i++)
+			{
+				Hashtable item = timeLeftList[i] as Hashtable;
+				if (id == Convert.ToInt32(item["id"]))
+				{
+					isFound = true;
+					item["timeLeft"] = timeLeft;
+					item["lastPlay"] = lastPlay;
+					timeLeftList[i] = item;
+					break;
+				}
+			}
+			if (!isFound)
+			{
+				Hashtable newData = new Hashtable();
+				newData.Add("id", id);
+				newData.Add("timeLeft", timeLeft);
+				newData.Add("lastPlay", lastPlay);
+				timeLeftList.Add(newData);
+			}
+		}
+		
+		string encodedString = MiniJSON.MiniJSON.jsonEncode(timeLeftList);
+		SessionHandler.SaveKidsTimeLeft(encodedString);
+	}
 }
 
 public class KidsTable
@@ -355,5 +633,8 @@ public class KidsTable
 	public const string LANGUAGE_COUNT						= "language_count";
 	public const string VIDEO_WATCHED_COUNT					= "videos_watched_count";
 	public const string GAME_PLAYED_COUNT					= "games_played_coun";
-}
 
+	public const string WEEKDAY_TIMELIMITS					= "weekday_time_limits";
+	public const string WEEKEND_TIMELIMITS					= "weekend_time_limits";
+}
+	

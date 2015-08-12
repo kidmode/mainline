@@ -154,6 +154,10 @@ public class SettingChildLockState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
+		//honda 
+		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
+		m_settingButton.addClickCallback(onCloseMenu);
+		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
@@ -670,6 +674,9 @@ public class SettingChildLockState : GameState
 	private UIElement 	m_menu;
 	private UIElement	m_upsellPanel;
 	private InputField  m_pinInputField;
+	//honda
+	private UIButton	m_settingButton;
+	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_leftButton;
 	private UIToggle    m_verifyBirth;

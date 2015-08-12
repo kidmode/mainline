@@ -195,6 +195,19 @@ public class RegionBaseState : GameState
 		//set buttons for jungle view
 		_setupElements();
 
+		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
+		{
+			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
+			                                     SessionHandler.getInstance().currentKid.timeLimits,
+			                                     SessionHandler.getInstance().currentKid.timeLeft);
+			TimerController.Instance.startTimer();
+			SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+		}
+		else if (TimerController.Instance.timesUp)
+		{
+			TimerController.Instance.timesUp = false;
+		}
+
 		if (m_queue == null)
 		{
 			m_queue = new RequestQueue();
@@ -334,6 +347,9 @@ public class RegionBaseState : GameState
 
 		// Sean: vzw
 		l_ui.removeScreenImmediately(UIScreen.REGION_APP);
+
+		if (m_currentActivityCanvas != null)
+			l_ui.removeScreenImmediately(m_currentActivityCanvas);
 
 		m_topBook = null;
 		m_gameFeatured = null;
@@ -940,6 +956,11 @@ public class RegionBaseState : GameState
 	private void onAppClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
 		AppInfo l_app = p_data as AppInfo;
+
+		TimerController.Instance.pauseTimer();
+		//tap native app(leave kidmode)
+		m_gameController.game.IsNativeAppRunning = true;
+
 		KidMode.startActivity(l_app.packageName);
 	}
 	// end vzw

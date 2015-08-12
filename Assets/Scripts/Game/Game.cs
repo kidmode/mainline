@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -28,6 +29,19 @@ public class Game : MonoBehaviour
 	private bool isPremiumCompleted;
 	private int testTimes;
 	private bool mIsRun = true;
+
+	private bool isNativeAppRunning = false;
+	public bool IsNativeAppRunning
+	{
+		get
+		{
+			return isNativeAppRunning;
+		}
+		set
+		{
+			isNativeAppRunning = value;
+		}
+	}
 	//end
 
 	void OnApplicationPause(bool pauseStatus) {
@@ -67,6 +81,11 @@ public class Game : MonoBehaviour
 			return PlayerPrefs.GetInt(IS_FIRST_LAUNCH, 0);   
 		}
 		set { PlayerPrefs.SetInt(IS_FIRST_LAUNCH, value); }
+	}
+
+	public bool isNotPlayingNativeWebView
+	{
+		get{ return mIsPlay;}
 	}
 
 	public Game()
@@ -159,6 +178,12 @@ public class Game : MonoBehaviour
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
 		testTimes = 0;
+		//check if time left data expired or not, if expired, remove the item
+		SessionHandler.updateKidsTimeLeft();
+
+		//set version text
+		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
+		versionText.text = CurrentBundleVersion.version;
 		//end
 
 		GCS.Environment.init();

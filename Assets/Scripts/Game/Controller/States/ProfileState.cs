@@ -35,6 +35,9 @@ public class ProfileState : GameState
 		SessionHandler.getInstance ().settingCache.active = false;
 		SessionHandler.getInstance ().initSettingCache ();
 
+		//check timer if kid is back from map
+		TimerController.Instance.resetKidTimer();
+
 		if (p_gameController.game.delayedParentDashboard)
 		{
 			p_gameController.changeState(ZoodleState.GOTO_PARENT_DASHBOARD);
@@ -414,9 +417,12 @@ public class ProfileState : GameState
 
 		if (l_kid.gems != ProfileInfo.ADD_PROFILE_CODE)
 		{
+			if (l_kid.timeLeft == 0)
+				return;
 			//**To-do** Set current profile Data
 			m_gameController.game.user.currentKid = l_kid;
 			SessionHandler.getInstance().currentKid = l_kid;
+			Debug.Log("time limits: " + l_kid.timeLimits);
             
 			m_gotoEntrance = true;
 

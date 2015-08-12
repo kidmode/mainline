@@ -125,6 +125,7 @@ public class UIScreen
 	public const int ERROR_MESSAGE			= 1201;
 	public const int NO_INTERNET            = 1202;
 	public const int LOADING_PAGE           = 1203;
+	public const int TIMES_UP				= 1204;
 }
 
 
@@ -257,6 +258,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.ERROR_MESSAGE,				SCREEN_DIRECTORY + "ErrorMessage" );
 		m_directoryMap.Add( UIScreen.NO_INTERNET,				SCREEN_DIRECTORY + "NoInternetScreen" );
 		m_directoryMap.Add( UIScreen.LOADING_PAGE,				SCREEN_DIRECTORY + "LoadingPage" );
+		m_directoryMap.Add( UIScreen.TIMES_UP,					SCREEN_DIRECTORY + "TimesUp" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -386,6 +388,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.ERROR_MESSAGE:			return new UICanvas() 			as UICanvas;
 			case UIScreen.NO_INTERNET:              return new UICanvas()			as UICanvas;
 			case UIScreen.LOADING_PAGE:             return new UICanvas()			as UICanvas;
+			case UIScreen.TIMES_UP:					return new UICanvas()			as UICanvas;
 		}
 		return new UICanvas();
 	}

@@ -35,11 +35,63 @@ public class KidMode
 		jo.Call("_setKidsModeActive", l_args); 
 		#endif
 	}
-	
+
 	public static void onActivityStop() {
+
+		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		//screen off
+		if (!game.IsNativeAppRunning)
+		{
+			TimerController.Instance.stopTimer();
+		}
 	}
 
 	public static void onActivityRestart() {
+
+		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+
+		//back to kid mode form native app
+		if (game.IsNativeAppRunning)
+		{
+			TimerController.Instance.resumeTimer();
+			game.IsNativeAppRunning = false;
+			return;
+		}
+		//back to kidmode when screen on
+		GameController gameController = game.gameController;
+		if (//map
+		    gameController.stateName.Equals("4") || 
+		    //jungle
+		    gameController.stateName.Equals("5") ||
+		    //region_video, game, drawing, book
+		    gameController.stateName.Equals("66") || 
+		    gameController.stateName.Equals("67") || 
+		    gameController.stateName.Equals("68") || 
+		    gameController.stateName.Equals("32") || 
+		    //activity_video, game, drawing, book
+		    gameController.stateName.Equals("52") || 
+		    gameController.stateName.Equals("53") || 
+		    gameController.stateName.Equals("7") ||
+		    gameController.stateName.Equals("10") ||
+		    //congratulations
+		    gameController.stateName.Equals("49") ||
+		    //kids_profile
+		    gameController.stateName.Equals("33"))
+		{
+			if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
+			{
+				TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
+				                                     SessionHandler.getInstance().currentKid.timeLimits,
+				                                     SessionHandler.getInstance().currentKid.timeLeft);
+				TimerController.Instance.startTimer();
+				SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+			}
+			else if (TimerController.Instance.timesUp)
+			{
+				TimerController.Instance.timesUp = false;
+			}
+			
+		}
 	}
 
 	public static void closeNativeWebview()
