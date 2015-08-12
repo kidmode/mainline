@@ -36,12 +36,10 @@ public class KidMode
 		#endif
 	}
 	
-	public static void onActivityPause() {
-		
+	public static void onActivityStop() {
 	}
 
 	public static void onActivityRestart() {
-
 	}
 
 	public static void closeNativeWebview()

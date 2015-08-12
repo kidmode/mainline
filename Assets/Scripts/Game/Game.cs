@@ -27,8 +27,16 @@ public class Game : MonoBehaviour
 	private bool isClientIdCompleted;
 	private bool isPremiumCompleted;
 	private int testTimes;
+	private bool mIsRun = true;
 	//end
 
+	void OnApplicationPause(bool pauseStatus) {
+		if(pauseStatus)
+			KidMode.onActivityStop ();
+		else
+			KidMode.onActivityRestart ();
+	}
+	
 	public bool IsAppLoad
 	{
 		get { 
@@ -74,12 +82,8 @@ public class Game : MonoBehaviour
 	}
 */
 
-	public void onActivityPause() {
-		KidMode.onActivityPause ();
-	}
-
 	public void onActivityRestart() {
-		KidMode.onActivityRestart ();
+		//KidMode.onActivityRestart ();
 	}
 
 	public void closeYoutube() {

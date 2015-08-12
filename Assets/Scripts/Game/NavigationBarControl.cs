@@ -16,6 +16,7 @@ public class NavigationBarControl : MonoBehaviour {
 
 	AndroidJavaObject decorView;
 
+
 	void OnApplicationFocus(bool focusStatus) {
 		if(focusStatus)
 			TurnImmersiveModeOn();
