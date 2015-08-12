@@ -29,6 +29,19 @@ public class Game : MonoBehaviour
 	private bool isPremiumCompleted;
 	private int testTimes;
 	private bool mIsRun = true;
+
+	private bool isNativeAppRunning = false;
+	public bool IsNativeAppRunning
+	{
+		get
+		{
+			return isNativeAppRunning;
+		}
+		set
+		{
+			isNativeAppRunning = value;
+		}
+	}
 	//end
 
 	void OnApplicationPause(bool pauseStatus) {

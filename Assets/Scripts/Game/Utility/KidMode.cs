@@ -36,19 +36,31 @@ public class KidMode
 		#endif
 	}
 
-	//honda
-	//TODO: to be deleted later
-	public static void onScreenOff() {
-		//honda
-		TimerController.Instance.pauseTimer();
-	}
-
-	public static void onScreenOn() {
+	public static void onActivityStop() {
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		//screen off
+		if (!game.IsNativeAppRunning)
+		{
+			TimerController.Instance.stopTimer();
+		}
+	}
+
+	public static void onActivityRestart() {
+
+		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+
+		//back to kid mode form native app
+		if (game.IsNativeAppRunning)
+		{
+			TimerController.Instance.resumeTimer();
+			game.IsNativeAppRunning = false;
+			return;
+		}
+		//back to kidmode when screen on
 		GameController gameController = game.gameController;
 		if (//map
-			gameController.stateName.Equals("4") || 
+		    gameController.stateName.Equals("4") || 
 		    //jungle
 		    gameController.stateName.Equals("5") ||
 		    //region_video, game, drawing, book
@@ -78,31 +90,8 @@ public class KidMode
 			{
 				TimerController.Instance.timesUp = false;
 			}
-
+			
 		}
-	}
-	//end
-	
-
-//	public static void onActivityPause() {
-//
-//	}
-//
-//	public static void onActivityRestart() {
-//		#if UNITY_ANDROID && !UNITY_EDITOR
-//		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
-//		jc.CallStatic("removeYoutubeView");
-//		#endif
-//
-//		//honda: back from native app, resume timer
-//		TimerController.Instance.resumeTimer();
-//	}
-
-	public static void onActivityStop() {
-	}
-
-	public static void onActivityRestart() {
-
 	}
 
 	public static void closeNativeWebview()
