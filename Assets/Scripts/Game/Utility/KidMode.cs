@@ -36,7 +36,6 @@ public class KidMode
 		#endif
 	}
 
-
 	public static void onActivityRestart() {
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
