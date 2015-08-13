@@ -237,10 +237,11 @@ public class BirthYearState : GameState
 			}
 			else if (l_previous == ZoodleState.MAP)
 			{
-//				UIManager manager = m_gameController.getUI();
-//				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
-//				if (mcanvas != null)
-//					manager.removeScreenImmediately(mcanvas);
+				//honda: unload map if needed
+				UIManager manager = m_gameController.getUI();
+				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
+				if (mcanvas != null)
+					manager.removeScreenImmediately(mcanvas);
 //				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
 //				if (sbcanvas != null)
 //					manager.removeScreenImmediately(sbcanvas);
