@@ -104,7 +104,8 @@ public class ProfileState : GameState
 	{
 		m_uiManager = p_uiManager;
 
-		p_uiManager.removeScreen(UIScreen.MAP);	// Remove map if it is exist
+		// Remove map if it is exist
+		p_uiManager.removeScreen(UIScreen.MAP);	
 
 		m_isIntro = true;
 		m_addFriendCanvas  = p_uiManager.createScreen (UIScreen.ADD_FRIEND,  false, 7);
