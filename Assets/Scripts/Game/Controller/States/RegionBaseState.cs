@@ -958,6 +958,8 @@ public class RegionBaseState : GameState
 		AppInfo l_app = p_data as AppInfo;
 
 		TimerController.Instance.pauseTimer();
+		//tap native app(leave kidmode)
+		m_gameController.game.IsNativeAppRunning = true;
 
 		KidMode.startActivity(l_app.packageName);
 	}

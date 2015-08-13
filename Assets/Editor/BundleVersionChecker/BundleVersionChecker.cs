@@ -14,12 +14,17 @@ public class BundleVersionChecker
 	static BundleVersionChecker ()
 	{
 		string bundleVersion = PlayerSettings.bundleVersion;
+		#if UNITY_ANDROID || UNITY_EDITOR
+		bundleVersion = PlayerSettings.bundleVersion + "("+ PlayerSettings.Android.bundleVersionCode +")";
+		#endif
 		string lastVersion = CurrentBundleVersion.version;
 		if (lastVersion != bundleVersion)
 		{
 			Debug.Log ("Found new bundle version " + bundleVersion + " replacing code from previous version " + lastVersion + " in file \"" + TargetCodeFile + "\"");
 			CreateNewBuildVersionClassFile (bundleVersion);
 		}
+
+
 	}
 	
 	static string CreateNewBuildVersionClassFile (string bundleVersion)

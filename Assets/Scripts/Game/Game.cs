@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -27,8 +28,29 @@ public class Game : MonoBehaviour
 	private bool isClientIdCompleted;
 	private bool isPremiumCompleted;
 	private int testTimes;
+	private bool mIsRun = true;
+
+	private bool isNativeAppRunning = false;
+	public bool IsNativeAppRunning
+	{
+		get
+		{
+			return isNativeAppRunning;
+		}
+		set
+		{
+			isNativeAppRunning = value;
+		}
+	}
 	//end
 
+	void OnApplicationPause(bool pauseStatus) {
+		if(pauseStatus)
+			KidMode.onActivityStop ();
+		else
+			KidMode.onActivityRestart ();
+	}
+	
 	public bool IsAppLoad
 	{
 		get { 
@@ -80,7 +102,7 @@ public class Game : MonoBehaviour
 */
 
 	public void onActivityRestart() {
-		KidMode.onActivityRestart ();
+		//KidMode.onActivityRestart ();
 	}
 
 	public void closeYoutube() {
@@ -158,6 +180,10 @@ public class Game : MonoBehaviour
 		testTimes = 0;
 		//check if time left data expired or not, if expired, remove the item
 		SessionHandler.updateKidsTimeLeft();
+
+		//set version text
+		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
+		versionText.text = CurrentBundleVersion.version;
 		//end
 
 		GCS.Environment.init();

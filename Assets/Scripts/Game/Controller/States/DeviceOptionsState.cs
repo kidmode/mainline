@@ -65,6 +65,11 @@ public class DeviceOptionsState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 	//	m_sliderDownPanel = m_menu.getView ("sildeDownPanel") as UIElement;
+
+		//honda 
+		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
+		m_settingButton.addClickCallback(onCloseMenu);
+		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 		m_allowCallButton = m_deviceOptionCanvas.getView ("AllowCallButton") as UIToggle;
@@ -500,6 +505,9 @@ public class DeviceOptionsState : GameState
 	private UILabel		m_noticeLabel;
 	private UIButton	m_closeButton;
 //	private UIElement 	m_sliderDownPanel;
+	//honda
+	private UIButton	m_settingButton;
+	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_childModeButton;
 	private UIButton    m_leftButton;

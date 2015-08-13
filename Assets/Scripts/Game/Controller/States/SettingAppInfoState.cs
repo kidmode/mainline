@@ -106,6 +106,10 @@ public class SettingAppInfoState : GameState
 		m_cancelSubButton = m_planDetailsCanvas.getView ("cancelButton") as UIButton;
 		m_cancelSubButton.addClickCallback (toCancelSubScreen);
 
+		//honda 
+		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
+		m_settingButton.addClickCallback(onCloseMenu);
+		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
@@ -615,6 +619,9 @@ public class SettingAppInfoState : GameState
 	private UIButton	m_dialogCloseButton;
 	private UIButton	m_cancelSubDialogCloseButton;
 	private UIButton	m_cancelSubButton;
+	//honda
+	private UIButton	m_settingButton;
+	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_childModeButton;
 	private UIButton  	m_submitButton;
