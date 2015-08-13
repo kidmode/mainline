@@ -60,8 +60,10 @@ public class PaintAcitivityController : System.Object
 
 			if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
 				
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
-				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
+//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				p_gameController.changeState(ZoodleState.REGION_FUN);
+				SessionHandler.getInstance().getPoints();
 
 			} else {
 

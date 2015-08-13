@@ -394,7 +394,7 @@ public class GameViewState : WebViewState
 			case SubState.GO_CONGRATS:
 //				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
 //				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+				p_gameController.changeState(ZoodleState.REGION_GAME);
 				SessionHandler.getInstance().getPoints();
 				break;
 				
