@@ -14,6 +14,7 @@ public class ControlSubjectState : GameState
 		_setupElment();
 
 		TutorialController.Instance.showNextPage();
+		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.controls");
 	}
 
 	public override void update (GameController p_gameController, int p_time)
