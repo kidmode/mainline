@@ -236,7 +236,9 @@ public class WebViewState : GameState
 		p_view.CleanCache();
 		p_view.Load("about:blank");
 
-		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK
+		    && !TimerController.Instance.timesUp) 
+		{
 
 			m_subState = SubState.GO_CONGRATS;
 
@@ -282,7 +284,9 @@ public class WebViewState : GameState
 
 	public static void _clickBackBtn()
 	{
-		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+		if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK
+		    && !TimerController.Instance.timesUp) 
+		{
 			
 			m_subState = SubState.GO_CONGRATS;
 			
@@ -323,9 +327,12 @@ public class VideoViewState : WebViewState
 			switch (m_subState)
 			{
 			case SubState.GO_CONGRATS:
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
-				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-
+				// Don't show the point pop up
+//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
+//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+				SessionHandler.getInstance().getPoints();
+				Debug.Log("@@@@@@@@@ get");
 				break;
 
 			case SubState.No_Points:

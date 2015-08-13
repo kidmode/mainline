@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -17,6 +18,8 @@ public class Game : MonoBehaviour
 	
 	private static bool mIsPlay = true;
 
+	private static bool mAppIsLoad = false;
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
@@ -25,7 +28,49 @@ public class Game : MonoBehaviour
 	private bool isClientIdCompleted;
 	private bool isPremiumCompleted;
 	private int testTimes;
+
+	private bool mIsRun = true;
+
+	private bool isNativeAppRunning = false;
+	public bool IsNativeAppRunning
+	{
+		get
+		{
+			return isNativeAppRunning;
+		}
+		set
+		{
+			isNativeAppRunning = value;
+		}
+	}
+
+	private bool mIsLoading = false;
+
+
+	public bool isLoading
+	{
+		get { 
+			return mIsLoading;   
+		}
+		set { mIsLoading = value;  }
+
+	}
 	//end
+
+	void OnApplicationPause(bool pauseStatus) {
+		if(pauseStatus)
+			KidMode.onActivityStop ();
+		else
+			KidMode.onActivityRestart ();
+	}
+	
+	public bool IsAppLoad
+	{
+		get { 
+			return mAppIsLoad;   
+		}
+		set { mAppIsLoad = value;  }
+	}
 
 	public int IsLogin
 	{
@@ -51,6 +96,11 @@ public class Game : MonoBehaviour
 		set { PlayerPrefs.SetInt(IS_FIRST_LAUNCH, value); }
 	}
 
+	public bool isNotPlayingNativeWebView
+	{
+		get{ return mIsPlay;}
+	}
+
 	public Game()
 	{
 		delayedParentDashboard = false;
@@ -63,7 +113,11 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	
+
+	public void onActivityRestart() {
+		//KidMode.onActivityRestart ();
+	}
+
 	public void closeYoutube() {
 		this.gameSwitcher (true);
 		WebViewState._clickBackBtn ();
@@ -72,16 +126,24 @@ public class Game : MonoBehaviour
 	public void OnLoadYoutubeComplete() {
 		WebViewState.HandleOnLoadComplete ();
 	}
-	
+
+	public void getAllSystemApps() {
+		KidMode.getAllSystemApps();
+	}
+
+
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
+		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
 		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+
 
 //		switch (Input.deviceOrientation) 
 //		{
@@ -132,6 +194,12 @@ public class Game : MonoBehaviour
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
 		testTimes = 0;
+		//check if time left data expired or not, if expired, remove the item
+		SessionHandler.updateKidsTimeLeft();
+
+		//set version text
+		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
+		versionText.text = CurrentBundleVersion.version;
 		//end
 
 		GCS.Environment.init();
@@ -198,6 +266,7 @@ public class Game : MonoBehaviour
 
 	}
 
+	bool isPress = false;
 	public void Update ()
 	{
 		if (mIsPlay) {
@@ -206,7 +275,7 @@ public class Game : MonoBehaviour
 			m_gameController.update(l_time);
 			SoundManager.getInstance().updateSystemSound();
 		}
-		
+
 	}
 	
 	public string getVersion()

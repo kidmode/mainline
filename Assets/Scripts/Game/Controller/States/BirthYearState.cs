@@ -53,15 +53,16 @@ public class BirthYearState : GameState
 				{
 					p_gameController.changeState(ZoodleState.MAP);
 				}
-				else
-				{
-					p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
-				}
+//				else
+//				{
+//					p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+//				}
 			}
-			else
-			{
-				p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
-			}
+			//honda: if state is undefined, don't do anything
+//			else
+//			{
+//				p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+//			}
 		}
 	}
 	
@@ -236,23 +237,31 @@ public class BirthYearState : GameState
 			}
 			else if (l_previous == ZoodleState.MAP)
 			{
+				//honda: unload map if needed
 				UIManager manager = m_gameController.getUI();
 				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
 				if (mcanvas != null)
 					manager.removeScreenImmediately(mcanvas);
-				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-				if (sbcanvas != null)
-					manager.removeScreenImmediately(sbcanvas);
+//				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+//				if (sbcanvas != null)
+//					manager.removeScreenImmediately(sbcanvas);
 
 				m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			}
 			else
 			{
-				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+				m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			}
 		}
 		else
-			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+		{
+//			UIManager manager = m_gameController.getUI();
+//			SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+//			if (sbcanvas != null)
+//				manager.removeScreenImmediately(sbcanvas);
+			
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+		}
 	}
 
 	private void deleteNumber( UIButton p_button )

@@ -82,6 +82,7 @@ public class LoadingPageState : GameState {
 		{
 			if(game.IsReLaunch == 1) 
 			{
+				//honda: has current kid
 				if(SessionHandler.LoadCurrentKid() != -1) 
 				{
 //					if (game.user.contentCache.isFinishedLoadingWebContent) 
@@ -95,6 +96,10 @@ public class LoadingPageState : GameState {
 						game.clientIdAndPremiumRequests(toDoActivityRequest);
 					}
 				}
+				//TODO: honda: should we do this part if there is no kid? check this later
+//				else
+//				{
+//				}
 			}
 			//normal launch
 			else {
@@ -120,7 +125,7 @@ public class LoadingPageState : GameState {
 						game.clientIdAndPremiumRequests(onRequestsCompleted);
 					}
 				}
-				//honda: currently, if have user account but no kid list, enter here
+				//honda: currently, if have user account but no current kid, enter here
 				else 
 				{
 					game.clientIdAndPremiumRequests(onRequestsCompleted);

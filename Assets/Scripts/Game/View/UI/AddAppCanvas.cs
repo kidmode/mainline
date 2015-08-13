@@ -93,9 +93,13 @@ public class AddAppCanvas : UICanvas
 		AppInfo l_app = p_data as AppInfo;
 
 		l_appName.text = l_app.appName;
+		if (l_app.appIcon == null) {
+			l_app.appIcon = ImageCache.getCacheImage (l_app.packageName + ".png");
+		}
 
-		if( null != l_app.appIcon )
-			l_appIcon.setTexture ( l_app.appIcon );
+		if (null != l_app.appIcon)
+			l_appIcon.setTexture (l_app.appIcon);
+
 
 		if( l_app.isAdded )
 		{

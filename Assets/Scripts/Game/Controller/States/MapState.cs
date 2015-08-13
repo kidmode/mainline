@@ -26,6 +26,19 @@ public class MapState : GameState
 		_setupKidProfile(p_gameController);
 		m_subState = SubState.NONE;
 
+		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
+		{
+			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
+			                                     SessionHandler.getInstance().currentKid.timeLimits,
+			                                     SessionHandler.getInstance().currentKid.timeLeft);
+			TimerController.Instance.startTimer();
+			SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+		}
+		else if (TimerController.Instance.timesUp)
+		{
+			TimerController.Instance.timesUp = false;
+		}
+
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("MapScreen");
@@ -60,9 +73,13 @@ public class MapState : GameState
 	public override void exit(GameController p_gameController)
 	{
         UIManager l_ui = p_gameController.getUI();
+
+		//honda
+		//DO NOT remove map, but cache map temporarily
+		m_mapCanvas.active = false;
 		//not hide map, remove map to have more space
-//		m_mapCanvas.active = false; // DO NOT remove map, but cache map temporarily
-		l_ui.removeScreenImmediately(UIScreen.MAP);
+//		l_ui.removeScreenImmediately(UIScreen.MAP);
+
         l_ui.removeScreen(UIScreen.CORNER_PROFILE_INFO);
 		//if( m_removeCornerProfile )
 		//	p_gameController.getUI().removeScreen( UIScreen.CORNER_PROFILE_INFO );
