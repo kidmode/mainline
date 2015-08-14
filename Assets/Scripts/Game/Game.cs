@@ -43,10 +43,9 @@ public class Game : MonoBehaviour
 			isNativeAppRunning = value;
 		}
 	}
-
+	public DateTime leaveAppDateTime;
+	//end
 	private bool mIsLoading = false;
-
-
 	public bool isLoading
 	{
 		get { 
@@ -55,7 +54,6 @@ public class Game : MonoBehaviour
 		set { mIsLoading = value;  }
 
 	}
-	//end
 
 	void OnApplicationPause(bool pauseStatus) {
 		if(pauseStatus)
@@ -195,7 +193,7 @@ public class Game : MonoBehaviour
 		isPremiumCompleted = false;
 		testTimes = 0;
 		//check if time left data expired or not, if expired, remove the item
-		SessionHandler.updateKidsTimeLeft();
+		SessionHandler.updateKidsLocalTimeLeftFile();
 
 		//set version text
 		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();

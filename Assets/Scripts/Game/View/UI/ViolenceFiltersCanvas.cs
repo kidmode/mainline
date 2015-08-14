@@ -93,7 +93,8 @@ public class ViolenceFiltersCanvas : UICanvas
 		UILabel l_contentLevel2 = getView("levelTwoToggle").getView("contentLabel") as UILabel;
 		UILabel l_contentLevel3 = getView("levelThreeToggle").getView("contentLabel") as UILabel;
 		UILabel l_contentLevel4 = getView("levelFourToggle").getView("contentLabel") as UILabel;
-		
+		UILabel l_contentLevel0 = getView("levelZeroToggle").getView("contentLabel") as UILabel;
+
 		l_top.text = Localization.getString( Localization.TXT_64_LABEL_TITLE );
 		l_titleLevel1.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL1 );
 		l_titleLevel2.text = Localization.getString( Localization.TXT_64_LABEL_TITLE_LEVEL2 );
@@ -104,6 +105,7 @@ public class ViolenceFiltersCanvas : UICanvas
 		l_contentLevel2.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL2 );
 		l_contentLevel3.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL3 );
 		l_contentLevel4.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL4 );
+		l_contentLevel0.text = Localization.getString( Localization.TXT_64_LABEL_CONTENT_LEVEL0 );
 	}
 	
 	private UIToggle m_levelZeroToggle;

@@ -938,7 +938,7 @@ public class SessionHandler
 	}
 
 	//check last play date expired or not, if expired, remove it
-	public static void updateKidsTimeLeft()
+	public static void updateKidsLocalTimeLeftFile()
 	{
 		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
 		ArrayList timeLeftList = null;
@@ -975,6 +975,22 @@ public class SessionHandler
 			if (encodedString.Equals("[]"))
 				encodedString = "";
 			SessionHandler.SaveKidsTimeLeft(encodedString);
+		}
+	}
+
+	public static void updateKidsTimeLeft()
+	{
+		//reset timer
+		TimerController.Instance.resetTimer();
+		//clean time left file if data expired
+		SessionHandler.updateKidsLocalTimeLeftFile();
+		//reset kid time left info
+		List<Kid> kidList = SessionHandler.getInstance().kidList;
+		foreach (Kid kid in kidList)
+		{
+			kid.timeLeft = kid.timeLimits;
+			kid.timesUp = false;
+			kid.lastPlay = "";
 		}
 	}
 

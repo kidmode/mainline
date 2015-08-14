@@ -430,7 +430,7 @@ public class ControlTimeState : GameState
 		if( m_weekUnlimited.isOn )
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = true;
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "";
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "-1";
 			weekdayTimeLimits = -1;
 		}
 		else
@@ -450,7 +450,7 @@ public class ControlTimeState : GameState
 		if( m_weekendUnlimited.isOn )
 		{
 			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = true;
-			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "";
+			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "-1";
 			weekendTimeLimits = -1;
 		}
 		else
@@ -467,6 +467,11 @@ public class ControlTimeState : GameState
 			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = weekendTimeLimits.ToString();
 		}
 		SessionHandler.getInstance().currentKid.updateTimeLimitsInfo(weekdayTimeLimits, weekendTimeLimits);
+
+		foreach(DictionaryEntry item in l_param)
+		{
+			Debug.Log("time limit param: " + item.Key + "->" + item.Value);
+		}
 
 		m_requestQueue.reset ();
 		m_requestQueue.add ( new SetTimeLimitsRequest(l_param));

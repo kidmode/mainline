@@ -96,7 +96,6 @@ GameObject:
   - 224: {fileID: 22400016}
   - 222: {fileID: 22200016}
   - 114: {fileID: 11400022}
-  - 114: {fileID: 11400020}
   m_Layer: 5
   m_Name: errorLabel
   m_TagString: Untagged
@@ -313,11 +312,11 @@ MonoBehaviour:
   m_Color: {r: .996078432, g: .996078432, b: .996078432, a: 1}
   m_FontData:
     m_Font: {fileID: 12800000, guid: 117e352a5dda155448e7007724a81c94, type: 3}
-    m_FontSize: 42
+    m_FontSize: 30
     m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 30
     m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -345,20 +344,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: .329411775, b: .541176498, a: 1}
-  m_EffectDistance: {x: 1.71000004, y: -1.59000003}
-  m_UseGraphicAlpha: 1
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -371,15 +356,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .996078432, g: .996078432, b: .996078432, a: 1}
+  m_Color: {r: .811764717, g: .509803951, b: .20784314, a: 1}
   m_FontData:
     m_Font: {fileID: 12800000, guid: 117e352a5dda155448e7007724a81c94, type: 3}
-    m_FontSize: 42
+    m_FontSize: 22
     m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 4
+    m_MaxSize: 22
+    m_Alignment: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -642,8 +627,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.3999996, y: -.000537869986}
-  m_SizeDelta: {x: 576.200012, y: 312.929993}
+  m_AnchoredPosition: {x: 46.5, y: -29.8540001}
+  m_SizeDelta: {x: 505, y: 267}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22400028
 RectTransform:

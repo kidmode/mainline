@@ -324,6 +324,7 @@ public class Localization : object
 	public const string TXT_64_LABEL_CONTENT_LEVEL2 = "TXT_64_LABEL_CONTENT_LEVEL2";
 	public const string TXT_64_LABEL_CONTENT_LEVEL3 = "TXT_64_LABEL_CONTENT_LEVEL3";
 	public const string TXT_64_LABEL_CONTENT_LEVEL4 = "TXT_64_LABEL_CONTENT_LEVEL4";
+	public const string TXT_64_LABEL_CONTENT_LEVEL0 = "TXT_64_LABEL_CONTENT_LEVEL0";
 
 	public const string TXT_65_LABEL_TOP 			= "TXT_65_LABEL_TOP";
 	public const string TXT_65_LABEL_CLAUSE1 		= "TXT_65_LABEL_CLAUSE1";
