@@ -474,8 +474,21 @@ public class ControlTimeState : GameState
 		}
 
 		m_requestQueue.reset ();
-		m_requestQueue.add ( new SetTimeLimitsRequest(l_param));
-		m_requestQueue.request (RequestType.RUSH);
+		m_requestQueue.add ( new SetTimeLimitsRequest(l_param, _setTimeLimitRequestComplete));
+		m_requestQueue.request (RequestType.SEQUENCE);
+	}
+
+	private void _setTimeLimitRequestComplete(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log(p_response.text);
+		}
+		else
+		{
+			Debug.Log(p_response.error);
+		}
+
 	}
 
 	private void onUpgradeButtonClick(UIButton p_button)
