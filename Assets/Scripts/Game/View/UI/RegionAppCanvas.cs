@@ -18,6 +18,8 @@ public class RegionAppCanvas: UICanvas
 		m_appSwipeList = getView("appScrollView") as UISwipeList;
 
 		_setupList();
+
+		setScrollView ();
 	}
 	
 	public void setupLocalization()
@@ -121,8 +123,120 @@ public class RegionAppCanvas: UICanvas
 //		l_canvas.isTransitioning = false;
 //	}
 
+
+	
+	
+	public override void update()
+	{
+		base.update();
+		
+		if (mMovingOffset == 0) {
+			move = m_contentPanel.localPosition.x;
+			moveTotal = move;
+		}
+		if (mMovingOffset > 0) {
+			move += mMovingOffset * MOVESPEED;
+			if (move <= moveTotal) {
+				m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(!m_leftButton.active) {
+					mMovingOffset = 0;
+					moveTotal = m_contentPanel.localPosition.x;
+				}
+				else {
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
+				}
+				
+			}
+		} else if (mMovingOffset < 0) {
+			
+			move += mMovingOffset * MOVESPEED;
+			if (move > moveTotal) {
+				m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(!m_rightButton.active) {
+					mMovingOffset = 0;
+					moveTotal = m_contentPanel.localPosition.x;
+				}
+				else {
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
+				}
+				
+			}
+		}
+		
+	}
+	
+	private void SetupLocalizition()
+	{		
+		UILabel l_allVideosLabel 	= getView("allContentLabel") as UILabel;
+		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_infoLabel 		= getView("info") as UILabel;
+		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
+		UILabel l_headerLabel 		= getView("header") as UILabel;
+		
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allVideosLabel.text 		= Localization.getString(Localization.TXT_TAB_ALL_VIDEOS);
+		//		l_infoLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_INFO);
+		//		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
+		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_LABEL_LOADING);
+		l_headerLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_HEADER);
+	}
+	
+	public void onLeftButtonClick( UIButton p_button )
+	{
+		mMovingOffset = 1;
+		if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+	
+	public void onRightButtonClick( UIButton p_button )
+	{
+		mMovingOffset = -1;
+		if (moveTotal == 0) {
+			move = m_contentPanel.localPosition.x;
+			moveTotal = move + mMovingOffset * OFFSET;
+		} else if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+
+
+	void setScrollView() {
+		
+		m_contentPanel = getView ("appScrollView").getChildAt(0).gameObject.GetComponent<RectTransform>();
+
+		
+		m_leftButton = getView( "contentArrowLeft" ) as UIButton;
+		m_rightButton = getView( "contentArrowRight" ) as UIButton;
+
+		
+		m_leftButton.addClickCallback( onLeftButtonClick );
+		m_rightButton.addClickCallback( onRightButtonClick );
+	}
+
+
 	private UISwipeList 	m_appSwipeList;
 
 	private Texture2D m_emptyTexture;
+
+	private RectTransform m_contentPanel;
+	
+	private UIButton m_leftButton;
+	private UIButton m_rightButton;
+
+	
+	private float OFFSET = 500;
+	private float MOVESPEED = 30;
+	private float mMovingOffset = 0;
+	private float move = 0;
+	private float moveTotal;
+	private bool isFavor = false; // true: favor false: all
 
 }
