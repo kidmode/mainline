@@ -28,6 +28,7 @@ public class Game : MonoBehaviour
 	private bool isClientIdCompleted;
 	private bool isPremiumCompleted;
 	private int testTimes;
+
 	private bool mIsRun = true;
 
 	private bool isNativeAppRunning = false;
@@ -44,6 +45,15 @@ public class Game : MonoBehaviour
 	}
 	public DateTime leaveAppDateTime;
 	//end
+	private bool mIsLoading = false;
+	public bool isLoading
+	{
+		get { 
+			return mIsLoading;   
+		}
+		set { mIsLoading = value;  }
+
+	}
 
 	void OnApplicationPause(bool pauseStatus) {
 		if(pauseStatus)
@@ -118,7 +128,8 @@ public class Game : MonoBehaviour
 	public void getAllSystemApps() {
 		KidMode.getAllSystemApps();
 	}
-	
+
+
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
@@ -129,6 +140,8 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+
 
 //		switch (Input.deviceOrientation) 
 //		{
@@ -251,6 +264,7 @@ public class Game : MonoBehaviour
 
 	}
 
+	bool isPress = false;
 	public void Update ()
 	{
 		if (mIsPlay) {
@@ -259,7 +273,7 @@ public class Game : MonoBehaviour
 			m_gameController.update(l_time);
 			SoundManager.getInstance().updateSystemSound();
 		}
-		
+
 	}
 	
 	public string getVersion()

@@ -39,7 +39,7 @@ public class KidMode
 	public static void onActivityStop() {
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-		//screen off
+		//screen off, stop timer
 		if (!game.IsNativeAppRunning)
 		{
 			TimerController.Instance.stopTimer();

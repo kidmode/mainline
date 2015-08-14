@@ -327,9 +327,11 @@ public class VideoViewState : WebViewState
 			switch (m_subState)
 			{
 			case SubState.GO_CONGRATS:
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
-				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-
+				// Don't show the point pop up
+//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
+//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				p_gameController.changeState(ZoodleState.REGION_VIDEO);
+				SessionHandler.getInstance().getPoints();
 				break;
 
 			case SubState.No_Points:
@@ -390,9 +392,10 @@ public class GameViewState : WebViewState
 			switch (m_subState)
 			{
 			case SubState.GO_CONGRATS:
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
-				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-				
+//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
+//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				p_gameController.changeState(ZoodleState.REGION_GAME);
+				SessionHandler.getInstance().getPoints();
 				break;
 				
 			case SubState.No_Points:

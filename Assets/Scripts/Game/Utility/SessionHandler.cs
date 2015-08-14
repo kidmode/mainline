@@ -688,6 +688,41 @@ public class SessionHandler
 		}
 	}
 
+	public void getPoints() {
+		if (m_PointRequest == null) {
+			m_PointRequest = new RequestQueue();
+		}
+
+		m_PointRequest.add(new GetZPs(2, _requestComplete));
+		m_PointRequest.request(RequestType.RUSH);
+
+	}
+
+	private void _requestComplete(WWW p_response)
+	{
+		Game game;
+		if (p_response.error != null) {
+			GameObject gameLogic = GameObject.FindWithTag("GameController");
+			game = gameLogic.GetComponent<Game>();
+			game.gameController.changeState (ZoodleState.SERVER_ERROR);
+		}
+		else
+		{
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			if (l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if (l_response.ContainsKey("response"))
+				{
+					Hashtable l_data = l_response["response"] as Hashtable;
+					Kid l_kid = SessionHandler.getInstance().currentKid;
+					l_kid.level = int.Parse(l_data["level"].ToString());
+					l_kid.stars = int.Parse(l_data["zps"].ToString());
+				}
+			}
+		}
+	}
+
 	public void getSingleKidApplist(Kid p_kid)
 	{
 		if(null == m_request)
@@ -1130,6 +1165,7 @@ public class SessionHandler
 	private RequestQueue m_iconRequest;
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
+	private RequestQueue m_PointRequest;
     private static SessionHandler m_instance = null;
 
 	// get kid info except app list, top recommend apps

@@ -24,7 +24,7 @@ public class fpsCalculator : MonoBehaviour {
 		{
 			float fps = frames / (timeNow - lastInterval);
 			float ms = 1000.0f / Mathf.Max(fps, 0.00001f);
-			m_text.text = ms.ToString("f1") + "ms " + fps.ToString("f2") + "FPS";
+			m_text.text = "TC,16bits," + Application.targetFrameRate.ToString() + "fps " + ms.ToString("f1") + "ms " + fps.ToString("f2") + "FPS";
 			frames = 0;
 			lastInterval = timeNow;
 		}
