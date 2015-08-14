@@ -140,6 +140,8 @@ public class BookActivityCanvas : UICanvas
 		
 		SetupLocalizition ();
 
+		setScrollView ();
+
 		m_lockIcon = Resources.Load ( "GUI/2048/common/icon/icon_lock" ) as Texture2D;
 		m_playIcon = Resources.Load ( "GUI/800/common/button/icon_play" ) as Texture2D;
 		m_recordableIcon = Resources.Load ( "GUI/800/common/button/icon_record" ) as Texture2D;
@@ -148,6 +150,81 @@ public class BookActivityCanvas : UICanvas
 	public override void update()
 	{
 		base.update();
+		
+		if (mMovingOffset == 0) {
+			if(isFavor)
+				if(m_favorcontentPanel != null)
+					move = m_favorcontentPanel.localPosition.x;
+			else
+				if(m_contentPanel != null)
+					move = m_contentPanel.localPosition.x;
+			moveTotal = move;
+		}
+		if (mMovingOffset > 0) {
+			move += mMovingOffset * MOVESPEED;
+			if (move <= moveTotal) {
+				if(isFavor)
+					m_favorcontentPanel.localPosition = new Vector3 (move, 0, 0);
+				else
+					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(isFavor) {
+					if(!m_favorleftButton.active) {
+						mMovingOffset = 0;
+						moveTotal = m_favorcontentPanel.localPosition.x;
+					}
+					else {
+						moveTotal += (mMovingOffset * OFFSET);
+						mMovingOffset = 0;
+					}
+				}
+				else {
+					if(!m_leftButton.active) {
+						mMovingOffset = 0;
+						moveTotal = m_contentPanel.localPosition.x;
+					}
+					else {
+						moveTotal += (mMovingOffset * OFFSET);
+						mMovingOffset = 0;
+					}
+				}
+				
+			}
+		} else if (mMovingOffset < 0) {
+			
+			move += mMovingOffset * MOVESPEED;
+			if (move > moveTotal) {
+				if(isFavor)
+					m_favorcontentPanel.localPosition = new Vector3 (move, 0, 0);
+				else
+					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(isFavor) {
+					if(!m_favorrightButton.active) {
+						mMovingOffset = 0;
+						moveTotal = m_favorcontentPanel.localPosition.x;
+					}
+					else {
+						moveTotal += (mMovingOffset * OFFSET);
+						mMovingOffset = 0;
+					}
+				}
+				else {
+					if(!m_rightButton.active) {
+						mMovingOffset = 0;
+						moveTotal = m_contentPanel.localPosition.x;
+					}
+					else {
+						moveTotal += (mMovingOffset * OFFSET);
+						mMovingOffset = 0;
+					}
+				}
+				
+			}
+		}
+		
 	}
 	
 	public override void enteringTransition(  )
@@ -181,6 +258,9 @@ public class BookActivityCanvas : UICanvas
     {
         if( p_isOn )
         {
+			moveTotal = 0;
+			move = 0;
+			isFavor = true;
             m_bookSwipeList.active          = false;
 			m_bookFavorateSwipeList.active 	= true;
 			m_bookFavorateInfo.active = (m_bookFavorateSwipeList.getData().Count <= 0);
@@ -192,6 +272,9 @@ public class BookActivityCanvas : UICanvas
     {
         if( p_isOn )
         {
+			moveTotal = 0;
+			move = 0;
+			isFavor = false;
             m_bookSwipeList.active          = true;
             m_bookFavorateSwipeList.active  = false;
 			m_bookInfo.active = (m_bookSwipeList.getData().Count <= 0);
@@ -295,6 +378,71 @@ public class BookActivityCanvas : UICanvas
 		l_headerLabel.text 			= Localization.getString(Localization.TXT_14_LABEL_HEADER);
 	}
 
+
+
+	
+	public void onLeftButtonClick( UIButton p_button )
+	{
+		mMovingOffset = 1;
+		if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+	
+	public void onRightButtonClick( UIButton p_button )
+	{
+		mMovingOffset = -1;
+		if (moveTotal == 0) {
+			if(isFavor)
+				move = m_favorcontentPanel.localPosition.x;
+			else
+				move = m_contentPanel.localPosition.x;
+			moveTotal = move + mMovingOffset * OFFSET;
+		} else if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+	
+	public void onLeftFavorButtonClick( UIButton p_button )
+	{
+		mMovingOffset = 1;
+		if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+
+	}
+	
+	public void onRightFavorButtonClick( UIButton p_button )
+	{
+		mMovingOffset = -1;
+		if (moveTotal == 0) {
+			if(isFavor)
+				move = m_favorcontentPanel.localPosition.x;
+			else
+				move = m_contentPanel.localPosition.x;
+			moveTotal = move + mMovingOffset * OFFSET;
+		} else if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+	
+	void setScrollView() {
+		
+		m_contentPanel = getView ("allContentScrollView").getChildAt(0).gameObject.GetComponent<RectTransform>();
+		m_favorcontentPanel = getView ("favorateScrollView").getChildAt(0).gameObject.GetComponent<RectTransform>();
+		
+		m_leftButton = getView( "allContentArrowLeft" ) as UIButton;
+		m_rightButton = getView( "allContentArrowRight" ) as UIButton;
+		m_favorleftButton = getView( "favorateScrollArrowLeft" ) as UIButton;
+		m_favorrightButton = getView( "favorateScrollArrowRight" ) as UIButton;
+		
+		m_leftButton.addClickCallback( onLeftButtonClick );
+		m_rightButton.addClickCallback( onRightButtonClick );
+		
+		m_favorleftButton.addClickCallback( onLeftFavorButtonClick );
+		m_favorrightButton.addClickCallback( onRightFavorButtonClick );
+	}
+
     private UISwipeList     m_bookSwipeList;
 	private UISwipeList     m_bookFavorateSwipeList;
 	private UILabel			m_bookFavorateInfo;
@@ -307,4 +455,20 @@ public class BookActivityCanvas : UICanvas
 	private Texture2D		m_recordableIcon;
 	
 	private Texture2D 		m_emptyTexture;
+
+	private RectTransform m_contentPanel;
+	private RectTransform m_favorcontentPanel;
+	
+	private UIButton m_leftButton;
+	private UIButton m_rightButton;
+	private UIButton m_favorleftButton;
+	private UIButton m_favorrightButton;
+	
+	private float OFFSET = 500;
+	private float MOVESPEED = 25;
+	private float mMovingOffset = 0;
+	private float move = 0;
+	private float moveTotal;
+	private bool isFavor = false; // true: favor false: all
+
 }
