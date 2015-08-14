@@ -71,7 +71,7 @@ public class WebRequest : object
 			else
 				l_url = m_server.url + m_call;
 #if UNITY_EDITOR
-//			Debug.Log(l_url);
+			Debug.Log(l_url);
 #endif
 
 			if( m_form != null )
@@ -93,7 +93,7 @@ public class WebRequest : object
 				else
 				{
 					#if UNITY_EDITOR
-//					Debug.Log(m_www.text);
+					Debug.Log(m_www.text);
 					#endif
 					m_status = (int)WebRequestStatus.Finished;
 				}
