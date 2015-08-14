@@ -42,6 +42,7 @@ public class Game : MonoBehaviour
 			isNativeAppRunning = value;
 		}
 	}
+	public DateTime leaveAppDateTime;
 	//end
 
 	void OnApplicationPause(bool pauseStatus) {
@@ -179,7 +180,7 @@ public class Game : MonoBehaviour
 		isPremiumCompleted = false;
 		testTimes = 0;
 		//check if time left data expired or not, if expired, remove the item
-		SessionHandler.updateKidsTimeLeft();
+		SessionHandler.updateKidsLocalTimeLeftFile();
 
 		//set version text
 		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
