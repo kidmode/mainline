@@ -153,11 +153,9 @@ public class BookActivityCanvas : UICanvas
 		
 		if (mMovingOffset == 0) {
 			if(isFavor)
-				if(m_favorcontentPanel != null)
-					move = m_favorcontentPanel.localPosition.x;
+				move = m_favorcontentPanel.localPosition.x;
 			else
-				if(m_contentPanel != null)
-					move = m_contentPanel.localPosition.x;
+				move = m_contentPanel.localPosition.x;
 			moveTotal = move;
 		}
 		if (mMovingOffset > 0) {
@@ -169,25 +167,16 @@ public class BookActivityCanvas : UICanvas
 					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
 			}
 			else {
-				if(isFavor) {
-					if(!m_favorleftButton.active) {
-						mMovingOffset = 0;
+				if(!m_leftButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
 						moveTotal = m_favorcontentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					else
+						moveTotal = m_contentPanel.localPosition.x;
 				}
 				else {
-					if(!m_leftButton.active) {
-						mMovingOffset = 0;
-						moveTotal = m_contentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
 				}
 				
 			}
@@ -201,25 +190,16 @@ public class BookActivityCanvas : UICanvas
 					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
 			}
 			else {
-				if(isFavor) {
-					if(!m_favorrightButton.active) {
-						mMovingOffset = 0;
+				if(!m_rightButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
 						moveTotal = m_favorcontentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					else
+						moveTotal = m_contentPanel.localPosition.x;
 				}
 				else {
-					if(!m_rightButton.active) {
-						mMovingOffset = 0;
-						moveTotal = m_contentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
 				}
 				
 			}
@@ -261,6 +241,7 @@ public class BookActivityCanvas : UICanvas
 			moveTotal = 0;
 			move = 0;
 			isFavor = true;
+			m_favorcontentPanel.localPosition = new Vector3 (0, 0, 0);
             m_bookSwipeList.active          = false;
 			m_bookFavorateSwipeList.active 	= true;
 			m_bookFavorateInfo.active = (m_bookFavorateSwipeList.getData().Count <= 0);
@@ -275,6 +256,7 @@ public class BookActivityCanvas : UICanvas
 			moveTotal = 0;
 			move = 0;
 			isFavor = false;
+			m_contentPanel.localPosition = new Vector3 (0, 0, 0);
             m_bookSwipeList.active          = true;
             m_bookFavorateSwipeList.active  = false;
 			m_bookInfo.active = (m_bookSwipeList.getData().Count <= 0);
@@ -378,9 +360,6 @@ public class BookActivityCanvas : UICanvas
 		l_headerLabel.text 			= Localization.getString(Localization.TXT_14_LABEL_HEADER);
 	}
 
-
-
-	
 	public void onLeftButtonClick( UIButton p_button )
 	{
 		mMovingOffset = 1;
@@ -409,7 +388,6 @@ public class BookActivityCanvas : UICanvas
 		if (move == moveTotal) {
 			moveTotal = move + mMovingOffset * OFFSET;
 		}
-
 	}
 	
 	public void onRightFavorButtonClick( UIButton p_button )
@@ -425,6 +403,7 @@ public class BookActivityCanvas : UICanvas
 			moveTotal = move + mMovingOffset * OFFSET;
 		}
 	}
+
 	
 	void setScrollView() {
 		
