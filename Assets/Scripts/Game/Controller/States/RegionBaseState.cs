@@ -193,7 +193,7 @@ public class RegionBaseState : GameState
 		//create jungle view
 		_createViews();
 		//set buttons for jungle view
-		_setupElements();
+		_setupElements(p_gameController);
 
 		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
 		{
@@ -426,8 +426,8 @@ public class RegionBaseState : GameState
 
 		}
 	}
-
 	
+
 	private void _createViews()
 	{
 		UIManager l_ui = m_gameController.getUI();
@@ -441,7 +441,7 @@ public class RegionBaseState : GameState
 		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
-	private void _setupElements()
+	private void _setupElements(GameController p_gameController)
 	{
 //		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
 
@@ -451,7 +451,8 @@ public class RegionBaseState : GameState
 
 		this._setupAppContentList();
 		// end vzw
-		
+
+
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
 		m_cornerPosition = m_mapButton.transform.localPosition;
