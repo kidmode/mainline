@@ -383,6 +383,15 @@ public class GameViewState : WebViewState
 		}
 	}
 
+	IEnumerator WaitAndPrint(GameController p_gameController) {
+		if (Screen.orientation == ScreenOrientation.Portrait || Screen.orientation == ScreenOrientation.PortraitUpsideDown) {
+			Screen.orientation = ScreenOrientation.Landscape;
+			yield return new WaitForSeconds (0.5F);
+		} else
+			yield return null;
+		p_gameController.changeState(ZoodleState.REGION_GAME);
+	}
+
 	public override void update(GameController p_gameController, int p_time)
 	{
 		base.update(p_gameController, p_time);
@@ -394,14 +403,13 @@ public class GameViewState : WebViewState
 			case SubState.GO_CONGRATS:
 //				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_GAME);
 //				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-				p_gameController.changeState(ZoodleState.REGION_GAME);
+				p_gameController.game.StartCoroutine(WaitAndPrint(p_gameController));
 				SessionHandler.getInstance().getPoints();
 				break;
 				
 			case SubState.No_Points:
-				
+				p_gameController.game.StartCoroutine(WaitAndPrint(p_gameController));
 				p_gameController.changeState(ZoodleState.REGION_GAME);
-				
 				break;
 			}
 			

@@ -179,7 +179,8 @@ public class RegionBaseState : GameState
 		GO_BOOKS,
 		GO_PAINT
 	}
-	
+
+
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
@@ -192,7 +193,9 @@ public class RegionBaseState : GameState
 
 		//create jungle view
 		_createViews();
+
 		//set buttons for jungle view
+
 		_setupElements(p_gameController);
 
 		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
@@ -377,6 +380,7 @@ public class RegionBaseState : GameState
 			m_bookQueue.dispose();
 			m_bookQueue = null;
 		}
+
 	}
 	
 	//------------------ Private Implementation ----------------------
@@ -452,7 +456,6 @@ public class RegionBaseState : GameState
 		this._setupAppContentList();
 		// end vzw
 
-
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
 		m_cornerPosition = m_mapButton.transform.localPosition;
@@ -460,9 +463,10 @@ public class RegionBaseState : GameState
 		m_backButton = m_regionLandingCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(onBackButtonClicked);
 
+//		m_backButton.transform.localPosition = new Vector3 (-427.2f, 196.9f, 0.0f);
 		m_backButtonPosition = m_backButton.transform.localPosition;
 		m_backButton.transform.localPosition += new Vector3(0, 200, 0);
-
+	
 
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
