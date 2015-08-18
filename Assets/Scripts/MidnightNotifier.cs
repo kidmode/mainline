@@ -21,7 +21,10 @@ static class MidnightNotifier
 	{
 		DateTime midnightTonight = DateTime.Today.AddDays(1);
 		double differenceInMilliseconds = (midnightTonight - DateTime.Now).TotalMilliseconds;
-		return differenceInMilliseconds;
+		//this is test case
+		return 60 * 1000;
+		//this is real thing
+//		return differenceInMilliseconds;
 	}
 	
 	private static void OnDayChanged()
@@ -32,4 +35,16 @@ static class MidnightNotifier
 	}
 	
 	public static event EventHandler<EventArgs> DayChanged;
+
+	public static void resetMidnightTimer()
+	{
+		timer.Interval = GetSleepTime();
+		timer.Start();
+	}
+
+	public static void stopMidnightNotifier()
+	{
+		if (timer.Enabled)
+			timer.Stop();
+	}
 }

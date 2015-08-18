@@ -45,6 +45,11 @@ public class KidMode
 			TimerController.Instance.stopTimer();
 		}
 
+		//stop midnight notifier
+		MidnightNotifier.stopMidnightNotifier();
+		//this one is test case
+//		game.leaveAppDateTime = DateTime.Now.AddDays(-1);
+		//this one is real thing
 		game.leaveAppDateTime = DateTime.Now;
 	}
 
@@ -52,13 +57,21 @@ public class KidMode
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 
+		//reset midnight notifier to have correct timer
+		MidnightNotifier.resetMidnightTimer();
+
 		//app first launch, leave app date time should not have any info
-		if (game.leaveAppDateTime.ToString() == "01/01/0001 00:00:00")
+		//if (game.leaveAppDateTime.ToString() == "01/01/0001 00:00:00")
+		if (game.leaveAppDateTime.Equals(DateTime.MinValue))
 			return;
 
+		//this one is test case
+//		DateTime now = DateTime.Now.AddDays(1);
+		//this one is real thing
 		DateTime now = DateTime.Now;
 		int compareDate = now.Date.CompareTo(game.leaveAppDateTime.Date);
-
+		//after comparing date, reset leaveAppDateTime
+		game.leaveAppDateTime = DateTime.MinValue;
 		//cross midnight, reset timer
 		if (compareDate > 0)
 		{
@@ -67,6 +80,10 @@ public class KidMode
 			game.IsNativeAppRunning = false;
 			return;
 		}
+		else if (compareDate == 0)
+			Debug.Log("It is impossible(compareDate == 0)");
+		else if (compareDate < 0)
+			Debug.Log("It is impossible(compareDate < 0)");
 		//back to kid mode form native app
 		if (game.IsNativeAppRunning)
 		{
