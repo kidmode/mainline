@@ -41,6 +41,7 @@ public class LoadingPageState : GameState {
 		savedState = ZoodleState.NO_STATE;
 		onTimerFinished += onTimerCompleted;
 
+		setVolumeSetting();
 		setupScreen(p_gameController);
 	}
 
@@ -200,5 +201,34 @@ public class LoadingPageState : GameState {
 				DebugUtils.Assert(savedState != ZoodleState.NO_STATE);
 			}
 		}
+	}
+
+	private void setVolumeSetting()
+	{
+		if (!PlayerPrefs.HasKey("master_volume"))
+		{
+			PlayerPrefs.SetInt("master_volume", 50);
+			PlayerPrefs.SetInt("music_volume", 50);
+			PlayerPrefs.SetInt("effects_volume", 50);
+			PlayerPrefs.Save();
+		}
+		
+		SessionHandler.getInstance().masterVolum = PlayerPrefs.GetInt("master_volume");
+		SessionHandler.getInstance().musicVolum = PlayerPrefs.GetInt("music_volume");
+		SessionHandler.getInstance().effectsVolum = PlayerPrefs.GetInt("effects_volume");
+
+		SoundManager.getInstance().effectVolume = (float)SessionHandler.getInstance().effectsVolum/100;
+		SoundManager.getInstance().musicVolume = (float)SessionHandler.getInstance().musicVolum/100;
+		SoundManager.getInstance().masterVolume = (float)SessionHandler.getInstance().masterVolum/100;
+
+		Debug.Log("Loading PlayerPref has master volume: " + PlayerPrefs.HasKey("master_volume") + " & volume: " + PlayerPrefs.GetInt("master_volume"));
+		Debug.Log("Loading PlayerPref has music volume: " + PlayerPrefs.HasKey("music_volume") + " & volume: " + PlayerPrefs.GetInt("music_volume"));
+		Debug.Log("Loading PlayerPref has effects volume: " + PlayerPrefs.HasKey("effects_volume") + " & volume: " + PlayerPrefs.GetInt("effects_volume"));
+		Debug.Log("Loading SessionHandler master volume: " + SessionHandler.getInstance().masterVolum);
+		Debug.Log("Loading SessionHandler music volume: " + SessionHandler.getInstance().musicVolum);
+		Debug.Log("Loading SessionHandler effects volume: " + SessionHandler.getInstance().effectsVolum);
+		Debug.Log("Loading SoundManager master volume: " + SoundManager.getInstance().masterVolume);
+		Debug.Log("Loading SoundManager music volume: " + SoundManager.getInstance().musicVolume);
+		Debug.Log("Loading SoundManager effects volume: " + SoundManager.getInstance().effectVolume);
 	}
 }
