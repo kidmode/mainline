@@ -22,9 +22,9 @@ static class MidnightNotifier
 		DateTime midnightTonight = DateTime.Today.AddDays(1);
 		double differenceInMilliseconds = (midnightTonight - DateTime.Now).TotalMilliseconds;
 		//this is test case
-		return 60 * 1000;
+//		return 60 * 1000;
 		//this is real thing
-//		return differenceInMilliseconds;
+		return differenceInMilliseconds;
 	}
 	
 	private static void OnDayChanged()

@@ -986,6 +986,8 @@ public class SessionHandler
 		SessionHandler.updateKidsLocalTimeLeftFile();
 		//reset kid time left info
 		List<Kid> kidList = SessionHandler.getInstance().kidList;
+		if (kidList == null)
+			return;
 		foreach (Kid kid in kidList)
 		{
 			kid.timeLeft = kid.timeLimits;
