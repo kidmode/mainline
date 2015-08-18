@@ -135,6 +135,7 @@ public class TimerController : MonoBehaviour {
 		if (isDayChanged)
 		{
 			isDayChanged = false;
+			Debug.Log("already midnight, reset kids timer");
 			SessionHandler.updateKidsTimeLeft();
 			runCurrentKidTimer();
 		}
@@ -238,6 +239,9 @@ public class TimerController : MonoBehaviour {
 
 		kid_id = kidId;
 		countdownTime = timelimit;
+		//This is test case
+//		timeLeft = 20;
+		//This is real thing
 		timeLeft = timeleft;
 	}
 	//this one would  save current kid local time left data
