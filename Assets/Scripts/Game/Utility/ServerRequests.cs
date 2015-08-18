@@ -454,6 +454,13 @@ public class GetUserSettingRequest : RequestQueue.Request
 				l_session.childLockPassword = l_data["lock_pin"].ToString();
 			}
 			SessionHandler.getInstance ().initSettingCache ();
+			Debug.Log("GetUserSetting SessionHandler master volume: " + SessionHandler.getInstance().masterVolum);
+			Debug.Log("GetUserSetting SessionHandler music volume: " + SessionHandler.getInstance().musicVolum);
+			Debug.Log("GetUserSetting SessionHandler effects volume: " + SessionHandler.getInstance().effectsVolum);
+			Debug.Log("GetUserSetting SoundManager master volume: " + SoundManager.getInstance().masterVolume);
+			Debug.Log("GetUserSetting SoundManager music volume: " + SoundManager.getInstance().musicVolume);
+			Debug.Log("GetUserSetting SoundManager effects volume: " + SoundManager.getInstance().effectVolume);
+			Debug.Log("GetUserSetting set volume data from session handler to setting cache");
 		}
 	}
 }
