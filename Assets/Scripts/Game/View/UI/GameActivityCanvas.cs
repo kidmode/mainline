@@ -80,6 +80,7 @@ public class GameActivityCanvas : UICanvas
 			moveTotal = 0;
 			move = 0;
 			isFavor = true;
+			m_favorcontentPanel.localPosition = new Vector3 (0, 0, 0);
             m_gameSwipeList.active = false;
 	        m_gameFavorateSwipeList.active = true;
 			m_gameFavorateInfo.active = (m_gameFavorateSwipeList.getData().Count <= 0);
@@ -94,6 +95,7 @@ public class GameActivityCanvas : UICanvas
 			moveTotal = 0;
 			move = 0;
 			isFavor = false;
+			m_contentPanel.localPosition = new Vector3 (0, 0, 0);
             m_gameSwipeList.active = true;
             m_gameFavorateSwipeList.active = false;
 			m_gameFavorateInfo.active = false;
@@ -216,14 +218,12 @@ public class GameActivityCanvas : UICanvas
 	public override void update()
 	{
 		base.update();
-
+		
 		if (mMovingOffset == 0) {
 			if(isFavor)
-				if(m_favorcontentPanel != null)
-					move = m_favorcontentPanel.localPosition.x;
+				move = m_favorcontentPanel.localPosition.x;
 			else
-				if(m_contentPanel != null)
-					move = m_contentPanel.localPosition.x;
+				move = m_contentPanel.localPosition.x;
 			moveTotal = move;
 		}
 		if (mMovingOffset > 0) {
@@ -235,25 +235,16 @@ public class GameActivityCanvas : UICanvas
 					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
 			}
 			else {
-				if(isFavor) {
-					if(!m_favorleftButton.active) {
-						mMovingOffset = 0;
+				if(!m_leftButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
 						moveTotal = m_favorcontentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					else
+						moveTotal = m_contentPanel.localPosition.x;
 				}
 				else {
-					if(!m_leftButton.active) {
-						mMovingOffset = 0;
-						moveTotal = m_contentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
 				}
 				
 			}
@@ -267,27 +258,17 @@ public class GameActivityCanvas : UICanvas
 					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
 			}
 			else {
-				if(isFavor) {
-					if(!m_favorrightButton.active) {
-						mMovingOffset = 0;
+				if(!m_rightButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
 						moveTotal = m_favorcontentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					else
+						moveTotal = m_contentPanel.localPosition.x;
 				}
 				else {
-					if(!m_rightButton.active) {
-						mMovingOffset = 0;
-						moveTotal = m_contentPanel.localPosition.x;
-					}
-					else {
-						moveTotal += (mMovingOffset * OFFSET);
-						mMovingOffset = 0;
-					}
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
 				}
-
 				
 			}
 		}

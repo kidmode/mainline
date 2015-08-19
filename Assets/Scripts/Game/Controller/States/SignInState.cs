@@ -335,10 +335,13 @@ public class SignInState : GameState
 				int l_vpc = l_data.ContainsKey("vpc_level") ? int.Parse(l_data["vpc_level"].ToString()) : 0;
 				//on trial
 				bool l_tried = l_data.ContainsKey ("is_tried") && null != l_data ["is_tried"] ? (bool)l_data ["is_tried"] : true;
-				SessionHandler.getInstance().username = m_account.text.Trim();
+				m_account.text = m_account.text.Trim();
+				SessionHandler.getInstance().username = m_account.text;
 				SessionHandler.getInstance().token.setToken(l_secret, l_premium,l_tried,l_current,l_vpc);
 				SessionHandler.getInstance().hasPin = l_data.ContainsKey("has_pin") && "true".Equals(l_data["has_pin"].ToString());
 				SessionHandler.getInstance().pin = l_data.ContainsKey("pin")&& null != l_data["pin"] ? int.Parse(l_data["pin"].ToString()) : -1;
+
+				CrittercismAndroid.SetUsername(m_account.text);
 
 				if (m_queue == null)
 					m_queue = new RequestQueue();

@@ -75,6 +75,7 @@ public class NotificationState : GameState
 		m_requestQueue.request (RequestType.SEQUENCE);
 		//update device option
 		SessionHandler.getInstance().resetSetting ();
+		Debug.Log("Notification set volume data from setting cache to session handler");
 		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
 		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
 		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;

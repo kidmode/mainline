@@ -34,6 +34,7 @@ public class ProfileState : GameState
 
 		SessionHandler.getInstance ().settingCache.active = false;
 		SessionHandler.getInstance ().initSettingCache ();
+		Debug.Log("Profile set volume data from session handler to setting cache");
 
 		//check timer if kid is back from map
 		TimerController.Instance.resetKidTimer();
