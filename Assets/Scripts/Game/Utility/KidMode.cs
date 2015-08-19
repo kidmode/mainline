@@ -598,6 +598,18 @@ public class KidMode
 		#endif
 		
 	}
+
+	public static bool isAirplaneModeOn(){
+
+		bool isAirplaneModeOn = false;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		isAirplaneModeOn = jc.CallStatic<bool>("isAirplaneModeOn");
+
+		#endif
+		return isAirplaneModeOn;
+	}
 	
 	
 	public static void openWifi(bool check){
