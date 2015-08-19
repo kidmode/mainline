@@ -368,7 +368,7 @@ public class Game : MonoBehaviour
 			onRequestCompleted += completedEvent;
 		}
 		
-		if (Application.internetReachability != NetworkReachability.NotReachable)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn())
 		{
 			setClientIdAndPremiumRequests();
 		}

@@ -154,7 +154,7 @@ public class CreateAccountSelectState : GameState
 
 	private void gotoSetUpScreen(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
@@ -165,7 +165,7 @@ public class CreateAccountSelectState : GameState
 	}
 	private void gotoSignInScreen(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
