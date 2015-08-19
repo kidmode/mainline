@@ -197,6 +197,10 @@ public class Game : MonoBehaviour
 		//set version text
 		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
 		versionText.text = CurrentBundleVersion.version;
+
+		string[] keys = {"version"};
+		string[] values = {CurrentBundleVersion.version};
+		CrittercismAndroid.SetMetadata(keys, values);
 		//end
 
 		GCS.Environment.init();
