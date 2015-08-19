@@ -77,7 +77,6 @@ public class ZoodlesAnimatedIntroState : GameState
 		Debug.Log("Animated SoundManager master volume: " + SoundManager.getInstance().masterVolume);
 		Debug.Log("Animated SoundManager music volume: " + SoundManager.getInstance().musicVolume);
 		Debug.Log("Animated SoundManager effects volume: " + SoundManager.getInstance().effectVolume);
-
 	}
 	
 	private void _setupScreen(UIManager p_uiManager)
