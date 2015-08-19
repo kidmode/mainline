@@ -258,7 +258,7 @@ public class CreateChildProfileState : GameState
 
 	private void toDeleteChild(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
@@ -514,7 +514,7 @@ public class CreateChildProfileState : GameState
 	private void toCreateProfile(UIButton p_button)
 	{
 		//cynthia
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

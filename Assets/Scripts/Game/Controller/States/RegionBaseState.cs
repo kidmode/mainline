@@ -891,8 +891,8 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
@@ -901,8 +901,8 @@ public class RegionBaseState : GameState
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn() 
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
@@ -917,8 +917,8 @@ public class RegionBaseState : GameState
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable &&
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
@@ -1138,8 +1138,8 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
-		    !p_toggle.name.Equals("booksButton"))
+		if ((Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) 
+		    && !p_toggle.name.Equals("booksButton"))
 		{
 			if (!p_isToggled)
 				return;
@@ -1661,7 +1661,7 @@ public class RegionBaseState : GameState
 
 	private void showMsgIfNoInternet () 
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

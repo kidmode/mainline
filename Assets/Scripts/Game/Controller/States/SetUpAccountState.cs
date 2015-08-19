@@ -44,7 +44,7 @@ public class SetUpAccountState : GameState
 	{
 		base.update( p_gameController, p_time );
 
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			// TODO: Sean
 		}
@@ -354,7 +354,7 @@ public class SetUpAccountState : GameState
 	//honda
 	private void onSignInAccountButtonClicked(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
@@ -368,7 +368,7 @@ public class SetUpAccountState : GameState
 
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);

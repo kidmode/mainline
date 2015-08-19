@@ -77,8 +77,8 @@ public class ActivityPanelCanvas : UICanvas
 
 	private void onToggleChanged( UIToggle p_toggle, bool p_isToggled )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
-		    !p_toggle.name.Equals("booksButton"))
+		if ((Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) 
+		    && !p_toggle.name.Equals("booksButton"))
 		{
 			m_currentToggle = p_toggle;
 			return;
