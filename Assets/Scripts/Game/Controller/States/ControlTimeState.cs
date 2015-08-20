@@ -429,13 +429,13 @@ public class ControlTimeState : GameState
 		int weekendTimeLimits = -1;
 		if( m_weekUnlimited.isOn )
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = true;
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = "true";
 			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "-1";
 			weekdayTimeLimits = -1;
 		}
 		else
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = false;
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = "false";
 			if( m_weekThirtyMin.isOn )
 				weekdayTimeLimits = 30;
 			else if( m_weekOneHour.isOn )
@@ -449,13 +449,13 @@ public class ControlTimeState : GameState
 		
 		if( m_weekendUnlimited.isOn )
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = true;
+			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = "true";
 			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "-1";
 			weekendTimeLimits = -1;
 		}
 		else
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = false;
+			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = "false";
 			if( m_weekendThirtyMin.isOn )
 				weekendTimeLimits = 30;
 			if( m_weekendOneHour.isOn )
