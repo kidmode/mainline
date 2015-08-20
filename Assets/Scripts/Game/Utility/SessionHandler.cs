@@ -497,8 +497,17 @@ public class SessionHandler
 		get{return m_bookRequest;}
 		set{m_bookRequest = value;}
 	}
-	public void clearUserData()
+	public void clearUserData(bool cleanToken)
 	{
+		if (cleanToken)
+		{
+			//need to clear token. if not, previous token info still exists after new Token(). 
+			m_token.clear();
+			m_token = new Token();
+			m_deviceName = string.Empty;
+			m_renewalPeriod = 0;
+		}
+
 		//honda: clean kids local time left list when user does sign out
 		removeKidsTimeLeftWhenSignOut();
 		m_kid   = null;
@@ -529,9 +538,6 @@ public class SessionHandler
 		m_masterVolum = 0;
 		m_allowCall = true;
 		m_tip = true;
-		//need to clear token. if not, previous token info still exists after new Token(). 
-		m_token.clear();
-		m_token = new Token();
 		m_username = "";
 		m_callMethod = CallMethod.NULL;
 		m_appList = null;
@@ -551,8 +557,6 @@ public class SessionHandler
 		m_creditCardNum = string.Empty;
 		m_cardMonth = string.Empty;
 		m_cardYear = string.Empty;
-		m_deviceName = string.Empty;
-		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
 	}
 

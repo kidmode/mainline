@@ -69,9 +69,9 @@ public class SignInFreeState : GameState
 	{
 		p_button.removeClickCallback ( onBackClick );
 
-		SessionHandler.getInstance().clearUserData ();
+		SessionHandler.getInstance().clearUserData (false);
 		LocalSetting.find ("User").delete ();
-		m_gameController.changeState (ZoodleState.CREATE_ACCOUNT_SELECTION);
+		m_gameController.changeState (ZoodleState.SET_UP_ACCOUNT);
 	}
 
 	private SplashBackCanvas m_signInButtonBackgroundCanvas;
