@@ -37,7 +37,6 @@ public class WebViewState : GameState
 		#endif
 
 		p_gameController.game.gameSwitcher (false);
-
 	}
 
 //	public override void enter(GameController p_gameController)
