@@ -74,7 +74,7 @@ public class SetUpAccountState : GameState
 			}
 		}
 
-		if(SessionHandler.getInstance().token.isExist())
+		if(SessionHandler.getInstance().token.isExist() && SessionHandler.getInstance().username != "")
 		{
 			p_gameController.changeState(ZoodleState.CONGRATURATION);
 		}
@@ -124,8 +124,8 @@ public class SetUpAccountState : GameState
 		m_premiumLogoArea = m_signUpCanvas.getView ("premiumLogoArea") as UIElement;
 		m_title			  = m_signUpCanvas.getView ("setupDialogTitleText") as UILabel;
 
-		m_passwordCheckImage.active = true;
-		m_emailCheckImage.active = true;
+		m_passwordCheckImage.active = false;
+		m_emailCheckImage.active = false;
 		m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 		m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 
@@ -184,6 +184,7 @@ public class SetUpAccountState : GameState
 		}
 		else
 		{
+			m_emailCheckImage.active = true;
 			m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 		}
 	}
@@ -202,6 +203,7 @@ public class SetUpAccountState : GameState
 					Hashtable l_bookData = l_response["response"] as Hashtable;
 					if(l_bookData.ContainsKey("validate"))
 					{
+						m_emailCheckImage.active = true;
 						bool l_validate = (bool)l_bookData["validate"];
 						if(l_validate)
 							m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
@@ -210,6 +212,10 @@ public class SetUpAccountState : GameState
 					}
 				}
 			}
+		}
+		else
+		{
+			m_emailCheckImage.active = true;
 		}
 	}
 
@@ -230,18 +236,20 @@ public class SetUpAccountState : GameState
 		if(passwordPasses())
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
+			m_passwordCheckImage.active = false;
 		}
 		else
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
+			m_passwordCheckImage.active = true;
 		}
 	}
 
 	private void onRepasswordChange(string p_value)
 	{
 		m_repasswordText = p_value;
-		
-		if(passwordPasses())
+		m_passwordCheckImage.active = true;
+		if(confirmPasswordPasses())
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
 		}
@@ -270,8 +278,12 @@ public class SetUpAccountState : GameState
 
 	private bool passwordPasses()
 	{
-//		return m_password.text.Equals(m_rePassword.text) && m_password.text.Length > 3;
-		return m_passwordText.Equals (m_repasswordText) && m_passwordText.Length > 3;
+		return  m_passwordText.Length > 3;
+	}
+
+	private bool confirmPasswordPasses()
+	{
+		return m_passwordText.Equals(m_repasswordText);
 	}
 
 	private bool emailPasses()

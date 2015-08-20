@@ -472,7 +472,7 @@ public class SettingAppInfoState : GameState
 
 	private void onConfirmSignOut(UIButton p_button)
 	{
-		m_session.clearUserData ();
+		m_session.clearUserData (true);
 		LocalSetting.find ("User").delete ();
 		m_gameController.changeState (ZoodleState.ZOODLES_ANIMATION);
 	}

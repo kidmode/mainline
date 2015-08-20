@@ -15,7 +15,7 @@ public class DeviceOptionsCanvas : UICanvas
 		m_allowIncomingCall.active = false;
 		m_displayHelpFulTips.active = false;
 		m_sliderArea.active = false;
-		tweener.addAlphaTrack( 0.0f, 1.0f, 0.1f,onShowFinish );
+		tweener.addAlphaTrack( 0.0f, 1.0f, 0.1f, onShowFinish );
 	}
 	
 	public override void update()
@@ -44,8 +44,11 @@ public class DeviceOptionsCanvas : UICanvas
 	private void onShowFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
 	{
 		m_sliderArea.active = true;
-		m_allowIncomingCall.active = true;
 		m_displayHelpFulTips.active = true;
+
+		m_allowIncomingCall.active = true;
+		UIImage disableImage = getView("disableImage") as UIImage;
+		disableImage.alpha = 0.5f;
 	}
 
 	private void SetupLocalizition()

@@ -29,13 +29,12 @@ public class SetBirthYearState : GameState
 		base.update( p_gameController, p_time );
 		if (gotoPrevious) 
 		{
-			SessionHandler.getInstance().clearUserData();
-			p_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+			SessionHandler.getInstance().clearUserData(false);
+			p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 			gotoPrevious = false;
 		}
 		if (gotoProfileScreen) 
 		{
-
 			if(null != SessionHandler.getInstance().kidList && SessionHandler.getInstance().kidList.Count > 0)
 			{
 				p_gameController.changeState( ZoodleState.PROFILE_SELECTION );
