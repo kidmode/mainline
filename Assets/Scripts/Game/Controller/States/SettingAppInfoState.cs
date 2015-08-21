@@ -472,7 +472,7 @@ public class SettingAppInfoState : GameState
 
 	private void onConfirmSignOut(UIButton p_button)
 	{
-		m_session.clearUserData ();
+		m_session.clearUserData (true);
 		LocalSetting.find ("User").delete ();
 		m_gameController.changeState (ZoodleState.ZOODLES_ANIMATION);
 	}
@@ -590,7 +590,7 @@ public class SettingAppInfoState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
