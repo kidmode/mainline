@@ -575,11 +575,25 @@ public class KidMode
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+//		
+//		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+//		
+//		jo.Call("setFullScreen"); 
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("showFullScreen");
 		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		#endif
 		
-		jo.Call("setFullScreen"); 
+	}
+
+	public static void setFullScreenDelay(){
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("resetScreenDelay");
 		
 		#endif
 		
