@@ -393,7 +393,8 @@ public class Game : MonoBehaviour
 		if(p_response.error == null)
 		{
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
+			Debug.Log("client id " + double.Parse(l_data["id"].ToString()) + " request completed");
+			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : 0;
 			
 			isClientIdCompleted = true;
 			checkRequestCompleted();
