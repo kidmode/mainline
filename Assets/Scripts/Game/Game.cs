@@ -56,11 +56,14 @@ public class Game : MonoBehaviour
 	}
 
 	void OnApplicationPause(bool pauseStatus) {
-		if(pauseStatus)
+		if (pauseStatus)
 			KidMode.onActivityStop ();
-		else
+		else {
+			KidMode.setFullScreenDelay();
 			KidMode.onActivityRestart ();
+		}
 	}
+
 	
 	public bool IsAppLoad
 	{
@@ -111,6 +114,8 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
+
+
 
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
