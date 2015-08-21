@@ -1457,52 +1457,55 @@ public class RegionBaseState : GameState
 		int l_gameCount = 0;
 		int l_videoCount = 0;
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			WebContent l_content = o as WebContent;
-			
-			if (l_content.category == WebContent.VIDEO_TYPE)
+			foreach (object o in p_contentList)
 			{
-				if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
-					continue;
+				WebContent l_content = o as WebContent;
 				
-				string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
-					ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
+				if (l_content.category == WebContent.VIDEO_TYPE)
+				{
+					if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
+						continue;
+					
+					string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
+						ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
-				
-				if (l_content.favorite)
-					m_videoFavoritesList.Add(l_info);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+					
+					if (l_content.favorite)
+						m_videoFavoritesList.Add(l_info);
 
-				m_videoViewList.Add(l_info);
+					m_videoViewList.Add(l_info);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_videoFeatured = l_info;
-			}
-			else if (l_content.category == WebContent.GAME_TYPE)
-			{
-				if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
-					continue;
-				
-				string l_url = l_content.url;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_videoFeatured = l_info;
+				}
+				else if (l_content.category == WebContent.GAME_TYPE)
+				{
+					if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+						continue;
+					
+					string l_url = l_content.url;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
 
-				GameInfo l_game = new GameInfo(l_info);
+					GameInfo l_game = new GameInfo(l_info);
 
-				if (l_content.favorite)
-					m_gameFavoritesList.Add(l_game);
+					if (l_content.favorite)
+						m_gameFavoritesList.Add(l_game);
 
-				m_gameViewList.Add(l_game);
+					m_gameViewList.Add(l_game);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_gameFeatured = l_info;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_gameFeatured = l_info;
+				}
 			}
 		}
 
@@ -1578,10 +1581,13 @@ public class RegionBaseState : GameState
 		m_funViewList.Clear();
 		m_funViewList.Add(new ActivityInfo(null));
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			ActivityInfo l_info = new ActivityInfo(o as Drawing);
-			m_funViewList.Add(l_info);
+			foreach (object o in p_contentList)
+			{
+				ActivityInfo l_info = new ActivityInfo(o as Drawing);
+				m_funViewList.Add(l_info);
+			}
 		}
 	}
 

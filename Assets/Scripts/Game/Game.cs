@@ -141,8 +141,6 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
-
-
 //		switch (Input.deviceOrientation) 
 //		{
 //		case DeviceOrientation.FaceDown:
@@ -216,6 +214,7 @@ public class Game : MonoBehaviour
 
 		GAUtil.startSession("Login");
 	}
+
 
 	public void OnApplicationFocus(bool p_focus)
 	{
