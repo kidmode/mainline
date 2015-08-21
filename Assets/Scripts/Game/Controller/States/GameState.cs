@@ -7,9 +7,12 @@ public class GameState
 	public virtual void enter( GameController p_gameController )
 	{
 		m_gameController = p_gameController;
-		Debug.Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-		          "game state: " + p_gameController.stateName +
-		          "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		if (p_gameController != null)
+		{
+			Debug.Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+			          "game state: " + p_gameController.stateName +
+			          "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		}
 	}
 	
 	public virtual void update( GameController p_gameController, int p_time ) 

@@ -35,8 +35,8 @@ public class BirthYearState : GameState
 			gotoPrevious = false;
 			if(null == SessionHandler.getInstance().kidList || SessionHandler.getInstance().kidList.Count == 0)
 			{
-				SessionHandler.getInstance().clearUserData();
-				p_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+				SessionHandler.getInstance().clearUserData(false);
+				p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 				return;
 			}
 			int l_nextState = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);

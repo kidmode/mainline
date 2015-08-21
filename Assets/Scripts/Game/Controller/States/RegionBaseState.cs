@@ -891,8 +891,8 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
@@ -901,8 +901,8 @@ public class RegionBaseState : GameState
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn() 
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
@@ -917,8 +917,8 @@ public class RegionBaseState : GameState
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable &&
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
@@ -1138,8 +1138,8 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
-		    !p_toggle.name.Equals("booksButton"))
+		if ((Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) 
+		    && !p_toggle.name.Equals("booksButton"))
 		{
 			if (!p_isToggled)
 				return;
@@ -1457,52 +1457,55 @@ public class RegionBaseState : GameState
 		int l_gameCount = 0;
 		int l_videoCount = 0;
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			WebContent l_content = o as WebContent;
-			
-			if (l_content.category == WebContent.VIDEO_TYPE)
+			foreach (object o in p_contentList)
 			{
-				if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
-					continue;
+				WebContent l_content = o as WebContent;
 				
-				string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
-					ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
+				if (l_content.category == WebContent.VIDEO_TYPE)
+				{
+					if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
+						continue;
+					
+					string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
+						ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
-				
-				if (l_content.favorite)
-					m_videoFavoritesList.Add(l_info);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+					
+					if (l_content.favorite)
+						m_videoFavoritesList.Add(l_info);
 
-				m_videoViewList.Add(l_info);
+					m_videoViewList.Add(l_info);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_videoFeatured = l_info;
-			}
-			else if (l_content.category == WebContent.GAME_TYPE)
-			{
-				if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
-					continue;
-				
-				string l_url = l_content.url;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_videoFeatured = l_info;
+				}
+				else if (l_content.category == WebContent.GAME_TYPE)
+				{
+					if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+						continue;
+					
+					string l_url = l_content.url;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
 
-				GameInfo l_game = new GameInfo(l_info);
+					GameInfo l_game = new GameInfo(l_info);
 
-				if (l_content.favorite)
-					m_gameFavoritesList.Add(l_game);
+					if (l_content.favorite)
+						m_gameFavoritesList.Add(l_game);
 
-				m_gameViewList.Add(l_game);
+					m_gameViewList.Add(l_game);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_gameFeatured = l_info;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_gameFeatured = l_info;
+				}
 			}
 		}
 
@@ -1578,10 +1581,13 @@ public class RegionBaseState : GameState
 		m_funViewList.Clear();
 		m_funViewList.Add(new ActivityInfo(null));
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			ActivityInfo l_info = new ActivityInfo(o as Drawing);
-			m_funViewList.Add(l_info);
+			foreach (object o in p_contentList)
+			{
+				ActivityInfo l_info = new ActivityInfo(o as Drawing);
+				m_funViewList.Add(l_info);
+			}
 		}
 	}
 
@@ -1661,7 +1667,7 @@ public class RegionBaseState : GameState
 
 	private void showMsgIfNoInternet () 
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
