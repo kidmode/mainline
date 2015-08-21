@@ -119,8 +119,8 @@ public class WebViewState : GameState
 
 		}
 
-		m_webView.AddJavaScript (m_text);
-		m_webView.EvaluatingJavaScript ("disableFullScreen()");
+//		m_webView.AddJavaScript (m_text);
+//		m_webView.EvaluatingJavaScript ("disableFullScreen()");
 		m_isLoaded = true;
 	}
 
@@ -199,7 +199,7 @@ public class WebViewState : GameState
 				}
 				else
 				{
-					m_webView.Reload();
+//					m_webView.Reload();
 				}
 			}
 		}
@@ -208,6 +208,7 @@ public class WebViewState : GameState
 
 	private void _setupWebView(string p_webViewPrefab, float p_inset)
 	{
+		return;
 		GameObject l_webViewPrefab = Resources.Load(p_webViewPrefab) as GameObject;
 		if (l_webViewPrefab == null)// || Application.platform != RuntimePlatform.Android )
 			return;
@@ -366,7 +367,8 @@ public class GameViewState : WebViewState
 		Screen.autorotateToPortraitUpsideDown = true;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
-		m_webView.InsetsForScreenOreitation += setInsetsScreenOrientation;
+
+		//m_webView.InsetsForScreenOreitation += setInsetsScreenOrientation;
 	}
 
 	UniWebViewEdgeInsets setInsetsScreenOrientation(UniWebView webView, UniWebViewOrientation orientation)
