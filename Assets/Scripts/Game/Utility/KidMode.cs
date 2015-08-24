@@ -588,6 +588,17 @@ public class KidMode
 		
 	}
 
+	public static void systemGC(){
+		
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("systemGC");
+		
+		#endif
+		
+	}
+
 	public static void setFullScreenDelay(){
 		
 		#if UNITY_ANDROID && !UNITY_EDITOR
