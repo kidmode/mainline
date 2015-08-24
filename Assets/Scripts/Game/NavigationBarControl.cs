@@ -3,6 +3,7 @@ using System.Collections;
 
 public class NavigationBarControl : MonoBehaviour {
 
+
 	#if UNITY_ANDROID
 	const int SYSTEM_UI_FLAG_IMMERSIVE = 2048;
 	const int SYSTEM_UI_FLAG_IMMERSIVE_STICKY = 4096;

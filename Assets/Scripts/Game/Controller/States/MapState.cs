@@ -21,7 +21,9 @@ public class MapState : GameState
 	
 	public override void enter(GameController p_gameController)
 	{
+
 		base.enter(p_gameController);
+
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
 		m_subState = SubState.NONE;
@@ -115,9 +117,12 @@ public class MapState : GameState
 			return;
 		}
 
+
 		m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
 		m_mapCanvas.enterTransitionEvent += onTransitionEnter;
 		m_mapCanvas.exitTransitionEvent += onTransitionExit;
+
+		
 
 		m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 		m_entranceButton.addClickCallback(onBackClicked);
@@ -140,6 +145,8 @@ public class MapState : GameState
 		l_arrowPosList.Add(l_arrow.transform.localPosition + new Vector3(0, 50, 0));
 		l_arrowPosList.Add(l_arrow.transform.localPosition);
 		l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
+
+
 	}
 
 	private void _setupKidProfile(GameController p_gameController)
