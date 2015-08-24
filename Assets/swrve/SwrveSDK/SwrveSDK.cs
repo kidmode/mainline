@@ -374,6 +374,7 @@ public partial class SwrveSDK
         StartCampaignsAndResourcesTimer();
         DisableAutoShowAfterDelay();
 #endif
+		SwrveComponent.Instance.SDK.GlobalMessageListener = new CustomMessageListener ();
     }
 
     /// <summary>
@@ -1627,4 +1628,20 @@ public partial class SwrveSDK
         }
     }
 #endif
+}
+
+class CustomMessageListener : ISwrveMessageListener {
+	public void OnShow (SwrveMessageFormat format) {
+		// Pause app, disable clicks on other UI elements
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (false);
+	}
+	public void OnShowing (SwrveMessageFormat format) {
+		// Message displaying, UI elements must continue to be disabled
+	}
+	public void OnDismiss (SwrveMessageFormat format) {
+		// Resume app and clicks in other UI elements
+		GameObject gameLogic = GameObject.FindWithTag("GameController");
+		gameLogic.GetComponent<Game> ().gameSwitcher (true);
+	}
 }
