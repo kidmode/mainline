@@ -67,6 +67,13 @@ public class SoundManager : object
 		l_audioSource.Stop();
 	}
 
+	public bool isPlayingMusic()
+	{
+		GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
+		AudioSource l_audioSource = l_gameObject.audio;
+		return l_audioSource.isPlaying;
+	}
+
 	public AudioSource play(string p_name, double p_offset, 
 		int p_loops, string p_channelName, object p_transform, bool p_isMusic)
 	{
