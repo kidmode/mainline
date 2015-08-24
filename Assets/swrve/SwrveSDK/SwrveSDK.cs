@@ -374,6 +374,8 @@ public partial class SwrveSDK
         StartCampaignsAndResourcesTimer();
         DisableAutoShowAfterDelay();
 #endif
+		SwrveComponent.Instance.SDK.GlobalMessageListener = new CustomMessageListener ();
+		SwrveComponent.Instance.SDK.GlobalCustomButtonListener = new CustomButtonListener ();
     }
 
     /// <summary>
@@ -1627,4 +1629,37 @@ public partial class SwrveSDK
         }
     }
 #endif
+	
+	/// <summary>
+	/// Process in-app message custom button clicks.
+	/// </summary>
+	private class CustomButtonListener : ISwrveCustomButtonListener
+	{
+		public void OnAction (string customAction)
+		{
+			// Custom button logic
+			UnityEngine.Debug.Log ("Custom action triggered " + customAction);
+		}
+	}
+	/// <summary>
+	/// Observe the SDK for in-app messages and pause/resume your game.
+	/// </summary>
+	class CustomMessageListener : ISwrveMessageListener {
+		public void OnShow (SwrveMessageFormat format) {
+			// Pause app, disable clicks on other UI elements
+			GameObject gameLogic = GameObject.FindWithTag("GameController");
+			gameLogic.GetComponent<Game> ().gameSwitcher (false);
+		}
+		public void OnShowing (SwrveMessageFormat format) {
+			// Message displaying, UI elements must continue to be disabled
+		}
+		public void OnDismiss (SwrveMessageFormat format) {
+			// Resume app and clicks in other UI elements
+			GameObject gameLogic = GameObject.FindWithTag("GameController");
+			gameLogic.GetComponent<Game> ().gameSwitcher (true);
+		}
+	}
 }
+
+
+

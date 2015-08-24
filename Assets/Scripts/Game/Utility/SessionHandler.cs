@@ -531,6 +531,11 @@ public class SessionHandler
 			m_clientId = 0;
 		}
 
+		if (SoundManager.getInstance().isPlayingMusic())
+		{
+			SoundManager.getInstance().stopMusic();
+		}
+
 		//honda: clean kids local time left list when user does sign out
 		removeKidsTimeLeftWhenSignOut();
 		//need to clear token. if not, previous token info still exists after new Token(). 
