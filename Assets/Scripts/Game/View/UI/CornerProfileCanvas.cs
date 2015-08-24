@@ -46,7 +46,7 @@ public class CornerProfileCanvas : UICanvas
 		m_childNameLabel.fontSize = Mathf.Min((int)(350.0f / m_kid.name.Length), 32);
 		m_zpLevelLabel.text		= m_kid.level.ToString("N0");
 		m_starNumberLabel.text 	= m_kid.stars.ToString("N0");
-//		m_gemNumberLabel.text 	= m_kid.gems.ToString("N0");
+		m_gemNumberLabel.text 	= m_kid.gems.ToString("N0");
 		m_starMeter.sizeDelta	= new Vector2(m_kid.stars * 150.0f / ServerSettings.getInstance().levels.getLevelPoints(m_kid.level + 1), 37.0f);
 	}
 	
