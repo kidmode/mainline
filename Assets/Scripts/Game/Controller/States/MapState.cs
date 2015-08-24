@@ -24,6 +24,7 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
+		KidMode.systemGC ();
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
 		m_subState = SubState.NONE;
