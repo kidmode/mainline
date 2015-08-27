@@ -6,10 +6,18 @@ public class TextureManager : System.Object
 {
 	public const int MAX_UNDO_DEPTH = 10;
 
-	public TextureManager(GameController p_gameController, Texture2D p_texture)
+	//honda
+	public RequestQueue.RequestHandler onSaveNewDrawingCompleted;
+	public RequestQueue.RequestHandler onSaveDrawingCompleted;
+	//end
+
+	public TextureManager(GameController p_gameController, Texture2D p_texture, 
+	                      RequestQueue.RequestHandler saveNewDrawingEvent, RequestQueue.RequestHandler saveDrawingEvent)
 	{
 		m_texture = p_texture;
 		m_undoStack = new List<Color[]>();
+		onSaveNewDrawingCompleted = saveNewDrawingEvent;
+		onSaveDrawingCompleted = saveDrawingEvent;
 	}
 
 	public void save()
@@ -17,9 +25,9 @@ public class TextureManager : System.Object
 		byte[] l_bytes = m_texture.EncodeToPNG();
 		RequestQueue l_queue = new RequestQueue();
 		if (SessionHandler.getInstance().currentDrawing == null)
-			l_queue.add(new NewDrawingRequest(l_bytes));
+			l_queue.add(new NewDrawingRequest(l_bytes, onSaveNewDrawingCompleted));
 		else
-			l_queue.add(new SaveDrawingRequest(l_bytes));
+			l_queue.add(new SaveDrawingRequest(l_bytes, onSaveDrawingCompleted));
 		l_queue.request(RequestType.RUSH);
 	}
 
@@ -96,6 +104,9 @@ public class TextureManager : System.Object
 
 	public void dispose()
 	{
+		onSaveNewDrawingCompleted = null;
+		onSaveDrawingCompleted = null;
+
 		m_undoStack.Clear();
 		m_undoStack = null;
 		m_pixels = null;
@@ -112,6 +123,8 @@ public class TextureManager : System.Object
 	private Color[] m_pixels;
 	private Texture2D m_texture;
 	private List<Color[]> m_undoStack;
+
+
 }
 
 

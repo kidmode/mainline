@@ -30,6 +30,7 @@ public class RequestQueue
 			init();
 			
 			m_params["version"] = "v2";
+			m_params["API_VERSION"] = "v2";
 			m_request = Server.request(m_call, m_params, m_method, _requestComplete);
 		}
 
@@ -1034,7 +1035,7 @@ public class NewDrawingRequest : RequestQueue.Request
 	public NewDrawingRequest(byte[] p_file, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_file = p_file;
-		handler += _requestComplete;
+//		handler += _requestComplete;
 	}
 
 	protected override void init()
@@ -1045,11 +1046,11 @@ public class NewDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
-	{
-		if (p_response.error == null)
-			_Debug.log(p_response.text);
-	}
+//	private void _requestComplete(WWW p_response)
+//	{
+//		if (p_response.error == null)
+//			_Debug.log("#####################: " + p_response.text);
+//	}
 
 	private byte[] m_file;
 }
@@ -1060,7 +1061,7 @@ public class SaveDrawingRequest : RequestQueue.Request
 	public SaveDrawingRequest(byte[] p_file, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_file = p_file;
-		handler += _requestComplete;
+//		handler += _requestComplete;
 	}
 	
 	protected override void init()
@@ -1071,11 +1072,11 @@ public class SaveDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
-	{
-		if (p_response.error == null)
-			_Debug.log(p_response.text);
-	}
+//	private void _requestComplete(WWW p_response)
+//	{
+//		if (p_response.error == null)
+//			_Debug.log(p_response.text);
+//	}
 
 	private byte[] m_file;
 }
