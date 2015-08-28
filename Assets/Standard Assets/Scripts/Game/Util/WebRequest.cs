@@ -73,11 +73,21 @@ public class WebRequest : object
 #if UNITY_EDITOR
 			Debug.Log(l_url);
 #endif
-
+			//honda: add header "API_VERSION" = "v2"
 			if( m_form != null )
-				m_www = new WWW( l_url, m_form );
+			{
+				Hashtable headers = m_form.headers;
+				byte[] rawData = m_form.data;
+				headers.Add("API_VERSION", "v2");
+				m_www = new WWW(l_url, rawData, headers);
+			}
             else
-                m_www = new WWW( l_url );
+			{
+				Hashtable headers = new Hashtable();
+				headers.Add("API_VERSION", "v2");
+                m_www = new WWW(l_url, null, headers);
+			}
+			//end
 		}
 		else
 		{
@@ -86,7 +96,7 @@ public class WebRequest : object
 				if( m_www.error != null )
 				{
 					#if UNITY_EDITOR
-					Debug.LogError( m_www.url + ":" + m_www.error );
+					Debug.LogError( m_www.url + ":" + m_www.error);
 					#endif
 					m_status = (int)WebRequestStatus.Error;
 				}

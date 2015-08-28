@@ -30,7 +30,6 @@ public class RequestQueue
 			init();
 			
 			m_params["version"] = "v2";
-			m_params["API_VERSION"] = "v2";
 			m_request = Server.request(m_call, m_params, m_method, _requestComplete);
 		}
 
