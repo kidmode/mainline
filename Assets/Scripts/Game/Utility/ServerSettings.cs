@@ -35,9 +35,24 @@ public class ZpLevels
 	public int getLevelPoints(int p_level)
 	{
 		_init();
-
+		
+		//===============================
+		//===============================
+		//Kevin 
+		//Added to avoid bug when p_level is greater and equal to 102
+		if( m_table["101"] == null){
+			
+			return 153;
+			
+		}
+		
+		if(m_table[p_level.ToString()] == null)
+			return int.Parse(m_table["101"].ToString());
+		//===============================End Bug avoid //===============================//===============================
+		
 		return int.Parse(m_table[p_level.ToString()].ToString());
 	}
+
 
 	private void _init()
 	{
