@@ -258,7 +258,7 @@ public class CreateChildProfileState : GameState
 
 	private void toDeleteChild(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
@@ -327,9 +327,9 @@ public class CreateChildProfileState : GameState
 
 	private void toBackSign(UIButton p_button)
 	{
-		SessionHandler.getInstance().clearUserData();
+		SessionHandler.getInstance().clearUserData(false);
 		LocalSetting.find("User").delete();
-		m_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+		m_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 	}
 
 	private string combineChildName(string p_firstName, string p_lastName)
@@ -514,7 +514,7 @@ public class CreateChildProfileState : GameState
 	private void toCreateProfile(UIButton p_button)
 	{
 		//cynthia
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

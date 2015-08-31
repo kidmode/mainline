@@ -179,7 +179,8 @@ public class RegionBaseState : GameState
 		GO_BOOKS,
 		GO_PAINT
 	}
-	
+
+
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
@@ -192,9 +193,16 @@ public class RegionBaseState : GameState
 
 		//create jungle view
 		_createViews();
-		//set buttons for jungle view
-		_setupElements();
 
+		//set buttons for jungle view
+		_setupElements(p_gameController);
+
+		if (m_queue == null)
+		{
+			m_queue = new RequestQueue();
+		}
+
+		//honda: check timer
 		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
 		{
 			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
@@ -207,20 +215,12 @@ public class RegionBaseState : GameState
 		{
 			TimerController.Instance.timesUp = false;
 		}
+		//end
+		//honda: current kid drawing list request
+		SessionHandler.getInstance().drawingListRequest();
+		//end
 
-		if (m_queue == null)
-		{
-			m_queue = new RequestQueue();
-		}
-
-		//honda: this line is weird
-		if (!m_requestStates.ContainsKey("PAINT") || m_requestStates["PAINT"] == true)
-		{
-			m_queue.add(new DrawingListRequest(_requestDrawingListComplete));
-		}
-
-		m_queue.request(RequestType.RUSH);
-
+		//play background music
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("RegionLandingScreen");
@@ -377,6 +377,7 @@ public class RegionBaseState : GameState
 			m_bookQueue.dispose();
 			m_bookQueue = null;
 		}
+
 	}
 	
 	//------------------ Private Implementation ----------------------
@@ -426,8 +427,8 @@ public class RegionBaseState : GameState
 
 		}
 	}
-
 	
+
 	private void _createViews()
 	{
 		UIManager l_ui = m_gameController.getUI();
@@ -441,7 +442,7 @@ public class RegionBaseState : GameState
 		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
-	private void _setupElements()
+	private void _setupElements(GameController p_gameController)
 	{
 //		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
 
@@ -451,7 +452,7 @@ public class RegionBaseState : GameState
 
 		this._setupAppContentList();
 		// end vzw
-		
+
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
 		m_mapButton.addClickCallback(onMapButtonClicked);
 		m_cornerPosition = m_mapButton.transform.localPosition;
@@ -459,9 +460,10 @@ public class RegionBaseState : GameState
 		m_backButton = m_regionLandingCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(onBackButtonClicked);
 
+//		m_backButton.transform.localPosition = new Vector3 (-427.2f, 196.9f, 0.0f);
 		m_backButtonPosition = m_backButton.transform.localPosition;
 		m_backButton.transform.localPosition += new Vector3(0, 200, 0);
-
+	
 
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
@@ -654,7 +656,7 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_funActivityCanvas;
 			
 			m_funSwipeList = m_funActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			m_funSwipeList.setData(m_funViewList);
+//			m_funSwipeList.setData(m_funViewList);
 			m_funSwipeList.addClickListener("Prototype", onFunActivityClicked);
 			//m_createActivity 		= ActivityType.None;
 			//m_gotoPaint 			= true;
@@ -886,8 +888,8 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
@@ -896,8 +898,8 @@ public class RegionBaseState : GameState
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && 
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn() 
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
@@ -912,8 +914,8 @@ public class RegionBaseState : GameState
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable &&
-		    p_toggles == true)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
@@ -1133,8 +1135,8 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable && 
-		    !p_toggle.name.Equals("booksButton"))
+		if ((Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) 
+		    && !p_toggle.name.Equals("booksButton"))
 		{
 			if (!p_isToggled)
 				return;
@@ -1421,6 +1423,7 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
+		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{
 			WebContentCache l_cache = m_gameController.game.user.contentCache;
@@ -1452,52 +1455,55 @@ public class RegionBaseState : GameState
 		int l_gameCount = 0;
 		int l_videoCount = 0;
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			WebContent l_content = o as WebContent;
-			
-			if (l_content.category == WebContent.VIDEO_TYPE)
+			foreach (object o in p_contentList)
 			{
-				if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
-					continue;
+				WebContent l_content = o as WebContent;
 				
-				string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
-					ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
+				if (l_content.category == WebContent.VIDEO_TYPE)
+				{
+					if (l_videoCount++ >= ZoodlesConstants.MAX_VIDEO_CONTENT)
+						continue;
+					
+					string l_url = ZoodlesConstants.YOUTUBE_EMBEDED_URL + l_content.youtubeId +
+						ZoodlesConstants.YOUTUBE_NO_RELATED_SUFFEX;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
-				
-				if (l_content.favorite)
-					m_videoFavoritesList.Add(l_info);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+					
+					if (l_content.favorite)
+						m_videoFavoritesList.Add(l_info);
 
-				m_videoViewList.Add(l_info);
+					m_videoViewList.Add(l_info);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_videoFeatured = l_info;
-			}
-			else if (l_content.category == WebContent.GAME_TYPE)
-			{
-				if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
-					continue;
-				
-				string l_url = l_content.url;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_videoFeatured = l_info;
+				}
+				else if (l_content.category == WebContent.GAME_TYPE)
+				{
+					if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+						continue;
+					
+					string l_url = l_content.url;
 
-//				string contentName = getLocalContentNmae(l_content);
-//				Texture2D texture = ImageCache.getCacheImage(contentName);
-				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+//					string contentName = getLocalContentNmae(l_content);
+//					Texture2D texture = ImageCache.getCacheImage(contentName);
+					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
 
-				GameInfo l_game = new GameInfo(l_info);
+					GameInfo l_game = new GameInfo(l_info);
 
-				if (l_content.favorite)
-					m_gameFavoritesList.Add(l_game);
+					if (l_content.favorite)
+						m_gameFavoritesList.Add(l_game);
 
-				m_gameViewList.Add(l_game);
+					m_gameViewList.Add(l_game);
 
-				//honda: comment out because we remove feature toy box
-//				if (l_content.recommend)
-//					m_gameFeatured = l_info;
+					//honda: comment out because we remove feature toy box
+//					if (l_content.recommend)
+//						m_gameFeatured = l_info;
+				}
 			}
 		}
 
@@ -1573,10 +1579,13 @@ public class RegionBaseState : GameState
 		m_funViewList.Clear();
 		m_funViewList.Add(new ActivityInfo(null));
 
-		foreach (object o in p_contentList)
+		if (p_contentList != null)
 		{
-			ActivityInfo l_info = new ActivityInfo(o as Drawing);
-			m_funViewList.Add(l_info);
+			foreach (object o in p_contentList)
+			{
+				ActivityInfo l_info = new ActivityInfo(o as Drawing);
+				m_funViewList.Add(l_info);
+			}
 		}
 	}
 
@@ -1656,7 +1665,7 @@ public class RegionBaseState : GameState
 
 	private void showMsgIfNoInternet () 
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

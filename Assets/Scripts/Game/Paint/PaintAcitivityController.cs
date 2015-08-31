@@ -37,7 +37,10 @@ public class PaintAcitivityController : System.Object
 		setupPaintingArea();
 
 		//start texture manager
-		m_textureManager = new TextureManager(m_gameController, m_paintTexture);
+		//honda: add listener to deatect saving and uploading drawing completion 
+		m_textureManager = new TextureManager(m_gameController, m_paintTexture, 
+		                                      SessionHandler.getInstance().saveNewDrawingCompleted,
+		                                      SessionHandler.getInstance().saveDrawingCompleted);
 		//m_textureManager.reset();
 
 		//Add button logic to system buttons
@@ -60,8 +63,10 @@ public class PaintAcitivityController : System.Object
 
 			if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
 				
-				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
-				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
+//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				p_gameController.changeState(ZoodleState.REGION_FUN);
+				SessionHandler.getInstance().getPoints();
 
 			} else {
 

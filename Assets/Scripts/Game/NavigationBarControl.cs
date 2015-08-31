@@ -3,6 +3,7 @@ using System.Collections;
 
 public class NavigationBarControl : MonoBehaviour {
 
+
 	#if UNITY_ANDROID
 	const int SYSTEM_UI_FLAG_IMMERSIVE = 2048;
 	const int SYSTEM_UI_FLAG_IMMERSIVE_STICKY = 4096;
@@ -25,10 +26,10 @@ public class NavigationBarControl : MonoBehaviour {
 	void Start() {
 		TurnImmersiveModeOn();
 
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-		AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
-		AndroidJavaObject window = activity.Call<AndroidJavaObject>("getWindow");
-		decorView = window.Call<AndroidJavaObject>("getDecorView");
+//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+//		AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
+//		AndroidJavaObject window = activity.Call<AndroidJavaObject>("getWindow");
+//		decorView = window.Call<AndroidJavaObject>("getDecorView");
 
 		mIsKeyboardShow = false;
 
@@ -61,8 +62,17 @@ public class NavigationBarControl : MonoBehaviour {
 	}
 	
 	void TurnImmersiveModeOff() {
-		decorView.Call("setSystemUiVisibility",
-		               SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//		decorView.Call("setSystemUiVisibility",
+//		               SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) { 
+			AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
+			activity.CallStatic("turnOffFullScreen"); 
+		}
+		
+		#endif
 	}
 
 	

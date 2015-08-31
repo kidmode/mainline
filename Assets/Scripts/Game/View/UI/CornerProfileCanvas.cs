@@ -72,6 +72,7 @@ public class CornerProfileCanvas : UICanvas
 		m_gemNumberLabel 		= getView( "gemNumber" 	) 	as UILabel;
 
 		m_starMeter				= getView( "starMeter" ).gameObject.GetComponent<RectTransform>();
+		m_gemMeter				= getView( "gems" ).gameObject.GetComponent<RectTransform>();
 
 		m_kid 					= SessionHandler.getInstance().currentKid;
 		m_kid.requestPhoto();
@@ -86,4 +87,5 @@ public class CornerProfileCanvas : UICanvas
 	private UILabel m_starNumberLabel;
 	private UILabel m_gemNumberLabel;
 	private RectTransform m_starMeter;
+	private RectTransform m_gemMeter;
 }

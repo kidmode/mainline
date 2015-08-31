@@ -20,6 +20,7 @@ public class Game : MonoBehaviour
 
 	private static bool mAppIsLoad = false;
 
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
@@ -43,10 +44,9 @@ public class Game : MonoBehaviour
 			isNativeAppRunning = value;
 		}
 	}
-
+	public DateTime leaveAppDateTime;
+	//end
 	private bool mIsLoading = false;
-
-
 	public bool isLoading
 	{
 		get { 
@@ -55,14 +55,16 @@ public class Game : MonoBehaviour
 		set { mIsLoading = value;  }
 
 	}
-	//end
 
 	void OnApplicationPause(bool pauseStatus) {
-		if(pauseStatus)
+		if (pauseStatus)
 			KidMode.onActivityStop ();
-		else
+		else {
+			KidMode.setFullScreenDelay();
 			KidMode.onActivityRestart ();
+		}
 	}
+
 	
 	public bool IsAppLoad
 	{
@@ -114,6 +116,8 @@ public class Game : MonoBehaviour
 	}
 */
 
+
+
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
 	}
@@ -142,8 +146,6 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
-
-
 
 //		switch (Input.deviceOrientation) 
 //		{
@@ -189,17 +191,20 @@ public class Game : MonoBehaviour
 
 		//honda
 //		PlayerPrefs.DeleteAll();
-		
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
 		testTimes = 0;
 		//check if time left data expired or not, if expired, remove the item
-		SessionHandler.updateKidsTimeLeft();
+		SessionHandler.updateKidsLocalTimeLeftFile();
 
 		//set version text
 		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
 		versionText.text = CurrentBundleVersion.version;
+
+		string[] keys = {"version"};
+		string[] values = {CurrentBundleVersion.version};
+		CrittercismAndroid.SetMetadata(keys, values);
 		//end
 
 		GCS.Environment.init();
@@ -215,6 +220,7 @@ public class Game : MonoBehaviour
 
 		GAUtil.startSession("Login");
 	}
+
 
 	public void OnApplicationFocus(bool p_focus)
 	{
@@ -367,7 +373,7 @@ public class Game : MonoBehaviour
 			onRequestCompleted += completedEvent;
 		}
 		
-		if (Application.internetReachability != NetworkReachability.NotReachable)
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn())
 		{
 			setClientIdAndPremiumRequests();
 		}
@@ -393,7 +399,8 @@ public class Game : MonoBehaviour
 		if(p_response.error == null)
 		{
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : -1;
+			Debug.Log("client id " + double.Parse(l_data["id"].ToString()) + " request completed");
+			SessionHandler.getInstance ().clientId = l_data.ContainsKey("id") ? double.Parse(l_data["id"].ToString()) : 0;
 			
 			isClientIdCompleted = true;
 			checkRequestCompleted();

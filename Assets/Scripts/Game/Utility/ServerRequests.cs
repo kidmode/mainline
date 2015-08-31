@@ -289,9 +289,9 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
 
 		//honda: add these to test create premium screen on unity editor
-//		m_params [ZoodlesConstants.PARAM_BRAND] = "Quanta";
-//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
-//		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
+		m_params [ZoodlesConstants.PARAM_BRAND] = "Quanta";
+		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
+		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
 		//end
 		#endif
 
@@ -454,6 +454,13 @@ public class GetUserSettingRequest : RequestQueue.Request
 				l_session.childLockPassword = l_data["lock_pin"].ToString();
 			}
 			SessionHandler.getInstance ().initSettingCache ();
+			Debug.Log("GetUserSetting SessionHandler master volume: " + SessionHandler.getInstance().masterVolum);
+			Debug.Log("GetUserSetting SessionHandler music volume: " + SessionHandler.getInstance().musicVolum);
+			Debug.Log("GetUserSetting SessionHandler effects volume: " + SessionHandler.getInstance().effectsVolum);
+			Debug.Log("GetUserSetting SoundManager master volume: " + SoundManager.getInstance().masterVolume);
+			Debug.Log("GetUserSetting SoundManager music volume: " + SoundManager.getInstance().musicVolume);
+			Debug.Log("GetUserSetting SoundManager effects volume: " + SoundManager.getInstance().effectVolume);
+			Debug.Log("GetUserSetting set volume data from session handler to setting cache");
 		}
 	}
 }
@@ -1027,7 +1034,7 @@ public class NewDrawingRequest : RequestQueue.Request
 	public NewDrawingRequest(byte[] p_file, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_file = p_file;
-		handler += _requestComplete;
+//		handler += _requestComplete;
 	}
 
 	protected override void init()
@@ -1038,11 +1045,11 @@ public class NewDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
-	{
-		if (p_response.error == null)
-			_Debug.log(p_response.text);
-	}
+//	private void _requestComplete(WWW p_response)
+//	{
+//		if (p_response.error == null)
+//			_Debug.log("#####################: " + p_response.text);
+//	}
 
 	private byte[] m_file;
 }
@@ -1053,7 +1060,7 @@ public class SaveDrawingRequest : RequestQueue.Request
 	public SaveDrawingRequest(byte[] p_file, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_file = p_file;
-		handler += _requestComplete;
+//		handler += _requestComplete;
 	}
 	
 	protected override void init()
@@ -1064,11 +1071,11 @@ public class SaveDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
-	{
-		if (p_response.error == null)
-			_Debug.log(p_response.text);
-	}
+//	private void _requestComplete(WWW p_response)
+//	{
+//		if (p_response.error == null)
+//			_Debug.log(p_response.text);
+//	}
 
 	private byte[] m_file;
 }
@@ -2175,6 +2182,42 @@ public class VisitLinkTrackRequest
 	{
 		_Debug.log(Encoding.UTF8.GetString(p_event.Result));
 	}
+}
+
+
+public class LinkVisitRequest : RequestQueue.Request
+{
+	
+	public int linkId;
+	
+	public LinkVisitRequest(int linkId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		
+		this.linkId = linkId;
+		
+	}
+	
+	protected override void init()
+	{
+		m_call = "/api/sessions/visit";
+		
+		//		 m_params = new Hashtable ();
+		m_params [ZoodlesConstants.PARAM_TOKEN] 	= SessionHandler.getInstance().token.getSecret();
+		
+		m_params [ZoodlesConstants.PARAM_CLIENT_ID] 	= SessionHandler.getInstance().clientId;
+		m_params [ZoodlesConstants.PARAM_LINK_ID] 	= linkId;
+		m_params [ZoodlesConstants.PARAM_KID_ID] 	= SessionHandler.getInstance ().currentKid.id;
+		m_method = CallMethod.GET;
+	}
+	
+	private void _requestComplete(WWW p_response)
+	{
+		string l_string = "";
+		
+		l_string = UnicodeDecoder.Unicode(p_response.text);
+
+	}
+
 }
 
 public class VisitBookRequest : RequestQueue.Request

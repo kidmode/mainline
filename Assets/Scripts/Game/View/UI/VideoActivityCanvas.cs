@@ -30,7 +30,11 @@ public class VideoActivityCanvas : UICanvas
 		_setupList();
 
 		SetupLocalizition ();
+
+		setScrollView ();
 	}
+
+
 	
 	public override void enteringTransition()
 	{
@@ -56,6 +60,10 @@ public class VideoActivityCanvas : UICanvas
     {
         if( p_isOn )
         {
+			moveTotal = 0;
+			move = 0;
+			isFavor = true;
+			m_favorcontentPanel.localPosition = new Vector3 (0, 0, 0);
             m_videoSwipeList.active = false;
 	        m_videoFavorateSwipeList.active = true;
 			m_videoFavorateInfo.active = (m_videoFavorateSwipeList.getData().Count <= 0);
@@ -67,6 +75,10 @@ public class VideoActivityCanvas : UICanvas
     {
         if( p_isOn )
         {
+			moveTotal = 0;
+			move = 0;
+			isFavor = false;
+			m_contentPanel.localPosition = new Vector3 (0, 0, 0);
             m_videoSwipeList.active = true;
 			m_videoFavorateSwipeList.active = false;
 			m_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
@@ -125,6 +137,70 @@ public class VideoActivityCanvas : UICanvas
 
         m_videoFavorateSwipeList.setDrawFunction(onListDraw);
         m_videoFavorateSwipeList.redraw();
+
+	}
+
+
+
+
+	public override void update()
+	{
+		base.update();
+
+		if (mMovingOffset == 0) {
+			if(isFavor)
+				move = m_favorcontentPanel.localPosition.x;
+			else
+				move = m_contentPanel.localPosition.x;
+			moveTotal = move;
+		}
+		if (mMovingOffset > 0) {
+			move += mMovingOffset * MOVESPEED;
+			if (move <= moveTotal) {
+				if(isFavor)
+					m_favorcontentPanel.localPosition = new Vector3 (move, 0, 0);
+				else
+					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(!m_leftButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
+						moveTotal = m_favorcontentPanel.localPosition.x;
+					else
+						moveTotal = m_contentPanel.localPosition.x;
+				}
+				else {
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
+				}
+
+			}
+		} else if (mMovingOffset < 0) {
+
+			move += mMovingOffset * MOVESPEED;
+			if (move > moveTotal) {
+				if(isFavor)
+					m_favorcontentPanel.localPosition = new Vector3 (move, 0, 0);
+				else
+					m_contentPanel.localPosition = new Vector3 (move, 0, 0);
+			}
+			else {
+				if(!m_rightButton.active) {
+					mMovingOffset = 0;
+					if(isFavor)
+						moveTotal = m_favorcontentPanel.localPosition.x;
+					else
+						moveTotal = m_contentPanel.localPosition.x;
+				}
+				else {
+					moveTotal += (mMovingOffset * OFFSET);
+					mMovingOffset = 0;
+				}
+
+			}
+		}
+
 	}
 
 	private void SetupLocalizition()
@@ -144,12 +220,90 @@ public class VideoActivityCanvas : UICanvas
 		l_headerLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_HEADER);
 	}
 
+	public void onLeftButtonClick( UIButton p_button )
+	{
+		mMovingOffset = 1;
+		if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+
+	public void onRightButtonClick( UIButton p_button )
+	{
+		mMovingOffset = -1;
+		if (moveTotal == 0) {
+			if(isFavor)
+				move = m_favorcontentPanel.localPosition.x;
+			else
+				move = m_contentPanel.localPosition.x;
+			moveTotal = move + mMovingOffset * OFFSET;
+		} else if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+
+	public void onLeftFavorButtonClick( UIButton p_button )
+	{
+		mMovingOffset = 1;
+		if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+	
+	public void onRightFavorButtonClick( UIButton p_button )
+	{
+		mMovingOffset = -1;
+		if (moveTotal == 0) {
+			if(isFavor)
+				move = m_favorcontentPanel.localPosition.x;
+			else
+				move = m_contentPanel.localPosition.x;
+			moveTotal = move + mMovingOffset * OFFSET;
+		} else if (move == moveTotal) {
+			moveTotal = move + mMovingOffset * OFFSET;
+		}
+	}
+
+	void setScrollView() {
+		
+		m_contentPanel = getView ("allContentScrollView").getChildAt(0).gameObject.GetComponent<RectTransform>();
+		m_favorcontentPanel = getView ("favorateScrollView").getChildAt(0).gameObject.GetComponent<RectTransform>();
+		
+		m_leftButton = getView( "allContentArrowLeft" ) as UIButton;
+		m_rightButton = getView( "allContentArrowRight" ) as UIButton;
+		m_favorleftButton = getView( "favorateScrollArrowLeft" ) as UIButton;
+		m_favorrightButton = getView( "favorateScrollArrowRight" ) as UIButton;
+		
+		m_leftButton.addClickCallback( onLeftButtonClick );
+		m_rightButton.addClickCallback( onRightButtonClick );
+		
+		m_favorleftButton.addClickCallback( onLeftFavorButtonClick );
+		m_favorrightButton.addClickCallback( onRightFavorButtonClick );
+	}
+
     private UISwipeList     m_videoSwipeList;
     private UISwipeList     m_videoFavorateSwipeList;
 	private UILabel			m_videoFavorateInfo;
 	private UILabel 		m_videoInfo;
 
+	private UIButton m_leftButton;
+	private UIButton m_rightButton;
+	private UIButton m_favorleftButton;
+	private UIButton m_favorrightButton;
+
 	private List< Button > 	m_buttonList;
 	
 	private Texture2D m_emptyTexture;
+
+	private RectTransform m_contentPanel;
+	private RectTransform m_favorcontentPanel;
+	
+
+	private float OFFSET = 500;
+	private float MOVESPEED = 30;
+	private float mMovingOffset = 0;
+	private float move = 0;
+	private float moveTotal;
+	private bool isFavor = false; // true: favor false: all
+	
 }

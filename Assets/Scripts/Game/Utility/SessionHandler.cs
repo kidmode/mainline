@@ -99,11 +99,36 @@ public class SessionHandler
 		set { m_selectedAvatar = value;  }
 	}
 
+	//honda: updated
     public double clientId
     {
-        get;
-        set;
+        get
+		{
+			if (m_clientId == 0)
+			{
+				if (PlayerPrefs.HasKey("CLIENT_ID"))
+				{
+					string cId = PlayerPrefs.GetString("CLIENT_ID");
+					m_clientId = Convert.ToDouble(cId);
+				}
+				return m_clientId;
+			}
+			else
+			{
+				return m_clientId;
+			}
+		}
+		set
+		{
+			m_clientId = value;
+			if (value > 0)
+			{
+				PlayerPrefs.SetString("CLIENT_ID", m_clientId.ToString());
+				Debug.Log("save client id = " + m_clientId +" to local");
+			}
+		}
     }
+	//end
 
 	public WebContent currentContent
 	{
@@ -497,10 +522,25 @@ public class SessionHandler
 		get{return m_bookRequest;}
 		set{m_bookRequest = value;}
 	}
-	public void clearUserData()
+	public void clearUserData(bool cleanClientId)
 	{
+		if (cleanClientId)
+		{
+			m_deviceName = string.Empty;
+			m_renewalPeriod = 0;
+			m_clientId = 0;
+		}
+
+		if (SoundManager.getInstance().isPlayingMusic())
+		{
+			SoundManager.getInstance().stopMusic();
+		}
+
 		//honda: clean kids local time left list when user does sign out
 		removeKidsTimeLeftWhenSignOut();
+		//need to clear token. if not, previous token info still exists after new Token(). 
+		m_token.clear();
+		m_token = new Token();
 		m_kid   = null;
 		m_kidList = null;
 		m_passwordVerified = false;
@@ -529,9 +569,6 @@ public class SessionHandler
 		m_masterVolum = 0;
 		m_allowCall = true;
 		m_tip = true;
-		//need to clear token. if not, previous token info still exists after new Token(). 
-		m_token.clear();
-		m_token = new Token();
 		m_username = "";
 		m_callMethod = CallMethod.NULL;
 		m_appList = null;
@@ -551,8 +588,6 @@ public class SessionHandler
 		m_creditCardNum = string.Empty;
 		m_cardMonth = string.Empty;
 		m_cardYear = string.Empty;
-		m_deviceName = string.Empty;
-		m_renewalPeriod = 0;
 		m_settingCache = new SettingCache();
 	}
 
@@ -811,6 +846,103 @@ public class SessionHandler
 		}
 		m_iconRequest.request(RequestType.RUSH);
 	}
+
+	//honda
+
+	public bool IsDrawingUpdated
+	{
+		get
+		{
+			return isDrawingUpdated;
+		}
+		set
+		{
+			isDrawingUpdated = value;
+			if (isDrawingUpdated)
+			{
+				if (onUpdateDrawingList != null)
+				{
+					onUpdateDrawingList();
+				}
+				isDrawingUpdated = false;
+			}
+		}
+	}
+	private bool isDrawingUpdated = false;
+
+	public delegate void onSaveDrawingCompletedEvent(bool isCompleted);
+	public delegate void onUpdateDrawingListEvent();
+	public event onUpdateDrawingListEvent onUpdateDrawingList;
+
+	public void drawingListRequest()
+	{
+		if (null == m_drawingRequest)
+			m_drawingRequest = new RequestQueue();
+		m_drawingRequest.add(new DrawingListRequest(_requestDrawingListComplete));
+		m_drawingRequest.request(RequestType.RUSH);
+	}
+
+	private void _requestDrawingListComplete(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			List<Drawing> l_list = new List<Drawing> ();
+			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
+			foreach (object o in l_data)
+			{
+				l_list.Add(new Drawing(o as Hashtable));
+			}
+			SessionHandler.getInstance().drawingList = l_list;
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("drawingListRequest error: " + p_response.error);
+		}
+	}
+
+	public void saveNewDrawingCompleted(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log("saveNewDrawingCompleted: "+ p_response.text);
+		
+			Hashtable hashtable = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			SessionHandler.getInstance().drawingList.Insert(0, new Drawing(hashtable));
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("saveNewDrawingCompleted error: " + p_response.error);
+		}
+	}
+
+	public void saveDrawingCompleted(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log("saveDrawingCompleted: " + p_response.text);
+			Hashtable hashtable = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			Drawing drawing = new Drawing(hashtable);
+			int total = SessionHandler.getInstance().drawingList.Count;
+			for (int i = 0; i < total; i++)
+			{
+				Drawing temp = SessionHandler.getInstance().drawingList[i];
+				if (drawing.id == temp.id)
+				{
+					SessionHandler.getInstance().drawingList[i] = drawing;
+					break;
+				}
+			}
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("saveDrawingCompleted error: "+ p_response.error);
+		}
+	}
+
+	//end
 	
 	public void resetSetting()
 	{
@@ -938,7 +1070,7 @@ public class SessionHandler
 	}
 
 	//check last play date expired or not, if expired, remove it
-	public static void updateKidsTimeLeft()
+	public static void updateKidsLocalTimeLeftFile()
 	{
 		string timeLeftStr = SessionHandler.LoadKidsTimeLeft();
 		ArrayList timeLeftList = null;
@@ -975,6 +1107,24 @@ public class SessionHandler
 			if (encodedString.Equals("[]"))
 				encodedString = "";
 			SessionHandler.SaveKidsTimeLeft(encodedString);
+		}
+	}
+
+	public static void updateKidsTimeLeft()
+	{
+		//reset timer
+		TimerController.Instance.resetTimer();
+		//clean time left file if data expired
+		SessionHandler.updateKidsLocalTimeLeftFile();
+		//reset kid time left info
+		List<Kid> kidList = SessionHandler.getInstance().kidList;
+		if (kidList == null)
+			return;
+		foreach (Kid kid in kidList)
+		{
+			kid.timeLeft = kid.timeLimits;
+			kid.timesUp = false;
+			kid.lastPlay = "";
 		}
 	}
 
@@ -1068,10 +1218,11 @@ public class SessionHandler
 	//honda: added
 	//only save time left info of kids entering map/jungle
 	private static string KIDS_TIMELEFT	= Application.persistentDataPath + "/kids_TimeLeft.txt";
+
+	private double  m_clientId = 0;
 	//end
-
 	// end vzw
-
+	
 	private Kid     m_kid   = null;
     private Token   m_token = null;
 	private List<Kid> m_kidList = null;
@@ -1150,6 +1301,9 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
 	private RequestQueue m_PointRequest;
+	//honda
+	private RequestQueue m_drawingRequest;
+	//end
     private static SessionHandler m_instance = null;
 
 	// get kid info except app list, top recommend apps

@@ -36,9 +36,10 @@ public class CreateChildState : GameState
 		switch (m_subState)
 		{
 		case SubState.GO_PREVIOUS:
-			SessionHandler.getInstance().inputedChildName = string.Empty;
-			SessionHandler.getInstance().inputedbirthday = string.Empty;
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			SessionHandler.getInstance().inputedChildName = "";
+			SessionHandler.getInstance().inputedbirthday = "";
+			int previousState = m_gameController.getConnectedState(int.Parse(m_gameController.stateName));
+			p_gameController.changeState(previousState);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE:
@@ -89,7 +90,7 @@ public class CreateChildState : GameState
 			(m_backScreen as SplashBackCanvas).setDown();
 		}
 		m_createChildCanvas = p_uiManager.createScreen(UIScreen.CREATE_CHILD_NEW, true, 1);
-		
+
 		m_backButton = m_createChildCanvas.getView("backButton") as UIButton;
 		m_backButton.tweener.addAlphaTrack (0.0f, 1.0f, 1.0f,null);
 		
@@ -148,24 +149,22 @@ public class CreateChildState : GameState
 	{
 		p_button.removeClickCallback ( toBack );
 
-		SessionHandler.getInstance().inputedChildName = "";
-		SessionHandler.getInstance().inputedbirthday = "";
+//		SessionHandler.getInstance().inputedChildName = "";
+//		SessionHandler.getInstance().inputedbirthday = "";
 		m_subState = SubState.GO_PREVIOUS;
-		int l_state = m_gameController.getConnectedState (int.Parse (m_gameController.stateName));
-		if(GameController.UNDEFINED_STATE == l_state)
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		else
-		{
-			m_gameController.changeState (l_state);
-		}
+//		int l_state = m_gameController.getConnectedState (int.Parse (m_gameController.stateName));
+//		if(GameController.UNDEFINED_STATE == l_state)
+//			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+//		else
+//			m_gameController.changeState (l_state);
 	}
 
 	private void toBackSign(UIButton p_button)
 	{
 		p_button.removeClickCallback ( toBackSign );
-		SessionHandler.getInstance().clearUserData();
+		SessionHandler.getInstance().clearUserData(false);
 		LocalSetting.find("User").delete();
-		m_gameController.changeState(ZoodleState.CREATE_ACCOUNT_SELECTION);
+		m_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 	}
 
 	private string combineBirthdayString(string p_year, string p_month, string p_day)

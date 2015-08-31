@@ -35,6 +35,7 @@ public class NoInternetScreen : MonoBehaviour {
 		if (game != null) 
 		{
 			game.gameController.getUI().removeScreen(UIScreen.NO_INTERNET);
+			game.gameController.changeState(ZoodleState.ZOODLES_ANIMATION);
 		}
 	}
 

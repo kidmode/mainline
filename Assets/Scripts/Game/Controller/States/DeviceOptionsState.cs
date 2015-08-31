@@ -109,6 +109,7 @@ public class DeviceOptionsState : GameState
 			m_musicVolumeSlider.value   =(float) m_settingCache.musicVolum;
 			m_masterVolumeSlider.value  =(float) m_settingCache.masterVolum;
 			m_effectsVolumeSlider.value =(float) m_settingCache.effectsVolum;
+			Debug.Log("volume contol: use setting cache");
 			if(m_settingCache.allowCall)
 			{
 				m_allowCallButton.isOn = true;
@@ -132,6 +133,7 @@ public class DeviceOptionsState : GameState
 			m_musicVolumeSlider.value   =(float) SessionHandler.getInstance ().musicVolum;
 			m_masterVolumeSlider.value  =(float) SessionHandler.getInstance ().masterVolum;
 			m_effectsVolumeSlider.value =(float) SessionHandler.getInstance ().effectsVolum;
+			Debug.Log("volume contol: use session handler");
 			if(SessionHandler.getInstance().allowCall)
 			{
 				m_allowCallButton.isOn = true;
@@ -277,6 +279,7 @@ public class DeviceOptionsState : GameState
 		m_requestQueue.request (RequestType.SEQUENCE);
 		//update device option
 		SessionHandler.getInstance().resetSetting ();
+		Debug.Log("DeviceOption set volume data from setting cache to session handler");
 		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
 		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
 		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;
@@ -284,6 +287,11 @@ public class DeviceOptionsState : GameState
 		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
 		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
 		PlayerPrefs.Save ();
+
+		Debug.Log("updated master_volume volume: " + PlayerPrefs.GetInt("master_volume"));
+		Debug.Log("updated music_volume volume: " + PlayerPrefs.GetInt("music_volume"));
+		Debug.Log("updated effects_volume volume: " + PlayerPrefs.GetInt("effects_volume"));
+
 	}
 	
 	private void toPremiumScreen(UIButton p_button)
@@ -471,7 +479,7 @@ public class DeviceOptionsState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

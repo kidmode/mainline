@@ -125,6 +125,7 @@ public class SettingChildLockState : GameState
 		m_requestQueue.request (RequestType.SEQUENCE);
 		//update device option
 		SessionHandler.getInstance().resetSetting ();
+		Debug.Log("SettingChildLock set volume data from setting cache to setting cache");
 		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
 		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
 		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;
@@ -639,7 +640,7 @@ public class SettingChildLockState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

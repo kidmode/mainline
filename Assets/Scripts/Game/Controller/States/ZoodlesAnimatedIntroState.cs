@@ -52,14 +52,31 @@ public class ZoodlesAnimatedIntroState : GameState
 	
 	private void readSetting()
 	{
+		if (!PlayerPrefs.HasKey("master_volume"))
+		{
+			PlayerPrefs.SetInt("master_volume", 50);
+			PlayerPrefs.SetInt("music_volume", 50);
+			PlayerPrefs.SetInt("effects_volume", 50);
+			PlayerPrefs.Save();
+		}
 
-		SessionHandler.getInstance().masterVolum = PlayerPrefs.GetInt("master_volume",50);
-		SessionHandler.getInstance().musicVolum = PlayerPrefs.GetInt("music_volume",50);
-		SessionHandler.getInstance().effectsVolum = PlayerPrefs.GetInt("effects_volume",50);
-		
+		SessionHandler.getInstance().masterVolum = PlayerPrefs.GetInt("master_volume");
+		SessionHandler.getInstance().musicVolum = PlayerPrefs.GetInt("music_volume");
+		SessionHandler.getInstance().effectsVolum = PlayerPrefs.GetInt("effects_volume");
+
 		SoundManager.getInstance ().effectVolume = (float)SessionHandler.getInstance ().effectsVolum/100;
 		SoundManager.getInstance ().musicVolume = (float)SessionHandler.getInstance ().musicVolum/100;
 		SoundManager.getInstance ().masterVolume = (float)SessionHandler.getInstance ().masterVolum/100;
+	
+		Debug.Log("Animated PlayerPref has master volume: " + PlayerPrefs.HasKey("master_volume") + " & volume: " + PlayerPrefs.GetInt("master_volume"));
+		Debug.Log("Animated PlayerPref has music volume: " + PlayerPrefs.HasKey("music_volume") + " & volume: " + PlayerPrefs.GetInt("music_volume"));
+		Debug.Log("Animated PlayerPref has effects volume: " + PlayerPrefs.HasKey("effects_volume") + " & volume: " + PlayerPrefs.GetInt("effects_volume"));
+		Debug.Log("Animated SessionHandler master volume: " + SessionHandler.getInstance().masterVolum);
+		Debug.Log("Animated SessionHandler music volume: " + SessionHandler.getInstance().musicVolum);
+		Debug.Log("Animated SessionHandler effects volume: " + SessionHandler.getInstance().effectsVolum);
+		Debug.Log("Animated SoundManager master volume: " + SoundManager.getInstance().masterVolume);
+		Debug.Log("Animated SoundManager music volume: " + SoundManager.getInstance().musicVolume);
+		Debug.Log("Animated SoundManager effects volume: " + SoundManager.getInstance().effectVolume);
 	}
 	
 	private void _setupScreen(UIManager p_uiManager)

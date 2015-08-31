@@ -244,6 +244,9 @@ public class UISwipeList : UIElement
 	
 	private void shiftElementsToDrawGroup(int p_drawGroup)
 	{
+		if (m_data == null)
+			return;
+
 		if (m_drawGroup != p_drawGroup
 		    && p_drawGroup >= 0
 		    && p_drawGroup <= (m_data.Count - m_numVisibleElements))

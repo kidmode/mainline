@@ -33,7 +33,6 @@ public class KidsProfileState : GameState
 		_createMainView ( m_gameController );
 		_setupElements();
 
-
 		if( null != m_kidsProfileCanvas )
 		{
 			//			m_kidsProfileCanvas.refreshInfo ();
@@ -50,7 +49,7 @@ public class KidsProfileState : GameState
 
 		m_lastIndex = -1;
 
-		m_uiManager.removeScreen( UIScreen.KIDS_PROFILE );
+		m_uiManager.removeScreenImmediately( UIScreen.KIDS_PROFILE );
 		m_uiManager.removeScreen( UIScreen.PROFILE_ACTIVE );
 		m_uiManager.removeScreen( UIScreen.SELECT_AVATAR );
 	}

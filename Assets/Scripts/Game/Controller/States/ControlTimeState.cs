@@ -357,7 +357,7 @@ public class ControlTimeState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
@@ -429,13 +429,13 @@ public class ControlTimeState : GameState
 		int weekendTimeLimits = -1;
 		if( m_weekUnlimited.isOn )
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = true;
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "";
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = "true";
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_LIMIT] = "-1";
 			weekdayTimeLimits = -1;
 		}
 		else
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = false;
+			l_param[ZoodlesConstants.PARAM_WEEKDAY_DISABLED] = "false";
 			if( m_weekThirtyMin.isOn )
 				weekdayTimeLimits = 30;
 			else if( m_weekOneHour.isOn )
@@ -449,13 +449,13 @@ public class ControlTimeState : GameState
 		
 		if( m_weekendUnlimited.isOn )
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = true;
-			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "";
+			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = "true";
+			l_param[ZoodlesConstants.PARAM_WEEKEND_LIMIT] = "-1";
 			weekendTimeLimits = -1;
 		}
 		else
 		{
-			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = false;
+			l_param[ZoodlesConstants.PARAM_WEEKEND_DISABLED] = "false";
 			if( m_weekendThirtyMin.isOn )
 				weekendTimeLimits = 30;
 			if( m_weekendOneHour.isOn )
@@ -468,9 +468,27 @@ public class ControlTimeState : GameState
 		}
 		SessionHandler.getInstance().currentKid.updateTimeLimitsInfo(weekdayTimeLimits, weekendTimeLimits);
 
+		foreach(DictionaryEntry item in l_param)
+		{
+			Debug.Log("time limit param: " + item.Key + "->" + item.Value);
+		}
+
 		m_requestQueue.reset ();
-		m_requestQueue.add ( new SetTimeLimitsRequest(l_param));
-		m_requestQueue.request (RequestType.RUSH);
+		m_requestQueue.add ( new SetTimeLimitsRequest(l_param, _setTimeLimitRequestComplete));
+		m_requestQueue.request (RequestType.SEQUENCE);
+	}
+
+	private void _setTimeLimitRequestComplete(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log(p_response.text);
+		}
+		else
+		{
+			Debug.Log(p_response.error);
+		}
+
 	}
 
 	private void onUpgradeButtonClick(UIButton p_button)

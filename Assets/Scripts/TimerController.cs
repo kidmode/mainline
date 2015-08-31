@@ -54,9 +54,10 @@ public class TimerController : MonoBehaviour {
 	private float countdownTime;
 	private float timeLeft;
 	private int kid_id;
-	private bool isTimesUp;
+	private bool isTimeUp;
 	private Text m_text;
 	private bool closeNativeView = false;
+	private bool isDayChanged;
 
 	void Awake()
 	{
@@ -77,10 +78,19 @@ public class TimerController : MonoBehaviour {
 	
 	void Start () 
 	{
+		//when day changes, reset timer
+		isDayChanged = false;
+		MidnightNotifier.DayChanged += dayChanged;
+//		MidnightNotifier.DayChanged += (object sender, System.EventArgs e) => 
+//		{
+//			SessionHandler.updateKidsTimeLeft();
+//			runCurrentKidTimer();
+//		};
+
 		UIManager uiManager = game.gameController.getUI();
 		m_text = GameObject.FindGameObjectWithTag("TimerUI").GetComponent<Text>();
 
-		isTimesUp = false;
+		isTimeUp = false;
 		countdownTime = 0;
 		timeLeft = countdownTime;
 		//Initialize timer with 1 second intervals
@@ -92,9 +102,9 @@ public class TimerController : MonoBehaviour {
 
 	void Update()
 	{
-		if (isTimesUp)
+		if (isTimeUp)
 		{
-			isTimesUp = false;
+			isTimeUp = false;
 			m_text.text = "time's up"; 
 
 			if (game.isNotPlayingNativeWebView)
@@ -121,12 +131,24 @@ public class TimerController : MonoBehaviour {
 //				m_text.text = "";
 //			}
 		}
+
+		if (isDayChanged)
+		{
+			isDayChanged = false;
+			Debug.Log("already midnight, reset kids timer");
+			SessionHandler.updateKidsTimeLeft();
+			runCurrentKidTimer();
+		}
 	}
 
 	public void startTimer()
 	{
-		if (countdownTime <= 0 )
+		if (countdownTime <= 0)
+		{
+			if (countdownTime == -1)
+				m_text.text = "unlimited time"; 
 			return;
+		}
 
 		if (timer.Enabled == false)
 		{
@@ -150,7 +172,7 @@ public class TimerController : MonoBehaviour {
 			timer.Stop();
 
 			timeLeft = (timeLeft < 0)?0:timeLeft;
-			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimesUp);
+			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimeUp);
 
 			//honda:
 			//TODO: fix this when stopTimer is not in main thread
@@ -172,7 +194,7 @@ public class TimerController : MonoBehaviour {
 		if (timer.Enabled == true)
 		{
 			timer.Stop();
-			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimesUp);
+			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimeUp);
 			m_text.text = timeLeft.ToString() + " seconds left(pause)";
 			Debug.Log("Countdown Timer pauses: " + timeLeft);
 		}
@@ -205,7 +227,7 @@ public class TimerController : MonoBehaviour {
 		Debug.Log("Countdown Timer: " + timeLeft);
 		if (timeLeft <= 0)
 		{
-			isTimesUp = true;
+			isTimeUp = true;
 			stopTimer();
 		}
 	}
@@ -217,15 +239,43 @@ public class TimerController : MonoBehaviour {
 
 		kid_id = kidId;
 		countdownTime = timelimit;
+		//This is test case
+//		timeLeft = 20;
+		//This is real thing
 		timeLeft = timeleft;
 	}
-
+	//this one would  save current kid local time left data
 	public void resetKidTimer()
 	{
 		stopTimer();
 		kid_id = -1;
 		countdownTime = 0;
 		timeLeft = countdownTime;
+	}
+	//this one would not save current kid local time left data
+	public void resetTimer()
+	{
+		if (countdownTime <= 0)
+			return;
+		
+		if (timer.Enabled == true)
+		{
+			timer.Stop();
+		
+			//honda:
+			//TODO: fix this when stopTimer is not in main thread
+			m_text.text = "reset timer"; 
+			Debug.Log("Countdown Timer reset");
+			kid_id = -1;
+			countdownTime = 0;
+			timeLeft = countdownTime;
+			return;
+		}
+		else
+		{
+			Debug.Log("Countdown Timer is already down");
+			return;
+		}
 	}
 
 	public void createTimesUpScreen()
@@ -252,4 +302,45 @@ public class TimerController : MonoBehaviour {
 		gameController.changeState(ZoodleState.BIRTHYEAR);
 	}
 
+	public void runCurrentKidTimer()
+	{
+		GameController gameController = game.gameController;
+		if (//map
+		    gameController.stateName.Equals("4")  || 
+		    //jungle
+		    gameController.stateName.Equals("5")  ||
+		    //region_video, game, drawing, book
+		    gameController.stateName.Equals("66") || 
+		    gameController.stateName.Equals("67") || 
+		    gameController.stateName.Equals("68") || 
+		    gameController.stateName.Equals("32") || 
+		    //activity_video, game, drawing, book
+		    gameController.stateName.Equals("52") || 
+		    gameController.stateName.Equals("53") || 
+		    gameController.stateName.Equals("7")  ||
+		    gameController.stateName.Equals("10") ||
+		    //congratulations
+		    gameController.stateName.Equals("49") ||
+		    //kids_profile
+		    gameController.stateName.Equals("33"))
+		{
+			if (!isRunning && !timesUp)
+			{
+				setKidTimer(SessionHandler.getInstance().currentKid.id, 
+				            SessionHandler.getInstance().currentKid.timeLimits,
+				            SessionHandler.getInstance().currentKid.timeLeft);
+				startTimer();
+				SessionHandler.getInstance().currentKid.lastPlay = System.DateTime.Now.ToString();
+			}
+			else if (timesUp)
+			{
+				timesUp = false;
+			}
+		}
+	}
+
+	private void dayChanged(object sender, System.EventArgs e)
+	{
+		isDayChanged = true;
+	}
 }

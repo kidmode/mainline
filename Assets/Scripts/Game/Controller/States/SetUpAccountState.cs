@@ -44,7 +44,7 @@ public class SetUpAccountState : GameState
 	{
 		base.update( p_gameController, p_time );
 
-		if (Application.internetReachability == NetworkReachability.NotReachable)
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			// TODO: Sean
 		}
@@ -74,7 +74,7 @@ public class SetUpAccountState : GameState
 			}
 		}
 
-		if(SessionHandler.getInstance().token.isExist())
+		if(SessionHandler.getInstance().token.isExist() && SessionHandler.getInstance().username != "")
 		{
 			p_gameController.changeState(ZoodleState.CONGRATURATION);
 		}
@@ -124,8 +124,8 @@ public class SetUpAccountState : GameState
 		m_premiumLogoArea = m_signUpCanvas.getView ("premiumLogoArea") as UIElement;
 		m_title			  = m_signUpCanvas.getView ("setupDialogTitleText") as UILabel;
 
-		m_passwordCheckImage.active = true;
-		m_emailCheckImage.active = true;
+		m_passwordCheckImage.active = false;
+		m_emailCheckImage.active = false;
 		m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 		m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 
@@ -184,6 +184,7 @@ public class SetUpAccountState : GameState
 		}
 		else
 		{
+			m_emailCheckImage.active = true;
 			m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 		}
 	}
@@ -202,6 +203,7 @@ public class SetUpAccountState : GameState
 					Hashtable l_bookData = l_response["response"] as Hashtable;
 					if(l_bookData.ContainsKey("validate"))
 					{
+						m_emailCheckImage.active = true;
 						bool l_validate = (bool)l_bookData["validate"];
 						if(l_validate)
 							m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
@@ -210,6 +212,10 @@ public class SetUpAccountState : GameState
 					}
 				}
 			}
+		}
+		else
+		{
+			m_emailCheckImage.active = true;
 		}
 	}
 
@@ -230,18 +236,20 @@ public class SetUpAccountState : GameState
 		if(passwordPasses())
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
+			m_passwordCheckImage.active = false;
 		}
 		else
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
+			m_passwordCheckImage.active = true;
 		}
 	}
 
 	private void onRepasswordChange(string p_value)
 	{
 		m_repasswordText = p_value;
-		
-		if(passwordPasses())
+		m_passwordCheckImage.active = true;
+		if(confirmPasswordPasses())
 		{
 			m_passwordCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_check"));
 		}
@@ -270,8 +278,12 @@ public class SetUpAccountState : GameState
 
 	private bool passwordPasses()
 	{
-//		return m_password.text.Equals(m_rePassword.text) && m_password.text.Length > 3;
-		return m_passwordText.Equals (m_repasswordText) && m_passwordText.Length > 3;
+		return  m_passwordText.Length > 3;
+	}
+
+	private bool confirmPasswordPasses()
+	{
+		return m_passwordText.Equals(m_repasswordText);
 	}
 
 	private bool emailPasses()
@@ -335,7 +347,7 @@ public class SetUpAccountState : GameState
 				GooglePlayManager.instance.LoadToken(GooglePlayManager.instance.deviceGoogleAccountList[0], scope);
 			}
 		}
-		
+
 	}
 
 	private void OnPlayerDisconnected() {
@@ -354,7 +366,7 @@ public class SetUpAccountState : GameState
 	//honda
 	private void onSignInAccountButtonClicked(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
@@ -368,7 +380,7 @@ public class SetUpAccountState : GameState
 
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
@@ -435,6 +447,7 @@ public class SetUpAccountState : GameState
 				SessionHandler.getInstance().token.setToken(l_secret, l_premium,l_tried,l_current,l_vpc);
 				
 				SessionHandler.getInstance().username = m_account.text;
+				CrittercismAndroid.SetUsername(m_account.text);
 
 				RequestQueue l_queue = new RequestQueue();
 				l_queue.add(new GetUserSettingRequest());
