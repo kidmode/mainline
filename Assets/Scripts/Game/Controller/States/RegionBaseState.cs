@@ -195,9 +195,14 @@ public class RegionBaseState : GameState
 		_createViews();
 
 		//set buttons for jungle view
-
 		_setupElements(p_gameController);
 
+		if (m_queue == null)
+		{
+			m_queue = new RequestQueue();
+		}
+
+		//honda: check timer
 		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
 		{
 			TimerController.Instance.setKidTimer(SessionHandler.getInstance().currentKid.id, 
@@ -210,20 +215,12 @@ public class RegionBaseState : GameState
 		{
 			TimerController.Instance.timesUp = false;
 		}
+		//end
+		//honda: current kid drawing list request
+		SessionHandler.getInstance().drawingListRequest();
+		//end
 
-		if (m_queue == null)
-		{
-			m_queue = new RequestQueue();
-		}
-
-		//honda: this line is weird
-		if (!m_requestStates.ContainsKey("PAINT") || m_requestStates["PAINT"] == true)
-		{
-			m_queue.add(new DrawingListRequest(_requestDrawingListComplete));
-		}
-
-		m_queue.request(RequestType.RUSH);
-
+		//play background music
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("RegionLandingScreen");
@@ -659,7 +656,7 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_funActivityCanvas;
 			
 			m_funSwipeList = m_funActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			m_funSwipeList.setData(m_funViewList);
+//			m_funSwipeList.setData(m_funViewList);
 			m_funSwipeList.addClickListener("Prototype", onFunActivityClicked);
 			//m_createActivity 		= ActivityType.None;
 			//m_gotoPaint 			= true;
@@ -1426,6 +1423,7 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
+		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{
 			WebContentCache l_cache = m_gameController.game.user.contentCache;

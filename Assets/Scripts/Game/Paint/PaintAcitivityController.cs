@@ -37,7 +37,10 @@ public class PaintAcitivityController : System.Object
 		setupPaintingArea();
 
 		//start texture manager
-		m_textureManager = new TextureManager(m_gameController, m_paintTexture);
+		//honda: add listener to deatect saving and uploading drawing completion 
+		m_textureManager = new TextureManager(m_gameController, m_paintTexture, 
+		                                      SessionHandler.getInstance().saveNewDrawingCompleted,
+		                                      SessionHandler.getInstance().saveDrawingCompleted);
 		//m_textureManager.reset();
 
 		//Add button logic to system buttons
