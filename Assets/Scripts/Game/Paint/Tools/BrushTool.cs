@@ -27,6 +27,21 @@ public class BrushTool : ToolState
 	public override void onMouseDown(PaintAcitivityController p_paintController)
 	{
 		m_hasMarkedUndoPoint = false;
+		
+		if (false == m_hasMarkedUndoPoint )
+			//		    && m_mouseLastFrame != m_mouseEnd)
+		{
+			p_paintController.getTextureManager().pushUndoPoint();
+			m_hasMarkedUndoPoint = true;
+		}
+		
+		m_size = p_paintController.getBrushSize();
+		m_color = p_paintController.getBrushColor();
+		m_hardness = m_size * 5;
+		
+		//		Debug.Log("m_mouseStart m_mouseStart " + m_mouseStart);
+		if(m_mouseStart != Vector2.zero)
+			paintLine (m_mouseStart, m_mouseStart + new Vector2( 0.1f, 0.1f), m_size, m_color, m_hardness);
 	}
 
 	public override void onMouseDrag(PaintAcitivityController p_paintController)

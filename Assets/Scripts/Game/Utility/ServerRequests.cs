@@ -2184,7 +2184,8 @@ public class VisitLinkTrackRequest
 	}
 }
 
-
+//===================
+//This for online link counter since the VisitLinkTrackRequest method seems to be offline only
 public class LinkVisitRequest : RequestQueue.Request
 {
 	
