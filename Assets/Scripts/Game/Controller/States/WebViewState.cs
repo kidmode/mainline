@@ -13,6 +13,8 @@ public class WebViewState : GameState
 		GO_CONGRATS
 	}
 
+	private RequestQueue 	m_requestQueue;
+
 	string m_text = "";
 
 	public override void enter(GameController p_gameController) {
@@ -27,6 +29,13 @@ public class WebViewState : GameState
 		
 		m_linkId = SessionHandler.getInstance().currentContent.id;
 		m_duration = 0;
+
+
+		m_requestQueue = new RequestQueue();
+
+		m_requestQueue.reset ();
+		m_requestQueue.add( new LinkVisitRequest( m_linkId ) );
+		m_requestQueue.request (RequestType.RUSH);
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -352,6 +361,16 @@ public class VideoViewState : WebViewState
 //		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", videotime.ToString()}};
 		SwrveComponent.Instance.SDK.NamedEvent("Video.end");
 
+		SessionHandler.getInstance ().currentKid.videoWatchedCount = SessionHandler.getInstance ().currentKid.videoWatchedCount + 1;
+
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance ().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
+
+
 		base.exit(p_gameController);
 	}
 }
@@ -435,6 +454,19 @@ public class GameViewState : WebViewState
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.Landscape;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+
+
+		SessionHandler.getInstance ().currentKid.gamePlayedCount = SessionHandler.getInstance ().currentKid.gamePlayedCount + 1;
+
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance ().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
+
+
 
 		base.exit(p_gameController);
 	}

@@ -2184,6 +2184,42 @@ public class VisitLinkTrackRequest
 	}
 }
 
+
+public class LinkVisitRequest : RequestQueue.Request
+{
+	
+	public int linkId;
+	
+	public LinkVisitRequest(int linkId, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		
+		this.linkId = linkId;
+		
+	}
+	
+	protected override void init()
+	{
+		m_call = "/api/sessions/visit";
+		
+		//		 m_params = new Hashtable ();
+		m_params [ZoodlesConstants.PARAM_TOKEN] 	= SessionHandler.getInstance().token.getSecret();
+		
+		m_params [ZoodlesConstants.PARAM_CLIENT_ID] 	= SessionHandler.getInstance().clientId;
+		m_params [ZoodlesConstants.PARAM_LINK_ID] 	= linkId;
+		m_params [ZoodlesConstants.PARAM_KID_ID] 	= SessionHandler.getInstance ().currentKid.id;
+		m_method = CallMethod.GET;
+	}
+	
+	private void _requestComplete(WWW p_response)
+	{
+		string l_string = "";
+		
+		l_string = UnicodeDecoder.Unicode(p_response.text);
+
+	}
+
+}
+
 public class VisitBookRequest : RequestQueue.Request
 {
 	public VisitBookRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
