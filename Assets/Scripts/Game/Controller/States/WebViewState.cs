@@ -32,10 +32,12 @@ public class WebViewState : GameState
 
 
 		m_requestQueue = new RequestQueue();
-
+		
 		m_requestQueue.reset ();
 		m_requestQueue.add( new LinkVisitRequest( m_linkId ) );
 		m_requestQueue.request (RequestType.RUSH);
+
+
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
@@ -319,11 +321,23 @@ public class WebViewState : GameState
 
 public class VideoViewState : WebViewState
 {
+
 	public override void enter(GameController p_gameController)
 	{
 
 		base.enter(p_gameController);
 
+		//Kevin Added for counter update to server
+		
+		
+		SessionHandler.getInstance ().currentKid.videoWatchedCount = SessionHandler.getInstance ().currentKid.videoWatchedCount + 1;
+		
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance ().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
 
 	}
 	public override void update(GameController p_gameController, int p_time)
@@ -361,14 +375,7 @@ public class VideoViewState : WebViewState
 //		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", videotime.ToString()}};
 		SwrveComponent.Instance.SDK.NamedEvent("Video.end");
 
-		SessionHandler.getInstance ().currentKid.videoWatchedCount = SessionHandler.getInstance ().currentKid.videoWatchedCount + 1;
 
-		ArrayList l_list = new ArrayList();
-		foreach (Kid k in SessionHandler.getInstance ().kidList) {
-			l_list.Add(k.toHashTable());
-		}
-		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-		SessionHandler.SaveKidList(encodedString);
 
 
 		base.exit(p_gameController);
@@ -377,15 +384,33 @@ public class VideoViewState : WebViewState
 
 public class GameViewState : WebViewState
 {
+
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
+
+		//-------------------Kevin Added for counter update to server
+		
+		
+		Debug.Log(" exit Game VIEW STATE  exit Game VIEW STATE exit Game VIEW STATE exit Game VIEW STATE exit Game VIEW STATE  111" );
+		SessionHandler.getInstance ().currentKid.gamePlayedCount = SessionHandler.getInstance ().currentKid.gamePlayedCount + 1;
+		
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance ().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
+		//-----------------------End  Added for counter update to server
+
 		
 		Screen.autorotateToPortrait = true;
 		Screen.autorotateToPortraitUpsideDown = true;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
-		m_webView.InsetsForScreenOreitation += setInsetsScreenOrientation;
+
+		if(m_webView != null)
+			m_webView.InsetsForScreenOreitation += setInsetsScreenOrientation;
 	}
 
 	UniWebViewEdgeInsets setInsetsScreenOrientation(UniWebView webView, UniWebViewOrientation orientation)
@@ -439,6 +464,8 @@ public class GameViewState : WebViewState
 	{
 		GAUtil.logVisit("Game", m_duration);
 
+		Debug.Log(" exit Game VIEW STATE  exit Game VIEW STATE exit Game VIEW STATE exit Game VIEW STATE exit Game VIEW STATE" );
+
 		int gametime = (int)Math.Ceiling(m_duration * 0.001);
 		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", gametime.ToString()}};
 		if (gametime > 120)
@@ -455,16 +482,8 @@ public class GameViewState : WebViewState
 		Screen.orientation = ScreenOrientation.Landscape;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
+	
 
-
-		SessionHandler.getInstance ().currentKid.gamePlayedCount = SessionHandler.getInstance ().currentKid.gamePlayedCount + 1;
-
-		ArrayList l_list = new ArrayList();
-		foreach (Kid k in SessionHandler.getInstance ().kidList) {
-			l_list.Add(k.toHashTable());
-		}
-		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-		SessionHandler.SaveKidList(encodedString);
 
 
 
