@@ -846,6 +846,103 @@ public class SessionHandler
 		}
 		m_iconRequest.request(RequestType.RUSH);
 	}
+
+	//honda
+
+	public bool IsDrawingUpdated
+	{
+		get
+		{
+			return isDrawingUpdated;
+		}
+		set
+		{
+			isDrawingUpdated = value;
+			if (isDrawingUpdated)
+			{
+				if (onUpdateDrawingList != null)
+				{
+					onUpdateDrawingList();
+				}
+				isDrawingUpdated = false;
+			}
+		}
+	}
+	private bool isDrawingUpdated = false;
+
+	public delegate void onSaveDrawingCompletedEvent(bool isCompleted);
+	public delegate void onUpdateDrawingListEvent();
+	public event onUpdateDrawingListEvent onUpdateDrawingList;
+
+	public void drawingListRequest()
+	{
+		if (null == m_drawingRequest)
+			m_drawingRequest = new RequestQueue();
+		m_drawingRequest.add(new DrawingListRequest(_requestDrawingListComplete));
+		m_drawingRequest.request(RequestType.RUSH);
+	}
+
+	private void _requestDrawingListComplete(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			List<Drawing> l_list = new List<Drawing> ();
+			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
+			foreach (object o in l_data)
+			{
+				l_list.Add(new Drawing(o as Hashtable));
+			}
+			SessionHandler.getInstance().drawingList = l_list;
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("drawingListRequest error: " + p_response.error);
+		}
+	}
+
+	public void saveNewDrawingCompleted(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log("saveNewDrawingCompleted: "+ p_response.text);
+		
+			Hashtable hashtable = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			SessionHandler.getInstance().drawingList.Insert(0, new Drawing(hashtable));
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("saveNewDrawingCompleted error: " + p_response.error);
+		}
+	}
+
+	public void saveDrawingCompleted(WWW p_response)
+	{
+		if (p_response.error == null)
+		{
+			Debug.Log("saveDrawingCompleted: " + p_response.text);
+			Hashtable hashtable = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			Drawing drawing = new Drawing(hashtable);
+			int total = SessionHandler.getInstance().drawingList.Count;
+			for (int i = 0; i < total; i++)
+			{
+				Drawing temp = SessionHandler.getInstance().drawingList[i];
+				if (drawing.id == temp.id)
+				{
+					SessionHandler.getInstance().drawingList[i] = drawing;
+					break;
+				}
+			}
+			SessionHandler.getInstance().IsDrawingUpdated = true;
+		}
+		else
+		{
+			Debug.Log("saveDrawingCompleted error: "+ p_response.error);
+		}
+	}
+
+	//end
 	
 	public void resetSetting()
 	{
@@ -1204,6 +1301,9 @@ public class SessionHandler
 	private RequestQueue m_singleKidRequest;
 	private RequestQueue m_bookRequest;
 	private RequestQueue m_PointRequest;
+	//honda
+	private RequestQueue m_drawingRequest;
+	//end
     private static SessionHandler m_instance = null;
 
 	// get kid info except app list, top recommend apps
