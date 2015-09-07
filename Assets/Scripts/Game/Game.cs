@@ -115,7 +115,8 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-
+	public void refreshJungleMedia() {
+	}
 
 
 	public void onActivityRestart() {

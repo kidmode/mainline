@@ -76,6 +76,12 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <receiver android:name="com.onevcat.uniwebview.WifiStatusReceiver" >
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
 
         <!-- For OOB loader begin -->
         <activity android:name="com.unity3d.plugin.downloader.UnityDownloaderActivity" />
