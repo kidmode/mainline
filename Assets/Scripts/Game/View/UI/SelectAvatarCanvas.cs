@@ -62,6 +62,13 @@ public class SelectAvatarCanvas : UICanvas
 		infoData.Add (new AvatarButton(l_imagePath + "icon_avatar_f2","icon_avatar_f2",AvatarImgType.AVATAR));
 		infoData.Add (new AvatarButton(l_imagePath + "icon_avatar_f3","icon_avatar_f3",AvatarImgType.AVATAR));
 		infoData.Add (new AvatarButton(l_imagePath + "icon_avatar_f4","icon_avatar_f4",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_bird","profile_animal_bird",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_elephant","profile_animal_elephant",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_giraffe","profile_animal_giraffe",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_lion","profile_animal_lion",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_monkey","profile_animal_monkey",AvatarImgType.AVATAR));
+		infoData.Add (new AvatarButton(l_imagePath + "profile_animal_tiger","profile_animal_tiger",AvatarImgType.AVATAR));
+
 		l_swipe.setData( infoData );
 		l_swipe.setDrawFunction( onListDraw );
 		l_swipe.redraw();
