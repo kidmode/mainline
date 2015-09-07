@@ -735,7 +735,14 @@ public class ImageRequest : RequestQueue.Request
 
 	private void _requestComplete(WWW p_response)
 	{
-		context.setVariable(m_variable, p_response);
+		if (p_response.error == null)
+		{
+			context.setVariable(m_variable, p_response);
+		}
+		else
+		{
+			Debug.Log(p_response.error);
+		}
 	}
 
 	private string m_variable;
