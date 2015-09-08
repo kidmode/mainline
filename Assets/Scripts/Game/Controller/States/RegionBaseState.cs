@@ -1430,18 +1430,22 @@ public class RegionBaseState : GameState
 			
 			if( l_cache.loadWebContentFail )
 			{
-				UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
-				if (null != l_videoInfo)
-				{
-					l_videoInfo.active = true;
-					l_videoInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				if (m_videoActivityCanvas != null) {
+					UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
+					if (null != l_videoInfo)
+					{
+						l_videoInfo.active = true;
+						l_videoInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+					}
 				}
 
-				UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
-				if (null != l_gameInfo)
-				{
-					l_gameInfo.active = true;
-					l_gameInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				if (m_gameActivityCanvas != null) {
+					UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
+					if (null != l_gameInfo)
+					{
+						l_gameInfo.active = true;
+						l_gameInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+					}
 				}
 				return;
 			}
