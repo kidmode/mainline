@@ -426,6 +426,18 @@ public class RegionBaseState : GameState
 			}
 
 		}
+
+		if( null != m_regionAppCanvas && null != m_regionAppCanvas.getView("mainPanel") )
+		{
+			
+			if( !m_regionAppCanvas.getView("mainPanel").active){ //m_gameActivityCanvas.getView("mainPanel").alpha < 1.0f &&
+				
+				m_regionAppCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+				
+			}
+			
+		}
+
 	}
 	
 
@@ -1405,6 +1417,14 @@ public class RegionBaseState : GameState
 		}
 		#endif
 
+		#if UNITY_EDITOR
+		for (int i = 0; i < 300; i++) {
+
+			m_appList.Add( new AppInfo() );
+
+		}
+		#endif
+
 		m_appSwipeList.setData(m_appList);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
 	}
@@ -1456,6 +1476,16 @@ public class RegionBaseState : GameState
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
 
+		#if UNITY_EDITOR
+		for (int i = 0; i < 300; i++) {
+			
+			m_gameViewList.Add( new GameInfo(new AppInfo() ) );
+			
+		}
+
+//		m_gameViewList.Add(l_game);
+		#endif
+
 		int l_gameCount = 0;
 		int l_videoCount = 0;
 
@@ -1501,6 +1531,7 @@ public class RegionBaseState : GameState
 
 					if (l_content.favorite)
 						m_gameFavoritesList.Add(l_game);
+
 
 					m_gameViewList.Add(l_game);
 
