@@ -119,6 +119,10 @@ public class Game : MonoBehaviour
 
 	}
 
+	public void closeWifi() {
+		
+	}
+
 
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
