@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+public delegate void CreateScreenFinishedHandler(UICanvas canvas);
+
 public class UIManager
 {
 	public class LayerContainer
@@ -34,41 +36,32 @@ public class UIManager
 		DebugUtils.Assert( m_screenDirectoryMap != null && m_screenDirectoryMap.Count > 0 );
 	}
 
+	public void createScreenAsync(int p_newScreen, CreateScreenFinishedHandler handler, bool hasTransition = false, int p_layerNumber = 0) {
+
+		DebugUtils.Assert( m_screenDirectoryMap.ContainsKey( p_newScreen ) );
+		DebugUtils.Assert(handler != null);
+
+		string screenPath = m_screenDirectoryMap[p_newScreen];
+		AsyncScreenLoader.instance.LoadScreen(screenPath, (object obj) => {
+			if (obj == null) {
+				_Debug.logError( string.Format( "Could not load canvas at: {0}", screenPath ) );
+				handler(null);
+				return;
+			}
+
+			GameObject l_screen = obj as GameObject;
+			GameObject l_screenObj = GameObject.Instantiate(l_screen) as GameObject;
+
+			handler(_setupCanvas(l_screenObj, p_newScreen, hasTransition, p_layerNumber));
+		});
+	}
+
 	public UICanvas createScreen( int p_newScreen, bool hasTransition = false, int p_layerNumber = 0 )
 	{
 		DebugUtils.Assert( m_screenDirectoryMap.ContainsKey( p_newScreen ) );
 		GameObject l_screenObj = _createUIScreen( m_screenDirectoryMap[ p_newScreen ] );
-		
-		Canvas[] l_canvasArray = l_screenObj.GetComponentsInChildren< Canvas >();
-		if( l_canvasArray == null )
-			return null;
 
-		List<Canvas> l_canvasList = new List<Canvas>( l_canvasArray );
-
-		Canvas l_mainCanvas;
-
-		if( l_canvasList.Count == 1 )
-			l_mainCanvas = l_canvasList[0];
-		else
-		{
-			l_canvasList.ForEach( (a) => a.worldCamera = m_mainCamera );
-			l_mainCanvas = l_canvasList.Find( (a) => a.tag == MAIN_CANVAS_TAG );
-		}
-
-
-
-		UICanvas l_root = _createCanvas( p_newScreen, p_layerNumber, l_mainCanvas.gameObject );
-		l_root.hasTransition = hasTransition;
-
-		LayerContainer l_container = new LayerContainer( );
-		l_container.layerNumber = p_layerNumber;
-		l_container.screenType	= p_newScreen;
-		l_container.root		= l_root;
-		l_container.screenObj	= l_screenObj;
-
-		_addContainer( l_container );
-
-		return l_container.root;
+		return _setupCanvas(l_screenObj, p_newScreen, hasTransition, p_layerNumber);
 	}
 
 	public void removeScreen( UICanvas p_canvas )
@@ -396,6 +389,38 @@ public class UIManager
 		GameObject l_screenObj = GameObject.Instantiate( l_screen ) as GameObject;
 
 		return l_screenObj;
+	}
+
+	private UICanvas _setupCanvas(GameObject p_screenObj, int p_newScreen, bool hasTransition, int p_layerNumber) {
+		
+		Canvas[] l_canvasArray = p_screenObj.GetComponentsInChildren< Canvas >();
+		if( l_canvasArray == null )
+			return null;
+		
+		List<Canvas> l_canvasList = new List<Canvas>( l_canvasArray );
+		
+		Canvas l_mainCanvas;
+		
+		if( l_canvasList.Count == 1 )
+			l_mainCanvas = l_canvasList[0];
+		else
+		{
+			l_canvasList.ForEach( (a) => a.worldCamera = m_mainCamera );
+			l_mainCanvas = l_canvasList.Find( (a) => a.tag == MAIN_CANVAS_TAG );
+		}
+		
+		UICanvas l_root = _createCanvas( p_newScreen, p_layerNumber, l_mainCanvas.gameObject );
+		l_root.hasTransition = hasTransition;
+		
+		LayerContainer l_container = new LayerContainer( );
+		l_container.layerNumber = p_layerNumber;
+		l_container.screenType	= p_newScreen;
+		l_container.root		= l_root;
+		l_container.screenObj	= p_screenObj;
+		
+		_addContainer( l_container );
+		
+		return l_container.root;
 	}
 
 	private UICanvas _createCanvas( int p_screenType, int p_layerNumber, GameObject p_gameObject )

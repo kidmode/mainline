@@ -115,19 +115,20 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	private int counter = 0;
-
 	public void refreshJungleMedia() 
 	{
 		Debug.Log("spinner: internetReachability" + Application.internetReachability);
-		if (counter == 0 && Application.internetReachability != NetworkReachability.NotReachable)
+		if (Application.internetReachability != NetworkReachability.NotReachable)
 		{
 			Debug.Log("spinner: refresh contents after having connection");
 			showSpinnerWithFetchingContents();
-			counter++;
 		}
 	}
-	
+
+	public void closeWifi() {
+		
+	}
+
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
 	}
