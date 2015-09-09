@@ -391,6 +391,19 @@ public class Kid : System.Object
 		}
 	}	
 
+	public void saveKidPhotoLocal(){
+
+		string hash = _getPhotoHash();
+		ImageCache.saveCacheImage(hash+".png", kid_photo);
+
+	}
+
+	public void requestPhotoAndSaveLocal(){
+
+		Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+
+	}
+
 	private void _getKidTimeLimitRequestComplete(WWW p_response)
 	{
 		if (p_response.error == null)

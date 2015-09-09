@@ -92,6 +92,9 @@ public class CreateChildProfileState : GameState
 	{
 		p_gameController.getUI().removeScreen(UIScreen.CREATE_CHILDPROFILE);
 		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+
+//		SessionHandler.getInstance().currentKid.requestPhotoAndSaveLocal();
+
 		base.exit(p_gameController);
 	}
 
@@ -586,14 +589,38 @@ public class CreateChildProfileState : GameState
 
 					if (m_queue == null)
 						m_queue = new RequestQueue();
-					m_queue.add(new ImageRequest("newAvatar", l_url));
+					m_queue.add(new ImageRequest("newAvatar", l_url, onImageRequestComplete));
 					m_queue.add(new UpdatePhotoRequest("newAvatar", null ));
 					m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
 					m_queue.request(RequestType.SEQUENCE);
 					m_subState = SubState.LOADING;
+
+					//Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
 				}
 			}
+
+
+			//================
+			//Kev
+			// Added so the local data will remember the change
+
+			SessionHandler.getInstance().currentKid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+			SessionHandler.getInstance().currentKid.saveKidPhotoLocal();
+//			SessionHandler.getInstance().currentKid.requestPhotoAndSaveLocal();
+//			ArrayList l_list = new ArrayList();
+//			foreach (Kid k in SessionHandler.getInstance ().kidList) {
+//				k.saveKidPhotoLocal();
+//			}
+
+
+			//End //=========
+
+
 		}
+	}
+
+	void onImageRequestComplete(WWW www){
+
 	}
 	
 	//Private variables
