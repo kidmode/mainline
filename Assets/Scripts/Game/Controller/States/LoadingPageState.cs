@@ -33,6 +33,8 @@ public class LoadingPageState : GameState {
 	{
 		base.enter( p_gameController );
 
+		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+
 		game = p_gameController.game;
 		timer = 300;
 		currentTimer = 0;
@@ -50,6 +52,8 @@ public class LoadingPageState : GameState {
 		base.exit( p_gameController );
 
 		p_gameController.getUI().removeScreenImmediately(loadingCanvas);
+
+		AndroidNativeUtility.HidePreloader();
 	}
 
 	public override void update( GameController p_gameController, int p_time )
@@ -152,9 +156,9 @@ public class LoadingPageState : GameState {
 
 	private void toDoActivityRequest(bool isCompleted)
 	{
-		SessionHandler.getInstance().resetKidCache();
 		CrittercismAndroid.SetUsername(SessionHandler.getInstance().username);
 
+		SessionHandler.getInstance().resetWebBookContentsCache();
 		game.user.contentCache.startRequests(onLoadingCompleted);
 		SessionHandler.getInstance().getAllKidApplist();
 	}

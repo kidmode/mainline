@@ -441,18 +441,23 @@ public class ProfileState : GameState
 
 	private void onBackClicked(UIButton p_button)
 	{
-		if(SessionHandler.getInstance().childLockSwitch)
-		{
-			m_gameController.connectState (ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.BIRTHYEAR);
-		}
-		else
-		{
-//			KidMode.setKidsModeActive(false);	
-			KidModeLockController.Instance.swith2DParentMode();
-			PlayerPrefs.Save();
-			Application.Quit();
-		}
+
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+
+//		if(SessionHandler.getInstance().childLockSwitch)
+//		{
+//			m_gameController.connectState (ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
+//			m_gameController.changeState (ZoodleState.BIRTHYEAR);
+//		}
+//		else
+//		{
+////			KidMode.setKidsModeActive(false);	
+//			KidModeLockController.Instance.swith2DParentMode();
+//			PlayerPrefs.Save();
+//			Application.Quit();
+//		}
+
     }	
 
 	private void onCreateChild(UIButton p_button)

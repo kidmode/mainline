@@ -24,6 +24,8 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
+		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
@@ -45,6 +47,8 @@ public class MapState : GameState
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("MapScreen");
+
+		AndroidNativeUtility.HidePreloader();
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
@@ -121,20 +125,22 @@ public class MapState : GameState
 			return;
 		}
 
-		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
-		GameObject ins = GameObject.Instantiate(obj) as GameObject;
+//		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
+//		GameObject ins = GameObject.Instantiate(obj) as GameObject;
 
-		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
-			GameObject.DestroyImmediate(ins);
+//		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
+
+			m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
+//			GameObject.DestroyImmediate(ins);
 
 
-			m_mapCanvas = canvas;
+//			m_mapCanvas = canvas;
 
 			m_mapCanvas.enterTransitionEvent += onTransitionEnter;
 			m_mapCanvas.exitTransitionEvent += onTransitionExit;
 			
 			
-			
+
 			m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 			m_entranceButton.addClickCallback(onBackClicked);
 			// Sean: vzw
@@ -159,7 +165,7 @@ public class MapState : GameState
 			l_arrowPosList.Add(l_arrow.transform.localPosition);
 			l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
 
-		}, true, 10);
+//		}, true, 10);
 	}
 
 	private void _setupKidProfile(GameController p_gameController)
