@@ -24,7 +24,7 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
-		AndroidNativeUtility.ShowPreloader("KidMode Loading", "Please Wait . . . . . ");
+		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
 
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
@@ -140,7 +140,7 @@ public class MapState : GameState
 			m_mapCanvas.exitTransitionEvent += onTransitionExit;
 			
 			
-			
+
 			m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 			m_entranceButton.addClickCallback(onBackClicked);
 			// Sean: vzw

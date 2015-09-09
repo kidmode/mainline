@@ -730,6 +730,9 @@ public class Localization : object
 	public const string ERROR_MESSAGE_ERROR_TEXT = "ERROR_MESSAGE_ERROR_TEXT";
 	public const string NO_INTERNET_TEXT = "NO_INTERNET_TEXT";
 
+	public const string TXT_LOADING_TITLE		  = "TXT_LOADING_TITLE";
+	public const string TXT_LOADING_MESSAGE		  = "TXT_LOADING_MESSAGE";
+
 	
 	private string m_currLanguage   = "EN";
 	private Hashtable m_dictionary  = new Hashtable();
