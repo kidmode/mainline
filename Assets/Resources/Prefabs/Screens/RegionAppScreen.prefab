@@ -184,6 +184,7 @@ GameObject:
   - 114: {fileID: 11497698}
   - 114: {fileID: 11497696}
   - 114: {fileID: 11497694}
+  - 114: {fileID: 11467370}
   m_Layer: 5
   m_Name: appScrollView
   m_TagString: Untagged
@@ -287,6 +288,23 @@ Transform:
   - {fileID: 22497694}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11467370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232f455363a4c4b5bbc0f16c6bc3155b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 11497696}
+  scrollArrowLeft: {fileID: 197672}
+  scrollArrowRight: {fileID: 197674}
+  scrollStartContentSize: 8
+  contentSize: 0
+  currPos: {x: 0, y: 0}
 --- !u!114 &11497666
 MonoBehaviour:
   m_ObjectHideFlags: 1

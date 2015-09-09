@@ -1423,7 +1423,7 @@ public class RegionBaseState : GameState
 		#endif
 
 		#if UNITY_EDITOR
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < 20; i++) {
 
 			m_appList.Add( new AppInfo() );
 
