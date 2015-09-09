@@ -24,6 +24,8 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
+		AndroidNativeUtility.ShowPreloader("KidMode Loading", "Please Wait . . . . . ");
+
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
@@ -45,6 +47,8 @@ public class MapState : GameState
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("MapScreen");
+
+		AndroidNativeUtility.HidePreloader();
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
