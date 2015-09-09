@@ -252,7 +252,7 @@ public class RegionBaseState : GameState
 		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
-			Debug.Log("spinner: canSetWebContent");
+			Debug.Log("spinner: 3. canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
 		}
@@ -310,12 +310,13 @@ public class RegionBaseState : GameState
 	{
 		if (m_linkLoaded == false)
 		{
+			Debug.Log("spinner: 1. checkIfLinksCacheLoaded");
 			Game l_game = p_gameController.game;
 			User l_user = l_game.user;
 			WebContentCache l_cache = l_user.contentCache;
 			if (l_cache.isFinishedLoadingWebContent)
 			{
-				Debug.Log("spinner: isFinishedLoadingWebContent");
+				Debug.Log("spinner: 2. isFinishedLoadingWebContent");
 				m_linkLoaded = true;
 				canSetWebContent = true;
 			}
@@ -534,6 +535,8 @@ public class RegionBaseState : GameState
 	{
 		if (m_createActivity == ActivityType.Video)
 		{
+			Debug.Log("spinner: 8. _handleDynamicActivities");
+
 			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_videoActivityCanvas;
@@ -1445,12 +1448,12 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
-		Debug.Log("spinner: _setupWebContentList = " + p_contentList.Count);
+		Debug.Log("spinner: 4. _setupWebContentList = " + p_contentList.Count);
 		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{
 			WebContentCache l_cache = m_gameController.game.user.contentCache;
-			
+			Debug.Log("spinner: 4_1. _setupWebContentList no WebContentLis");
 			if( l_cache.loadWebContentFail )
 			{
 				if (m_videoActivityCanvas != null) {
@@ -1474,6 +1477,7 @@ public class RegionBaseState : GameState
 			}
 		}
 
+		Debug.Log("spinner: 5. _setupWebContentList clear data");
 		m_videoViewList.Clear();
 		m_videoFavoritesList.Clear();
 		m_gameViewList.Clear();
@@ -1543,6 +1547,8 @@ public class RegionBaseState : GameState
 //						m_gameFeatured = l_info;
 				}
 			}
+			Debug.Log("spinner: 6. m_videoViewList = " + m_videoViewList.Count);
+			Debug.Log("spinner: 7. m_gameViewList = " + m_gameViewList.Count);
 		}
 
 		if( null != m_videoActivityCanvas )
