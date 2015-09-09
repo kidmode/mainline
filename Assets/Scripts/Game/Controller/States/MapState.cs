@@ -24,7 +24,7 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
-		AndroidNativeUtility.ShowPreloader("KidMode Loading", "Please Wait . . . . . ");
+		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
 
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
@@ -125,8 +125,8 @@ public class MapState : GameState
 			return;
 		}
 
-		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
-		GameObject ins = GameObject.Instantiate(obj) as GameObject;
+//		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
+//		GameObject ins = GameObject.Instantiate(obj) as GameObject;
 
 		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
 			GameObject.DestroyImmediate(ins);
@@ -138,7 +138,7 @@ public class MapState : GameState
 			m_mapCanvas.exitTransitionEvent += onTransitionExit;
 			
 			
-			
+
 			m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
 			m_entranceButton.addClickCallback(onBackClicked);
 			// Sean: vzw
