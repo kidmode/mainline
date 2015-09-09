@@ -125,14 +125,16 @@ public class MapState : GameState
 			return;
 		}
 
-		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
-		GameObject ins = GameObject.Instantiate(obj) as GameObject;
+//		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
+//		GameObject ins = GameObject.Instantiate(obj) as GameObject;
 
-		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
-			GameObject.DestroyImmediate(ins);
+//		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
+
+			m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
+//			GameObject.DestroyImmediate(ins);
 
 
-			m_mapCanvas = canvas;
+//			m_mapCanvas = canvas;
 
 			m_mapCanvas.enterTransitionEvent += onTransitionEnter;
 			m_mapCanvas.exitTransitionEvent += onTransitionExit;
@@ -163,7 +165,7 @@ public class MapState : GameState
 			l_arrowPosList.Add(l_arrow.transform.localPosition);
 			l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
 
-		}, true, 10);
+//		}, true, 10);
 	}
 
 	private void _setupKidProfile(GameController p_gameController)
