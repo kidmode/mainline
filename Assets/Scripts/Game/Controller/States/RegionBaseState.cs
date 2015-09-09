@@ -252,6 +252,7 @@ public class RegionBaseState : GameState
 		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
+			Debug.Log("spinner: canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
 		}
@@ -314,6 +315,7 @@ public class RegionBaseState : GameState
 			WebContentCache l_cache = l_user.contentCache;
 			if (l_cache.isFinishedLoadingWebContent)
 			{
+				Debug.Log("spinner: isFinishedLoadingWebContent");
 				m_linkLoaded = true;
 				canSetWebContent = true;
 			}
@@ -545,7 +547,7 @@ public class RegionBaseState : GameState
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
 
 
-			//Get Scroll view updateor
+			//Get Scroll view updator
 			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 			viewUpdator.setContentDataSize(m_videoViewList.Count);
 
@@ -1443,6 +1445,7 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
+		Debug.Log("spinner: _setupWebContentList = " + p_contentList.Count);
 		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{

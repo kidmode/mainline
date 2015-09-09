@@ -14,23 +14,12 @@ Shader "GAF/GAFObjectsGroup"
 			"IgnoreProjector"="True"
 			"RenderType"="Transparent"
 		}
-		
 
 		Blend SrcAlpha OneMinusSrcAlpha
 		AlphaTest Greater .01
 		Cull Off
 		Zwrite Off
 		Lighting Off
-	
-   		
-   		Stencil {
-		  	Comp Equal
-		  	ZFail Zero
-		  	Fail Zero
-		  	Pass Keep
-
-		}
-
 	
 		CGPROGRAM
 				

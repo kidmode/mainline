@@ -115,10 +115,19 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	public void refreshJungleMedia() {
+	private int counter = 0;
+
+	public void refreshJungleMedia() 
+	{
+		Debug.Log("spinner: internetReachability" + Application.internetReachability);
+		if (counter == 0 && Application.internetReachability != NetworkReachability.NotReachable)
+		{
+			Debug.Log("spinner: refresh contents after having connection");
+			showSpinnerWithFetchingContents();
+			counter++;
+		}
 	}
-
-
+	
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
 	}
@@ -191,7 +200,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 		//honda
-		PlayerPrefs.DeleteAll();
+//		PlayerPrefs.DeleteAll();
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
@@ -418,8 +427,8 @@ public class Game : MonoBehaviour
 				}
 				else
 				{
-					Game game = m_gameController.game;;
-					game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+//					Game game = m_gameController.game;
+					m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 				}
 				//cynthia vzw
 //				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -466,6 +475,30 @@ public class Game : MonoBehaviour
 			isClientIdCompleted = false;
 			isPremiumCompleted = false;
 		}
+	}
+
+	private void showSpinnerWithFetchingContents()
+	{
+		Debug.Log("spinner: show spinner");
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
+		Debug.Log("spinner: start request");
+
+		Invoke("startWebContentRequest", 2);
+	}
+
+	private void startWebContentRequest()
+	{
+		Game game = m_gameController.game;
+		game.user.contentCache.startRequests(onLoadingCompleted);
+	}
+
+	private void onLoadingCompleted()
+	{
+		Debug.Log("spinner: remove spinner");
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		Debug.Log("spinner: webcontent list = " + SessionHandler.getInstance().webContentList.Count);
 	}
 	
 	//end
