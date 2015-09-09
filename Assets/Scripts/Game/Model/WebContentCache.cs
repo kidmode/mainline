@@ -55,7 +55,7 @@ public class WebContentCache : object
 		loadWebContentFail = false;
 		loadBookFail = false;
 
-		m_sessionHandler.resetKidCacheLists();
+		m_sessionHandler.resetWebBookListsCache();
 
 		if (null != m_webContentRequest)
 		{
@@ -82,13 +82,6 @@ public class WebContentCache : object
 
 	private void _requestWebContentComplete(WWW p_response)
 	{
-		isFinishedLoadingWebContent = true;
-		if (onLoadingCompleted != null)
-		{
-			onLoadingCompleted();
-			onLoadingCompleted = null;
-		}
-
 		if (p_response.error == null)
 		{
 			List<object> l_contentList = new List<object> ();
@@ -99,10 +92,19 @@ public class WebContentCache : object
 				l_contentList.Add(new WebContent(o as Hashtable));
 			}
 			m_sessionHandler.webContentList = l_contentList;
+			isFinishedLoadingWebContent = true;
 		}
 		else
 		{
 			loadWebContentFail = true;
+			Debug.Log("spinner: webcontent error = " + p_response.error);
+		}
+
+
+		if (onLoadingCompleted != null)
+		{
+			onLoadingCompleted();
+			onLoadingCompleted = null;
 		}
 
 		processFinishedRequests();

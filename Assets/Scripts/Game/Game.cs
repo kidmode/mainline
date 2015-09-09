@@ -115,14 +115,87 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
-	public void refreshJungleMedia() {
-
+	public void refreshJungleMedia() 
+	{
+		Debug.Log("spinner: turn on wifi internetReachability" + Application.internetReachability);
+//		if (Application.internetReachability != NetworkReachability.NotReachable)
+		if (checkWebcontentList())
+		{
+			Debug.Log("spinner: refresh contents after having connection");
+			showSpinnerWithFetchingContents();
+		}
+		if (checkDrawingList())
+		{
+			Debug.Log("spinner: refresh drawing contents after having connection");
+			fetchDrawingList();
+		}
 	}
 
-	public void closeWifi() {
+	public void closeWifi() 
+	{
+
+		Debug.Log("spinner: turn off wifi internetReachability" + Application.internetReachability);
 		
 	}
 
+	private bool checkWebcontentList()
+	{
+		if (//map
+		    m_gameController.stateName.Equals("4")  || 
+		    //jungle
+		    m_gameController.stateName.Equals("5")  ||
+		    //kids_profile
+		    m_gameController.stateName.Equals("33"))
+		{
+
+			if (SessionHandler.getInstance().webContentList == null || SessionHandler.getInstance().webContentList.Count == 0)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+				return true;
+			}
+			else
+			{
+				Debug.Log("spinner: (don't need to fetch)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+				return false;
+			}
+		}
+		else
+		{
+			Debug.Log("spinner: (not correct state)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+			return false;
+		}
+	}
+
+	private bool checkDrawingList()
+	{
+		if (//jungle
+		    m_gameController.stateName.Equals("5")  ||
+		    //kids_profile
+		    m_gameController.stateName.Equals("33"))
+		{
+			
+			if (SessionHandler.getInstance().drawingList == null)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " drawingList.count = null");
+				return true;
+			}
+			else if (SessionHandler.getInstance().drawingList.Count == 0)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " drawingList.count = 0");
+				return true;
+			}
+			else
+			{
+				Debug.Log("spinner: (don't need to fetch)game state = " + m_gameController.stateName + " drawingList.count = " + SessionHandler.getInstance().drawingList.Count);
+				return false;
+			}
+		}
+		else
+		{
+			Debug.Log("spinner: (not correct state)game state = " + m_gameController.stateName);
+			return false;
+		}
+	}
 
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
@@ -423,8 +496,8 @@ public class Game : MonoBehaviour
 				}
 				else
 				{
-					Game game = m_gameController.game;;
-					game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+//					Game game = m_gameController.game;
+					m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 				}
 				//cynthia vzw
 //				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -472,6 +545,42 @@ public class Game : MonoBehaviour
 			isPremiumCompleted = false;
 		}
 	}
+
+	private void showSpinnerWithFetchingContents()
+	{
+		Debug.Log("spinner: show spinner");
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
+		Debug.Log("spinner: start webcontent request");
+
+		Invoke("startWebContentRequest", 10);
+	}
+
+	private void startWebContentRequest()
+	{
+		Game game = m_gameController.game;
+		game.user.contentCache.startRequests(onLoadingCompleted);
+	}
+
+	private void onLoadingCompleted()
+	{
+		Debug.Log("spinner: remove spinner");
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		Debug.Log("spinner: webcontent list = " + SessionHandler.getInstance().webContentList.Count);
+	}
+
+	private void fetchDrawingList()
+	{
+		Debug.Log("spinner: start drawing request");
+		Invoke("startDrawingRequest", 10);
+	}
+
+	private void startDrawingRequest()
+	{
+		SessionHandler.getInstance().drawingListRequest();
+	}
+
 	
 	//end
 
