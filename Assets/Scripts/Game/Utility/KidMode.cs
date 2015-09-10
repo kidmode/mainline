@@ -93,6 +93,12 @@ public class KidMode
 		}
 		//back to kidmode when screen on
 		TimerController.Instance.runCurrentKidTimer();
+
+
+		//==============================
+		//Google installed app, auto add to selected list Hack
+//		KidMode.googleInstalledAppAutoAdd();
+
 	}
 
 	public static void closeNativeWebview()
@@ -273,6 +279,8 @@ public class KidMode
 		#endif
 	}
 
+
+	#region SystemApps
 
 	public static void getAllSystemApps()
 	{
@@ -465,6 +473,110 @@ public class KidMode
 			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
 		}
 	}
+
+
+
+
+
+	public static List<System.Object> getLastLocalApps()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "lastLocalApps" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = mAllAppList;
+			if(allAppList != null && allAppList.Count > 0)
+			{
+				foreach(AppInfo l_app in allAppList)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						selectedAppList.Add(l_app);
+					}
+				}
+			}
+		}
+		#endif
+		
+		return selectedAppList;
+	}
+
+	public static void setLastLocalAppInfo()
+	{
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+//		List<object> m_dataList = new List<object> ();
+		List<object> l_list = KidMode.getApps();
+//		foreach (AppInfo l_app in l_list)
+//		{
+//			m_dataList.Add(l_app);
+//		}
+
+
+		ArrayList l_appNameList = new ArrayList();
+		foreach (AppInfo l_app in l_list)
+		{
+			l_appNameList.Add(l_app.packageName);
+		}
+
+		PlayerPrefs.SetString( "lastLocalApps", MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
+
+//		#endif
+		
+//		return selectedAppList;
+	}
+
+
+
+	public static void googleInstalledAppAutoAdd()
+	{
+
+		Debug.Log("  googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd");
+
+		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
+
+		if(hasLuanchedGoogle == 1){
+
+			List<object> l_list = KidMode.getApps();
+
+			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
+
+
+
+			List<object> selectedList = KidMode.getSelectedApps();
+
+			ArrayList selectedArrayList = new ArrayList(selectedList);
+
+			foreach (AppInfo l_app in l_list)
+			{
+
+				if(!lastLocalAppsList.Contains(l_app.packageName)){
+
+					selectedArrayList.Add(l_app.packageName);
+
+				}
+//				selectedList.add
+				//l_app
+
+			}
+
+			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
+
+		}
+
+		PlayerPrefs.SetInt("hasLaunchedGoogle", 0);
+
+	}
+
+
+	#endregion
+
+
+	//============
 	
 	public static bool hasFlashInstalled ()
 	{

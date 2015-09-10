@@ -255,7 +255,7 @@ public class Game : MonoBehaviour
 	//		_loadTestWebpage( "https://www.youtube.com/embed/G1UdkMDAdsU" );
 
 	}
-	
+
 	public void Awake () 
 	{
 		// Sean: vzw
@@ -270,8 +270,8 @@ public class Game : MonoBehaviour
  		// vzw end
 
 
-		//honda
-//		PlayerPrefs.DeleteAll();
+		//honda1
+		PlayerPrefs.DeleteAll();
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
