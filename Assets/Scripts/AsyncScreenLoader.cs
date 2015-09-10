@@ -25,6 +25,10 @@ public class AsyncScreenLoader : MonoBehaviour {
 
 		ResourceRequest rr = Resources.LoadAsync<GameObject>(resPath);
 
+		if (!rr.isDone) {
+			yield return new WaitForSeconds(0.5f);
+		}
+
 		yield return rr;
 
 		handler(rr.asset);
