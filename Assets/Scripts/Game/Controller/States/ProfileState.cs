@@ -578,6 +578,9 @@ public class ProfileState : GameState
 	
 	private void _onTermsButtonClick(UIButton p_button)
 	{
+
+		m_quitButton.gameObject.SetActive(false);
+
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -591,6 +594,9 @@ public class ProfileState : GameState
 
 	private void _onPolicyButtonClick(UIButton p_button)
 	{
+
+		m_quitButton.gameObject.SetActive(false);
+
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -606,7 +612,8 @@ public class ProfileState : GameState
 	{
 		UICanvas l_screen = m_uiManager.createScreen(UIScreen.LEGAL_CONTENT, false, 5);
 		m_uiManager.changeScreen(l_screen, true);
-		UIButton l_confirm = l_screen.getView("trigger") as UIButton;
+
+		UIButton l_confirm = l_screen.getView("quitButton") as UIButton;
 		l_confirm.addClickCallback(_onConfirmButtonClick);
 		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
 		l_webView.insets = new UniWebViewEdgeInsets((int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor), (int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor));
@@ -618,6 +625,9 @@ public class ProfileState : GameState
 
 	private void _closeWebview()
 	{
+
+		m_quitButton.gameObject.SetActive(true);
+
 		UICanvas l_screen = m_uiManager.findScreen(UIScreen.LEGAL_CONTENT);
 		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
 		l_webView.Hide();
@@ -632,6 +642,9 @@ public class ProfileState : GameState
 
 	private bool _onShouldCloseView(UniWebView p_webView)
 	{
+
+
+
 		_closeWebview();
 		return true;
 	}
