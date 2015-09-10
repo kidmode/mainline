@@ -943,24 +943,29 @@ public class RegionBaseState : GameState
 	
 	private void onFunActivityClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-		Drawing l_drawing = (p_data as ActivityInfo).drawing;
-		SessionHandler.getInstance().currentDrawing = l_drawing;
+		//honda: if no internet, won't enter drawing section
+		if (!showMsgIfNoInternet())
+		{
+			Drawing l_drawing = (p_data as ActivityInfo).drawing;
+			SessionHandler.getInstance().currentDrawing = l_drawing;
 
-		m_subState = SubState.GO_PAINT;
+			m_subState = SubState.GO_PAINT;
+		}
 	}
 
 	private void onVideoClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-
-		WebContent l_webContent = (p_data as WebViewInfo).webData;
-		SessionHandler.getInstance().currentContent = l_webContent;
-
-		m_subState = SubState.GO_VIDEO;
-
-		Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
-		SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
+		//honda: if no internet, won't enter video section
+		if (!showMsgIfNoInternet())
+		{
+			WebContent l_webContent = (p_data as WebViewInfo).webData;
+			SessionHandler.getInstance().currentContent = l_webContent;
+			
+			m_subState = SubState.GO_VIDEO;
+			
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
+			SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
+		}
 	}
 
 	//honda: comment out because we remove feature toy box
@@ -986,29 +991,31 @@ public class RegionBaseState : GameState
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-
-		GameInfo l_game = p_data as GameInfo;
-
-		if( l_game.isWebView )
+		//honda: if no internet, won't enter game section
+		if(!showMsgIfNoInternet())
 		{
-			WebContent l_webContent = l_game.webViewData.webData;
-			SessionHandler.getInstance().currentContent = l_webContent;
-		
-			m_subState = SubState.GO_GAME;
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
-			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
-		}
-		else
-		{
-
-			KidMode.taskManagerLockFalse();
-
-			KidMode.setKidsModeActive(false);
-
-			KidMode.startActivity(l_game.appData.packageName);
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
-			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			GameInfo l_game = p_data as GameInfo;
+			
+			if( l_game.isWebView )
+			{
+				WebContent l_webContent = l_game.webViewData.webData;
+				SessionHandler.getInstance().currentContent = l_webContent;
+				
+				m_subState = SubState.GO_GAME;
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
+				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			}
+			else
+			{
+				
+				KidMode.taskManagerLockFalse();
+				
+				KidMode.setKidsModeActive(false);
+				
+				KidMode.startActivity(l_game.appData.packageName);
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
+				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			}
 		}
 	}
 
@@ -1707,13 +1714,17 @@ public class RegionBaseState : GameState
 		p_element.tweener.addRotationTrack(2.0f, -2.0f, 5.0f, _oscillateLightsDown);
 	}
 
-	private void showMsgIfNoInternet () 
+	private bool showMsgIfNoInternet () 
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
