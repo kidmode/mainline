@@ -249,6 +249,9 @@ public class ProfileState : GameState
 
 	private void sendTellFriendRequestComplete(WWW p_response)
 	{
+
+		m_toInput.text = "";
+
 		m_closeConfirmButton.active = true;
 		if (null == p_response.error) 
 		{
