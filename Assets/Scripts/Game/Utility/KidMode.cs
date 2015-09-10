@@ -97,7 +97,7 @@ public class KidMode
 
 		//==============================
 		//Google installed app, auto add to selected list Hack
-		KidMode.googleInstalledAppAutoAdd();
+//		KidMode.googleInstalledAppAutoAdd();
 
 	}
 
