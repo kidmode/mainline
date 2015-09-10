@@ -64,6 +64,14 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonGooglePlay()
 	{
+
+		Debug.Log("  buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay");
+
+		PlayerPrefs.SetInt("hasLaunchedGoogle", 1);
+
+		KidMode.setLastLocalAppInfo();
+
+
 		KidMode.openGooglePlay ();	
 	}
 
