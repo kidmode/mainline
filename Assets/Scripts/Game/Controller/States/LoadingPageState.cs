@@ -165,6 +165,7 @@ public class LoadingPageState : GameState {
 
 	private void onLoadingCompleted()
 	{
+		KidMode.broadcastCurrentMode("KidMode");
 		if (isTimerFinished == true)
 		{
 			onTimerFinished -= onTimerCompleted;

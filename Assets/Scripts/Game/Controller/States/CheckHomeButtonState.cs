@@ -13,6 +13,7 @@ public class CheckHomeButtonState: GameState
 		base.enter( p_gameController );
 
 		game = p_gameController.game;
+		KidMode.broadcastCurrentMode("ParentMode");
 	}
 
 	public override void update( GameController p_gameController, int p_time )
