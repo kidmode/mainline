@@ -55,6 +55,7 @@ public class ProfileState : GameState
 
 		if (m_gotoEntrance)
 		{
+			KidMode.broadcastCurrentMode("KidMode");
 			p_gameController.changeState(ZoodleState.LOADING_ENTRANCE);
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
 			m_gotoEntrance = false;

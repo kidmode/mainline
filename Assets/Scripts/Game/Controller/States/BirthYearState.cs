@@ -237,6 +237,7 @@ public class BirthYearState : GameState
 			}
 			else if (l_previous == ZoodleState.MAP)
 			{
+				KidMode.broadcastCurrentMode("ParentMode");
 				//honda: unload map if needed
 				UIManager manager = m_gameController.getUI();
 				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;

@@ -770,6 +770,23 @@ public class KidMode
 		startActivity (packageName);
 		
 	}
+
+	//let system know which mode it is currently
+	//Parameter: 1. ParentMode 2. KidMode
+	//To cathy: please uncomment the code after you want to use it
+	public static void broadcastCurrentMode(string mode)
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+//		
+//		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+//		
+//		jo.Call("broadcastCurrentMode", mode);
+		
+		#endif
+
+	}
 	
 	
 }
