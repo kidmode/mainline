@@ -69,29 +69,43 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 			
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
 			
-			
+			ArrayList lastLocalAppsArrayList = new ArrayList(lastLocalAppsList);
 			
 			List<object> selectedList = KidMode.getSelectedApps();
 			
 			ArrayList selectedArrayList = new ArrayList(selectedList);
+
+			if(lastLocalAppsList.Count < l_list.Count){
 			
-			foreach (AppInfo l_app in l_list)
-			{
+				foreach (AppInfo l_app in l_list)
+				{
 
 
-				if(!lastLocalAppsList.Contains(l_app.packageName)){
-					
-					selectedArrayList.Add(l_app.packageName);
+					if(!lastLocalAppsList.Contains(l_app.packageName)){
 
-					hasLuanchedGoogle = 0;
+						Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ADDED " );
+						
+						selectedArrayList.Add(l_app.packageName);
+
+						hasLuanchedGoogle = 0;
+						
+					}
+
+	//				PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
+					//				selectedList.add
+					//l_app
 					
 				}
-				//				selectedList.add
-				//l_app
-				
+
+				string json =  MiniJSON.MiniJSON.jsonEncode(selectedArrayList);
+
+				string refJson =  MiniJSON.MiniJSON.jsonEncode(lastLocalAppsArrayList); 
+
+				PlayerPrefs.SetString( "addedAppList", json );
+
 			}
 			
-			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
+
 
 //			hasLuanchedGoogle = 0;
 			

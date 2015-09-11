@@ -430,6 +430,34 @@ public class KidMode
 		
 		return selectedAppList;
 	}
+
+
+	public static List<System.Object> getSelectedAppsNames()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = mAllAppList;
+			if(allAppList != null && allAppList.Count > 0)
+			{
+				foreach(AppInfo l_app in allAppList)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						selectedAppList.Add(l_app.packageName);
+					}
+				}
+			}
+		}
+		#endif
+		
+		return selectedAppList;
+	}
 	
 	//vzw: get apps for parent dashboard
 	public static List<System.Object> getApps()
@@ -497,7 +525,7 @@ public class KidMode
 				{
 					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
 					{
-						selectedAppList.Add(l_app);
+						selectedAppList.Add(l_app.packageName);
 					}
 				}
 			}
