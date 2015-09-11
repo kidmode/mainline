@@ -97,7 +97,7 @@ public class KidMode
 
 		//==============================
 		//Google installed app, auto add to selected list Hack
-//		KidMode.googleInstalledAppAutoAdd();
+		KidMode.googleInstalledAppAutoAdd();
 
 	}
 
@@ -535,7 +535,9 @@ public class KidMode
 	public static void googleInstalledAppAutoAdd()
 	{
 
-		Debug.Log("  googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd");
+		Debug.Log("  ++++++++++++++++++++++++++++++++++++++++++++++++++++     ++googleInstalledAppAutoAdd");
+
+		GoogleInstallAutoAddController.Instance.testList();
 
 		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
 
@@ -574,6 +576,7 @@ public class KidMode
 
 
 	#endregion
+
 
 
 	//============
