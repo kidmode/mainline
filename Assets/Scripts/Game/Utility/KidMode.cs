@@ -778,11 +778,11 @@ public class KidMode
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
-//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
-//		
-//		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-//		
-//		jo.Call("broadcastCurrentMode", mode);
+		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		
+		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
+		
+		jo.Call("broadcastCurrentMode", mode);
 		
 		#endif
 
