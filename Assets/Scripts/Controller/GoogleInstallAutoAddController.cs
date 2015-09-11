@@ -11,6 +11,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	public Text displayInfo;
 
+	public int hasLuanchedGoogle;
+
 	void Awake(){
 
 		Instance = this;
@@ -33,29 +35,37 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	public void testList(){
 
-		Invoke("autoAdd", 1.0f);
+//		Invoke("autoAdd", 1.0f);
 
-		InvokeRepeating("checkList", 0.0f, 1.0f);
+		InvokeRepeating("autoAdd", 0.0f, 1.0f);
 
 	}
 
 	private void checkList (){
+
+//		KidMode.getAllSystemApps();
 		
 		List<object> l_list = KidMode.getApps();
 
+//		List<object> l_listSystemApps = 
+
 		Debug.Log(" *1111111111111111111111111  h  l_list " + l_list.Count);
+
+//		Debug.Log(" *1111111111111111111111111 l_listSystemApps " + l_listSystemApps.Count);
 
 	}
 
 	private void autoAdd (){
 
-		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
+//		KidMode.getAllSystemApps();
+
+//		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
 
 		if(hasLuanchedGoogle == 1){
 			
-			List<object> l_list = KidMode.getApps();
+			List<object> l_list =  KidMode.getApps();
 
-			Debug.Log(" *******************************  h  l_list " + l_list.Count);
+			Debug.Log(" ******************************* 0-00000000000000000000000000000000000000  h  l_list " + l_list.Count);
 			
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
 			
@@ -72,6 +82,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 				if(!lastLocalAppsList.Contains(l_app.packageName)){
 					
 					selectedArrayList.Add(l_app.packageName);
+
+					hasLuanchedGoogle = 0;
 					
 				}
 				//				selectedList.add
@@ -81,7 +93,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 			
 			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
 
-			hasLuanchedGoogle = 0;
+//			hasLuanchedGoogle = 0;
 			
 		}
 

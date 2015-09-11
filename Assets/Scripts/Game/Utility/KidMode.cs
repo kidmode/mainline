@@ -285,6 +285,8 @@ public class KidMode
 	public static void getAllSystemApps()
 	{
 
+		Debug.Log("   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$     getAllSystemApps   ");
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (mAllAppList.Count != 0)
 			mAllAppList.Clear ();
@@ -538,6 +540,8 @@ public class KidMode
 		Debug.Log("  ++++++++++++++++++++++++++++++++++++++++++++++++++++     ++googleInstalledAppAutoAdd");
 
 		GoogleInstallAutoAddController.Instance.testList();
+
+		return;
 
 		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
 

@@ -68,7 +68,9 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 		Debug.Log("  buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay");
 
-		PlayerPrefs.SetInt("hasLaunchedGoogle", 1);
+//		PlayerPrefs.SetInt("hasLaunchedGoogle", 1);
+
+		GoogleInstallAutoAddController.Instance.hasLuanchedGoogle = 1;
 
 		List<object> l_list = KidMode.getApps();
 		
