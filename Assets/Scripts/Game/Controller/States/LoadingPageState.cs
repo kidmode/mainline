@@ -33,7 +33,10 @@ public class LoadingPageState : GameState {
 	{
 		base.enter( p_gameController );
 
-		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+//		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+
+		Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.InversedLarge);
+		Handheld.StartActivityIndicator();
 
 		game = p_gameController.game;
 		timer = 300;
@@ -53,7 +56,8 @@ public class LoadingPageState : GameState {
 
 		p_gameController.getUI().removeScreenImmediately(loadingCanvas);
 
-		AndroidNativeUtility.HidePreloader();
+//		AndroidNativeUtility.HidePreloader();
+		Handheld.StopActivityIndicator();
 	}
 
 	public override void update( GameController p_gameController, int p_time )

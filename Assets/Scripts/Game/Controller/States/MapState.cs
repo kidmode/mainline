@@ -24,7 +24,11 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
-		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+//		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+
+		
+		Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.InversedLarge);
+		Handheld.StartActivityIndicator();
 
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
@@ -48,7 +52,8 @@ public class MapState : GameState
 
 		GAUtil.logScreen("MapScreen");
 
-		AndroidNativeUtility.HidePreloader();
+		Handheld.StopActivityIndicator();
+//		AndroidNativeUtility.HidePreloader();
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
