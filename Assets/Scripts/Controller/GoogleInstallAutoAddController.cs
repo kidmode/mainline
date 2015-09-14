@@ -78,34 +78,59 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 			ArrayList newlySelectedArrayList = new ArrayList();
 
 			if(lastLocalAppsList.Count < l_list.Count){
-			
-				foreach (AppInfo l_app in l_list)
-				{
+
+				setLocalAppNamesSortedByAddedTime();
+
+				ArrayList sortedAppNames = getLocallAppNamesSoretedByAddedTime();
+
+				for (int sortedAppNamesIndex = 0; sortedAppNamesIndex < sortedAppNames.Count; sortedAppNamesIndex++) {
 
 
-					if(!lastLocalAppsList.Contains(l_app.packageName)){
+					if(selectedArrayList.Contains(sortedAppNames[sortedAppNamesIndex])){
 
-						Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ADDED " );
-						
-//						selectedArrayList.Add(l_app.packageName);
+						newlySelectedArrayList.Add(sortedAppNames[sortedAppNamesIndex]);
 
-						newlySelectedArrayList.Add(l_app.packageName);
 
-						hasLuanchedGoogle = 0;
-						
+
 					}
 
-	//				PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
-					//				selectedList.add
-					//l_app
-					
-				}
+					if(!lastLocalAppsList.Contains(sortedAppNames[sortedAppNamesIndex])){
 
-				for (int selectedArrayListIndex = 0; selectedArrayListIndex < selectedArrayList.Count; selectedArrayListIndex++) {
+						newlySelectedArrayList.Add(sortedAppNames[sortedAppNamesIndex]);
 
-					newlySelectedArrayList.Add(selectedArrayList[selectedArrayListIndex]);
+					}
 
 				}
+
+				hasLuanchedGoogle = 0;
+			
+//				foreach (AppInfo l_app in l_list)
+//				{
+//
+//
+//					if(!lastLocalAppsList.Contains(l_app.packageName)){
+//
+//						Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ADDED " );
+//						
+////						selectedArrayList.Add(l_app.packageName);
+//
+//						newlySelectedArrayList.Add(l_app.packageName);
+//
+//						hasLuanchedGoogle = 0;
+//						
+//					}
+//
+//	//				PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
+//					//				selectedList.add
+//					//l_app
+//					
+//				}
+//
+//				for (int selectedArrayListIndex = 0; selectedArrayListIndex < selectedArrayList.Count; selectedArrayListIndex++) {
+//
+//					newlySelectedArrayList.Add(selectedArrayList[selectedArrayListIndex]);
+//
+//				}
 
 
 //				ArrayList selectedArrayListNames = new ArrayList();

@@ -432,6 +432,45 @@ public class KidMode
 	}
 
 
+	public static List<System.Object> getSelectedAppsSorted()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+
+
+
+		if( null != l_appNameList )
+		{
+
+			GoogleInstallAutoAddController.Instance.setLocalAppNamesSortedByAddedTime();
+
+			ArrayList sortedAppNameList = GoogleInstallAutoAddController.Instance.getLocallAppNamesSoretedByAddedTime();
+
+//			List<object> allAppList = mAllAppList;
+			if(sortedAppNameList != null && sortedAppNameList.Count > 0)
+			{
+				for (int i = 0; i < sortedAppNameList.Count; i++) {
+
+					if( selectedAppList.Count > 0 && selectedAppList.Contains(sortedAppNameList[i]) )
+					{
+						selectedAppList.Add(sortedAppNameList[i]);
+					}
+
+				}
+			}
+		}
+//		#endif
+
+
+		
+		return selectedAppList;
+	}
+
+
 	public static List<System.Object> getSelectedAppsNames()
 	{
 		List<System.Object> selectedAppList = new List<object>();
