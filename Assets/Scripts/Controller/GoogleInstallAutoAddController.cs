@@ -97,9 +97,25 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 					
 				}
 
-				string json =  MiniJSON.MiniJSON.jsonEncode(selectedArrayList);
+
+				ArrayList selectedArrayListNames = new ArrayList();
+
+				for (int i = 0; i < selectedArrayList.Count; i++) {
+
+					AppInfo info = selectedArrayList[i] as AppInfo;
+
+					selectedArrayListNames.Add(info.packageName);
+				}
+
+
+
+				string json =  MiniJSON.MiniJSON.jsonEncode(selectedArrayListNames);
+
+				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  json "  + json);
 
 				string refJson =  MiniJSON.MiniJSON.jsonEncode(lastLocalAppsArrayList); 
+
+				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  refJson "  + refJson);
 
 				PlayerPrefs.SetString( "addedAppList", json );
 
