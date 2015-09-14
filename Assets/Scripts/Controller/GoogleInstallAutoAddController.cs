@@ -71,9 +71,11 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 			
 			ArrayList lastLocalAppsArrayList = new ArrayList(lastLocalAppsList);
 			
-			List<object> selectedList = KidMode.getSelectedApps();
+			List<object> selectedList = KidMode.getSelectedAppsNames();
 			
 			ArrayList selectedArrayList = new ArrayList(selectedList);
+
+			ArrayList newlySelectedArrayList = new ArrayList();
 
 			if(lastLocalAppsList.Count < l_list.Count){
 			
@@ -85,7 +87,9 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 						Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ADDED " );
 						
-						selectedArrayList.Add(l_app.packageName);
+//						selectedArrayList.Add(l_app.packageName);
+
+						newlySelectedArrayList.Add(l_app.packageName);
 
 						hasLuanchedGoogle = 0;
 						
@@ -97,19 +101,25 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 					
 				}
 
+				for (int selectedArrayListIndex = 0; selectedArrayListIndex < selectedArrayList.Count; selectedArrayListIndex++) {
 
-				ArrayList selectedArrayListNames = new ArrayList();
+					newlySelectedArrayList.Add(selectedArrayList[selectedArrayListIndex]);
 
-				for (int i = 0; i < selectedArrayList.Count; i++) {
-
-					AppInfo info = selectedArrayList[i] as AppInfo;
-
-					selectedArrayListNames.Add(info.packageName);
 				}
 
 
+//				ArrayList selectedArrayListNames = new ArrayList();
+//
+//				for (int i = 0; i < selectedArrayList.Count; i++) {
+//
+//					AppInfo info = selectedArrayList[i] as AppInfo;
+//
+//					selectedArrayListNames.Add(info.packageName);
+//				}
 
-				string json =  MiniJSON.MiniJSON.jsonEncode(selectedArrayListNames);
+
+
+				string json =  MiniJSON.MiniJSON.jsonEncode(newlySelectedArrayList);
 
 				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  json "  + json);
 
