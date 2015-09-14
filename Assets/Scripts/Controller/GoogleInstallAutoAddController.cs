@@ -140,6 +140,75 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	}
 
+
+	//=============================================
+	public void setLocalAppNamesSortedByAddedTime()
+	{
+		//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		string localAppSortedByDateString = PlayerPrefs.GetString( "localAppNamesSortedAddedTime");
+
+		ArrayList listSortedAppNames = MiniJSON.MiniJSON.jsonDecode( localAppSortedByDateString ) as ArrayList;
+
+
+		ArrayList newlySelectedArrayList = new ArrayList();
+
+		if( null == listSortedAppNames )
+		{
+
+			listSortedAppNames = new ArrayList();
+
+		}else{
+
+			List<object> l_list =  KidMode.getApps();
+			
+//			ArrayList curretAppList = new ArrayList(l_list);
+
+			foreach (AppInfo l_app in l_list)
+			{
+
+				if(!listSortedAppNames.Contains(l_app.packageName)){
+
+					newlySelectedArrayList.Add(l_app.packageName);
+
+				}
+
+			}
+
+		}
+
+		
+		for (int listSortedAppNamesIndex = 0; listSortedAppNamesIndex < listSortedAppNames.Count; listSortedAppNamesIndex++) {
+			
+			newlySelectedArrayList.Add(listSortedAppNames[listSortedAppNamesIndex]);
+			
+		}
+		
+		PlayerPrefs.SetString( "localAppNamesSortedAddedTime", MiniJSON.MiniJSON.jsonEncode(newlySelectedArrayList) );
+		
+	}
+
+	public ArrayList getLocallAppNamesSoretedByAddedTime(){
+
+		string localAppSortedByDateString = PlayerPrefs.GetString( "localAppNamesSortedAddedTime");
+		
+		ArrayList listSortedAppNames = MiniJSON.MiniJSON.jsonDecode( localAppSortedByDateString ) as ArrayList;
+
+		if( null == listSortedAppNames )
+		{
+			
+			listSortedAppNames = new ArrayList();
+			
+		}
+
+		return listSortedAppNames;
+
+	}
+
+
+
+
+
 	public void checkKidModeDefault(){
 
 
@@ -148,8 +217,20 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	}
 
+	//========================================
+	//
+	public void saveAppListJson(){
+
+	}
+
+	public void loadAppListJson(){
+
+	}
+
 //	public void 
 
 
 
 }
+
+

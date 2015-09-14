@@ -562,6 +562,10 @@ public class KidMode
 
 
 
+
+
+
+
 	public static void googleInstalledAppAutoAdd()
 	{
 
