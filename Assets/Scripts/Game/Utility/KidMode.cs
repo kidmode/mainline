@@ -776,18 +776,28 @@ public class KidMode
 	//To cathy: please uncomment the code after you want to use it
 	public static void broadcastCurrentMode(string mode)
 	{
+		Debug.Log("broadcast mode: " + mode);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
-		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastCurrentMode", mode);
 		
-		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-		
-		jo.Call("broadcastCurrentMode", mode);
+		#endif
+	}
+
+	public static void broadcastKidmodeFota()
+	{
+		Debug.Log("broadcast Kid mode Fota");
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastKidmodeFota");
 		
 		#endif
 
 	}
-	
 	
 }
 
