@@ -97,7 +97,7 @@ public class KidMode
 
 		//==============================
 		//Google installed app, auto add to selected list Hack
-//		KidMode.googleInstalledAppAutoAdd();
+		KidMode.googleInstalledAppAutoAdd();
 
 	}
 
@@ -285,6 +285,8 @@ public class KidMode
 	public static void getAllSystemApps()
 	{
 
+		Debug.Log("   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$     getAllSystemApps   ");
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (mAllAppList.Count != 0)
 			mAllAppList.Clear ();
@@ -428,6 +430,34 @@ public class KidMode
 		
 		return selectedAppList;
 	}
+
+
+	public static List<System.Object> getSelectedAppsNames()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = mAllAppList;
+			if(allAppList != null && allAppList.Count > 0)
+			{
+				foreach(AppInfo l_app in allAppList)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						selectedAppList.Add(l_app.packageName);
+					}
+				}
+			}
+		}
+		#endif
+		
+		return selectedAppList;
+	}
 	
 	//vzw: get apps for parent dashboard
 	public static List<System.Object> getApps()
@@ -495,7 +525,7 @@ public class KidMode
 				{
 					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
 					{
-						selectedAppList.Add(l_app);
+						selectedAppList.Add(l_app.packageName);
 					}
 				}
 			}
@@ -535,7 +565,11 @@ public class KidMode
 	public static void googleInstalledAppAutoAdd()
 	{
 
-		Debug.Log("  googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd googleInstalledAppAutoAdd");
+		Debug.Log("  ++++++++++++++++++++++++++++++++++++++++++++++++++++     ++googleInstalledAppAutoAdd");
+
+		GoogleInstallAutoAddController.Instance.testList();
+
+		return;
 
 		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
 
@@ -574,6 +608,7 @@ public class KidMode
 
 
 	#endregion
+
 
 
 	//============
@@ -776,18 +811,28 @@ public class KidMode
 	//To cathy: please uncomment the code after you want to use it
 	public static void broadcastCurrentMode(string mode)
 	{
+		Debug.Log("broadcast mode: " + mode);
+
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
-//		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
-//		
-//		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"); 
-//		
-//		jo.Call("broadcastCurrentMode", mode);
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastCurrentMode", mode);
+		
+		#endif
+	}
+
+	public static void broadcastKidmodeFota()
+	{
+		Debug.Log("broadcast Kid mode Fota");
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastKidmodeFota");
 		
 		#endif
 
 	}
-	
 	
 }
 

@@ -115,6 +115,62 @@ public class Game : MonoBehaviour
 		#endif
 	}
 */
+
+	public bool isFotaBroadcast = false;
+
+	public void receieveFOTABroadcast()
+	{
+		if (isKidMode())
+		{
+			Debug.Log("receieve FOTA Broadcast, do parent gate due to kid mode");
+			isFotaBroadcast = true;
+
+			UIManager l_ui = m_gameController.getUI();
+			UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
+			if (l_backScreen == null)
+			{
+				l_backScreen = l_ui.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+				SplashBackCanvas l_splashBack = l_backScreen as SplashBackCanvas;
+				l_splashBack.setDown();
+			}
+
+			m_gameController.connectState(ZoodleState.BIRTHYEAR, int.Parse(m_gameController.stateName));
+			m_gameController.changeState(ZoodleState.BIRTHYEAR);
+		}
+		else
+		{	
+			Debug.Log("receieve FOTA Broadcast, do nothing due to parent mode");
+		}
+	}
+
+	private bool isKidMode()
+	{
+		if (//map
+		    gameController.stateName.Equals("4")  || 
+		    //jungle
+		    gameController.stateName.Equals("5")  ||
+		    //region_video, game, drawing, book
+		    gameController.stateName.Equals("66") || 
+		    gameController.stateName.Equals("67") || 
+		    gameController.stateName.Equals("68") || 
+		    gameController.stateName.Equals("32") || 
+		    //activity_video, game, drawing, book
+		    gameController.stateName.Equals("52") || 
+		    gameController.stateName.Equals("53") || 
+		    gameController.stateName.Equals("7")  ||
+		    gameController.stateName.Equals("10") ||
+		    //congratulations
+		    gameController.stateName.Equals("49") ||
+		    //kids_profile
+		    gameController.stateName.Equals("33"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	public void refreshJungleMedia() 
 	{
@@ -197,6 +253,8 @@ public class Game : MonoBehaviour
 			return false;
 		}
 	}
+
+
 
 	public void onActivityRestart() {
 		//KidMode.onActivityRestart ();
