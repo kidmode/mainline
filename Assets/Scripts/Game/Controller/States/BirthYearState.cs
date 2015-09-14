@@ -97,6 +97,14 @@ public class BirthYearState : GameState
 		m_backButton = m_birthCanvas.getView("exitButton") as UIButton;
 		m_backButton.addClickCallback (toBack);
 
+		//honda
+		if (m_gameController.game.isFotaBroadcast)
+		{
+			Debug.Log("@@@@@@@@fota disable back button");
+			m_backButton.active = false;
+		}
+		//end
+
 		// Sean: vzw
 		// if this app is A launcher, we should go back to nowhere
 		int l_nextState = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
@@ -222,6 +230,21 @@ public class BirthYearState : GameState
 	{
 		int l_previous = m_gameController.getConnectedState(ZoodleState.BIRTHYEAR);
 		Debug.Log("BirthYearState -> previous? " + l_previous);
+
+		if (m_gameController.game.isFotaBroadcast)
+		{
+			Debug.Log("@@@@@@@@fota parent gate verified");
+			KidMode.broadcastKidmodeFota();
+			UICanvas l_backScreen = m_gameController.getUI().findScreen(UIScreen.SPLASH_BACKGROUND);
+			if (l_backScreen != null)
+			{
+				m_gameController.getUI().removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
+			}
+			m_gameController.changeState(l_previous);
+			m_gameController.game.isFotaBroadcast = false;
+			return;
+		}
+
 		if(GameController.UNDEFINED_STATE != l_previous)
 		{
 			if(l_previous == ZoodleState.PROFILE_SELECTION)
@@ -295,4 +318,6 @@ public class BirthYearState : GameState
 	private Hashtable 	m_postData;
 
 	private bool 		gotoPrevious = false;
+
+	public 	bool		isFotaBroadcast = false; 
 }
