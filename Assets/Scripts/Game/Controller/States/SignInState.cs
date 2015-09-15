@@ -137,7 +137,7 @@ public class SignInState : GameState
 		m_trialMessageCanvas = p_uiManager.createScreen(UIScreen.TRIAL_MESSAGE, false, 2);
 		m_signInCanvas = p_uiManager.createScreen(UIScreen.SIGN_IN, true, 1);
 		
-		m_backButton = m_signInCanvas.getView("exitButton") as UIButton;
+		m_backButton = m_signInCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback (toBack);
 		m_signInButton = m_signInCanvas.getView("signInButton") as UIButton;
 		m_signInButton.addClickCallback(toCreateChildrenScreen);
