@@ -43,7 +43,7 @@ public class BirthYearCanvas : UICanvas
 		UILabel l_notice = getView ("noticeText") as UILabel;
 		UILabel l_forgot = getView ("forgotBtnText") as UILabel;
 		
-		l_exit.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+		l_exit.text = Localization.getString (Localization.TXT_BUTTON_BACK);
 		l_top.text = Localization.getString (Localization.TXT_22_LABEL_TOP);
 		l_notice.text = Localization.getString (Localization.TXT_22_LABEL_NOTICE);
 		l_forgot.text = Localization.getString (Localization.TXT_22_LABEL_FORGOT);

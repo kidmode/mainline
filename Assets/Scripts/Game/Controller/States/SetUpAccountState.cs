@@ -122,6 +122,10 @@ public class SetUpAccountState : GameState
 		//Kev
 		m_quitButton = m_signUpCanvas.getView("quitButton") as UIButton;
 		m_quitButton.addClickCallback(onBackClicked);
+
+		UILabel quitText = m_signUpCanvas.getView ("quitButton").getView("btnText") as UILabel;
+
+		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 		//end
 
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
