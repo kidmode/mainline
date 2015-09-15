@@ -437,7 +437,7 @@ public class KidMode
 
 		List<System.Object> sortedSelectedAppList = new List<object>();
 
-		List<System.Object> selectedAppList = getSelectedApps();
+		List<System.Object> selectedAppNamesList = getSelectedAppsNames();
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		KidMode.addDefaultAppsInTheFirstTime();
@@ -458,7 +458,7 @@ public class KidMode
 			{
 				for (int i = 0; i < sortedAppNameList.Count; i++) {
 
-					if( selectedAppList.Count > 0 && selectedAppList.Contains(sortedAppNameList[i]) )
+					if( selectedAppNamesList.Count > 0 && selectedAppNamesList.Contains(sortedAppNameList[i]) )
 					{
 //						selectedAppList.Add(sortedAppNameList[i]);
 

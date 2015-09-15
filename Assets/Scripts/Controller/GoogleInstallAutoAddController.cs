@@ -22,6 +22,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		setLocalAppNamesSortedByAddedTime();
+
 		Instance = this;
 	
 	}
@@ -154,6 +156,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 				PlayerPrefs.SetString( "addedAppList", json );
 
+				CancelInvoke("autoAdd");
+
 			}
 			
 
@@ -183,7 +187,11 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 			listSortedAppNames = new ArrayList();
 
-		}else{
+
+
+		}
+
+//		{
 
 			List<object> l_list =  KidMode.getApps();
 			
@@ -200,7 +208,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 			}
 
-		}
+//		}
 
 		
 		for (int listSortedAppNamesIndex = 0; listSortedAppNamesIndex < listSortedAppNames.Count; listSortedAppNamesIndex++) {
