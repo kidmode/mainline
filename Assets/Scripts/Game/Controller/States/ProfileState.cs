@@ -63,9 +63,6 @@ public class ProfileState : GameState
 
 		if (m_gotoCREATE_CHILD_NEW)
 		{
-
-			PlayerPrefs.SetInt("newChildInKidMode", 1);
-
 			SessionHandler.getInstance().CreateChild = true;
 			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
 			p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
