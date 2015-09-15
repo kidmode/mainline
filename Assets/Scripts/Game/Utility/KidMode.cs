@@ -434,7 +434,10 @@ public class KidMode
 
 	public static List<System.Object> getSelectedAppsSorted()
 	{
-		List<System.Object> selectedAppList = new List<object>();
+
+		List<System.Object> sortedSelectedAppList = new List<object>();
+
+		List<System.Object> selectedAppList = getSelectedApps();
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 		
 		KidMode.addDefaultAppsInTheFirstTime();
@@ -466,7 +469,7 @@ public class KidMode
 
 							if(l_app.packageName == name){
 
-								selectedAppList.Add(l_app);
+								sortedSelectedAppList.Add(l_app);
 
 							}
 
@@ -482,7 +485,7 @@ public class KidMode
 
 
 		
-		return selectedAppList;
+		return sortedSelectedAppList;
 	}
 
 
