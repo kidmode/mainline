@@ -122,7 +122,8 @@ public class TimerController : MonoBehaviour {
 		}
 		else
 		{
-			if (timer.Enabled)
+			// Add null decide for timer by Cathy
+			if (timer != null && timer.Enabled)
 			{
 				m_text.text = timeLeft.ToString() + " seconds left"; 
 			}
