@@ -71,7 +71,7 @@ public class AddAppCanvas : UICanvas
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		m_dataList = new List<object> ();
-		List<object> l_list = KidMode.getApps();
+		List<object> l_list = KidMode.getAppsSorted();
 		foreach (AppInfo l_app in l_list)
 		{
 			m_dataList.Add(l_app);

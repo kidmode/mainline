@@ -21,6 +21,8 @@ public class Game : MonoBehaviour
 	private static bool mAppIsLoad = false;
 
 
+
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
