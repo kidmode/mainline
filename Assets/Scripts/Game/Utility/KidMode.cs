@@ -450,14 +450,29 @@ public class KidMode
 
 			ArrayList sortedAppNameList = GoogleInstallAutoAddController.Instance.getLocallAppNamesSoretedByAddedTime();
 
-//			List<object> allAppList = mAllAppList;
+			List<object> allAppList = mAllAppList;
 			if(sortedAppNameList != null && sortedAppNameList.Count > 0)
 			{
 				for (int i = 0; i < sortedAppNameList.Count; i++) {
 
 					if( selectedAppList.Count > 0 && selectedAppList.Contains(sortedAppNameList[i]) )
 					{
-						selectedAppList.Add(sortedAppNameList[i]);
+//						selectedAppList.Add(sortedAppNameList[i]);
+
+						foreach(AppInfo l_app in allAppList)
+						{
+
+							string name = sortedAppNameList[i] as string;
+
+							if(l_app.packageName == name){
+
+								selectedAppList.Add(l_app);
+
+							}
+
+						}
+
+
 					}
 
 				}
