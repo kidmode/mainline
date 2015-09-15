@@ -540,7 +540,64 @@ public class KidMode
 		
 		return appList;
 	}
-	
+
+	public static List<System.Object> getAppsSorted()
+	{
+		
+		
+		//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		//		KidMode.addDefaultAppsInTheFirstTime();
+		//		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		//		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		
+		
+		
+		//		if( null != l_appNameList )
+		//		{
+		
+		List<System.Object> sortedAppsList = new List<object>();
+		
+		GoogleInstallAutoAddController.Instance.setLocalAppNamesSortedByAddedTime();
+		
+		ArrayList sortedAppNameList = GoogleInstallAutoAddController.Instance.getLocallAppNamesSoretedByAddedTime();
+		
+		List<object> allAppList = mAllAppList;
+		if(sortedAppNameList != null && sortedAppNameList.Count > 0)
+		{
+			for (int i = 0; i < sortedAppNameList.Count; i++) {
+				
+				//				if( selectedAppNamesList.Count > 0 && selectedAppNamesList.Contains(sortedAppNameList[i]) )
+				//				{
+				//						selectedAppList.Add(sortedAppNameList[i]);
+				
+				foreach(AppInfo l_app in allAppList)
+				{
+					
+					string name = sortedAppNameList[i] as string;
+					
+					if(l_app.packageName == name){
+						
+						sortedAppsList.Add(l_app);
+						
+					}
+					
+				}
+				
+				
+				//				}
+				
+			}
+		}
+		//		}
+		//		#endif
+		
+		
+		
+		return sortedAppsList;
+	}
+
+
 	public static void addDefaultAppsInTheFirstTime()
 	{
 		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );

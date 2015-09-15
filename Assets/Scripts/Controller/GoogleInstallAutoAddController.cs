@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
 public class GoogleInstallAutoAddController : MonoBehaviour {
 
@@ -12,6 +13,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 	public Text displayInfo;
 
 	public int hasLuanchedGoogle;
+
+	public static event Action OnNewAppAdded;
 
 	void Awake(){
 
@@ -105,6 +108,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 				}
 
 				hasLuanchedGoogle = 0;
+
+
 			
 //				foreach (AppInfo l_app in l_list)
 //				{
@@ -148,13 +153,16 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 				string json =  MiniJSON.MiniJSON.jsonEncode(newlySelectedArrayList);
 
-				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  json "  + json);
+//				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  json "  + json);
 
-				string refJson =  MiniJSON.MiniJSON.jsonEncode(lastLocalAppsArrayList); 
-
-				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  refJson "  + refJson);
+//				string refJson =  MiniJSON.MiniJSON.jsonEncode(lastLocalAppsArrayList); 
+//
+//				Debug.Log(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  refJson "  + refJson);
 
 				PlayerPrefs.SetString( "addedAppList", json );
+
+				if(OnNewAppAdded != null)
+					OnNewAppAdded();
 
 				CancelInvoke("autoAdd");
 
