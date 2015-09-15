@@ -75,6 +75,9 @@ public class CreateChildState : GameState
 	
 	public override void exit(GameController p_gameController)
 	{
+
+		PlayerPrefs.SetInt("newChildInKidMode", 0);
+
 		p_gameController.getUI().removeScreen(UIScreen.CREATE_CHILD_NEW);
 		base.exit(p_gameController);
 	}
