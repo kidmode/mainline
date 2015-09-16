@@ -740,6 +740,10 @@ public class Localization : object
 	public const string TXT_FOTA_POPUP_CANCEL_BTN = "TXT_FOTA_POPUP_CANCEL_BTN";
 	
 	private string m_currLanguage   = "EN";
+
+
+	public const string TXT_BASELINE = "Baseline";
+
 	private Hashtable m_dictionary  = new Hashtable();
 	
 	public Localization( Accessor p_accessor )
