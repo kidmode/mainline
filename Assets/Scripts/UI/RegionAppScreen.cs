@@ -11,6 +11,14 @@ public class RegionAppScreen : MonoBehaviour {
 
 	public float ShowHeyTime = 3.0f;
 
+	public enum State{
+		Wating,
+		SpeechHey,
+		SpeechRecommend
+	}
+
+	public State state;
+
 	// Use this for initialization
 	void Start () {
 
@@ -34,7 +42,33 @@ public class RegionAppScreen : MonoBehaviour {
 
 		if(ShowHeyChance > rndSpeech){
 
+			state = State.SpeechHey;
+
 			SpeechBoxHey.SetActive(true);
+
+			SpeechBoxRecommendApps.SetActive(false);
+
+		}
+
+	}
+
+	public void monkeyClick(){
+
+		Debug.Log("  monkeyClick  ");
+
+		if(state != State.SpeechRecommend){
+
+			CancelInvoke("checkSpeechBoxHey");
+
+			SpeechBoxRecommendApps.SetActive(true);
+
+			SpeechBoxHey.SetActive(false);
+
+			state = State.SpeechRecommend;
+
+		}else if(state == State.SpeechRecommend){
+
+
 
 		}
 
