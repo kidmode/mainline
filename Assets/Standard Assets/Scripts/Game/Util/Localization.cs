@@ -733,6 +733,11 @@ public class Localization : object
 	public const string TXT_LOADING_TITLE		  = "TXT_LOADING_TITLE";
 	public const string TXT_LOADING_MESSAGE		  = "TXT_LOADING_MESSAGE";
 
+	//honda: FOTA Popup
+	public const string TXT_FOTA_POPUP_TITLE = "TXT_FOTA_POPUP_TITLE";
+	public const string TXT_FOTA_POPUP_CONTENT = "TXT_FOTA_POPUP_CONTENT";
+	public const string TXT_FOTA_POPUP_CONFIRM_BTN = "TXT_FOTA_POPUP_CONFIRM_BTN";
+	public const string TXT_FOTA_POPUP_CANCEL_BTN = "TXT_FOTA_POPUP_CANCEL_BTN";
 	
 	private string m_currLanguage   = "EN";
 	private Hashtable m_dictionary  = new Hashtable();

@@ -12,8 +12,9 @@ public class fpsCalculator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-//		m_text = GameObject.FindObjectOfType<Text>();
-		m_text = GameObject.FindGameObjectWithTag("FPS").GetComponent<Text>();
+		GameObject fpsObject = GameObject.FindGameObjectWithTag("FPS");
+		if (fpsObject != null)
+			m_text = fpsObject.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -24,7 +25,8 @@ public class fpsCalculator : MonoBehaviour {
 		{
 			float fps = frames / (timeNow - lastInterval);
 			float ms = 1000.0f / Mathf.Max(fps, 0.00001f);
-			m_text.text = "TC,16bits," + Application.targetFrameRate.ToString() + "fps " + ms.ToString("f1") + "ms " + fps.ToString("f2") + "FPS";
+			if (m_text != null)
+				m_text.text = "TC,16bits," + Application.targetFrameRate.ToString() + "fps " + ms.ToString("f1") + "ms " + fps.ToString("f2") + "FPS";
 			frames = 0;
 			lastInterval = timeNow;
 		}
