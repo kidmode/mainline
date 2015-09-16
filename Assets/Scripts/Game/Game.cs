@@ -21,6 +21,8 @@ public class Game : MonoBehaviour
 	private static bool mAppIsLoad = false;
 
 
+
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
@@ -339,8 +341,12 @@ public class Game : MonoBehaviour
 		SessionHandler.updateKidsLocalTimeLeftFile();
 
 		//set version text
-		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
-		versionText.text = CurrentBundleVersion.version;
+		GameObject versionObject = GameObject.FindGameObjectWithTag("Version");
+		if (versionObject != null)
+		{
+			Text versionText = versionObject.GetComponent<Text>();
+			versionText.text = CurrentBundleVersion.version;
+		}
 
 		string[] keys = {"version"};
 		string[] values = {CurrentBundleVersion.version};

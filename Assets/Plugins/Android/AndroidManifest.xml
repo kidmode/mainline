@@ -68,7 +68,8 @@
             android:value="\ 1" />
 
         <receiver android:name="com.androidnative.features.notifications.LocalNotificationReceiver" />
-        <receiver android:name="com.onevcat.uniwebview.InstalledAppReceiver" >
+        
+<!--         <receiver android:name="com.onevcat.uniwebview.InstalledAppReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -76,7 +77,7 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
+ -->
         <receiver android:name="com.onevcat.uniwebview.FOTAReceiver" >
             <intent-filter>
                 <action android:name="com.marvell.vdmc.alert.show" />

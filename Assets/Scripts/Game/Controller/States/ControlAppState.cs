@@ -17,6 +17,8 @@ public class ControlAppState : GameState
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
 		TutorialController.Instance.showNextPage();
 		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
+
+		GoogleInstallAutoAddController.OnNewAppAdded += OnNewAppAdded;
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -37,6 +39,8 @@ public class ControlAppState : GameState
 		
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
+
+		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -469,6 +473,12 @@ public class ControlAppState : GameState
 			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
 		}
+	}
+
+	private void OnNewAppAdded(){
+
+		m_addAppCanvas.firstLoadApp();
+
 	}
 	
 	private void viewPremiumRequestComplete(WWW p_response)

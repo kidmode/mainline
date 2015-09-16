@@ -735,11 +735,12 @@ public class SessionHandler
 
 	private void _requestComplete(WWW p_response)
 	{
-		Game game;
+
 		if (p_response.error != null) {
-			GameObject gameLogic = GameObject.FindWithTag("GameController");
-			game = gameLogic.GetComponent<Game>();
-			game.gameController.changeState (ZoodleState.SERVER_ERROR);
+//			Game game;
+//			GameObject gameLogic = GameObject.FindWithTag("GameController");
+//			game = gameLogic.GetComponent<Game>();
+//			game.gameController.changeState (ZoodleState.SERVER_ERROR);
 		}
 		else
 		{

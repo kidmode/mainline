@@ -10,6 +10,8 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 
 	public GameObject scrollArrowRight;
 
+	public float arrowShowThreshhold = 0.0003f;
+
 	[SerializeField]
 	private int scrollStartContentSize = 6;
 
@@ -53,7 +55,7 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 			
 		}
 		
-		if (scrolRectPos.x > 0.0f) {
+		if (scrolRectPos.x > 0.0 + arrowShowThreshhold) {
 			
 			scrollArrowLeft.SetActive(true);
 			
@@ -64,7 +66,7 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 		}
 		
 		
-		if (scrolRectPos.x < 1.0f) {
+		if (scrolRectPos.x < 1.0f - arrowShowThreshhold) {
 			
 			scrollArrowRight.SetActive(true);
 			
