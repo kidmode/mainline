@@ -53,6 +53,10 @@ public class BirthYearState : GameState
 				{
 					p_gameController.changeState(ZoodleState.MAP);
 				}
+				else if (l_nextState == ZoodleState.REGION_LANDING)
+				{
+					p_gameController.changeState(ZoodleState.REGION_LANDING);
+				}
 //				else
 //				{
 //					p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
@@ -266,11 +270,27 @@ public class BirthYearState : GameState
 				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
 				if (mcanvas != null)
 					manager.removeScreenImmediately(mcanvas);
-//				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-//				if (sbcanvas != null)
-//					manager.removeScreenImmediately(sbcanvas);
+				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+				if (sbcanvas != null)
+					manager.removeScreenImmediately(sbcanvas);
 
 				m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			}
+			else if (l_previous == ZoodleState.REGION_LANDING)
+			{
+				KidMode.broadcastCurrentMode("ParentMode");
+				//honda: unload map if needed
+				UIManager manager = m_gameController.getUI();
+				MapCanvas mcanvas = manager.findScreen(UIScreen.MAP) as MapCanvas;
+				if (mcanvas != null)
+					manager.removeScreenImmediately(mcanvas);
+				SplashBackCanvas sbcanvas = manager.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+				if (sbcanvas != null)
+					manager.removeScreenImmediately(sbcanvas);
+
+				//reset timer if kid is going to overview app state on parent dashboard
+				TimerController.Instance.resetKidTimer();
+				m_gameController.changeState(ZoodleState.OVERVIEW_APP);
 			}
 			else
 			{
