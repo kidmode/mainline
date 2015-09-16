@@ -128,6 +128,8 @@ public class UIScreen
 	public const int TIMES_UP				= 1204;
 	// Cathy : Loading Spinner
 	public const int LOADING_SPINNER_ELEPHANT        = 1205;
+	//Honda
+	public const int FOTA_POPUP				= 1206;
 }
 
 
@@ -260,12 +262,13 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.ERROR_MESSAGE,				SCREEN_DIRECTORY + "ErrorMessage" );
 		m_directoryMap.Add( UIScreen.NO_INTERNET,				SCREEN_DIRECTORY + "NoInternetScreen" );
 		m_directoryMap.Add( UIScreen.LOADING_PAGE,				SCREEN_DIRECTORY + "LoadingPage" );
-
 		m_directoryMap.Add( UIScreen.TIMES_UP,					SCREEN_DIRECTORY + "TimesUp" );
-
 
 		// Cathy
 		m_directoryMap.Add( UIScreen.LOADING_SPINNER_ELEPHANT,	SCREEN_DIRECTORY + "LoadingSpinnerElephant" );
+
+		//honda
+		m_directoryMap.Add( UIScreen.FOTA_POPUP,				SCREEN_DIRECTORY + "FOTAPopup" );
 
 	}
 
@@ -396,13 +399,13 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.ERROR_MESSAGE:			return new UICanvas() 			as UICanvas;
 			case UIScreen.NO_INTERNET:              return new UICanvas()			as UICanvas;
 			case UIScreen.LOADING_PAGE:             return new UICanvas()			as UICanvas;
-
 			case UIScreen.TIMES_UP:					return new UICanvas()			as UICanvas;
 
-
 			// Cathy: vzw
-		case UIScreen.LOADING_SPINNER_ELEPHANT:             return new UICanvas()			as UICanvas;
+			case UIScreen.LOADING_SPINNER_ELEPHANT: return new UICanvas()			as UICanvas;
 
+			//honda
+			case UIScreen.FOTA_POPUP:				return new UICanvas()			as UICanvas;
 		}
 		return new UICanvas();
 	}

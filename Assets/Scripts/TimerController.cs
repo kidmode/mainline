@@ -88,7 +88,12 @@ public class TimerController : MonoBehaviour {
 //		};
 
 		UIManager uiManager = game.gameController.getUI();
-		m_text = GameObject.FindGameObjectWithTag("TimerUI").GetComponent<Text>();
+		GameObject timerObject = GameObject.FindGameObjectWithTag("TimerUI");
+		if (timerObject != null)
+		{
+			m_text = timerObject.GetComponent<Text>();
+			m_text.text = "";
+		}
 
 		isTimeUp = false;
 		countdownTime = 0;
@@ -96,8 +101,6 @@ public class TimerController : MonoBehaviour {
 		//Initialize timer with 1 second intervals
 		timer = new System.Timers.Timer (1000);
 		timer.Elapsed += timeElapsed;
-
-		m_text.text = "";
 	}
 
 	void Update()
@@ -105,7 +108,8 @@ public class TimerController : MonoBehaviour {
 		if (isTimeUp)
 		{
 			isTimeUp = false;
-			m_text.text = "time's up"; 
+			if (m_text != null)
+				m_text.text = "time's up"; 
 
 			if (game.isNotPlayingNativeWebView)
 			{
@@ -125,7 +129,8 @@ public class TimerController : MonoBehaviour {
 			// Add null decide for timer by Cathy
 			if (timer != null && timer.Enabled)
 			{
-				m_text.text = timeLeft.ToString() + " seconds left"; 
+				if (m_text != null)
+					m_text.text = timeLeft.ToString() + " seconds left"; 
 			}
 //			else
 //			{
@@ -147,14 +152,18 @@ public class TimerController : MonoBehaviour {
 		if (countdownTime <= 0)
 		{
 			if (countdownTime == -1)
-				m_text.text = "unlimited time"; 
+			{
+				if (m_text != null)
+					m_text.text = "unlimited time"; 
+			}
 			return;
 		}
 
 		if (timer.Enabled == false)
 		{
 			timer.Start();
-			m_text.text = timeLeft.ToString() + " seconds left(start)"; 
+			if (m_text != null)
+				m_text.text = timeLeft.ToString() + " seconds left(start)"; 
 			Debug.Log("Countdown Timer starts: " + timeLeft);
 		}
 		else
@@ -177,7 +186,8 @@ public class TimerController : MonoBehaviour {
 
 			//honda:
 			//TODO: fix this when stopTimer is not in main thread
-			m_text.text = timeLeft.ToString() + " seconds left(stop)"; 
+			if (m_text != null)
+				m_text.text = timeLeft.ToString() + " seconds left(stop)"; 
 			Debug.Log("Countdown Timer stops: " + timeLeft);
 			timeLeft = countdownTime;
 		}
@@ -196,7 +206,8 @@ public class TimerController : MonoBehaviour {
 		{
 			timer.Stop();
 			SessionHandler.getInstance().currentKid.updateAndSaveTimeLeft(timeLeft, isTimeUp);
-			m_text.text = timeLeft.ToString() + " seconds left(pause)";
+			if (m_text != null)
+				m_text.text = timeLeft.ToString() + " seconds left(pause)";
 			Debug.Log("Countdown Timer pauses: " + timeLeft);
 		}
 		else
@@ -213,7 +224,8 @@ public class TimerController : MonoBehaviour {
 		if (timer.Enabled == false)
 		{
 			timer.Start();
-			m_text.text = timeLeft.ToString() + " seconds left(resume)";
+			if (m_text != null)
+				m_text.text = timeLeft.ToString() + " seconds left(resume)";
 			Debug.Log("Countdown Timer resumes: " + timeLeft);
 		}
 		else
@@ -265,7 +277,8 @@ public class TimerController : MonoBehaviour {
 		
 			//honda:
 			//TODO: fix this when stopTimer is not in main thread
-			m_text.text = "reset timer"; 
+			if (m_text != null)
+				m_text.text = "reset timer"; 
 			Debug.Log("Countdown Timer reset");
 			kid_id = -1;
 			countdownTime = 0;
