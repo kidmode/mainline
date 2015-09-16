@@ -648,6 +648,21 @@ public class Game : MonoBehaviour
 		SessionHandler.getInstance().drawingListRequest();
 	}
 
+	public void callParentGate()
+	{
+		UIManager l_ui = m_gameController.getUI();
+		UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
+		if (l_backScreen == null)
+		{
+			l_backScreen = l_ui.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+			SplashBackCanvas l_splashBack = l_backScreen as SplashBackCanvas;
+			l_splashBack.setDown();
+		}
+		m_gameController.connectState(ZoodleState.BIRTHYEAR, ZoodleState.REGION_LANDING);
+		m_gameController.changeState(ZoodleState.BIRTHYEAR);
+	
+	}
+
 	
 	//end
 
