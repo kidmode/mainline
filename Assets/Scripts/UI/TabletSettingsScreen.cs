@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TabletSettingsScreen : MonoBehaviour {
 
@@ -64,6 +65,20 @@ public class TabletSettingsScreen : MonoBehaviour {
 
 	public void buttonGooglePlay()
 	{
+
+		Debug.Log("  buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay buttonGooglePlay");
+
+//		PlayerPrefs.SetInt("hasLaunchedGoogle", 1);
+
+		GoogleInstallAutoAddController.Instance.hasLuanchedGoogle = 1;
+
+		List<object> l_list = KidMode.getApps();
+		
+		Debug.Log(" *******************************  h  l_list " + l_list.Count);
+
+		KidMode.setLastLocalAppInfo();
+
+
 		KidMode.openGooglePlay ();	
 	}
 

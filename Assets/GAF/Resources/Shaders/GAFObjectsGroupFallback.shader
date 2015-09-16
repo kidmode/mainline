@@ -15,22 +15,12 @@ Shader "GAF/GAFObjectsGroupFallback"
 			"IgnoreProjector"="True"
 			"RenderType"="Transparent"
 		}
-   		
-   		Stencil {
-		  	Comp Equal
-		  	ZFail Zero
-		  	Fail Zero
-		  	Pass Keep
-
-		}				
-
 
 		Blend SrcAlpha OneMinusSrcAlpha
 		AlphaTest Greater .01
 		Cull Off
 		Zwrite Off
 		Lighting Off
-
 	
 		CGPROGRAM
 				

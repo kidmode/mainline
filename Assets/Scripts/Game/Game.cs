@@ -21,6 +21,8 @@ public class Game : MonoBehaviour
 	private static bool mAppIsLoad = false;
 
 
+
+
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
@@ -116,6 +118,144 @@ public class Game : MonoBehaviour
 	}
 */
 
+	public bool isFotaBroadcast = false;
+
+	public void receieveFOTABroadcast()
+	{
+		if (isKidMode())
+		{
+			Debug.Log("receieve FOTA Broadcast, do parent gate due to kid mode");
+			isFotaBroadcast = true;
+
+			UIManager l_ui = m_gameController.getUI();
+			UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
+			if (l_backScreen == null)
+			{
+				l_backScreen = l_ui.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+				SplashBackCanvas l_splashBack = l_backScreen as SplashBackCanvas;
+				l_splashBack.setDown();
+			}
+
+			m_gameController.connectState(ZoodleState.BIRTHYEAR, int.Parse(m_gameController.stateName));
+			m_gameController.changeState(ZoodleState.BIRTHYEAR);
+		}
+		else
+		{	
+			Debug.Log("receieve FOTA Broadcast, do nothing due to parent mode");
+		}
+	}
+
+	private bool isKidMode()
+	{
+		if (//map
+		    gameController.stateName.Equals("4")  || 
+		    //jungle
+		    gameController.stateName.Equals("5")  ||
+		    //region_video, game, drawing, book
+		    gameController.stateName.Equals("66") || 
+		    gameController.stateName.Equals("67") || 
+		    gameController.stateName.Equals("68") || 
+		    gameController.stateName.Equals("32") || 
+		    //activity_video, game, drawing, book
+		    gameController.stateName.Equals("52") || 
+		    gameController.stateName.Equals("53") || 
+		    gameController.stateName.Equals("7")  ||
+		    gameController.stateName.Equals("10") ||
+		    //congratulations
+		    gameController.stateName.Equals("49") ||
+		    //kids_profile
+		    gameController.stateName.Equals("33"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public void refreshJungleMedia() 
+	{
+		Debug.Log("spinner: turn on wifi internetReachability" + Application.internetReachability);
+//		if (Application.internetReachability != NetworkReachability.NotReachable)
+		if (checkWebcontentList())
+		{
+			Debug.Log("spinner: refresh contents after having connection");
+			showSpinnerWithFetchingContents();
+		}
+		if (checkDrawingList())
+		{
+			Debug.Log("spinner: refresh drawing contents after having connection");
+			fetchDrawingList();
+		}
+	}
+
+	public void closeWifi() 
+	{
+
+		Debug.Log("spinner: turn off wifi internetReachability" + Application.internetReachability);
+
+	}
+
+	private bool checkWebcontentList()
+	{
+		if (//map
+		    m_gameController.stateName.Equals("4")  || 
+		    //jungle
+		    m_gameController.stateName.Equals("5")  ||
+		    //kids_profile
+		    m_gameController.stateName.Equals("33"))
+		{
+
+			if (SessionHandler.getInstance().webContentList == null || SessionHandler.getInstance().webContentList.Count == 0)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+				return true;
+			}
+			else
+			{
+				Debug.Log("spinner: (don't need to fetch)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+				return false;
+			}
+		}
+		else
+		{
+			Debug.Log("spinner: (not correct state)game state = " + m_gameController.stateName + " webcontent.count = " + SessionHandler.getInstance().webContentList.Count);
+			return false;
+		}
+	}
+
+	private bool checkDrawingList()
+	{
+		if (//jungle
+		    m_gameController.stateName.Equals("5")  ||
+		    //kids_profile
+		    m_gameController.stateName.Equals("33"))
+		{
+			
+			if (SessionHandler.getInstance().drawingList == null)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " drawingList.count = null");
+				return true;
+			}
+			else if (SessionHandler.getInstance().drawingList.Count == 0)
+			{
+				Debug.Log("spinner: (need to fetch)game state = " + m_gameController.stateName + " drawingList.count = 0");
+				return true;
+			}
+			else
+			{
+				Debug.Log("spinner: (don't need to fetch)game state = " + m_gameController.stateName + " drawingList.count = " + SessionHandler.getInstance().drawingList.Count);
+				return false;
+			}
+		}
+		else
+		{
+			Debug.Log("spinner: (not correct state)game state = " + m_gameController.stateName);
+			return false;
+		}
+	}
+
 
 
 	public void onActivityRestart() {
@@ -175,7 +315,7 @@ public class Game : MonoBehaviour
 	//		_loadTestWebpage( "https://www.youtube.com/embed/G1UdkMDAdsU" );
 
 	}
-	
+
 	public void Awake () 
 	{
 		// Sean: vzw
@@ -189,8 +329,10 @@ public class Game : MonoBehaviour
 		#endif
  		// vzw end
 
-		//honda
+
+		//honda1
 //		PlayerPrefs.DeleteAll();
+
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
@@ -199,8 +341,12 @@ public class Game : MonoBehaviour
 		SessionHandler.updateKidsLocalTimeLeftFile();
 
 		//set version text
-		Text versionText = GameObject.FindGameObjectWithTag("Version").GetComponent<Text>();
-		versionText.text = CurrentBundleVersion.version;
+		GameObject versionObject = GameObject.FindGameObjectWithTag("Version");
+		if (versionObject != null)
+		{
+			Text versionText = versionObject.GetComponent<Text>();
+			versionText.text = CurrentBundleVersion.version;
+		}
 
 		string[] keys = {"version"};
 		string[] values = {CurrentBundleVersion.version};
@@ -417,8 +563,8 @@ public class Game : MonoBehaviour
 				}
 				else
 				{
-					Game game = m_gameController.game;;
-					game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+//					Game game = m_gameController.game;
+					m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 				}
 				//cynthia vzw
 //				Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -466,6 +612,42 @@ public class Game : MonoBehaviour
 			isPremiumCompleted = false;
 		}
 	}
+
+	private void showSpinnerWithFetchingContents()
+	{
+		Debug.Log("spinner: show spinner");
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
+		Debug.Log("spinner: start webcontent request");
+
+		Invoke("startWebContentRequest", 10);
+	}
+
+	private void startWebContentRequest()
+	{
+		Game game = m_gameController.game;
+		game.user.contentCache.startRequests(onLoadingCompleted);
+	}
+
+	private void onLoadingCompleted()
+	{
+		Debug.Log("spinner: remove spinner");
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		Debug.Log("spinner: webcontent list = " + SessionHandler.getInstance().webContentList.Count);
+	}
+
+	private void fetchDrawingList()
+	{
+		Debug.Log("spinner: start drawing request");
+		Invoke("startDrawingRequest", 10);
+	}
+
+	private void startDrawingRequest()
+	{
+		SessionHandler.getInstance().drawingListRequest();
+	}
+
 	
 	//end
 

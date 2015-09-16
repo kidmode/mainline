@@ -735,7 +735,14 @@ public class ImageRequest : RequestQueue.Request
 
 	private void _requestComplete(WWW p_response)
 	{
-		context.setVariable(m_variable, p_response);
+		if (p_response.error == null)
+		{
+			context.setVariable(m_variable, p_response);
+		}
+		else
+		{
+			Debug.Log(p_response.error);
+		}
 	}
 
 	private string m_variable;
@@ -902,7 +909,7 @@ public class WebContentRequest : RequestQueue.Request
 
 	protected override void init()
 	{
-		Debug.Log ("@@@@@@" + SessionHandler.getInstance ().currentKid.id);
+		Debug.Log ("spinner: " + SessionHandler.getInstance ().currentKid.id);
 		m_call = "/api/kids" + ZoodlesConstants.SLASH + SessionHandler.getInstance().currentKid.id + ZoodlesConstants.REST_LINKS_LIST_URL_SUFFIX;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
@@ -2184,7 +2191,8 @@ public class VisitLinkTrackRequest
 	}
 }
 
-
+//===================
+//This for online link counter since the VisitLinkTrackRequest method seems to be offline only
 public class LinkVisitRequest : RequestQueue.Request
 {
 	

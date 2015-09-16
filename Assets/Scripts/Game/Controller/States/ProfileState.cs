@@ -55,6 +55,7 @@ public class ProfileState : GameState
 
 		if (m_gotoEntrance)
 		{
+			KidMode.broadcastCurrentMode("KidMode");
 			p_gameController.changeState(ZoodleState.LOADING_ENTRANCE);
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
 			m_gotoEntrance = false;
@@ -62,6 +63,9 @@ public class ProfileState : GameState
 
 		if (m_gotoCREATE_CHILD_NEW)
 		{
+
+			PlayerPrefs.SetInt("newChildInKidMode", 1);
+
 			SessionHandler.getInstance().CreateChild = true;
 			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
 			p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
@@ -249,6 +253,9 @@ public class ProfileState : GameState
 
 	private void sendTellFriendRequestComplete(WWW p_response)
 	{
+
+		m_toInput.text = "";
+
 		m_closeConfirmButton.active = true;
 		if (null == p_response.error) 
 		{
@@ -441,18 +448,23 @@ public class ProfileState : GameState
 
 	private void onBackClicked(UIButton p_button)
 	{
-		if(SessionHandler.getInstance().childLockSwitch)
-		{
-			m_gameController.connectState (ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.BIRTHYEAR);
-		}
-		else
-		{
-//			KidMode.setKidsModeActive(false);	
-			KidModeLockController.Instance.swith2DParentMode();
-			PlayerPrefs.Save();
-			Application.Quit();
-		}
+
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+
+//		if(SessionHandler.getInstance().childLockSwitch)
+//		{
+//			m_gameController.connectState (ZoodleState.BIRTHYEAR,int.Parse(m_gameController.stateName));
+//			m_gameController.changeState (ZoodleState.BIRTHYEAR);
+//		}
+//		else
+//		{
+////			KidMode.setKidsModeActive(false);	
+//			KidModeLockController.Instance.swith2DParentMode();
+//			PlayerPrefs.Save();
+//			Application.Quit();
+//		}
+
     }	
 
 	private void onCreateChild(UIButton p_button)
@@ -570,6 +582,9 @@ public class ProfileState : GameState
 	
 	private void _onTermsButtonClick(UIButton p_button)
 	{
+
+		m_quitButton.gameObject.SetActive(false);
+
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -583,6 +598,9 @@ public class ProfileState : GameState
 
 	private void _onPolicyButtonClick(UIButton p_button)
 	{
+
+		m_quitButton.gameObject.SetActive(false);
+
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -598,7 +616,8 @@ public class ProfileState : GameState
 	{
 		UICanvas l_screen = m_uiManager.createScreen(UIScreen.LEGAL_CONTENT, false, 5);
 		m_uiManager.changeScreen(l_screen, true);
-		UIButton l_confirm = l_screen.getView("trigger") as UIButton;
+
+		UIButton l_confirm = l_screen.getView("quitButton") as UIButton;
 		l_confirm.addClickCallback(_onConfirmButtonClick);
 		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
 		l_webView.insets = new UniWebViewEdgeInsets((int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor), (int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor));
@@ -610,6 +629,9 @@ public class ProfileState : GameState
 
 	private void _closeWebview()
 	{
+
+		m_quitButton.gameObject.SetActive(true);
+
 		UICanvas l_screen = m_uiManager.findScreen(UIScreen.LEGAL_CONTENT);
 		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
 		l_webView.Hide();
@@ -624,6 +646,9 @@ public class ProfileState : GameState
 
 	private bool _onShouldCloseView(UniWebView p_webView)
 	{
+
+
+
 		_closeWebview();
 		return true;
 	}

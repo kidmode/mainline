@@ -716,8 +716,8 @@ public class SessionHandler
 				m_iconRequest = new RequestQueue();
 			foreach(Kid l_kid in m_kidList)
 			{
-				m_request.add(new NewGetAppByPageRequest(l_kid,"google",1));
-				m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,l_kid));
+				m_request.add(new NewGetAppByPageRequest(l_kid, ZoodlesConstants.GOOGLE, 1));
+				m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE, l_kid));
 			}
 			m_request.request(RequestType.RUSH);
 		}
@@ -769,8 +769,8 @@ public class SessionHandler
 				m_singleKidRequest = new RequestQueue();
 			if(null != p_kid.appList)
 				p_kid.appList = new List<object>();
-			m_request.add(new NewGetAppByPageRequest(p_kid,"google",1));
-			m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE,p_kid));
+			m_request.add(new NewGetAppByPageRequest(p_kid, ZoodlesConstants.GOOGLE, 1));
+			m_request.add(new GetTopRecommandRequest(ZoodlesConstants.GOOGLE, p_kid));
 			m_request.request(RequestType.RUSH);
 		}
 	}
@@ -960,14 +960,15 @@ public class SessionHandler
 		settingCache.active = false;
 	}
 
-
-	public void resetKidCacheLists()
+	//honda: change name because resetKidCacheLists is not clear
+	public void resetWebBookListsCache()
 	{
 		webContentList = null;
 		bookContentList = null;
 	}
-	
-	public void resetKidCache()
+
+	//honda: change name becuase resetKidCache is not clear name
+	public void resetWebBookContentsCache()
 	{
 		webContentList = null;
 		bookContentList = null;

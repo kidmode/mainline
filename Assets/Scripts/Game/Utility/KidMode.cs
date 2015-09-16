@@ -93,6 +93,12 @@ public class KidMode
 		}
 		//back to kidmode when screen on
 		TimerController.Instance.runCurrentKidTimer();
+
+
+		//==============================
+		//Google installed app, auto add to selected list Hack
+		KidMode.googleInstalledAppAutoAdd();
+
 	}
 
 	public static void closeNativeWebview()
@@ -274,8 +280,12 @@ public class KidMode
 	}
 
 
+	#region SystemApps
+
 	public static void getAllSystemApps()
 	{
+
+		Debug.Log("   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$     getAllSystemApps   ");
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (mAllAppList.Count != 0)
@@ -420,6 +430,91 @@ public class KidMode
 		
 		return selectedAppList;
 	}
+
+
+	public static List<System.Object> getSelectedAppsSorted()
+	{
+
+		List<System.Object> sortedSelectedAppList = new List<object>();
+
+		List<System.Object> selectedAppNamesList = getSelectedAppsNames();
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+
+
+
+		if( null != l_appNameList )
+		{
+
+			GoogleInstallAutoAddController.Instance.setLocalAppNamesSortedByAddedTime();
+
+			ArrayList sortedAppNameList = GoogleInstallAutoAddController.Instance.getLocallAppNamesSoretedByAddedTime();
+
+			List<object> allAppList = mAllAppList;
+			if(sortedAppNameList != null && sortedAppNameList.Count > 0)
+			{
+				for (int i = 0; i < sortedAppNameList.Count; i++) {
+
+					if( selectedAppNamesList.Count > 0 && selectedAppNamesList.Contains(sortedAppNameList[i]) )
+					{
+//						selectedAppList.Add(sortedAppNameList[i]);
+
+						foreach(AppInfo l_app in allAppList)
+						{
+
+							string name = sortedAppNameList[i] as string;
+
+							if(l_app.packageName == name){
+
+								sortedSelectedAppList.Add(l_app);
+
+							}
+
+						}
+
+
+					}
+
+				}
+			}
+		}
+//		#endif
+
+
+		
+		return sortedSelectedAppList;
+	}
+
+
+	public static List<System.Object> getSelectedAppsNames()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = mAllAppList;
+			if(allAppList != null && allAppList.Count > 0)
+			{
+				foreach(AppInfo l_app in allAppList)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						selectedAppList.Add(l_app.packageName);
+					}
+				}
+			}
+		}
+		#endif
+		
+		return selectedAppList;
+	}
 	
 	//vzw: get apps for parent dashboard
 	public static List<System.Object> getApps()
@@ -445,7 +540,64 @@ public class KidMode
 		
 		return appList;
 	}
-	
+
+	public static List<System.Object> getAppsSorted()
+	{
+		
+		
+		//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		//		KidMode.addDefaultAppsInTheFirstTime();
+		//		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
+		//		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		
+		
+		
+		//		if( null != l_appNameList )
+		//		{
+		
+		List<System.Object> sortedAppsList = new List<object>();
+		
+		GoogleInstallAutoAddController.Instance.setLocalAppNamesSortedByAddedTime();
+		
+		ArrayList sortedAppNameList = GoogleInstallAutoAddController.Instance.getLocallAppNamesSoretedByAddedTime();
+		
+		List<object> allAppList = mAllAppList;
+		if(sortedAppNameList != null && sortedAppNameList.Count > 0)
+		{
+			for (int i = 0; i < sortedAppNameList.Count; i++) {
+				
+				//				if( selectedAppNamesList.Count > 0 && selectedAppNamesList.Contains(sortedAppNameList[i]) )
+				//				{
+				//						selectedAppList.Add(sortedAppNameList[i]);
+				
+				foreach(AppInfo l_app in allAppList)
+				{
+					
+					string name = sortedAppNameList[i] as string;
+					
+					if(l_app.packageName == name){
+						
+						sortedAppsList.Add(l_app);
+						
+					}
+					
+				}
+				
+				
+				//				}
+				
+			}
+		}
+		//		}
+		//		#endif
+		
+		
+		
+		return sortedAppsList;
+	}
+
+
 	public static void addDefaultAppsInTheFirstTime()
 	{
 		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
@@ -465,6 +617,119 @@ public class KidMode
 			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode( l_appNameList ) );
 		}
 	}
+
+
+
+
+
+	public static List<System.Object> getLastLocalApps()
+	{
+		List<System.Object> selectedAppList = new List<object>();
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		KidMode.addDefaultAppsInTheFirstTime();
+		string l_appListJson = PlayerPrefs.GetString( "lastLocalApps" );
+		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
+		if( null != l_appNameList )
+		{
+			List<object> allAppList = mAllAppList;
+			if(allAppList != null && allAppList.Count > 0)
+			{
+				foreach(AppInfo l_app in allAppList)
+				{
+					if( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
+					{
+						selectedAppList.Add(l_app.packageName);
+					}
+				}
+			}
+		}
+		#endif
+		
+		return selectedAppList;
+	}
+
+	public static void setLastLocalAppInfo()
+	{
+//		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+//		List<object> m_dataList = new List<object> ();
+		List<object> l_list = KidMode.getApps();
+//		foreach (AppInfo l_app in l_list)
+//		{
+//			m_dataList.Add(l_app);
+//		}
+
+
+		ArrayList l_appNameList = new ArrayList();
+		foreach (AppInfo l_app in l_list)
+		{
+			l_appNameList.Add(l_app.packageName);
+		}
+
+		PlayerPrefs.SetString( "lastLocalApps", MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
+
+//		#endif
+		
+//		return selectedAppList;
+	}
+
+
+
+
+
+
+
+	public static void googleInstalledAppAutoAdd()
+	{
+
+		Debug.Log("  ++++++++++++++++++++++++++++++++++++++++++++++++++++     ++googleInstalledAppAutoAdd");
+
+		GoogleInstallAutoAddController.Instance.testList();
+
+		return;
+
+		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
+
+		if(hasLuanchedGoogle == 1){
+
+			List<object> l_list = KidMode.getApps();
+
+			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
+
+
+
+			List<object> selectedList = KidMode.getSelectedApps();
+
+			ArrayList selectedArrayList = new ArrayList(selectedList);
+
+			foreach (AppInfo l_app in l_list)
+			{
+
+				if(!lastLocalAppsList.Contains(l_app.packageName)){
+
+					selectedArrayList.Add(l_app.packageName);
+
+				}
+//				selectedList.add
+				//l_app
+
+			}
+
+			PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(selectedArrayList) );
+
+		}
+
+		PlayerPrefs.SetInt("hasLaunchedGoogle", 0);
+
+	}
+
+
+	#endregion
+
+
+
+	//============
 	
 	public static bool hasFlashInstalled ()
 	{
@@ -658,7 +923,34 @@ public class KidMode
 		startActivity (packageName);
 		
 	}
-	
+
+	//let system know which mode it is currently
+	//Parameter: 1. ParentMode 2. KidMode
+	//To cathy: please uncomment the code after you want to use it
+	public static void broadcastCurrentMode(string mode)
+	{
+		Debug.Log("broadcast mode: " + mode);
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastCurrentMode", mode);
+		
+		#endif
+	}
+
+	public static void broadcastKidmodeFota()
+	{
+		Debug.Log("broadcast Kid mode Fota");
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("broadcastKidmodeFota");
+		
+		#endif
+
+	}
 	
 }
 

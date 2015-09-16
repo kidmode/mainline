@@ -119,6 +119,15 @@ public class SetUpAccountState : GameState
 		m_SignInAccountButton.addClickCallback(onSignInAccountButtonClicked);
 		//end
 
+		//Kev
+		m_quitButton = m_signUpCanvas.getView("quitButton") as UIButton;
+		m_quitButton.addClickCallback(onBackClicked);
+
+		UILabel quitText = m_signUpCanvas.getView ("quitButton").getView("btnText") as UILabel;
+
+		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+		//end
+
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
 		m_passwordCheckImage = m_signUpCanvas.getView ("passwordInputConfirm") as UIImage;
 		m_premiumLogoArea = m_signUpCanvas.getView ("premiumLogoArea") as UIElement;
@@ -378,6 +387,16 @@ public class SetUpAccountState : GameState
 
 	//end
 
+	//Kev
+	private void onBackClicked(UIButton p_button)
+	{
+		
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+
+	}
+	//end
+
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
@@ -522,6 +541,7 @@ public class SetUpAccountState : GameState
 	private InputField 	m_rePassword;
 
 	private UIButton 	m_createAccountButton;
+	private UIButton 	m_quitButton;
 	private UIImage 	m_emailCheckImage;
 	private UIImage 	m_passwordCheckImage;
 	private UIElement	m_premiumLogoArea;

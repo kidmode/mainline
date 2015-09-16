@@ -38,16 +38,20 @@ public class SignInCanvas : UICanvas
 
 	private void SetupLocalizition()
 	{
-		UILabel l_exit = getView ("exitButton").getView("btnText") as UILabel;
+		UILabel l_back = getView ("backButton").getView("btnText") as UILabel;
 		UILabel l_top = getView ("topicText") as UILabel;
 		UILabel l_email = getView ("emailAddressText") as UILabel;
 		UILabel l_password = getView ("passwordText") as UILabel;
 		UILabel l_signIn = getView ("signInBtnText") as UILabel;
+
+		UILabel l_quit = getView ("quitButton").getView("btnText") as UILabel;
 		
-		l_exit.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+		l_back.text = Localization.getString (Localization.TXT_BUTTON_BACK);
 		l_top.text = Localization.getString (Localization.TXT_21_LABEL_TOP);
 		l_email.text = Localization.getString (Localization.TXT_21_LABEL_EMAIL);
 		l_password.text = Localization.getString (Localization.TXT_21_LABEL_PASSWORD);
 		l_signIn.text = Localization.getString (Localization.TXT_21_LABEL_SIGNIN);
+
+		l_quit.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 	}
 }

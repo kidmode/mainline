@@ -184,6 +184,7 @@ GameObject:
   - 114: {fileID: 11497698}
   - 114: {fileID: 11497696}
   - 114: {fileID: 11497694}
+  - 114: {fileID: 11467370}
   m_Layer: 5
   m_Name: appScrollView
   m_TagString: Untagged
@@ -222,7 +223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &197692
 GameObject:
   m_ObjectHideFlags: 1
@@ -287,6 +288,23 @@ Transform:
   - {fileID: 22497694}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11467370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232f455363a4c4b5bbc0f16c6bc3155b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 11497696}
+  scrollArrowLeft: {fileID: 197672}
+  scrollArrowRight: {fileID: 197674}
+  scrollStartContentSize: 8
+  contentSize: 0
+  currPos: {x: 0, y: 0}
 --- !u!114 &11497666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -920,10 +938,10 @@ RectTransform:
   - {fileID: 22497666}
   m_Father: {fileID: 22497674}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: -190}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &22497674
 RectTransform:
@@ -941,7 +959,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: .5}
   m_AnchorMax: {x: 0, y: .5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 334}
+  m_SizeDelta: {x: 170, y: 334}
   m_Pivot: {x: 0, y: .5}
 --- !u!224 &22497676
 RectTransform:

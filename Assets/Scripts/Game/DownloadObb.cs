@@ -28,7 +28,11 @@ public class DownloadObb : MonoBehaviour {
 			return;
 		}
 		
-		expPath = GooglePlayDownloader.GetExpansionFilePath();;
+		expPath = GooglePlayDownloader.GetExpansionFilePath();
+		if(expPath != null)
+			log("waiting mainPath " + expPath);
+		else
+			log("waiting mainPath is null");
 		if (expPath == null)
 		{
 			GUI.Label(new Rect(10, 10, Screen.width-10, 20), "External storage is not available!");
@@ -66,7 +70,7 @@ public class DownloadObb : MonoBehaviour {
 		{
 			yield return new WaitForSeconds(0.5f);
 			mainPath = GooglePlayDownloader.GetMainOBBPath(expPath);	
-			log("waiting mainPath "+mainPath);
+			log("waiting mainPath " + mainPath);
 		}
 		while( mainPath == null);
 		

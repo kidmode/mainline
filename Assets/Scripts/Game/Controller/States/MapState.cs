@@ -24,6 +24,12 @@ public class MapState : GameState
 
 		base.enter(p_gameController);
 
+//		AndroidNativeUtility.ShowPreloader(Localization.getString (Localization.TXT_LOADING_TITLE), Localization.getString (Localization.TXT_LOADING_MESSAGE));
+
+		
+		Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.InversedLarge);
+		Handheld.StartActivityIndicator();
+
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);
@@ -45,6 +51,9 @@ public class MapState : GameState
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("MapScreen");
+
+		Handheld.StopActivityIndicator();
+//		AndroidNativeUtility.HidePreloader();
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
@@ -102,8 +111,9 @@ public class MapState : GameState
 		UIManager l_ui = p_gameController.getUI();
 
 		SplashBackCanvas sbcanvas = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-		if (sbcanvas != null)
+		if (sbcanvas != null) {
 			l_ui.removeScreenImmediately(sbcanvas);
+		}
 
 		m_mapCanvas = l_ui.findScreen(UIScreen.MAP);
 		if (m_mapCanvas != null)
@@ -113,41 +123,54 @@ public class MapState : GameState
 
 			// Sean: vzw
 			m_entranceButton.enabled = false;
-			m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+			m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f,
+			                                       ZoodlesScreenFactory.FADE_SPEED,
+			                                       (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
 			// end vzw
 			return;
 		}
 
+//		GameObject obj = Resources.Load<GameObject>("Prefabs/Screens/LoadingScreen");
+//		GameObject ins = GameObject.Instantiate(obj) as GameObject;
 
-		m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
-		m_mapCanvas.enterTransitionEvent += onTransitionEnter;
-		m_mapCanvas.exitTransitionEvent += onTransitionExit;
+//		l_ui.createScreenAsync(UIScreen.MAP, (UICanvas canvas) => {
 
-		
-
-		m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
-		m_entranceButton.addClickCallback(onBackClicked);
-		// Sean: vzw
-		m_entranceButton.enabled = false;
-		m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
-		// end vzw
-
-		UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
-		l_jungleButton.addClickCallback(onJungleClicked);
-		
-//		UIButton l_savannaButton = m_mapCanvas.getView("savannaButton") as UIButton;
-
-		UIButton l_welcomeButton = m_mapCanvas.getView("infoPanel") as UIButton;
-		l_welcomeButton.addClickCallback(onSpeechClick);
-		
-		UIImage l_arrow	= m_mapCanvas.getView( "activeArrow" ) as UIImage;
-		List<Vector3> l_arrowPosList = new List<Vector3>();
-		l_arrowPosList.Add(l_arrow.transform.localPosition);
-		l_arrowPosList.Add(l_arrow.transform.localPosition + new Vector3(0, 50, 0));
-		l_arrowPosList.Add(l_arrow.transform.localPosition);
-		l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
+			m_mapCanvas = l_ui.createScreen(UIScreen.MAP, true, 10);
+//			GameObject.DestroyImmediate(ins);
 
 
+//			m_mapCanvas = canvas;
+
+			m_mapCanvas.enterTransitionEvent += onTransitionEnter;
+			m_mapCanvas.exitTransitionEvent += onTransitionExit;
+			
+			
+
+			m_entranceButton = m_mapCanvas.getView("entranceButton") as UIButton;
+			m_entranceButton.addClickCallback(onBackClicked);
+			// Sean: vzw
+			m_entranceButton.enabled = false;
+			m_entranceButton.tweener.addAlphaTrack(0.0f, 1.0f,
+			                                       ZoodlesScreenFactory.FADE_SPEED,
+			                                       (UIElement p_element, Tweener.TargetVar p_targetVar) => { onTransitionDone(); });
+			// end vzw
+			
+			UIButton l_jungleButton = m_mapCanvas.getView("jungleButton") as UIButton;
+			l_jungleButton.addClickCallback(onJungleClicked);
+			
+			//		UIButton l_savannaButton = m_mapCanvas.getView("savannaButton") as UIButton;
+			
+			UIButton l_welcomeButton = m_mapCanvas.getView("infoPanel") as UIButton;
+			l_welcomeButton.addClickCallback(onSpeechClick);
+			
+			UIImage l_arrow	= m_mapCanvas.getView( "activeArrow" ) as UIImage;
+			List<Vector3> l_arrowPosList = new List<Vector3>();
+			l_arrowPosList.Add(l_arrow.transform.localPosition);
+			l_arrowPosList.Add(l_arrow.transform.localPosition + new Vector3(0, 50, 0));
+			l_arrowPosList.Add(l_arrow.transform.localPosition);
+			l_arrow.tweener.addPositionTrack(l_arrowPosList, 1.0f, null, Tweener.Style.Standard, true);
+
+//		}, true, 10);
 	}
 
 	private void _setupKidProfile(GameController p_gameController)

@@ -75,6 +75,9 @@ public class CreateChildState : GameState
 	
 	public override void exit(GameController p_gameController)
 	{
+
+		PlayerPrefs.SetInt("newChildInKidMode", 0);
+
 		p_gameController.getUI().removeScreen(UIScreen.CREATE_CHILD_NEW);
 		base.exit(p_gameController);
 	}
@@ -106,6 +109,8 @@ public class CreateChildState : GameState
 		m_childFirstName = m_createChildCanvas.getView("childFirstNameArea").gameObject.GetComponent<InputField>();
 		m_childBirthYear = m_createChildCanvas.getView("YearArea").gameObject.GetComponent<InputField>();
 		m_childBirthMonth = m_createChildCanvas.getView("MonthArea").gameObject.GetComponent<InputField>();
+
+		m_childBirthMonth.text = "1";
 		
 		SessionHandler l_session = SessionHandler.getInstance();
 		

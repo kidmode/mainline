@@ -32,6 +32,7 @@ public class ErrorMessage : MonoBehaviour {
 		if (onClick != null)
 		{
 			onClick();
+			onClick = null;
 		}
 	}
 

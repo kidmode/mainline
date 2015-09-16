@@ -252,6 +252,7 @@ public class RegionBaseState : GameState
 		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
+			Debug.Log("spinner: 3. canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
 		}
@@ -309,11 +310,13 @@ public class RegionBaseState : GameState
 	{
 		if (m_linkLoaded == false)
 		{
+			Debug.Log("spinner: 1. checkIfLinksCacheLoaded");
 			Game l_game = p_gameController.game;
 			User l_user = l_game.user;
 			WebContentCache l_cache = l_user.contentCache;
 			if (l_cache.isFinishedLoadingWebContent)
 			{
+				Debug.Log("spinner: 2. isFinishedLoadingWebContent");
 				m_linkLoaded = true;
 				canSetWebContent = true;
 			}
@@ -426,6 +429,18 @@ public class RegionBaseState : GameState
 			}
 
 		}
+
+		if( null != m_regionAppCanvas && null != m_regionAppCanvas.getView("mainPanel") )
+		{
+			
+			if( !m_regionAppCanvas.getView("mainPanel").active){ //m_gameActivityCanvas.getView("mainPanel").alpha < 1.0f &&
+				
+				m_regionAppCanvas.getView("mainPanel").tweener.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+				
+			}
+			
+		}
+
 	}
 	
 
@@ -520,6 +535,8 @@ public class RegionBaseState : GameState
 	{
 		if (m_createActivity == ActivityType.Video)
 		{
+			Debug.Log("spinner: 8. _handleDynamicActivities");
+
 			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
 			m_currentActivityCanvas = m_videoActivityCanvas;
@@ -533,7 +550,7 @@ public class RegionBaseState : GameState
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
 
 
-			//Get Scroll view updateor
+			//Get Scroll view updator
 			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 			viewUpdator.setContentDataSize(m_videoViewList.Count);
 
@@ -926,24 +943,29 @@ public class RegionBaseState : GameState
 	
 	private void onFunActivityClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-		Drawing l_drawing = (p_data as ActivityInfo).drawing;
-		SessionHandler.getInstance().currentDrawing = l_drawing;
+		//honda: if no internet, won't enter drawing section
+		if (!showMsgIfNoInternet())
+		{
+			Drawing l_drawing = (p_data as ActivityInfo).drawing;
+			SessionHandler.getInstance().currentDrawing = l_drawing;
 
-		m_subState = SubState.GO_PAINT;
+			m_subState = SubState.GO_PAINT;
+		}
 	}
 
 	private void onVideoClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-
-		WebContent l_webContent = (p_data as WebViewInfo).webData;
-		SessionHandler.getInstance().currentContent = l_webContent;
-
-		m_subState = SubState.GO_VIDEO;
-
-		Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
-		SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
+		//honda: if no internet, won't enter video section
+		if (!showMsgIfNoInternet())
+		{
+			WebContent l_webContent = (p_data as WebViewInfo).webData;
+			SessionHandler.getInstance().currentContent = l_webContent;
+			
+			m_subState = SubState.GO_VIDEO;
+			
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
+			SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
+		}
 	}
 
 	//honda: comment out because we remove feature toy box
@@ -969,29 +991,31 @@ public class RegionBaseState : GameState
 
 	private void onGameClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		showMsgIfNoInternet(); //cynthia
-
-		GameInfo l_game = p_data as GameInfo;
-
-		if( l_game.isWebView )
+		//honda: if no internet, won't enter game section
+		if(!showMsgIfNoInternet())
 		{
-			WebContent l_webContent = l_game.webViewData.webData;
-			SessionHandler.getInstance().currentContent = l_webContent;
-		
-			m_subState = SubState.GO_GAME;
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
-			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
-		}
-		else
-		{
-
-			KidMode.taskManagerLockFalse();
-
-			KidMode.setKidsModeActive(false);
-
-			KidMode.startActivity(l_game.appData.packageName);
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
-			SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			GameInfo l_game = p_data as GameInfo;
+			
+			if( l_game.isWebView )
+			{
+				WebContent l_webContent = l_game.webViewData.webData;
+				SessionHandler.getInstance().currentContent = l_webContent;
+				
+				m_subState = SubState.GO_GAME;
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
+				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			}
+			else
+			{
+				
+				KidMode.taskManagerLockFalse();
+				
+				KidMode.setKidsModeActive(false);
+				
+				KidMode.startActivity(l_game.appData.packageName);
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
+				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+			}
 		}
 	}
 
@@ -1398,10 +1422,18 @@ public class RegionBaseState : GameState
 	private void _setupAppContentList()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		List<object> l_list = KidMode.getSelectedApps();
+		List<object> l_list = KidMode.getSelectedAppsSorted();
 		foreach (AppInfo l_app in l_list)
 		{
 			m_appList.Add(l_app);
+		}
+		#endif
+
+		#if UNITY_EDITOR
+		for (int i = 0; i < 20; i++) {
+
+			m_appList.Add( new AppInfo() );
+
 		}
 		#endif
 
@@ -1423,34 +1455,50 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
+		Debug.Log("spinner: 4. _setupWebContentList = " + p_contentList.Count);
 		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{
 			WebContentCache l_cache = m_gameController.game.user.contentCache;
-			
+			Debug.Log("spinner: 4_1. _setupWebContentList no WebContentLis");
 			if( l_cache.loadWebContentFail )
 			{
-				UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
-				if (null != l_videoInfo)
-				{
-					l_videoInfo.active = true;
-					l_videoInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				if (m_videoActivityCanvas != null) {
+					UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
+					if (null != l_videoInfo)
+					{
+						l_videoInfo.active = true;
+						l_videoInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+					}
 				}
 
-				UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
-				if (null != l_gameInfo)
-				{
-					l_gameInfo.active = true;
-					l_gameInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+				if (m_gameActivityCanvas != null) {
+					UILabel l_gameInfo = m_gameActivityCanvas.getView("info") as UILabel;
+					if (null != l_gameInfo)
+					{
+						l_gameInfo.active = true;
+						l_gameInfo.text = Localization.getString(Localization.TXT_STATE_61_FAIL);
+					}
 				}
 				return;
 			}
 		}
 
+		Debug.Log("spinner: 5. _setupWebContentList clear data");
 		m_videoViewList.Clear();
 		m_videoFavoritesList.Clear();
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
+
+		#if UNITY_EDITOR
+		for (int i = 0; i < 300; i++) {
+			
+			m_gameViewList.Add( new GameInfo(new AppInfo() ) );
+			
+		}
+
+//		m_gameViewList.Add(l_game);
+		#endif
 
 		int l_gameCount = 0;
 		int l_videoCount = 0;
@@ -1498,6 +1546,7 @@ public class RegionBaseState : GameState
 					if (l_content.favorite)
 						m_gameFavoritesList.Add(l_game);
 
+
 					m_gameViewList.Add(l_game);
 
 					//honda: comment out because we remove feature toy box
@@ -1505,6 +1554,8 @@ public class RegionBaseState : GameState
 //						m_gameFeatured = l_info;
 				}
 			}
+			Debug.Log("spinner: 6. m_videoViewList = " + m_videoViewList.Count);
+			Debug.Log("spinner: 7. m_gameViewList = " + m_gameViewList.Count);
 		}
 
 		if( null != m_videoActivityCanvas )
@@ -1663,13 +1714,17 @@ public class RegionBaseState : GameState
 		p_element.tweener.addRotationTrack(2.0f, -2.0f, 5.0f, _oscillateLightsDown);
 	}
 
-	private void showMsgIfNoInternet () 
+	private bool showMsgIfNoInternet () 
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			return;
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 

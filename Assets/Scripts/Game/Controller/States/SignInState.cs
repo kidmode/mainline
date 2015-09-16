@@ -137,7 +137,7 @@ public class SignInState : GameState
 		m_trialMessageCanvas = p_uiManager.createScreen(UIScreen.TRIAL_MESSAGE, false, 2);
 		m_signInCanvas = p_uiManager.createScreen(UIScreen.SIGN_IN, true, 1);
 		
-		m_backButton = m_signInCanvas.getView("exitButton") as UIButton;
+		m_backButton = m_signInCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback (toBack);
 		m_signInButton = m_signInCanvas.getView("signInButton") as UIButton;
 		m_signInButton.addClickCallback(toCreateChildrenScreen);
@@ -162,6 +162,11 @@ public class SignInState : GameState
 		m_subscriptionButton.addClickCallback ( onSubscriptionClick );
 		m_continueButton.addClickCallback ( onContinueClick );
 		m_exitButton.addClickCallback ( onContinueClick );
+
+		//Kev
+		m_quitButton = m_signInCanvas.getView("quitButton") as UIButton;
+		m_quitButton.addClickCallback(onBackClicked);
+		//end
 
 		#if UNITY_ANDROID
 		m_addressText = m_signInCanvas.getView("emailAddressText") as UILabel;
@@ -233,6 +238,16 @@ public class SignInState : GameState
 			m_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
 		}
 	}
+
+	//Kev
+	private void onBackClicked(UIButton p_button)
+	{
+		
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+		
+	}
+	//end
 
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
@@ -482,6 +497,7 @@ public class SignInState : GameState
 	private UIButton 	m_subscriptionButton;
 	private UIButton 	m_continueButton;
 	private UIButton 	m_exitButton;
+	private UIButton 	m_quitButton;
 	private UILabel 	m_messageText;
 	private UILabel 	m_continueText;
 

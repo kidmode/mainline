@@ -77,6 +77,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.onevcat.uniwebview.FOTAReceiver" >
+            <intent-filter>
+                <action android:name="com.marvell.vdmc.alert.show" />
+            </intent-filter>
+        </receiver>
+
         <!-- For OOB loader begin -->
         <activity android:name="com.unity3d.plugin.downloader.UnityDownloaderActivity" />
 
