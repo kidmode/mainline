@@ -27,6 +27,8 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 		setLocalAppNamesSortedByAddedTime();
 
+//		ArrayList list = KidMode.getSelectedAppsSorted();
+
 		Instance = this;
 	
 	}
@@ -199,32 +201,49 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 		}
 
-//		{
+		//====
+		//default apps
+		TextAsset defaultApps = Resources.Load("Data/Default_Native_Apps") as TextAsset;
+		string[] names = defaultApps.text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+		List<string> defaultAppsList = new List<string>(names);
 
-			List<object> l_list =  KidMode.getApps();
-			
-//			ArrayList curretAppList = new ArrayList(l_list);
+		//==========
+		//Adding new apps to the sorted list;
+		//so it is at the front
+		List<object> l_list =  KidMode.getApps();
 
-			foreach (AppInfo l_app in l_list)
-			{
+		foreach (AppInfo l_app in l_list)
+		{
 
-				if(!listSortedAppNames.Contains(l_app.packageName)){
+			if(!listSortedAppNames.Contains(l_app.packageName) && !defaultAppsList.Contains(l_app.packageName)){
 
-					newlySelectedArrayList.Add(l_app.packageName);
-
-				}
+				newlySelectedArrayList.Add(l_app.packageName);
 
 			}
 
-//		}
+		}
 
-		
+
+		//Add the rest of the sorted apps to the sorted list
 		for (int listSortedAppNamesIndex = 0; listSortedAppNamesIndex < listSortedAppNames.Count; listSortedAppNamesIndex++) {
-			
-			newlySelectedArrayList.Add(listSortedAppNames[listSortedAppNamesIndex]);
+
+			string packageName = listSortedAppNames[listSortedAppNamesIndex] as string;
+			if(!defaultAppsList.Contains(packageName))
+				newlySelectedArrayList.Add(listSortedAppNames[listSortedAppNamesIndex]);
 			
 		}
-		
+
+		//Now add the default apps 
+		//Add default apps now
+		//
+
+		foreach (string name in defaultAppsList)
+		{
+			newlySelectedArrayList.Add(name);
+		}
+
+
+
 		PlayerPrefs.SetString( "localAppNamesSortedAddedTime", MiniJSON.MiniJSON.jsonEncode(newlySelectedArrayList) );
 		
 	}
