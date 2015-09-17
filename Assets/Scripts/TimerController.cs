@@ -75,12 +75,6 @@ public class TimerController : MonoBehaviour {
 				Destroy(this.gameObject);
 		}
 	}
-
-	void OnApplicationQuit(){
-
-		Debug.Log("  OnApplicationQuit " );
-
-	}
 	
 	void Start () 
 	{
@@ -151,6 +145,12 @@ public class TimerController : MonoBehaviour {
 			SessionHandler.updateKidsTimeLeft();
 			runCurrentKidTimer();
 		}
+	}
+
+	void OnApplicationQuit()
+	{
+		timer.Elapsed -= timeElapsed;
+		timer.Dispose();
 	}
 
 	public void startTimer()
