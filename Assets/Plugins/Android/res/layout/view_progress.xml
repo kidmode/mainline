@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#88000000" >
+
+    <ImageView
+        android:id="@+id/holo"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/spinner_halo" />
+
+    <ImageView
+        android:layout_width="126dp"
+        android:layout_height="126dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/spinner_elephant" />
+
+</RelativeLayout>
