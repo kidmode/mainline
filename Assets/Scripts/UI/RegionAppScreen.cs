@@ -73,6 +73,9 @@ public class RegionAppScreen : MonoBehaviour {
 
 		if(state != State.SpeechRecommend){
 
+			CancelInvoke("resetSpeech");
+
+
 			CancelInvoke("checkSpeechBoxHey");
 
 			SpeechBoxRecommendApps.SetActive(true);
@@ -81,7 +84,7 @@ public class RegionAppScreen : MonoBehaviour {
 
 			state = State.SpeechRecommend;
 
-//			CancelInvoke("resetSpeech");
+//			
 
 			Invoke("resetSpeech", removeSpeechTime);
 
