@@ -181,6 +181,8 @@ public class KidsProfileState : GameState
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 		
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+		//honda: save new avatar to local
+		l_kid.saveKidPhotoLocal();
 
 		foreach( Kid l_kidData in SessionHandler.getInstance().kidList )
 		{

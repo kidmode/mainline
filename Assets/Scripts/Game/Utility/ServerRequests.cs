@@ -695,6 +695,8 @@ public class CreateChildRequest : RequestQueue.Request
 		if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
 			SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+		//honda
+		l_kid.saveKidPhotoLocal();
 		//honda: request time limits info
 		l_kid.requestTimeLimits();
 		//end
