@@ -341,7 +341,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22400066}
-  - 114: {fileID: 11462638}
   m_Layer: 5
   m_Name: backButtonArea
   m_TagString: Untagged
@@ -2460,17 +2459,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Your are purchasing '
---- !u!114 &11462638
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5581e36f78d7640a5a7614e06cc704a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11465838
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3562,7 +3550,7 @@ RectTransform:
   - {fileID: 22400052}
   - {fileID: 22400016}
   m_Father: {fileID: 22400054}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
   m_AnchoredPosition: {x: -5.80000019, y: -214.100006}
@@ -3704,7 +3692,7 @@ RectTransform:
   m_Children:
   - {fileID: 22400070}
   m_Father: {fileID: 22400054}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: -6.19999981, y: -31.2999992}
@@ -3737,6 +3725,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 22420488}
   - {fileID: 22400014}
   - {fileID: 22400050}
   - {fileID: 22400066}
@@ -3777,10 +3766,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 22420488}
+  m_Children: []
   m_Father: {fileID: 22400054}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 99, y: -91.3000031}
@@ -4103,11 +4091,11 @@ RectTransform:
   m_Children:
   - {fileID: 22420490}
   - {fileID: 22420492}
-  m_Father: {fileID: 22400066}
+  m_Father: {fileID: 22400054}
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 60.230011, y: 77.5}
+  m_AnchoredPosition: {x: -278.893494, y: 260.095398}
   m_SizeDelta: {x: 120.459991, y: 155}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &22420490
@@ -4656,7 +4644,7 @@ RectTransform:
   - {fileID: 22483768}
   - {fileID: 22483766}
   m_Father: {fileID: 22400054}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -800.000061}
