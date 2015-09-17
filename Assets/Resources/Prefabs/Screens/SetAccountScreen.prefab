@@ -668,7 +668,6 @@ GameObject:
   - 222: {fileID: 22234152}
   - 114: {fileID: 11434158}
   - 114: {fileID: 11434160}
-  - 114: {fileID: 11411318}
   m_Layer: 5
   m_Name: pwdInput
   m_TagString: Untagged
@@ -1094,7 +1093,6 @@ GameObject:
   - 222: {fileID: 22278134}
   - 114: {fileID: 11478140}
   - 114: {fileID: 11478142}
-  - 114: {fileID: 11405644}
   m_Layer: 5
   m_Name: repwdInput
   m_TagString: Untagged
@@ -1737,34 +1735,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11405644
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 178134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11478142}
-  checkMoveObject: {fileID: 179068}
-  checkMoveObjectFake: {fileID: 141568}
---- !u!114 &11411318
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 134152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11434160}
-  checkMoveObject: {fileID: 179068}
-  checkMoveObjectFake: {fileID: 141568}
 --- !u!114 &11423962
 MonoBehaviour:
   m_ObjectHideFlags: 1
