@@ -951,6 +951,22 @@ public class KidMode
 		#endif
 
 	}
+
+	public static void showProgressBar()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("showProgressDialog");
+		#endif
+	}
+
+	public static void dismissProgressBar()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("dismissProgressDialog");
+		#endif
+	}
 	
 }
 
