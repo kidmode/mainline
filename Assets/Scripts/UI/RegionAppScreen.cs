@@ -15,6 +15,8 @@ public class RegionAppScreen : MonoBehaviour {
 
 	public float ShowHeyTime = 3.0f;
 
+	public float removeSpeechTime = 5.0f;
+
 	public enum State{
 		Wating,
 		SpeechHey,
@@ -57,6 +59,10 @@ public class RegionAppScreen : MonoBehaviour {
 
 			SpeechBoxRecommendApps.SetActive(false);
 
+//			CancelInvoke("resetSpeech");
+			
+			Invoke("resetSpeech", removeSpeechTime);
+
 		}
 
 	}
@@ -67,6 +73,9 @@ public class RegionAppScreen : MonoBehaviour {
 
 		if(state != State.SpeechRecommend){
 
+			CancelInvoke("resetSpeech");
+
+
 			CancelInvoke("checkSpeechBoxHey");
 
 			SpeechBoxRecommendApps.SetActive(true);
@@ -74,6 +83,10 @@ public class RegionAppScreen : MonoBehaviour {
 			SpeechBoxHey.SetActive(false);
 
 			state = State.SpeechRecommend;
+
+//			
+
+			Invoke("resetSpeech", removeSpeechTime);
 
 		}else if(state == State.SpeechRecommend){
 
@@ -86,6 +99,18 @@ public class RegionAppScreen : MonoBehaviour {
 //			parentGateThenRecommendedApps();
 
 		}
+
+	}
+
+	private void resetSpeech(){
+
+		state = State.Wating;
+
+		SpeechBoxRecommendApps.SetActive(false);
+
+		SpeechBoxHey.SetActive(false);
+
+		CancelInvoke("checkSpeechBoxHey");
 
 	}
 

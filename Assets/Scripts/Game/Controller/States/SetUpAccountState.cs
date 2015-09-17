@@ -128,9 +128,9 @@ public class SetUpAccountState : GameState
 		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
 
-		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
+//		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
 		
-		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+//		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
 		//end
 
