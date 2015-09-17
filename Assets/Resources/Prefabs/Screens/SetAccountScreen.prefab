@@ -668,7 +668,6 @@ GameObject:
   - 222: {fileID: 22234152}
   - 114: {fileID: 11434158}
   - 114: {fileID: 11434160}
-  - 114: {fileID: 11411318}
   m_Layer: 5
   m_Name: pwdInput
   m_TagString: Untagged
@@ -761,7 +760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &150464
 GameObject:
   m_ObjectHideFlags: 1
@@ -1094,7 +1093,6 @@ GameObject:
   - 222: {fileID: 22278134}
   - 114: {fileID: 11478140}
   - 114: {fileID: 11478142}
-  - 114: {fileID: 11405644}
   m_Layer: 5
   m_Name: repwdInput
   m_TagString: Untagged
@@ -1181,6 +1179,7 @@ GameObject:
   - 224: {fileID: 22479068}
   - 222: {fileID: 22279068}
   - 114: {fileID: 11479066}
+  - 114: {fileID: 11467588}
   m_Layer: 5
   m_Name: quitButton
   m_TagString: Untagged
@@ -1736,34 +1735,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11405644
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 178134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11478142}
-  checkMoveObject: {fileID: 179068}
-  checkMoveObjectFake: {fileID: 141568}
---- !u!114 &11411318
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 134152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11434160}
-  checkMoveObject: {fileID: 179068}
-  checkMoveObjectFake: {fileID: 141568}
 --- !u!114 &11423962
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2129,8 +2100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 21300000, guid: 68d95de45216c2843946e8bb8d18a1b4, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: bfbdc9c92658e477eab61838df6dba6d, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2691,6 +2662,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Sign in with Google
+--- !u!114 &11467588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 179068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5581e36f78d7640a5a7614e06cc704a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11468814
 MonoBehaviour:
   m_ObjectHideFlags: 1
