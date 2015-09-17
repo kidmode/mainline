@@ -75,6 +75,12 @@ public class TimerController : MonoBehaviour {
 				Destroy(this.gameObject);
 		}
 	}
+
+	void OnApplicationQuit(){
+
+		Debug.Log("  OnApplicationQuit " );
+
+	}
 	
 	void Start () 
 	{
