@@ -330,8 +330,8 @@ public class Game : MonoBehaviour
  		// vzw end
 
 
-		//honda1
-		PlayerPrefs.DeleteAll();
+		//honda
+//		PlayerPrefs.DeleteAll();
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
@@ -620,7 +620,8 @@ public class Game : MonoBehaviour
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
 		Debug.Log("spinner: start webcontent request");
 
-		Invoke("startWebContentRequest", 10);
+//		startWebContentRequest();
+		Invoke("startWebContentRequest", 0.5f);
 	}
 
 	private void startWebContentRequest()
@@ -640,7 +641,8 @@ public class Game : MonoBehaviour
 	private void fetchDrawingList()
 	{
 		Debug.Log("spinner: start drawing request");
-		Invoke("startDrawingRequest", 10);
+//		startDrawingRequest();
+		Invoke("startDrawingRequest", 0.5f);
 	}
 
 	private void startDrawingRequest()
