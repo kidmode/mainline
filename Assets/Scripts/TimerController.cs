@@ -147,6 +147,12 @@ public class TimerController : MonoBehaviour {
 		}
 	}
 
+	void OnApplicationQuit()
+	{
+		timer.Elapsed -= timeElapsed;
+		timer.Dispose();
+	}
+
 	public void startTimer()
 	{
 		if (countdownTime <= 0)
