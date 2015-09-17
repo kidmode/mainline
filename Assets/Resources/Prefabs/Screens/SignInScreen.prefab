@@ -62,6 +62,7 @@ GameObject:
   - 224: {fileID: 22400034}
   - 222: {fileID: 22200006}
   - 114: {fileID: 11400008}
+  - 114: {fileID: 11486856}
   m_Layer: 5
   m_Name: backButton
   m_TagString: Untagged
@@ -402,6 +403,7 @@ GameObject:
   - 224: {fileID: 22428994}
   - 222: {fileID: 22228994}
   - 114: {fileID: 11429000}
+  - 114: {fileID: 11486854}
   m_Layer: 5
   m_Name: quitButton
   m_TagString: Untagged
@@ -470,7 +472,6 @@ GameObject:
   - 222: {fileID: 22269122}
   - 114: {fileID: 11469124}
   - 114: {fileID: 11469126}
-  - 114: {fileID: 11428990}
   m_Layer: 5
   m_Name: emailInput
   m_TagString: Untagged
@@ -603,7 +604,6 @@ GameObject:
   - 222: {fileID: 22269136}
   - 114: {fileID: 11469134}
   - 114: {fileID: 11469136}
-  - 114: {fileID: 11428988}
   m_Layer: 5
   m_Name: pwdInput
   m_TagString: Untagged
@@ -1289,34 +1289,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &11428988
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 169140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11469126}
-  checkMoveObject: {fileID: 128994}
-  checkMoveObjectFake: {fileID: 192692}
---- !u!114 &11428990
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 169124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a083b094761884cf5929810bb0b97940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 11469126}
-  checkMoveObject: {fileID: 128994}
-  checkMoveObjectFake: {fileID: 192692}
 --- !u!114 &11428992
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1751,6 +1723,28 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &11486854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 128994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5581e36f78d7640a5a7614e06cc704a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11486856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5581e36f78d7640a5a7614e06cc704a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11492686
 MonoBehaviour:
   m_ObjectHideFlags: 1
