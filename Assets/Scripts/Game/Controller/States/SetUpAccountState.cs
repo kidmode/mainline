@@ -92,6 +92,10 @@ public class SetUpAccountState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
+
 		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND ) as SplashBackCanvas;
 		if( m_createAccountBackgroundCanvas == null )
             m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 ) as SplashBackCanvas;
@@ -120,6 +124,9 @@ public class SetUpAccountState : GameState
 		//end
 
 		//Kev
+//		SplashBackCanvas splashCanvas = p_uiManager.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		m_createAccountBackgroundCanvas.gameObject.SetActive(false);
+
 		m_quitButton = m_signUpCanvas.getView("quitButton") as UIButton;
 		m_quitButton.addClickCallback(onBackClicked);
 
