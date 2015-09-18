@@ -60,7 +60,7 @@ public class SetUpAccountState : GameState
 				break;
 			case ScreenChange.NextScreen:
 				m_signUpCanvas.active = false;
-				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER,false,2);
+				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT,false,2);
 				changeToState = ScreenChange.None;
 				break;
 			case ScreenChange.SignInAccountScreen:
@@ -83,7 +83,7 @@ public class SetUpAccountState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER );
+		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER_ELEPHANT );
 		p_gameController.getUI().removeScreenImmediately( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD );
 	}
 	
@@ -507,8 +507,8 @@ public class SetUpAccountState : GameState
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
 		m_signUpCanvas.active = true;
-		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER))
-			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT))
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 		m_errorTitle.text = p_errorTitle;
 		m_errorContent.text = p_errorContent;

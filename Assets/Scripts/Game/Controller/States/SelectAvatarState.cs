@@ -72,7 +72,7 @@ public class SelectAvatarState : GameState
 		base.exit( p_gameController );
 		m_lastIndex = -1;
 		p_gameController.getUI().removeScreen( UIScreen.SELECT_AVATAR );
-		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);		
+		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);		
 	}
 	
 	
@@ -144,7 +144,7 @@ public class SelectAvatarState : GameState
 			m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday, "childAvatar"));
 			m_queue.request(RequestType.SEQUENCE);
 			m_selectAvatarCanvas.active = false;
-			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 2);
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 2);
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"Avatar_png", l_url}};
 			SwrveComponent.Instance.SDK.NamedEvent("AddChild.end", payload);
 		}

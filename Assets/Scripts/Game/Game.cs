@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.IO;
 
 public class Game : MonoBehaviour 
 {
@@ -331,6 +332,17 @@ public class Game : MonoBehaviour
 
 		//honda
 		PlayerPrefs.DeleteAll();
+
+		//Kev .... for deleting kid files
+		File.Delete( Application.persistentDataPath + "/kidList.txt");
+
+		File.Delete( Application.persistentDataPath + "/kidList_temp.txt");
+
+		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
+
+//		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
+//		dataDir.Delete(true);
+//		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
