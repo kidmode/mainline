@@ -330,6 +330,7 @@ public class Game : MonoBehaviour
 		#endif
  		// vzw end
 
+
 		//honda
 		PlayerPrefs.DeleteAll();
 //
@@ -343,6 +344,7 @@ public class Game : MonoBehaviour
 		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 		dataDir.Delete(true);
 		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
+
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
@@ -631,8 +633,7 @@ public class Game : MonoBehaviour
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
 		Debug.Log("spinner: start webcontent request");
 
-//		startWebContentRequest();
-		Invoke("startWebContentRequest", 0.5f);
+		Invoke("startWebContentRequest", 10);
 	}
 
 	private void startWebContentRequest()
@@ -652,8 +653,7 @@ public class Game : MonoBehaviour
 	private void fetchDrawingList()
 	{
 		Debug.Log("spinner: start drawing request");
-//		startDrawingRequest();
-		Invoke("startDrawingRequest", 0.5f);
+		Invoke("startDrawingRequest", 10);
 	}
 
 	private void startDrawingRequest()
