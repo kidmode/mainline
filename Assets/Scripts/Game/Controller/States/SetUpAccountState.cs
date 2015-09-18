@@ -426,12 +426,15 @@ public class SetUpAccountState : GameState
 		{
 			p_button.removeClickCallback( toCreateChildrenScreen );
 
-			changeToState = ScreenChange.NextScreen;
-			RequestQueue l_queue = new RequestQueue();
-//				l_queue.add(new ClientIdRequest());
-			l_queue.add(new SignUpRequest(m_account.text, m_password.text,createAccountComplete));
-			l_queue.request(RequestType.SEQUENCE);
-			SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
+			popupCheckParentBirth();
+
+			//move to popupCheckParentBirth()
+//			changeToState = ScreenChange.NextScreen;
+//			RequestQueue l_queue = new RequestQueue();
+////				l_queue.add(new ClientIdRequest());
+//			l_queue.add(new SignUpRequest(m_account.text, m_password.text,createAccountComplete));
+//			l_queue.request(RequestType.SEQUENCE);
+//			SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
 		}
 		else
 		{
@@ -455,6 +458,47 @@ public class SetUpAccountState : GameState
 				}
 			}
 		}
+	}
+
+	private void popupCheckParentBirth()
+	{
+		m_gameController.getUI().createScreen(UIScreen.PARENT_BIRTH_CHECK, false, 7);		
+
+		CheckParentBirthPopup parentBirthPop = GameObject.FindWithTag("CheckParentBirthTag").GetComponent<CheckParentBirthPopup>() as CheckParentBirthPopup;
+		if (parentBirthPop != null)
+			parentBirthPop.onClick += onCreateAccountClicked;
+	}
+
+	private void onCreateAccountClicked(bool successful)
+	{
+		if (successful) 
+		{
+			changeToState = ScreenChange.NextScreen;
+			RequestQueue l_queue = new RequestQueue ();
+//			l_queue.add(new ClientIdRequest());
+			l_queue.add (new SignUpRequest (m_account.text, m_password.text, createAccountComplete));
+			l_queue.request (RequestType.SEQUENCE);
+			SwrveComponent.Instance.SDK.NamedEvent ("SignUp.end");
+		}
+		else 
+		{
+			m_account.text = "";
+			m_password.text = "";
+			m_rePassword.text = "";
+			m_passwordCheckImage.active = false;
+			m_emailCheckImage.active = false;
+
+			if(m_IsCreateFreeAccount && SessionHandler.getInstance().renewalPeriod == 0)
+			{
+				m_createFreeAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
+			else
+			{
+				m_createAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
+		}
+
+			
 	}
 
 	private void createAccountComplete(WWW p_response)

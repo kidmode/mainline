@@ -331,7 +331,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
 //		File.Delete( Application.persistentDataPath + "/kidList.txt");
@@ -340,9 +340,9 @@ public class Game : MonoBehaviour
 //
 //		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
 
-//		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
-//		dataDir.Delete(true);
-//		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
+		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
+		dataDir.Delete(true);
+		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
