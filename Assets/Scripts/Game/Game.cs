@@ -281,8 +281,8 @@ public class Game : MonoBehaviour
 		_Debug.mode = OutputMode.DISABLE;
 
 		getAllSystemApps ();
-		Screen.autorotateToLandscapeLeft = true;
-		Screen.autorotateToLandscapeRight = false;
+		Screen.autorotateToLandscapeLeft = false;
+		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
@@ -330,7 +330,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;

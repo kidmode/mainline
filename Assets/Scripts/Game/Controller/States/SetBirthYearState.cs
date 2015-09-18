@@ -18,7 +18,7 @@ public class SetBirthYearState : GameState
 		UIManager l_ui = p_gameController.getUI();
 		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
 		if(splashCanvas != null)
-			splashCanvas.gameObject.SetActive(true);
+			splashCanvas.gameObject.SetActive(false);
 		//Kev
 		
 		_setupScreen( p_gameController.getUI() );
