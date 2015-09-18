@@ -42,6 +42,15 @@ public class SignInState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
+
+			//Kev
+			UIManager l_ui = p_gameController.getUI();
+			SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+			if(splashCanvas != null)
+				splashCanvas.gameObject.SetActive(true);
+			//Kev
+
+
 			m_signInCanvas.active = false;
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 3);
 			m_subState = SubState.NONE;
@@ -121,6 +130,8 @@ public class SignInState : GameState
 		p_gameController.getUI().removeScreenImmediately(UIScreen.SIGN_IN);
 		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER);
 		p_gameController.getUI().removeScreenImmediately(UIScreen.TRIAL_MESSAGE);
+
+
 	}
 	
 	//---------------- Private Implementation ----------------------

@@ -60,7 +60,7 @@ public class SetUpAccountState : GameState
 				break;
 			case ScreenChange.NextScreen:
 				m_signUpCanvas.active = false;
-				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER,false,2);
+				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT,false,2);
 				changeToState = ScreenChange.None;
 				break;
 			case ScreenChange.SignInAccountScreen:
@@ -83,7 +83,7 @@ public class SetUpAccountState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER );
+		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER_ELEPHANT );
 		p_gameController.getUI().removeScreenImmediately( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD );
 	}
 	
@@ -92,6 +92,10 @@ public class SetUpAccountState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
+
 		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND ) as SplashBackCanvas;
 		if( m_createAccountBackgroundCanvas == null )
             m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 ) as SplashBackCanvas;
@@ -120,6 +124,9 @@ public class SetUpAccountState : GameState
 		//end
 
 		//Kev
+//		SplashBackCanvas splashCanvas = p_uiManager.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		m_createAccountBackgroundCanvas.gameObject.SetActive(false);
+
 		m_quitButton = m_signUpCanvas.getView("quitButton") as UIButton;
 		m_quitButton.addClickCallback(onBackClicked);
 
@@ -128,9 +135,9 @@ public class SetUpAccountState : GameState
 		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
 
-		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
+//		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
 		
-		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+//		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
 		//end
 
@@ -419,8 +426,9 @@ public class SetUpAccountState : GameState
 		{
 			p_button.removeClickCallback( toCreateChildrenScreen );
 
+			popupCheckParentBirth();
 
-			//move
+			//move to popupCheckParentBirth()
 //			changeToState = ScreenChange.NextScreen;
 //			RequestQueue l_queue = new RequestQueue();
 ////				l_queue.add(new ClientIdRequest());
@@ -477,6 +485,17 @@ public class SetUpAccountState : GameState
 			m_account.text = "";
 			m_password.text = "";
 			m_rePassword.text = "";
+			m_passwordCheckImage.active = false;
+			m_emailCheckImage.active = false;
+
+			if(m_IsCreateFreeAccount && SessionHandler.getInstance().renewalPeriod == 0)
+			{
+				m_createFreeAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
+			else
+			{
+				m_createAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
 		}
 
 			
@@ -532,8 +551,8 @@ public class SetUpAccountState : GameState
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
 		m_signUpCanvas.active = true;
-		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER))
-			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT))
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 		m_errorTitle.text = p_errorTitle;
 		m_errorContent.text = p_errorContent;

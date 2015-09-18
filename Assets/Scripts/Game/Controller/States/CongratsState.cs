@@ -7,11 +7,15 @@ public class CongratsState : GameState
 	{
 		base.enter(p_gameController);
 
+
+
 		m_time = 0;
 		m_clicked = false;
 		m_requested = false;
 
 		UIManager l_ui = p_gameController.getUI();
+
+
 
 		l_ui.createScreen(UIScreen.CONGRATS_BACKGROUND, false, -1);
 //		m_screenBackground = l_ui.findScreen (UIScreen.CONGRATS_BACKGROUND) as UICanvas;

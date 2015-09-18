@@ -39,12 +39,12 @@ public class CheckParentBirthPopup : MonoBehaviour {
 		birthDay = m_checkParentBirthPopupCanvas.getView("DayArea").gameObject.GetComponent<InputField>();
 
 		yearErrorImage = m_checkParentBirthPopupCanvas.getView("YearErrorImage") as UIImage;
-		monthErrorImage = m_checkParentBirthPopupCanvas.getView("monthErrorImage") as UIImage;
-		dayErrorImage = m_checkParentBirthPopupCanvas.getView("dayErrorImage") as UIImage;
+		monthErrorImage = m_checkParentBirthPopupCanvas.getView("MonthErrorImage") as UIImage;
+		dayErrorImage = m_checkParentBirthPopupCanvas.getView("DayErrorImage") as UIImage;
 
-		yearText = m_checkParentBirthPopupCanvas.getView("yearText") as UILabel;
-		monthText = m_checkParentBirthPopupCanvas.getView("monthText") as UILabel;
-		dayText = m_checkParentBirthPopupCanvas.getView("dayText") as UILabel;
+		yearText = m_checkParentBirthPopupCanvas.getView("YearText") as UILabel;
+		monthText = m_checkParentBirthPopupCanvas.getView("MonthText") as UILabel;
+		dayText = m_checkParentBirthPopupCanvas.getView("DayText") as UILabel;
 
 		SetupLocalization();
 	}
@@ -65,6 +65,10 @@ public class CheckParentBirthPopup : MonoBehaviour {
 	
 	public void checkParentBirth()
 	{
+		yearErrorImage.active = false;
+		monthErrorImage.active = false;
+		dayErrorImage.active = false;
+
 		int check = checkBirth();
 		if (check == 0) 
 		{
@@ -135,7 +139,7 @@ public class CheckParentBirthPopup : MonoBehaviour {
 		if (IsMatch (ZoodlesConstants.DATE_REGULAR_NUMBER, birthDay.text)) 
 		{
 			int day = int.Parse (birthDay.text);
-			if (day <= 0 && day >= 32)
+			if (day <= 0 || day >= 32)
 			{
 				fieldError = false;
 				dayErrorImage.active = true;
@@ -182,6 +186,12 @@ public class CheckParentBirthPopup : MonoBehaviour {
 
 		UILabel okText = m_checkParentBirthPopupCanvas.getView("OKText") as UILabel;
 		okText.text = Localization.getString(Localization.TXT_CPB_POPUP_OK_BTN);
+
+		UILabel failTitleText = m_checkParentBirthPopupCanvas.getView("FailTitleText") as UILabel;
+		failTitleText.text = Localization.getString (Localization.TXT_STATE_13_VARIF_FAIL);
+
+		UILabel failContentText = m_checkParentBirthPopupCanvas.getView("FailContentText") as UILabel;
+		failContentText.text = Localization.getString (Localization.TXT_25_LABEL_FAIL);
 	}
 
 	private bool IsMatch(string p_pattern, string p_input)
