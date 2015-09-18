@@ -282,7 +282,7 @@ public class Game : MonoBehaviour
 
 		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
-		Screen.autorotateToLandscapeRight = true;
+		Screen.autorotateToLandscapeRight = false;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
