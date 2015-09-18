@@ -122,13 +122,7 @@ public class SetBirthYearState : GameState
 			}
 			else
 			{
-				p_button.removeClickCallback (onSetBirthYear);
-				UIElement l_messagePanel = m_birthCanvas.getView( "messagePanel" );
 
-				List<Vector3> l_pointListIn = new List<Vector3>();
-				l_pointListIn.Add( l_messagePanel.transform.localPosition );
-				l_pointListIn.Add( l_messagePanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-				l_messagePanel.tweener.addPositionTrack( l_pointListIn, 0f, onShowFinish, Tweener.Style.Standard, false );
 			}
 		}
 	}

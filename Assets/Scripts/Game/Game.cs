@@ -330,7 +330,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
