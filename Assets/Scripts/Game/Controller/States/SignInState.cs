@@ -46,7 +46,8 @@ public class SignInState : GameState
 			//Kev
 			UIManager l_ui = p_gameController.getUI();
 			SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-			splashCanvas.gameObject.SetActive(true);
+			if(splashCanvas != null)
+				splashCanvas.gameObject.SetActive(true);
 			//Kev
 
 
