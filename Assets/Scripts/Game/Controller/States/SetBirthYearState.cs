@@ -13,6 +13,13 @@ public class SetBirthYearState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		//Kev
+		UIManager l_ui = p_gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		//Kev
 		
 		_setupScreen( p_gameController.getUI() );
 

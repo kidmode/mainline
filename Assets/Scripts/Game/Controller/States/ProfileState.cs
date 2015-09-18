@@ -16,6 +16,14 @@ public class ProfileState : GameState
 	{
 		base.enter(p_gameController);
 
+		//Kev
+		UIManager l_ui = p_gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(true);
+		//Kev
+
 		TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
 		
 		m_requestQueue = new RequestQueue ();
