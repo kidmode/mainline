@@ -11,6 +11,13 @@ public class CongraturationsState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		//Kev
+		UIManager l_ui = p_gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		splashCanvas.gameObject.SetActive(true);
+		//Kev
+
 		
 		m_game = p_gameController.game;
 		m_canChangeState = true;
