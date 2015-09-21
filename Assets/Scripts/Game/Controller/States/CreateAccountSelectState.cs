@@ -154,10 +154,10 @@ public class CreateAccountSelectState : GameState
 
 	private void gotoSetUpScreen(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) //cynthia
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SetUp;
@@ -165,10 +165,10 @@ public class CreateAccountSelectState : GameState
 	}
 	private void gotoSignInScreen(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) //cynthia
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 		changeToState = ScreenChange.SignInScreen;

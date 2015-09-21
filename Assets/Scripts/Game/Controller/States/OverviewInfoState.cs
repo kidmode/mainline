@@ -185,11 +185,14 @@ public class OverviewInfoState : GameState {
 
 	private void editProfile(UIButton p_button)
 	{
-		SessionHandler.getInstance ().inputedChildName = SessionHandler.getInstance ().currentKid.name;
-		SessionHandler.getInstance ().inputedbirthday = SessionHandler.getInstance ().currentKid.birthday;
-		SessionHandler.getInstance ().selectAvatar = string.Empty;
-		SessionHandler.getInstance ().CreateChild = false;
-		m_gameController.changeState (ZoodleState.CREATE_CHILD);
+		if (checkInternet()) 
+		{
+			SessionHandler.getInstance ().inputedChildName = SessionHandler.getInstance ().currentKid.name;
+			SessionHandler.getInstance ().inputedbirthday = SessionHandler.getInstance ().currentKid.birthday;
+			SessionHandler.getInstance ().selectAvatar = string.Empty;
+			SessionHandler.getInstance ().CreateChild = false;
+			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+		}
 	}
 
 	private void onConfiemButtonClick( UIButton p_button )
@@ -644,10 +647,10 @@ public class OverviewInfoState : GameState {
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			
 			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
 			if (error != null)
