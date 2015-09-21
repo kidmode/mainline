@@ -1439,6 +1439,11 @@ public class RegionBaseState : GameState
 
 		m_appSwipeList.setData(m_appList);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
+
+		KidModeScrollViewUpdator scrollUpdator = m_appSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+
+		scrollUpdator.getAppButtonList();
+
 	}
 	// end vzw
 

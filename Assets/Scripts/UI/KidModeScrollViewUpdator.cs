@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
+
 
 public class KidModeScrollViewUpdator : MonoBehaviour {
 	
@@ -23,10 +25,15 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	[SerializeField]
 	private Vector2 currPos;
 
+
+	public static event Action<Vector2> OnScrollViewValueChanged;
+
 	// Use this for initialization
 	void Start () {
 
 		scrollRect.onValueChanged.AddListener( onValueChanged ); 
+
+//		getAppButtonList();
 
 	}
 	
@@ -34,6 +41,24 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+
+	#region HidingNonOnScreenApps
+
+	public Button[] buttons;
+
+	public void getAppButtonList(){
+
+		buttons = gameObject.GetComponentsInChildren<Button>();
+
+	}
+
+
+
+	#endregion
+
+
 
 	void onValueChanged(Vector2 scrolRectPos){
 

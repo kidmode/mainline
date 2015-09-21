@@ -20,6 +20,8 @@ public class RegionAppCanvas: UICanvas
 		_setupList();
 
 		setScrollView ();
+
+		KidModeScrollViewUpdator.OnScrollViewValueChanged+= OnScrollViewValueChanged;
 	}
 	
 	public void setupLocalization()
@@ -69,6 +71,11 @@ public class RegionAppCanvas: UICanvas
 		m_appSwipeList.setDrawFunction(onListDraw);
 	}
 
+
+	void OnScrollViewValueChanged(Vector2 rect){
+
+	}
+
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
 		UIButton l_button = p_element as UIButton;
@@ -80,6 +87,10 @@ public class RegionAppCanvas: UICanvas
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
+
+//		l_appImage.gameObject.SetActive(true);
+//
+//		return;
 
 		if (l_appImage != null)
 			l_appImage.active = false;
