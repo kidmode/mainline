@@ -169,12 +169,15 @@ public class BirthYearState : GameState
 
 	private void showDialog(UIButton p_button)
 	{
-		m_forgotButton.removeAllCallbacks ();
-		m_closeDialog.addClickCallback (closeDialog);
-		m_closeDialogButton.addClickCallback (closeDialog);
-		m_requestQueue.reset ();
-		m_requestQueue.add (new SendPinRequest(sendPinRequestComplete));
-		m_requestQueue.request();
+		if (m_gameController.game.checkInternet()) 
+		{
+			m_forgotButton.removeAllCallbacks ();
+			m_closeDialog.addClickCallback (closeDialog);
+			m_closeDialogButton.addClickCallback (closeDialog);
+			m_requestQueue.reset ();
+			m_requestQueue.add (new SendPinRequest(sendPinRequestComplete));
+			m_requestQueue.request();
+		}
 	}
 
 	private void sendPinRequestComplete(WWW p_response)
