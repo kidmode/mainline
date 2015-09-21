@@ -591,7 +591,7 @@ public class ProfileState : GameState
 	private void _onTermsButtonClick(UIButton p_button)
 	{
 
-		m_quitButton.gameObject.SetActive(false);
+
 
 		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
 		{
@@ -600,7 +600,11 @@ public class ProfileState : GameState
 		}
 		else
 		{
+
+			m_quitButton.gameObject.SetActive(false);
+
 			_setupWebview("http://www.zoodles.com/en-US/home/legal/terms");
+
 		}
 	}
 
