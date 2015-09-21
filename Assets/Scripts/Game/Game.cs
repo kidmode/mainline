@@ -277,13 +277,14 @@ public class Game : MonoBehaviour
 	}
 
 
+
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
 		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
-		Screen.autorotateToLandscapeRight = false;
+		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
