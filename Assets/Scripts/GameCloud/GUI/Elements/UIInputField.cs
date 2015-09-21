@@ -62,7 +62,15 @@ public class UIInputField : UIElement
 				{
 					for (int i = 0; i < l_canvas.getChildCount(); ++i)
 					{
-						s_modifiers.Add(new UIElementModifier(l_canvas.getChildAt(i)));
+
+						NoOffset noOffset = l_canvas.getChildAt(i).gameObject.GetComponent<NoOffset>();
+
+						if(noOffset == null)
+							s_modifiers.Add(new UIElementModifier(l_canvas.getChildAt(i)));
+						else{
+
+							Debug.Log("noOffset " + l_canvas.getChildAt(i).gameObject.name);
+						}
 					}
 				}
 				

@@ -17,6 +17,8 @@ public class ControlAppState : GameState
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.Add_YOUR_APP);
 		TutorialController.Instance.showNextPage();
 		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
+
+		GoogleInstallAutoAddController.OnNewAppAdded += OnNewAppAdded;
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -37,6 +39,8 @@ public class ControlAppState : GameState
 		
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
+
+		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -470,6 +474,12 @@ public class ControlAppState : GameState
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
 		}
 	}
+
+	private void OnNewAppAdded(){
+
+		m_addAppCanvas.firstLoadApp();
+
+	}
 	
 	private void viewPremiumRequestComplete(WWW p_response)
 	{
@@ -488,11 +498,10 @@ public class ControlAppState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return false;
 		}
 		return true;

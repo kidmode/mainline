@@ -183,10 +183,12 @@ public class FunActivityCanvas : UICanvas
         //*Temporary*
         UILabel l_titleLabel = p_element.getView("title") as UILabel;
         DebugUtils.Assert(l_titleLabel != null);
+		UIImage l_plusImage = p_element.getView("plus") as UIImage;
 
 		if (!l_info.isNew())
 		{
 			l_titleLabel.active = false;
+			l_plusImage.active = false;
 
 			if( null != l_info.icon )
 			{

@@ -44,7 +44,8 @@ public class SetUpAccountState : GameState
 	{
 		base.update( p_gameController, p_time );
 
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
 		{
 			// TODO: Sean
 		}
@@ -60,7 +61,7 @@ public class SetUpAccountState : GameState
 				break;
 			case ScreenChange.NextScreen:
 				m_signUpCanvas.active = false;
-				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER,false,2);
+				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT,false,2);
 				changeToState = ScreenChange.None;
 				break;
 			case ScreenChange.SignInAccountScreen:
@@ -83,7 +84,7 @@ public class SetUpAccountState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER );
+		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER_ELEPHANT );
 		p_gameController.getUI().removeScreenImmediately( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD );
 	}
 	
@@ -92,6 +93,10 @@ public class SetUpAccountState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
+
 		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND ) as SplashBackCanvas;
 		if( m_createAccountBackgroundCanvas == null )
             m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 ) as SplashBackCanvas;
@@ -117,6 +122,24 @@ public class SetUpAccountState : GameState
 		//Honda
 		m_SignInAccountButton = m_signUpCanvas.getView("signInAccountButton") as UIButton;
 		m_SignInAccountButton.addClickCallback(onSignInAccountButtonClicked);
+		//end
+
+		//Kev
+//		SplashBackCanvas splashCanvas = p_uiManager.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		m_createAccountBackgroundCanvas.gameObject.SetActive(false);
+
+		m_quitButton = m_signUpCanvas.getView("quitButton") as UIButton;
+		m_quitButton.addClickCallback(onBackClicked);
+
+		UILabel quitText = m_signUpCanvas.getView ("quitButton").getView("btnText") as UILabel;
+
+		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+
+
+//		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
+		
+//		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
+
 		//end
 
 		m_emailCheckImage = m_signUpCanvas.getView ("emailInputConfirm") as UIImage;
@@ -366,10 +389,10 @@ public class SetUpAccountState : GameState
 	//honda
 	private void onSignInAccountButtonClicked(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) //cynthia
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 
@@ -378,12 +401,22 @@ public class SetUpAccountState : GameState
 
 	//end
 
+	//Kev
+	private void onBackClicked(UIButton p_button)
+	{
+		
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+
+	}
+	//end
+
 	private void toCreateChildrenScreen( UIButton p_button )
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) //cynthia
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 6);
 			return;
 		}
 
@@ -394,12 +427,15 @@ public class SetUpAccountState : GameState
 		{
 			p_button.removeClickCallback( toCreateChildrenScreen );
 
-			changeToState = ScreenChange.NextScreen;
-			RequestQueue l_queue = new RequestQueue();
-//				l_queue.add(new ClientIdRequest());
-			l_queue.add(new SignUpRequest(m_account.text, m_password.text,createAccountComplete));
-			l_queue.request(RequestType.SEQUENCE);
-			SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
+			popupCheckParentBirth();
+
+			//move to popupCheckParentBirth()
+//			changeToState = ScreenChange.NextScreen;
+//			RequestQueue l_queue = new RequestQueue();
+////				l_queue.add(new ClientIdRequest());
+//			l_queue.add(new SignUpRequest(m_account.text, m_password.text,createAccountComplete));
+//			l_queue.request(RequestType.SEQUENCE);
+//			SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
 		}
 		else
 		{
@@ -423,6 +459,47 @@ public class SetUpAccountState : GameState
 				}
 			}
 		}
+	}
+
+	private void popupCheckParentBirth()
+	{
+		m_gameController.getUI().createScreen(UIScreen.PARENT_BIRTH_CHECK, false, 7);		
+
+		CheckParentBirthPopup parentBirthPop = GameObject.FindWithTag("CheckParentBirthTag").GetComponent<CheckParentBirthPopup>() as CheckParentBirthPopup;
+		if (parentBirthPop != null)
+			parentBirthPop.onClick += onCreateAccountClicked;
+	}
+
+	private void onCreateAccountClicked(bool successful)
+	{
+		if (successful) 
+		{
+			changeToState = ScreenChange.NextScreen;
+			RequestQueue l_queue = new RequestQueue ();
+//			l_queue.add(new ClientIdRequest());
+			l_queue.add (new SignUpRequest (m_account.text, m_password.text, createAccountComplete));
+			l_queue.request (RequestType.SEQUENCE);
+			SwrveComponent.Instance.SDK.NamedEvent ("SignUp.end");
+		}
+		else 
+		{
+			m_account.text = "";
+			m_password.text = "";
+			m_rePassword.text = "";
+			m_passwordCheckImage.active = false;
+			m_emailCheckImage.active = false;
+
+			if(m_IsCreateFreeAccount && SessionHandler.getInstance().renewalPeriod == 0)
+			{
+				m_createFreeAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
+			else
+			{
+				m_createAccountButton.addClickCallback (toCreateChildrenScreen);
+			}
+		}
+
+			
 	}
 
 	private void createAccountComplete(WWW p_response)
@@ -475,8 +552,8 @@ public class SetUpAccountState : GameState
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
 		m_signUpCanvas.active = true;
-		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER))
-			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		if(null != m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT))
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 		m_errorTitle.text = p_errorTitle;
 		m_errorContent.text = p_errorContent;
@@ -522,6 +599,7 @@ public class SetUpAccountState : GameState
 	private InputField 	m_rePassword;
 
 	private UIButton 	m_createAccountButton;
+	private UIButton 	m_quitButton;
 	private UIImage 	m_emailCheckImage;
 	private UIImage 	m_passwordCheckImage;
 	private UIElement	m_premiumLogoArea;

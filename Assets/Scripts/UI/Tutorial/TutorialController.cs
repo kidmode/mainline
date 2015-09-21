@@ -54,7 +54,7 @@ public class TutorialController : MonoBehaviour {
 
 				currSequence = sequence;
 
-				Debug.LogWarning(" 000000000000000000000000000000 show it " + currSequence.ToString() );
+//				Debug.LogWarning(" 000000000000000000000000000000 show it " + currSequence.ToString() );
 
 				UIManager uiManager = game.gameController.getUI();
 

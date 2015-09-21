@@ -42,6 +42,16 @@ public class SignInState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
+
+			//Kev
+			UIManager l_ui = p_gameController.getUI();
+			SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+			if(splashCanvas != null)
+				splashCanvas.gameObject.SetActive(true);
+			//Kev
+
+
+
 			m_signInCanvas.active = false;
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 3);
 			m_subState = SubState.NONE;
@@ -121,6 +131,8 @@ public class SignInState : GameState
 		p_gameController.getUI().removeScreenImmediately(UIScreen.SIGN_IN);
 		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER);
 		p_gameController.getUI().removeScreenImmediately(UIScreen.TRIAL_MESSAGE);
+
+
 	}
 	
 	//---------------- Private Implementation ----------------------
@@ -137,7 +149,7 @@ public class SignInState : GameState
 		m_trialMessageCanvas = p_uiManager.createScreen(UIScreen.TRIAL_MESSAGE, false, 2);
 		m_signInCanvas = p_uiManager.createScreen(UIScreen.SIGN_IN, true, 1);
 		
-		m_backButton = m_signInCanvas.getView("exitButton") as UIButton;
+		m_backButton = m_signInCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback (toBack);
 		m_signInButton = m_signInCanvas.getView("signInButton") as UIButton;
 		m_signInButton.addClickCallback(toCreateChildrenScreen);
@@ -162,6 +174,11 @@ public class SignInState : GameState
 		m_subscriptionButton.addClickCallback ( onSubscriptionClick );
 		m_continueButton.addClickCallback ( onContinueClick );
 		m_exitButton.addClickCallback ( onContinueClick );
+
+		//Kev
+		m_quitButton = m_signInCanvas.getView("quitButton") as UIButton;
+		m_quitButton.addClickCallback(onBackClicked);
+		//end
 
 		#if UNITY_ANDROID
 		m_addressText = m_signInCanvas.getView("emailAddressText") as UILabel;
@@ -234,8 +251,21 @@ public class SignInState : GameState
 		}
 	}
 
+	//Kev
+	private void onBackClicked(UIButton p_button)
+	{
+		
+		KidModeLockController.Instance.swith2DefaultLauncher ();
+		KidMode.openDefaultLauncher ();
+		
+	}
+	//end
+
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
+
+
+
 		m_signInCanvas.active = true;
 
 		m_errorTitle.text = p_errorTitle;
@@ -245,6 +275,14 @@ public class SignInState : GameState
 		l_pointListOut.Add( m_dialog.transform.localPosition - new Vector3( 0, 582, 0 ));
 		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
 		m_controller.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+
+
+		//Kev
+		UIManager l_ui = m_controller.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		//Kev
 	}
 
 	private void closeDialog(UIButton p_button)
@@ -482,6 +520,7 @@ public class SignInState : GameState
 	private UIButton 	m_subscriptionButton;
 	private UIButton 	m_continueButton;
 	private UIButton 	m_exitButton;
+	private UIButton 	m_quitButton;
 	private UILabel 	m_messageText;
 	private UILabel 	m_continueText;
 

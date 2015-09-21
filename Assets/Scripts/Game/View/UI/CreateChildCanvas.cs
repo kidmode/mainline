@@ -33,6 +33,10 @@ public class CreateChildCanvas : UICanvas
 		l_name.text = Localization.getString (Localization.TXT_99_LABEL_NAME);
 		l_year.text = Localization.getString (Localization.TXT_23_LABEL_YEAR);
 		l_month.text = Localization.getString (Localization.TXT_23_LABEL_MONTH);
+
+		UILabel l_backFake = getView ("btnTextFake") as UILabel;
+		l_backFake.text = Localization.getString (Localization.TXT_BUTTON_BACK);
+
 	}
 	
 	public override void update()

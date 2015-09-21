@@ -429,7 +429,7 @@ public class GameViewState : WebViewState
 	IEnumerator WaitAndPrint(GameController p_gameController) {
 		if (Screen.orientation == ScreenOrientation.Portrait || Screen.orientation == ScreenOrientation.PortraitUpsideDown) {
 			Screen.orientation = ScreenOrientation.Landscape;
-			yield return new WaitForSeconds (0.5F);
+			yield return new WaitForSeconds (1.0F);
 		} else
 			yield return null;
 		p_gameController.changeState(ZoodleState.REGION_GAME);

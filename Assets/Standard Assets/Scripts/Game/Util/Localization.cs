@@ -730,8 +730,26 @@ public class Localization : object
 	public const string ERROR_MESSAGE_ERROR_TEXT = "ERROR_MESSAGE_ERROR_TEXT";
 	public const string NO_INTERNET_TEXT = "NO_INTERNET_TEXT";
 
+	public const string TXT_LOADING_TITLE		  = "TXT_LOADING_TITLE";
+	public const string TXT_LOADING_MESSAGE		  = "TXT_LOADING_MESSAGE";
+
+	//honda: FOTA Popup
+	public const string TXT_FOTA_POPUP_TITLE = "TXT_FOTA_POPUP_TITLE";
+	public const string TXT_FOTA_POPUP_CONTENT = "TXT_FOTA_POPUP_CONTENT";
+	public const string TXT_FOTA_POPUP_CONFIRM_BTN = "TXT_FOTA_POPUP_CONFIRM_BTN";
+	public const string TXT_FOTA_POPUP_CANCEL_BTN = "TXT_FOTA_POPUP_CANCEL_BTN";
+
+	//honda: Check Parent Birth Popup
+	public const string TXT_CPB_POPUP_TITLE = "TXT_CPB_POPUP_TITLE";
+	public const string TXT_CPB_POPUP_YEAR = "TXT_CPB_POPUP_YEAR";
+	public const string TXT_CPB_POPUP_MONTH = "TXT_CPB_POPUP_MONTH";
+	public const string TXT_CPB_POPUP_DAY = "TXT_CPB_POPUP_DAY";
+	public const string TXT_CPB_POPUP_OK_BTN = "TXT_CPB_POPUP_OK_BTN";
 	
 	private string m_currLanguage   = "EN";
+	
+	public const string TXT_BASELINE = "Baseline";
+
 	private Hashtable m_dictionary  = new Hashtable();
 	
 	public Localization( Accessor p_accessor )

@@ -695,6 +695,8 @@ public class CreateChildRequest : RequestQueue.Request
 		if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
 			SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
 		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+		//honda
+		l_kid.saveKidPhotoLocal();
 		//honda: request time limits info
 		l_kid.requestTimeLimits();
 		//end
@@ -735,7 +737,14 @@ public class ImageRequest : RequestQueue.Request
 
 	private void _requestComplete(WWW p_response)
 	{
-		context.setVariable(m_variable, p_response);
+		if (p_response.error == null)
+		{
+			context.setVariable(m_variable, p_response);
+		}
+		else
+		{
+			Debug.Log(p_response.error);
+		}
 	}
 
 	private string m_variable;
@@ -902,7 +911,7 @@ public class WebContentRequest : RequestQueue.Request
 
 	protected override void init()
 	{
-		Debug.Log ("@@@@@@" + SessionHandler.getInstance ().currentKid.id);
+		Debug.Log ("spinner: " + SessionHandler.getInstance ().currentKid.id);
 		m_call = "/api/kids" + ZoodlesConstants.SLASH + SessionHandler.getInstance().currentKid.id + ZoodlesConstants.REST_LINKS_LIST_URL_SUFFIX;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
@@ -2050,7 +2059,7 @@ public class EditChildRequest : RequestQueue.Request
 		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
 		Kid l_kid = new Kid(l_data);
 		if (null == SessionHandler.getInstance ().selectAvatar || string.Empty.Equals (SessionHandler.getInstance ().selectAvatar))
-			l_kid.kid_photo = SessionHandler.getInstance ().currentKid.kid_photo;
+			l_kid.kid_photo = SessionHandler.getInstance().currentKid.kid_photo;
 		else
 			l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
 		List<Kid> l_list = SessionHandler.getInstance ().kidList;
@@ -2062,9 +2071,11 @@ public class EditChildRequest : RequestQueue.Request
 				Kid l_currentKid = l_list[l_i] as Kid;
 				if(l_currentKid.id == l_kid.id)
 				{
+					SessionHandler.getInstance().kidList[l_i].wholeName = l_kid.wholeName;
 					SessionHandler.getInstance().kidList[l_i].name = l_kid.name;
 					SessionHandler.getInstance().kidList[l_i].birthday = l_kid.birthday;
 					SessionHandler.getInstance().kidList[l_i].kid_photo = l_kid.kid_photo;
+					SessionHandler.getInstance().kidList[l_i].saveKidPhotoLocal();
 					string birthday = l_kid.birthday;
 					
 					int l_age = 0;
@@ -2088,6 +2099,16 @@ public class EditChildRequest : RequestQueue.Request
 				}
 			}
 		}
+
+		//honda: save latest kid rogile to local
+		ArrayList arraylist = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance().kidList) {
+			arraylist.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(arraylist);
+		SessionHandler.SaveKidList(encodedString);
+		//end
+	
 		SessionHandler.getInstance ().inputedChildName = string.Empty;
 		SessionHandler.getInstance ().inputedbirthday = string.Empty;
 		SessionHandler.getInstance ().selectAvatar = null;
@@ -2184,7 +2205,8 @@ public class VisitLinkTrackRequest
 	}
 }
 
-
+//===================
+//This for online link counter since the VisitLinkTrackRequest method seems to be offline only
 public class LinkVisitRequest : RequestQueue.Request
 {
 	

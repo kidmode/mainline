@@ -55,7 +55,7 @@ public class CreateChildProfileCanvas : UICanvas
 		UILabel l_deleteConfirm = getView ("noticeText3") as UILabel;
 		UILabel l_confirm 	= getView ("confirmButtonText") as UILabel;
 		UILabel l_cancel 	= getView ("cancelButtonText") as UILabel;
-		
+
 		
 		l_back.text 	= Localization.getString (Localization.TXT_BUTTON_BACK);
 		l_top.text 		= Localization.getString (Localization.TXT_23_LABEL_TOP);
@@ -74,5 +74,7 @@ public class CreateChildProfileCanvas : UICanvas
 		l_deleteConfirm.text = Localization.getString (Localization.TXT_23_LABEL_DELETE_CONFIRM);
 		l_confirm.text 	= Localization.getString (Localization.TXT_75_BUTTON_CONFIRM);
 		l_cancel.text 	= Localization.getString (Localization.TXT_75_BUTTON_CANCEL);
+
+
 	}
 }

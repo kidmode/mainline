@@ -83,6 +83,8 @@ public class PromoteSubjectsCanvas : UICanvas
 		UILabel l_cognitive = getView("cognitiveText") as UILabel;
 		UILabel l_creative = getView("creativeText") as UILabel;
 		UILabel l_life = getView("lifeSkillsText") as UILabel;
+
+		UILabel l_baseline = getView("TextBaseLine") as UILabel;
 		
 		l_math.text = Localization.getString( Localization.TXT_COURSE_MATH );
 		l_reading.text = Localization.getString( Localization.TXT_COURSE_READING );
@@ -91,6 +93,9 @@ public class PromoteSubjectsCanvas : UICanvas
 		l_cognitive.text = Localization.getString( Localization.TXT_COURSE_COGNITIVE );
 		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
 		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
+
+		l_baseline.text = Localization.getString( Localization.TXT_BASELINE );
+
 	}
 
 	UISlider m_mathSlider;

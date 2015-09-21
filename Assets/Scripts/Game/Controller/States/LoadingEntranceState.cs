@@ -24,7 +24,7 @@ public class LoadingEntranceState : GameState
       
 //		KidMode.setKidsModeActive(true);
 		KidModeLockController.Instance.swith2KidMode();
-		SessionHandler.getInstance().resetKidCache();
+		SessionHandler.getInstance().resetWebBookContentsCache();
 
 		m_counterToNextScreen = 0;
 

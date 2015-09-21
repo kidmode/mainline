@@ -92,6 +92,9 @@ public class CreateChildProfileState : GameState
 	{
 		p_gameController.getUI().removeScreen(UIScreen.CREATE_CHILDPROFILE);
 		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+
+//		SessionHandler.getInstance().currentKid.requestPhotoAndSaveLocal();
+
 		base.exit(p_gameController);
 	}
 
@@ -258,12 +261,7 @@ public class CreateChildProfileState : GameState
 
 	private void toDeleteChild(UIButton p_button)
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) //cynthia
-		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-		}
-		else
+		if (checkInternet())
 		{
 			m_confirmPanel.active = false;
 			m_loadingPanel.active = true;
@@ -409,9 +407,12 @@ public class CreateChildProfileState : GameState
 
 	private void toAddPhoto(UIButton p_button)
 	{
-		SessionHandler.getInstance().inputedChildName = combineChildName(m_childFirstName.text, m_childLastName.text);
-		SessionHandler.getInstance().inputedbirthday = combineBirthdayString(m_childBirthYear.text, m_childBirthMonth.text, "01");
-		m_gameController.changeState(ZoodleState.SELECT_AVATAR);
+		if (checkInternet ()) 
+		{
+			SessionHandler.getInstance ().inputedChildName = combineChildName (m_childFirstName.text, m_childLastName.text);
+			SessionHandler.getInstance ().inputedbirthday = combineBirthdayString (m_childBirthYear.text, m_childBirthMonth.text, "01");
+			m_gameController.changeState (ZoodleState.SELECT_AVATAR);
+		}
 	}
 
 	private bool IsMatch(string p_pattern, string p_input)
@@ -514,12 +515,11 @@ public class CreateChildProfileState : GameState
 	private void toCreateProfile(UIButton p_button)
 	{
 		//cynthia
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (!checkInternet()) 
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return;
 		}
+
 		//cynthia
 		p_button.removeClickCallback(toCreateProfile);
 		int l_count = null != SessionHandler.getInstance ().kidList?SessionHandler.getInstance ().kidList.Count:0;
@@ -587,15 +587,62 @@ public class CreateChildProfileState : GameState
 					if (m_queue == null)
 						m_queue = new RequestQueue();
 					m_queue.add(new ImageRequest("newAvatar", l_url));
-					m_queue.add(new UpdatePhotoRequest("newAvatar", null ));
+					m_queue.add(new UpdatePhotoRequest("newAvatar", onUpdatePhotoComplete));
 					m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
 					m_queue.request(RequestType.SEQUENCE);
 					m_subState = SubState.LOADING;
 				}
 			}
+
+
+			//================
+			//Kev
+			// Added so the local data will remember the change
+
+//			SessionHandler.getInstance().currentKid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+//			SessionHandler.getInstance().currentKid.saveKidPhotoLocal();
+//			SessionHandler.getInstance().currentKid.requestPhotoAndSaveLocal();
+//			ArrayList l_list = new ArrayList();
+//			foreach (Kid k in SessionHandler.getInstance ().kidList) {
+//				k.saveKidPhotoLocal();
+//			}
+
+
+			//End //=========
+
+
 		}
 	}
-	
+
+	void onUpdatePhotoComplete(WWW www)
+	{
+		SessionHandler.getInstance().currentKid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+		SessionHandler.getInstance().currentKid.saveKidPhotoLocal();
+	}
+
+	private bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
+		{
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+			if (error != null)
+				error.onClick += onClickExit;
+
+			return false;
+		}
+		return true;
+	}
+
+	private void onClickExit()
+	{
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+		error.onClick -= onClickExit;;
+		m_gameController.changeState (ZoodleState.CONTROL_APP);
+	}
+
 	//Private variables
 
 	private UIElement	m_title;

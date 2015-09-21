@@ -52,7 +52,7 @@ public class GameController
 	{
 		if (null != m_state)
 		{
-			m_state.update( this, p_time );
+				m_state.update( this, p_time );
 		}
 		
 		if( m_uiManager != null )

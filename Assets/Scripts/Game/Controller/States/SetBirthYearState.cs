@@ -13,6 +13,13 @@ public class SetBirthYearState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		//Kev
+		UIManager l_ui = p_gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		//Kev
 		
 		_setupScreen( p_gameController.getUI() );
 
@@ -122,13 +129,7 @@ public class SetBirthYearState : GameState
 			}
 			else
 			{
-				p_button.removeClickCallback (onSetBirthYear);
-				UIElement l_messagePanel = m_birthCanvas.getView( "messagePanel" );
 
-				List<Vector3> l_pointListIn = new List<Vector3>();
-				l_pointListIn.Add( l_messagePanel.transform.localPosition );
-				l_pointListIn.Add( l_messagePanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-				l_messagePanel.tweener.addPositionTrack( l_pointListIn, 0f, onShowFinish, Tweener.Style.Standard, false );
 			}
 		}
 	}
