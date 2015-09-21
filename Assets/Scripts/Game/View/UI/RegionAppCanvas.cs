@@ -107,16 +107,16 @@ public class RegionAppCanvas: UICanvas
 			else {
 				l_appImage.setTexture(l_info.appIcon);
 				l_appImage.active = true;
-//				l_rawImage.active = false;
-				l_rawImage.active = true;
+				l_rawImage.active = false;
+//				l_rawImage.active = true;
 			}
 		}
 		else
 		{
 			l_appImage.setTexture(l_info.appIcon);
 			l_appImage.active = true;
-//			l_rawImage.active = false;
-			l_rawImage.active = true;
+			l_rawImage.active = false;
+//			l_rawImage.active = true;
 		}
 	}
 //	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
