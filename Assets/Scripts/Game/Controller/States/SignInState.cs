@@ -51,6 +51,7 @@ public class SignInState : GameState
 			//Kev
 
 
+
 			m_signInCanvas.active = false;
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 3);
 			m_subState = SubState.NONE;
@@ -262,6 +263,9 @@ public class SignInState : GameState
 
 	private void invokeDialog(string p_errorTitle, string p_errorContent)
 	{
+
+
+
 		m_signInCanvas.active = true;
 
 		m_errorTitle.text = p_errorTitle;
@@ -271,6 +275,14 @@ public class SignInState : GameState
 		l_pointListOut.Add( m_dialog.transform.localPosition - new Vector3( 0, 582, 0 ));
 		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
 		m_controller.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+
+
+		//Kev
+		UIManager l_ui = m_controller.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		//Kev
 	}
 
 	private void closeDialog(UIButton p_button)

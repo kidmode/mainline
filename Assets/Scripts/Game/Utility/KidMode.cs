@@ -967,6 +967,19 @@ public class KidMode
 		jc.CallStatic("dismissProgressDialog");
 		#endif
 	}
+
+	public static bool isWifiConnected()
+	{
+				
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		bool isWifiConnectes = jc.CallStatic<bool>("isWifiConnected");
+
+		return isWifiConnectes;
+		#endif
+
+		return true;
+	}
 	
 }
 

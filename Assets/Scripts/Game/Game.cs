@@ -277,13 +277,14 @@ public class Game : MonoBehaviour
 	}
 
 
+
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
 
 		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
-		Screen.autorotateToLandscapeRight = false;
+		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
@@ -319,6 +320,8 @@ public class Game : MonoBehaviour
 
 	public void Awake () 
 	{
+
+
 		// Sean: vzw
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		Application.targetFrameRate = 30;
@@ -378,6 +381,7 @@ public class Game : MonoBehaviour
         startLoading();
 
 		GAUtil.startSession("Login");
+
 	}
 
 
