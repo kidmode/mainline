@@ -319,6 +319,8 @@ public class Game : MonoBehaviour
 
 	public void Awake () 
 	{
+
+
 		// Sean: vzw
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		Application.targetFrameRate = 30;
@@ -378,6 +380,7 @@ public class Game : MonoBehaviour
         startLoading();
 
 		GAUtil.startSession("Login");
+
 	}
 
 
