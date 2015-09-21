@@ -311,17 +311,27 @@ public class KidMode
 		if(null != l_appNameList)
 		{
 			foreach(IDictionary dic in l_appNameList) {
+
+
+
+
 				AppInfo app = new AppInfo();
 				app.appName = (string)dic["appName"];
 				app.packageName = (string)dic["packageName"];
+
+				Debug.Log("   000000000000000000000  packageName   " + (string)dic["packageName"]);
+
 				Texture2D l_textureIcon = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 				l_textureIcon = ImageCache.getCacheImage(app.packageName + ".png");
 				app.appIcon = l_textureIcon;
 				app.isAdded = false;
 				mAllAppList.Add(app);
+
 			}
 		}
 		#endif
+
+
 	}
 
 
@@ -525,10 +535,23 @@ public class KidMode
 		string l_appListJson = PlayerPrefs.GetString( "addedAppList" );
 		ArrayList l_appNameList = MiniJSON.MiniJSON.jsonDecode( l_appListJson ) as ArrayList;
 		List<System.Object> l_list = mAllAppList;
+
+		TextAsset package = Resources.Load("Data/VZW_System_Ignore_Apps") as TextAsset;
+		string[] ignoreNames = package.text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+		List<string> ignoreNamesList = new List<string>(ignoreNames);
+
+
 		if ( l_list != null && l_list.Count > 0)
 		{
 			foreach (AppInfo l_app in l_list)
 			{
+
+				if( ignoreNamesList.Contains(l_app.packageName) ){
+
+					continue;
+
+				}
+
 				if ( l_appNameList.Count > 0 && l_appNameList.Contains(l_app.packageName) )
 				{
 					l_app.isAdded = true;
@@ -966,6 +989,19 @@ public class KidMode
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
 		jc.CallStatic("dismissProgressDialog");
 		#endif
+	}
+
+	public static bool isWifiConnected()
+	{
+				
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		bool isWifiConnectes = jc.CallStatic<bool>("isWifiConnected");
+
+		return isWifiConnectes;
+		#endif
+
+		return true;
 	}
 	
 }

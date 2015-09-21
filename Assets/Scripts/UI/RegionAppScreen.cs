@@ -118,8 +118,15 @@ public class RegionAppScreen : MonoBehaviour {
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 
-		game.callParentGate();
-
+		if (game.checkInternet()) 
+		{
+			game.callParentGate ();
+		} 
+		else 
+		{
+			MonkeyImageHighlight.SetActive(false);
+			MonkeyImage.SetActive(true);
+		}
 	}
 
 

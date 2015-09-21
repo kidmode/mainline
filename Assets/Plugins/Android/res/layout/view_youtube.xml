@@ -61,6 +61,7 @@
         android:layout_toRightOf="@id/btn_back" >
 
         <WebView
+            android:focusableInTouchMode="false"
             android:id="@+id/youtube_webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

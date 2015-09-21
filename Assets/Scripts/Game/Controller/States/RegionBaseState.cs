@@ -1159,7 +1159,8 @@ public class RegionBaseState : GameState
 	
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
-		if ((Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn()) 
+		if ((Application.internetReachability == NetworkReachability.NotReachable 
+		     || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) 
 		    && !p_toggle.name.Equals("booksButton"))
 		{
 			if (!p_isToggled)
@@ -1169,8 +1170,7 @@ public class RegionBaseState : GameState
 			ActivityPanelCanvas l_panel = m_activityPanelCanvas as ActivityPanelCanvas;
 			l_panel.untoggleActivities();
 
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6); 
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6); 
 
 //			setInputEnabled(false);
 //			// Honda: Now, when you tap any tab except books tab, it will not do any transition.
@@ -1716,10 +1716,10 @@ public class RegionBaseState : GameState
 
 	private bool showMsgIfNoInternet () 
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return true;
 		}
 		else
