@@ -663,6 +663,9 @@ public class ProfileState : GameState
 
 	private void _onConfirmButtonClick(UIButton p_button)
 	{
+
+		m_quitButton.gameObject.SetActive(true);
+
 		_closeWebview();
 	}
 
