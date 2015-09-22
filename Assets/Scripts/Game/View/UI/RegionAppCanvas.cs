@@ -180,7 +180,7 @@ public class RegionAppCanvas: UICanvas
 		if(isInCurrentDrawGroup(p_index)){
 
 			l_appName.gameObject.SetActive(true);
-//			l_rawImage.gameObject.SetActive(true);
+			l_rawImage.gameObject.SetActive(true);
 			l_appImage.gameObject.SetActive(true);
 
 //			p_element.gameObject.SetActive(true);
@@ -231,7 +231,7 @@ public class RegionAppCanvas: UICanvas
 
 //			l_appName.text = "NNNN";
 			l_appName.gameObject.SetActive(false);
-//			l_rawImage.gameObject.SetActive(false);
+			l_rawImage.gameObject.SetActive(false);
 			l_appImage.gameObject.SetActive(false);
 
 
