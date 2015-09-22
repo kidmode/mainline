@@ -344,8 +344,8 @@ public class Game : MonoBehaviour
 //
 //		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
 
-		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
-		dataDir.Delete(true);
+//		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
+//		dataDir.Delete(true);
 
 
 		m_request = new RequestQueue ();

@@ -47,7 +47,9 @@ public class RegionAppCanvas: UICanvas
 //		l_year.text = Localization.getString (Localization.TXT_23_LABEL_YEAR);
 //		l_month.text = Localization.getString (Localization.TXT_23_LABEL_MONTH);
 	}
-	
+
+
+
 //	public override void update()
 //	{
 //		base.update();
@@ -89,8 +91,8 @@ public class RegionAppCanvas: UICanvas
 		UILabel l_appName = p_element.getView("appName") as UILabel;
 
 //		l_appImage.gameObject.SetActive(true);
-//
-//		return;
+
+
 
 		if (l_appImage != null)
 			l_appImage.active = false;
@@ -103,6 +105,8 @@ public class RegionAppCanvas: UICanvas
 		{
 			l_appName.active = true;
 		}
+
+//		return;
 
 		Vector2 l_textSize = l_appName.calcSize();
 		RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
