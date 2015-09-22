@@ -5,6 +5,8 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class RegionAppCanvas: UICanvas
 {
@@ -17,10 +19,97 @@ public class RegionAppCanvas: UICanvas
 
 		m_appSwipeList = getView("appScrollView") as UISwipeList;
 
+		m_appSwipeList.addValueChangeListener(onScrollValueChanged);
+
 		_setupList();
 
 		setScrollView ();
+
+		KidModeScrollViewUpdator.OnScrollViewValueChanged+= onScrollValueChanged;
 	}
+
+
+	private int currentDrawColumn = 0;
+
+	private int visibleColumns = 8;
+
+	private int totalColumnCount = 0; 
+
+	private void onScrollValueChanged(Vector2 scrollValue)
+	{
+
+		Debug.Log("  scrollValue " + scrollValue.x.ToString());
+
+		List<UIElement> listElements = m_appSwipeList.getListElements();
+
+//		listElements.Count
+
+
+
+
+		totalColumnCount = listElements.Count/2;
+
+		if(listElements.Count % 2 == 1){
+
+			totalColumnCount++;
+
+		}
+
+
+
+		currentDrawColumn = (int) Math.Round ( totalColumnCount * scrollValue.x );
+
+		Debug.Log("  listElements " + listElements.Count + "       columnCount  " + totalColumnCount + "     currentDrawColumn " + currentDrawColumn);
+
+	}
+
+	private bool isInCurrentDrawGroup(int index){
+
+		int checkInt = index + 1;
+
+		int columnNum = checkInt/2;
+		
+		if(checkInt % 2 == 1){
+			
+			columnNum++;
+			
+		}
+
+
+
+		//Start checking
+		if(currentDrawColumn < 0 + visibleColumns / 2){
+
+			if(columnNum < visibleColumns){
+
+				return true;
+
+			}
+
+		}
+
+
+		if(currentDrawColumn > totalColumnCount - visibleColumns / 2){
+			
+			if(columnNum > totalColumnCount - visibleColumns){
+				
+				return true;
+				
+			}
+			
+		}
+
+
+		if( columnNum < currentDrawColumn + visibleColumns / 2 + 1 && columnNum > currentDrawColumn - visibleColumns / 2 ){
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
 	
 	public void setupLocalization()
 	{
@@ -45,7 +134,9 @@ public class RegionAppCanvas: UICanvas
 //		l_year.text = Localization.getString (Localization.TXT_23_LABEL_YEAR);
 //		l_month.text = Localization.getString (Localization.TXT_23_LABEL_MONTH);
 	}
-	
+
+
+
 //	public override void update()
 //	{
 //		base.update();
@@ -69,6 +160,7 @@ public class RegionAppCanvas: UICanvas
 		m_appSwipeList.setDrawFunction(onListDraw);
 	}
 
+
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
 		UIButton l_button = p_element as UIButton;
@@ -81,43 +173,73 @@ public class RegionAppCanvas: UICanvas
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
 
-		if (l_appImage != null)
-			l_appImage.active = false;
-	
-		if (l_rawImage == null)
-            return;
+//		l_appImage.gameObject.SetActive(true);
+//
+//		return;
 
-		l_appName.text = l_info.appName;
-		if (l_appName.active == false)
-		{
-			l_appName.active = true;
-		}
+		if(isInCurrentDrawGroup(p_index)){
 
-		Vector2 l_textSize = l_appName.calcSize();
-		RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
-		float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
-		l_transform.localScale = new Vector3(l_scale, l_scale, 1);
+			l_appName.gameObject.SetActive(true);
+			l_rawImage.gameObject.SetActive(true);
+			l_appImage.gameObject.SetActive(true);
+
+//			p_element.gameObject.SetActive(true);
+
+			if (l_appImage != null)
+				l_appImage.active = false;
+		
+			if (l_rawImage == null)
+	            return;
+
+			l_appName.text = l_info.appName;
+			if (l_appName.active == false)
+			{
+				l_appName.active = true;
+			}
+
+	//		return;
+
+			Vector2 l_textSize = l_appName.calcSize();
+			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
+			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
+			l_transform.localScale = new Vector3(l_scale, l_scale, 1);
 
 
-		if( l_info.appIcon == null )
-		{
-			l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
-			if(l_info.appIcon == null)
-				l_appImage.setTexture( m_emptyTexture );
-			else {
+			if( l_info.appIcon == null )
+			{
+				l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
+				if(l_info.appIcon == null)
+					l_appImage.setTexture( m_emptyTexture );
+				else {
+					l_appImage.setTexture(l_info.appIcon);
+					l_appImage.active = true;
+					l_rawImage.active = false;
+	//				l_rawImage.active = true;
+				}
+			}
+			else
+			{
 				l_appImage.setTexture(l_info.appIcon);
 				l_appImage.active = true;
 				l_rawImage.active = false;
-//				l_rawImage.active = true;
+	//			l_rawImage.active = true;
 			}
+
+		}else{
+
+//			p_element.gameObject.SetActive(false);
+
+//			l_appName.text = "NNNN";
+			l_appName.gameObject.SetActive(false);
+			l_rawImage.gameObject.SetActive(false);
+			l_appImage.gameObject.SetActive(false);
+
+
+
 		}
-		else
-		{
-			l_appImage.setTexture(l_info.appIcon);
-			l_appImage.active = true;
-			l_rawImage.active = false;
-//			l_rawImage.active = true;
-		}
+
+
+
 	}
 //	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
 //	{

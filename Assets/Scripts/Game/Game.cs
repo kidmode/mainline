@@ -335,7 +335,7 @@ public class Game : MonoBehaviour
 
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
 //		File.Delete( Application.persistentDataPath + "/kidList.txt");
@@ -346,7 +346,7 @@ public class Game : MonoBehaviour
 
 //		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 //		dataDir.Delete(true);
-//		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
+
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
@@ -438,6 +438,7 @@ public class Game : MonoBehaviour
 	public void Update ()
 	{
 		if (mIsPlay) {
+			Debug.Log("@@@@@@@@@@@@@@@@@@@@@@Update");
 			int l_time = (int)(Time.deltaTime * 1000.0f);
 			Server.update(l_time);
 			m_gameController.update(l_time);
@@ -518,7 +519,7 @@ public class Game : MonoBehaviour
 		
 		Debug.LogWarning (" onAndroidResume " + info);
 		
-		KidModeLockController.Instance.onAndroidResume ();
+//		KidModeLockController.Instance.onAndroidResume ();
 		
 	}
 
@@ -636,7 +637,7 @@ public class Game : MonoBehaviour
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
 		Debug.Log("spinner: start webcontent request");
 
-		Invoke("startWebContentRequest", 1);
+		Invoke("startWebContentRequest", 10);
 	}
 
 	private void startWebContentRequest()
@@ -656,7 +657,7 @@ public class Game : MonoBehaviour
 	private void fetchDrawingList()
 	{
 		Debug.Log("spinner: start drawing request");
-		Invoke("startDrawingRequest", 1);
+		Invoke("startDrawingRequest", 10);
 	}
 
 	private void startDrawingRequest()
@@ -666,11 +667,6 @@ public class Game : MonoBehaviour
 
 	public void callParentGate()
 	{
-		if (!checkInternet ())
-		{
-			return;
-		}
-
 		UIManager l_ui = m_gameController.getUI();
 		UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
 		if (l_backScreen == null)
@@ -684,6 +680,7 @@ public class Game : MonoBehaviour
 	
 	}
 
+
 	public bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable
@@ -696,6 +693,7 @@ public class Game : MonoBehaviour
 		}
 		return true;
 	}
+
 
 	
 	//end
