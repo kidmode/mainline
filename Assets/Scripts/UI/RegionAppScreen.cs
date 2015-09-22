@@ -29,7 +29,9 @@ public class RegionAppScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		InvokeRepeating("checkSpeechBoxHey", ShowHeyTime, ShowHeyTime);
+//		InvokeRepeating("checkSpeechBoxHey", ShowHeyTime, ShowHeyTime);
+
+		state = State.Wating;
 
 		SpeechBoxHey.SetActive(false);
 
@@ -71,34 +73,50 @@ public class RegionAppScreen : MonoBehaviour {
 
 		Debug.Log("  monkeyClick  ");
 
-		if(state != State.SpeechRecommend){
+		if(state != State.ToParentGate){
 
-			CancelInvoke("resetSpeech");
-
-
-			CancelInvoke("checkSpeechBoxHey");
-
-			SpeechBoxRecommendApps.SetActive(true);
-
-			SpeechBoxHey.SetActive(false);
-
-			state = State.SpeechRecommend;
-
-//			
-
-			Invoke("resetSpeech", removeSpeechTime);
-
-		}else if(state == State.SpeechRecommend){
-
+			state = State.ToParentGate;
+			
 			MonkeyImageHighlight.SetActive(true);
 			
 			MonkeyImage.SetActive(false);
-
+			
 			Invoke("parentGateThenRecommendedApps", 0.4f);
-
-//			parentGateThenRecommendedApps();
-
+			
+			//			parentGateThenRecommendedApps();
+			
 		}
+
+
+//
+//		if(state != State.SpeechRecommend){
+//
+//			CancelInvoke("resetSpeech");
+//
+//
+//			CancelInvoke("checkSpeechBoxHey");
+//
+//			SpeechBoxRecommendApps.SetActive(true);
+//
+//			SpeechBoxHey.SetActive(false);
+//
+//			state = State.SpeechRecommend;
+//
+////			
+//
+//			Invoke("resetSpeech", removeSpeechTime);
+//
+//		}else if(state == State.SpeechRecommend){
+//
+//			MonkeyImageHighlight.SetActive(true);
+//			
+//			MonkeyImage.SetActive(false);
+//
+//			Invoke("parentGateThenRecommendedApps", 0.4f);
+//
+////			parentGateThenRecommendedApps();
+//
+//		}
 
 	}
 
@@ -118,8 +136,15 @@ public class RegionAppScreen : MonoBehaviour {
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 
-		game.callParentGate();
-
+		if (game.checkInternet()) 
+		{
+			game.callParentGate ();
+		} 
+		else 
+		{
+			MonkeyImageHighlight.SetActive(false);
+			MonkeyImage.SetActive(true);
+		}
 	}
 
 

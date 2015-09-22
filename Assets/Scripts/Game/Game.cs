@@ -335,7 +335,7 @@ public class Game : MonoBehaviour
 
 
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
 //		File.Delete( Application.persistentDataPath + "/kidList.txt");
@@ -344,8 +344,8 @@ public class Game : MonoBehaviour
 //
 //		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
 
-		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
-		dataDir.Delete(true);
+//		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
+//		dataDir.Delete(true);
 
 
 		m_request = new RequestQueue ();
@@ -679,6 +679,21 @@ public class Game : MonoBehaviour
 		m_gameController.changeState(ZoodleState.BIRTHYEAR);
 	
 	}
+
+
+	public bool checkInternet()
+	{
+		if (Application.internetReachability == NetworkReachability.NotReachable
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
+		{
+			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			
+			return false;
+		}
+		return true;
+	}
+
 
 	
 	//end

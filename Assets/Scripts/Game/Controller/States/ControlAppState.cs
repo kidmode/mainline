@@ -498,11 +498,10 @@ public class ControlAppState : GameState
 
 	private bool checkInternet()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable || KidMode.isAirplaneModeOn())
+		if (Application.internetReachability == NetworkReachability.NotReachable 
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
 		{
-			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
-			
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 			return false;
 		}
 		return true;
