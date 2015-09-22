@@ -20,6 +20,8 @@ public class RegionAppCanvas: UICanvas
 		_setupList();
 
 		setScrollView ();
+
+		KidModeScrollViewUpdator.OnScrollViewValueChanged+= OnScrollViewValueChanged;
 	}
 	
 	public void setupLocalization()
@@ -45,7 +47,9 @@ public class RegionAppCanvas: UICanvas
 //		l_year.text = Localization.getString (Localization.TXT_23_LABEL_YEAR);
 //		l_month.text = Localization.getString (Localization.TXT_23_LABEL_MONTH);
 	}
-	
+
+
+
 //	public override void update()
 //	{
 //		base.update();
@@ -69,6 +73,11 @@ public class RegionAppCanvas: UICanvas
 		m_appSwipeList.setDrawFunction(onListDraw);
 	}
 
+
+	void OnScrollViewValueChanged(Vector2 rect){
+
+	}
+
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
 		UIButton l_button = p_element as UIButton;
@@ -81,6 +90,10 @@ public class RegionAppCanvas: UICanvas
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
 
+//		l_appImage.gameObject.SetActive(true);
+
+
+
 		if (l_appImage != null)
 			l_appImage.active = false;
 	
@@ -92,6 +105,8 @@ public class RegionAppCanvas: UICanvas
 		{
 			l_appName.active = true;
 		}
+
+//		return;
 
 		Vector2 l_textSize = l_appName.calcSize();
 		RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
