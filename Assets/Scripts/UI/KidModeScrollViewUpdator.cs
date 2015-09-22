@@ -62,6 +62,8 @@ public class KidModeScrollViewUpdator : MonoBehaviour {
 
 	void onValueChanged(Vector2 scrolRectPos){
 
+//		Debug.Log("  scrolRectPos " + scrolRectPos);
+
 		currPos = scrolRectPos;
 
 		updateChanges (scrolRectPos);
