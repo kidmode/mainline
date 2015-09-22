@@ -335,7 +335,7 @@ public class Game : MonoBehaviour
 
 
 		//honda
-		PlayerPrefs.DeleteAll();
+//		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
 //		File.Delete( Application.persistentDataPath + "/kidList.txt");
