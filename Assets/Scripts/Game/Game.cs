@@ -438,7 +438,6 @@ public class Game : MonoBehaviour
 	public void Update ()
 	{
 		if (mIsPlay) {
-			Debug.Log("@@@@@@@@@@@@@@@@@@@@@@Update");
 			int l_time = (int)(Time.deltaTime * 1000.0f);
 			Server.update(l_time);
 			m_gameController.update(l_time);
@@ -519,7 +518,7 @@ public class Game : MonoBehaviour
 		
 		Debug.LogWarning (" onAndroidResume " + info);
 		
-//		KidModeLockController.Instance.onAndroidResume ();
+		KidModeLockController.Instance.onAndroidResume ();
 		
 	}
 
