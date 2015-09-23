@@ -78,6 +78,26 @@
             </intent-filter>
         </receiver>
  -->
+ 
+         <!-- Add this to your AndroidManifest.xml -->
+        <!-- Specifies the Google Play Services version that the app was compiled with -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+       <receiver
+            android:name="com.swrve.unity.gcm.SwrveGcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.zoodles.ellipsiskids" />
+            </intent-filter>	
+        </receiver>
+
+        <service android:name="com.swrve.unity.gcm.SwrveGcmIntentService" />
+        
         <receiver android:name="com.onevcat.uniwebview.FOTAReceiver" >
             <intent-filter>
                 <action android:name="com.marvell.vdmc.alert.show" />
@@ -287,5 +307,11 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    
+        <!-- Add this to your AndroidManifest.xml -->
+    <permission
+        android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <!-- End of changes -->
 
 </manifest>

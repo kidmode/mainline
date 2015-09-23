@@ -1808,7 +1808,7 @@ MonoBehaviour:
     SendEventsIfBufferTooLarge: 1
     StoreDataInPlayerPrefs: 0
     PushNotificationEnabled: 1
-    GCMSenderId: 
+    GCMSenderId: 249368169554
     GCMPushNotificationTitle: '#Your App Title'
     AutoShowMessagesMaxDelay: 5
   FlushEventsOnApplicationQuit: 1
@@ -2665,6 +2665,14 @@ Prefab:
     - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: Config.GCMSenderId
+      value: 249368169554
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: Config.PushNotificationEnabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
