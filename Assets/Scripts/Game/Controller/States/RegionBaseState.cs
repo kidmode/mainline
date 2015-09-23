@@ -1430,11 +1430,19 @@ public class RegionBaseState : GameState
 		#endif
 
 		#if UNITY_EDITOR
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 60; i++) {
 
 			AppInfo info = new AppInfo();
 
-			info.appName ="test" + i;
+			for (int j = 0; j < i; j++) {
+
+				info.appName = info.appName + "t";
+
+			}
+
+			info.appName = info.appName + i;
+
+//			info.appName ="test " + i;
 
 			m_appList.Add( info );
 

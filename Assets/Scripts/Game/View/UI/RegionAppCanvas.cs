@@ -191,7 +191,17 @@ public class RegionAppCanvas: UICanvas
 			if (l_rawImage == null)
 	            return;
 
-			l_appName.text = l_info.appName;
+
+			if(appNameNeedTruncate(l_info.appName)){
+
+				l_appName.text = trucatedAppName(l_info.appName);
+
+			}else{
+
+				l_appName.text = l_info.appName;
+
+			}
+
 			if (l_appName.active == false)
 			{
 				l_appName.active = true;
@@ -241,6 +251,36 @@ public class RegionAppCanvas: UICanvas
 
 
 	}
+
+
+	#region AppNameTruncate
+
+	//Any app name over this length needs to be truncated
+	private int needTruncateLength = 37;
+	private bool appNameNeedTruncate(string name){
+
+		if(name.Length > needTruncateLength){
+
+			return true;
+
+		}
+
+		return false;
+
+
+	}
+
+	private string trucatedAppName(string name){
+
+		string preName = name.Substring(0, needTruncateLength -1 - 6);
+
+		string returnName = preName + " . . .";
+
+		return returnName;
+
+	}
+
+	#endregion
 //	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
 //	{
 //		UICanvas l_canvas = p_element as UICanvas;

@@ -336,7 +336,7 @@ public class Game : MonoBehaviour
 
 		#if UNITY_EDITOR
 		//honda
-		PlayerPrefs.DeleteAll();
+//		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
 //		File.Delete( Application.persistentDataPath + "/kidList.txt");
