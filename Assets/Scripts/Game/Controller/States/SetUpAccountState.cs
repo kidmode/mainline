@@ -83,9 +83,14 @@ public class SetUpAccountState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
+
+		m_createAccountButton.removeClickCallback( toCreateChildrenScreen );
+
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( UIScreen.LOADING_SPINNER_ELEPHANT );
 		p_gameController.getUI().removeScreenImmediately( UIScreen.SIGN_UP_AFTER_INPUT_CREDITCARD );
+
+
 	}
 	
 	
@@ -425,7 +430,7 @@ public class SetUpAccountState : GameState
 
 		if(l_emailPasses && l_passwordPasses)
 		{
-			p_button.removeClickCallback( toCreateChildrenScreen );
+//			p_button.removeClickCallback( toCreateChildrenScreen );
 
 			popupCheckParentBirth();
 

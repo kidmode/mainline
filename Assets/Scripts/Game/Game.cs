@@ -334,6 +334,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 
+		#if UNITY_EDITOR
 		//honda
 //		PlayerPrefs.DeleteAll();
 //
@@ -346,6 +347,7 @@ public class Game : MonoBehaviour
 
 //		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 //		dataDir.Delete(true);
+		#endif
 
 
 		m_request = new RequestQueue ();
