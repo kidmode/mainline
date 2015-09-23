@@ -256,7 +256,7 @@ public class RegionAppCanvas: UICanvas
 	#region AppNameTruncate
 
 	//Any app name over this length needs to be truncated
-	private int needTruncateLength = 37;
+	private int needTruncateLength = 17;
 	private bool appNameNeedTruncate(string name){
 
 		if(name.Length > needTruncateLength){
@@ -272,7 +272,7 @@ public class RegionAppCanvas: UICanvas
 
 	private string trucatedAppName(string name){
 
-		string preName = name.Substring(0, needTruncateLength -1 - 6);
+		string preName = name.Substring(0, needTruncateLength);
 
 		string returnName = preName + " . . .";
 
