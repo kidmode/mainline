@@ -543,14 +543,17 @@ public class RegionBaseState : GameState
 	
 	private void _handleDynamicActivities()
 	{
-//		if (m_createActivity == ActivityType.AppList)
-//		{
-//			Debug.Log("spinner: 8. _handleDynamicActivities");
-//			
-//			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
-//			m_createActivity = ActivityType.None;
-//			m_currentActivityCanvas = m_videoActivityCanvas;
-//			
+		if (m_createActivity == ActivityType.AppList)
+		{
+			Debug.Log("spinner: 8. _handleDynamicActivities");
+			
+			m_regionAppCanvas = m_gameController.getUI().createScreen(UIScreen.REGION_APP, true, LAYER_GAME);
+
+			this._setupAppContentList();
+
+			m_createActivity = ActivityType.None;
+			m_currentActivityCanvas = m_regionAppCanvas;
+			
 //			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
 //			m_videoSwipeList.setData(m_videoViewList);
 //			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
@@ -560,7 +563,7 @@ public class RegionBaseState : GameState
 //			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
 //			
 //			
-//			//Get Scroll view updator
+//			//Get Scroll view updator and set its data so we know its data size
 //			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 //			viewUpdator.setContentDataSize(m_videoViewList.Count);
 //			
@@ -583,7 +586,7 @@ public class RegionBaseState : GameState
 //				UILabel l_favorateInfoLabel = m_videoActivityCanvas.getView("favoriteInfo") as UILabel;
 //				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
 //			}
-//		}
+		}
 
 		if (m_createActivity == ActivityType.Video)
 		{
@@ -960,8 +963,8 @@ public class RegionBaseState : GameState
 		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
 		    && p_toggles == true)
 		{
-//			m_nextActivity = ActivityType.AppList;
-			m_nextActivity = ActivityType.Video;
+			m_nextActivity = ActivityType.AppList;
+//			m_nextActivity = ActivityType.Video;
 			SwrveComponent.Instance.SDK.NamedEvent("Tab.AppList");
 
 			Debug.Log("     +++++    appListCallBack ");
@@ -1816,6 +1819,9 @@ public class RegionBaseState : GameState
 	private List<object> m_appList = new List<object>();
 
 	// end vzw
+
+	//Kevin Add new app list Canvas , there is already m_regionAppCanvas but make sure there is no problems so addding a new one
+	protected UICanvas m_appListCanvas;
 
 
 	protected UICanvas 	m_regionLandingCanvas;
