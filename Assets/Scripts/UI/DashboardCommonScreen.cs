@@ -11,12 +11,43 @@ public class DashboardCommonScreen : MonoBehaviour {
 //	[SerializeField]
 	private Game game;
 
+//	public static DashboardCommonScreen Instance;
+//
+	public UICanvas tableSettingsCanvas;
+//
+//	void Awake(){
+//
+//		Instance = this;
+//
+//	}
+
 	// Use this for initialization
 	void Start () 
 	{
 		updateToggleButtons ();
 		GameObject gameLogic = GameObject.FindWithTag("GameController");
 		game = gameLogic.GetComponent<Game>();
+	}
+
+	void Update()
+	{
+
+		if( null != tableSettingsCanvas )
+		{
+			
+			if(null != tableSettingsCanvas.getView("panel")){
+				
+				if( !tableSettingsCanvas.getView("panel").active){
+					
+					Tweener tw = tableSettingsCanvas.getView("panel").tweener;
+					
+					tw.addAlphaTrack( 0.0f, 1.0f, 0.2f );
+				}
+				
+			}
+			
+		}
+
 	}
 
 	void updateToggleButtons()
@@ -59,7 +90,7 @@ public class DashboardCommonScreen : MonoBehaviour {
 	{
 		if (game != null) 
 		{
-			game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false, 6);
+			tableSettingsCanvas = game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false, 6);
 		}
 	}
 }
