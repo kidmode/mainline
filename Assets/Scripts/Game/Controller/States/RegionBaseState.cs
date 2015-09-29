@@ -459,7 +459,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
+//		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
 	private void _setupElements(GameController p_gameController)
@@ -468,9 +468,9 @@ public class RegionBaseState : GameState
 
 		// Sean: vzw
 //		m_speechBubble.active = false;
-		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
-
-		this._setupAppContentList();
+//		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+//
+//		this._setupAppContentList();
 		// end vzw
 
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
@@ -1200,10 +1200,15 @@ public class RegionBaseState : GameState
 		m_mapButton.tweener.addPositionTrack(l_mapPositions, ZoodlesScreenFactory.FADE_SPEED);
 
 		// Sean: vzw
-		m_regionAppCanvas.active = true;
-		m_regionAppCanvas.canvasGroup.interactable = true;
-		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
+//		m_regionAppCanvas.active = true;
+//		m_regionAppCanvas.canvasGroup.interactable = true;
+//		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
 		// end vzw
+		m_transitioning = false;
+		m_activityPanelCanvas.canvasGroup.interactable = true;
+		m_cornerProfileCanvas.canvasGroup.interactable = true;
+
+
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
 
@@ -1284,8 +1289,8 @@ public class RegionBaseState : GameState
 			m_cornerProfileCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
 
 			// Sean: vzw
-			m_regionAppCanvas.canvasGroup.interactable = false;
-			m_regionAppCanvas.active = false;
+//			m_regionAppCanvas.canvasGroup.interactable = false;
+//			m_regionAppCanvas.active = false;
 		}
 		else
 		{
