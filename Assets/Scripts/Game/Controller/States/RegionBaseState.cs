@@ -549,6 +549,8 @@ public class RegionBaseState : GameState
 			
 			m_regionAppCanvas = m_gameController.getUI().createScreen(UIScreen.REGION_APP, true, LAYER_GAME);
 
+			m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+
 			this._setupAppContentList();
 
 			m_createActivity = ActivityType.None;
