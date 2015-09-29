@@ -1500,10 +1500,12 @@ public class RegionBaseState : GameState
 		List<object> l_list = KidMode.getSelectedAppsSorted();
 		foreach (AppInfo l_app in l_list)
 		{
-			m_appList.Add(l_app);
+			if(! m_appList.Contains(l_app))
+				m_appList.Add(l_app);
 		}
 		#endif
 
+			  
 		#if UNITY_EDITOR
 		for (int i = 0; i < 60; i++) {
 
