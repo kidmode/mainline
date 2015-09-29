@@ -372,7 +372,7 @@ public class KidMode
 					continue;
 				}
 			}
-			if( l_packageName.Equals("com.zoodles.ellipsiskids") )
+			if( l_packageName.Equals("com.zoodles.kidmode") )
 			{
 				continue;
 			}
