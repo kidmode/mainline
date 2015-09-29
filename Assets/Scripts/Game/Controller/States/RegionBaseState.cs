@@ -1430,15 +1430,32 @@ public class RegionBaseState : GameState
 		#endif
 
 		#if UNITY_EDITOR
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 60; i++) {
 
-			m_appList.Add( new AppInfo() );
+			AppInfo info = new AppInfo();
+
+			for (int j = 0; j < i; j++) {
+
+				info.appName = info.appName + "t";
+
+			}
+
+			info.appName = info.appName + i;
+
+//			info.appName ="test " + i;
+
+			m_appList.Add( info );
 
 		}
 		#endif
 
 		m_appSwipeList.setData(m_appList);
 		m_appSwipeList.addClickListener("Prototype", onAppClicked);
+
+		KidModeScrollViewUpdator scrollUpdator = m_appSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+
+		scrollUpdator.getAppButtonList();
+
 	}
 	// end vzw
 

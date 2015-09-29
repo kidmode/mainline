@@ -17,6 +17,13 @@ public class SignInState : GameState
 
 	public override void enter(GameController p_gameController)
 	{
+		//Kev
+		UIManager l_ui = p_gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		//Kev
+
 		base.enter(p_gameController);
 		m_controller = p_gameController;
 		m_subState = SubState.NONE;

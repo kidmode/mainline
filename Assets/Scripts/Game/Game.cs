@@ -334,6 +334,7 @@ public class Game : MonoBehaviour
  		// vzw end
 
 
+		#if UNITY_EDITOR
 		//honda
 //		PlayerPrefs.DeleteAll();
 //
@@ -346,7 +347,8 @@ public class Game : MonoBehaviour
 
 //		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 //		dataDir.Delete(true);
-//		Debug.Log(" 0000000000000000000000000000  Application.persistentDataPath  " + Application.persistentDataPath);
+		#endif
+
 
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
@@ -636,7 +638,7 @@ public class Game : MonoBehaviour
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
 		Debug.Log("spinner: start webcontent request");
 
-		Invoke("startWebContentRequest", 1);
+		Invoke("startWebContentRequest", 10);
 	}
 
 	private void startWebContentRequest()
@@ -656,7 +658,7 @@ public class Game : MonoBehaviour
 	private void fetchDrawingList()
 	{
 		Debug.Log("spinner: start drawing request");
-		Invoke("startDrawingRequest", 1);
+		Invoke("startDrawingRequest", 10);
 	}
 
 	private void startDrawingRequest()
@@ -666,11 +668,6 @@ public class Game : MonoBehaviour
 
 	public void callParentGate()
 	{
-		if (!checkInternet ())
-		{
-			return;
-		}
-
 		UIManager l_ui = m_gameController.getUI();
 		UICanvas l_backScreen = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
 		if (l_backScreen == null)
@@ -684,6 +681,7 @@ public class Game : MonoBehaviour
 	
 	}
 
+
 	public bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable
@@ -696,6 +694,7 @@ public class Game : MonoBehaviour
 		}
 		return true;
 	}
+
 
 	
 	//end
