@@ -166,7 +166,8 @@ public class RegionBaseState : GameState
 		Video,
 		Game,
 		Books,
-		Fun
+		Fun,
+		AppList
 	}
 
 	protected enum SubState
@@ -177,7 +178,8 @@ public class RegionBaseState : GameState
 		GO_VIDEO,
 		GO_GAME,
 		GO_BOOKS,
-		GO_PAINT
+		GO_PAINT,
+		GO_APPLIST
 	}
 
 
@@ -292,6 +294,9 @@ public class RegionBaseState : GameState
 			case SubState.GO_PAINT:
 				_changeToPaintActivity(p_gameController);
 				break;
+//			case SubState:
+//				_changeToPaintActivity(p_gameController);
+//				break;
 			}
 
 			m_subState = SubState.None;
@@ -483,6 +488,11 @@ public class RegionBaseState : GameState
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
 
+		m_appListButton = m_activityPanelCanvas.getView("appListButton") as UIToggle;
+		m_appListButton.addValueChangedCallback(appListCallBack);
+		m_appListButton.addValueChangedCallback(onActivityToggleClicked);
+		//appListCallBack
+
 		m_videoButton = m_activityPanelCanvas.getView("videoButton") as UIToggle;
 		m_videoButton.addValueChangedCallback(videoCallback);
 		m_videoButton.addValueChangedCallback(onActivityToggleClicked);
@@ -533,6 +543,48 @@ public class RegionBaseState : GameState
 	
 	private void _handleDynamicActivities()
 	{
+//		if (m_createActivity == ActivityType.AppList)
+//		{
+//			Debug.Log("spinner: 8. _handleDynamicActivities");
+//			
+//			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
+//			m_createActivity = ActivityType.None;
+//			m_currentActivityCanvas = m_videoActivityCanvas;
+//			
+//			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
+//			m_videoSwipeList.setData(m_videoViewList);
+//			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+//			
+//			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
+//			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
+//			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
+//			
+//			
+//			//Get Scroll view updator
+//			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_videoViewList.Count);
+//			
+//			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
+//			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
+//			
+//			if( true == l_videoInfo.active && m_linkLoaded )
+//			{
+//				l_videoInfo.text = Localization.getString(Localization.TXT_11_LABEL_INFO);
+//			}
+//			
+//			//honda: comment out because we remove feature toy box
+//			//			if (m_videoFeatured != null)
+//			//			{
+//			//				m_videoFeatured.retriveIcon(setFeatureImageVideo);
+//			//			}
+//			
+//			if( m_videoFavoritesList.Count <= 0 )
+//			{
+//				UILabel l_favorateInfoLabel = m_videoActivityCanvas.getView("favoriteInfo") as UILabel;
+//				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
+//			}
+//		}
+
 		if (m_createActivity == ActivityType.Video)
 		{
 			Debug.Log("spinner: 8. _handleDynamicActivities");
@@ -900,6 +952,19 @@ public class RegionBaseState : GameState
 		{
 //			p_gameController.connectState(ZoodleState.PAINT_VIEW, ZoodleState.REGION_FUN);
 			p_gameController.changeState(ZoodleState.PAINT_VIEW);
+		}
+	}
+
+	private void appListCallBack(UIToggle p_element, bool p_toggles)
+	{
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
+		{
+//			m_nextActivity = ActivityType.AppList;
+			m_nextActivity = ActivityType.Video;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.AppList");
+
+			Debug.Log("     +++++    appListCallBack ");
 		}
 	}
 	
@@ -1772,7 +1837,8 @@ public class RegionBaseState : GameState
 //	protected UIButton  m_speechBubble;
 	protected UIButton 	m_profileButton;
 	protected UIButton	m_quitMessageButton;
-	
+
+	protected UIToggle  m_appListButton;
 	protected UIToggle	m_videoButton;
 	protected UIToggle 	m_gamesButton;
 	protected UIToggle	m_booksButton;

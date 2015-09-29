@@ -15,6 +15,9 @@ public class ActivityPanelCanvas : UICanvas
 	{
 		base.init( p_gameObject );
 		//tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+
+		m_videoToggle 	= getView( "appListButton" ) as UIToggle;
+		m_videoToggle.addValueChangedCallback( onToggleChanged );
 	
 		m_videoToggle 	= getView( "videoButton" ) as UIToggle;
 		m_videoToggle.addValueChangedCallback( onToggleChanged );
