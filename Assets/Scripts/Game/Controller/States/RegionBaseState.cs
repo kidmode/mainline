@@ -464,7 +464,7 @@ public class RegionBaseState : GameState
 	
 	private void _setupElements(GameController p_gameController)
 	{
-//		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
+		m_speechBubble = m_regionLandingCanvas.getView("speechBubble") as UIButton;
 
 		// Sean: vzw
 //		m_speechBubble.active = false;
@@ -519,9 +519,9 @@ public class RegionBaseState : GameState
 		m_triggers.Clear();
 		// Sean: vzw
 //		if (false) {
-//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
-//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
-//			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
 //		} 
 		// vzw end
 
@@ -1849,7 +1849,7 @@ public class RegionBaseState : GameState
 	
 	protected UIButton	m_backButton;
 	protected UIButton 	m_mapButton;
-//	protected UIButton  m_speechBubble;
+	protected UIButton  m_speechBubble;
 	protected UIButton 	m_profileButton;
 	protected UIButton	m_quitMessageButton;
 
