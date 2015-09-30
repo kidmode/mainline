@@ -166,7 +166,8 @@ public class RegionBaseState : GameState
 		Video,
 		Game,
 		Books,
-		Fun
+		Fun,
+		AppList
 	}
 
 	protected enum SubState
@@ -177,7 +178,8 @@ public class RegionBaseState : GameState
 		GO_VIDEO,
 		GO_GAME,
 		GO_BOOKS,
-		GO_PAINT
+		GO_PAINT,
+		GO_APPLIST
 	}
 
 
@@ -292,6 +294,9 @@ public class RegionBaseState : GameState
 			case SubState.GO_PAINT:
 				_changeToPaintActivity(p_gameController);
 				break;
+//			case SubState:
+//				_changeToPaintActivity(p_gameController);
+//				break;
 			}
 
 			m_subState = SubState.None;
@@ -454,7 +459,7 @@ public class RegionBaseState : GameState
 		m_regionBackgroundCanvas = l_ui.createScreen(UIScreen.REGION_LANDING_BACKGROUND, true, 0);
 
 		// Sean: vzw
-		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
+//		m_regionAppCanvas = l_ui.createScreen(UIScreen.REGION_APP, true, 4);
 	}
 	
 	private void _setupElements(GameController p_gameController)
@@ -463,9 +468,9 @@ public class RegionBaseState : GameState
 
 		// Sean: vzw
 //		m_speechBubble.active = false;
-		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
-
-		this._setupAppContentList();
+//		m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+//
+//		this._setupAppContentList();
 		// end vzw
 
 		m_mapButton = m_regionLandingCanvas.getView("mapsButton") as UIButton;
@@ -482,6 +487,11 @@ public class RegionBaseState : GameState
 
 		m_background = m_regionBackgroundCanvas.getView("background");
 		m_foreground = m_regionLandingCanvas.getView("foreground");
+
+		m_appListButton = m_activityPanelCanvas.getView("appListButton") as UIToggle;
+		m_appListButton.addValueChangedCallback(appListCallBack);
+		m_appListButton.addValueChangedCallback(onActivityToggleClicked);
+		//appListCallBack
 
 		m_videoButton = m_activityPanelCanvas.getView("videoButton") as UIToggle;
 		m_videoButton.addValueChangedCallback(videoCallback);
@@ -533,6 +543,53 @@ public class RegionBaseState : GameState
 	
 	private void _handleDynamicActivities()
 	{
+		if (m_createActivity == ActivityType.AppList)
+		{
+			Debug.Log("spinner: 8. _handleDynamicActivities");
+			
+			m_regionAppCanvas = m_gameController.getUI().createScreen(UIScreen.REGION_APP, true, LAYER_GAME);
+
+			m_appSwipeList = m_regionAppCanvas.getView("appScrollView") as UISwipeList;
+
+			this._setupAppContentList();
+
+			m_createActivity = ActivityType.None;
+			m_currentActivityCanvas = m_regionAppCanvas;
+			
+//			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
+//			m_videoSwipeList.setData(m_videoViewList);
+//			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+//			
+//			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
+//			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
+//			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
+//			
+//			
+//			//Get Scroll view updator and set its data so we know its data size
+//			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_videoViewList.Count);
+//			
+//			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
+//			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
+//			
+//			if( true == l_videoInfo.active && m_linkLoaded )
+//			{
+//				l_videoInfo.text = Localization.getString(Localization.TXT_11_LABEL_INFO);
+//			}
+//			
+//			//honda: comment out because we remove feature toy box
+//			//			if (m_videoFeatured != null)
+//			//			{
+//			//				m_videoFeatured.retriveIcon(setFeatureImageVideo);
+//			//			}
+//			
+//			if( m_videoFavoritesList.Count <= 0 )
+//			{
+//				UILabel l_favorateInfoLabel = m_videoActivityCanvas.getView("favoriteInfo") as UILabel;
+//				l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
+//			}
+		}
+
 		if (m_createActivity == ActivityType.Video)
 		{
 			Debug.Log("spinner: 8. _handleDynamicActivities");
@@ -902,6 +959,19 @@ public class RegionBaseState : GameState
 			p_gameController.changeState(ZoodleState.PAINT_VIEW);
 		}
 	}
+
+	private void appListCallBack(UIToggle p_element, bool p_toggles)
+	{
+		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		    && p_toggles == true)
+		{
+			m_nextActivity = ActivityType.AppList;
+//			m_nextActivity = ActivityType.Video;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.AppList");
+
+			Debug.Log("     +++++    appListCallBack ");
+		}
+	}
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
@@ -1130,10 +1200,15 @@ public class RegionBaseState : GameState
 		m_mapButton.tweener.addPositionTrack(l_mapPositions, ZoodlesScreenFactory.FADE_SPEED);
 
 		// Sean: vzw
-		m_regionAppCanvas.active = true;
-		m_regionAppCanvas.canvasGroup.interactable = true;
-		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
+//		m_regionAppCanvas.active = true;
+//		m_regionAppCanvas.canvasGroup.interactable = true;
+//		m_regionAppCanvas.tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED, onToLeftRegionTweenAndAppListFadedIn);
 		// end vzw
+		m_transitioning = false;
+		m_activityPanelCanvas.canvasGroup.interactable = true;
+		m_cornerProfileCanvas.canvasGroup.interactable = true;
+
+
 
 		m_foregroundGafGroup.gameObject.SetActive (true);
 
@@ -1214,8 +1289,8 @@ public class RegionBaseState : GameState
 			m_cornerProfileCanvas.tweener.addAlphaTrack(1.0f, 0.0f, ZoodlesScreenFactory.FADE_SPEED);
 
 			// Sean: vzw
-			m_regionAppCanvas.canvasGroup.interactable = false;
-			m_regionAppCanvas.active = false;
+//			m_regionAppCanvas.canvasGroup.interactable = false;
+//			m_regionAppCanvas.active = false;
 		}
 		else
 		{
@@ -1425,10 +1500,12 @@ public class RegionBaseState : GameState
 		List<object> l_list = KidMode.getSelectedAppsSorted();
 		foreach (AppInfo l_app in l_list)
 		{
-			m_appList.Add(l_app);
+			if(! m_appList.Contains(l_app))
+				m_appList.Add(l_app);
 		}
 		#endif
 
+			  
 		#if UNITY_EDITOR
 		for (int i = 0; i < 60; i++) {
 
@@ -1752,6 +1829,9 @@ public class RegionBaseState : GameState
 
 	// end vzw
 
+	//Kevin Add new app list Canvas , there is already m_regionAppCanvas but make sure there is no problems so addding a new one
+	protected UICanvas m_appListCanvas;
+
 
 	protected UICanvas 	m_regionLandingCanvas;
 	protected UICanvas 	m_activityPanelCanvas;
@@ -1772,7 +1852,8 @@ public class RegionBaseState : GameState
 //	protected UIButton  m_speechBubble;
 	protected UIButton 	m_profileButton;
 	protected UIButton	m_quitMessageButton;
-	
+
+	protected UIToggle  m_appListButton;
 	protected UIToggle	m_videoButton;
 	protected UIToggle 	m_gamesButton;
 	protected UIToggle	m_booksButton;

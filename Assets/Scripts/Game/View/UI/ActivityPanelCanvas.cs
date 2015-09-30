@@ -15,6 +15,9 @@ public class ActivityPanelCanvas : UICanvas
 	{
 		base.init( p_gameObject );
 		//tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
+
+		m_appTogle 	= getView( "appListButton" ) as UIToggle;
+		m_appTogle.addValueChangedCallback( onToggleChanged );
 	
 		m_videoToggle 	= getView( "videoButton" ) as UIToggle;
 		m_videoToggle.addValueChangedCallback( onToggleChanged );
@@ -135,6 +138,10 @@ public class ActivityPanelCanvas : UICanvas
 
 	private void SetupLocalizition()
     {
+		//Kev, new tab
+		UILabel l_appLabel    = m_appTogle.getView("titleLabel") as UILabel;
+		//End
+
         UILabel l_videoLabel    = m_videoToggle.getView("titleLabel") as UILabel;
         UILabel l_gamesLabel    = m_gamesToggle.getView("titleLabel") as UILabel;
         UILabel l_booksLabel    = m_booksToggle.getView("titleLabel") as UILabel;
@@ -144,9 +151,14 @@ public class ActivityPanelCanvas : UICanvas
 		l_videoLabel.text       = Localization.getString(Localization.TXT_LABEL_VIDEOS);
 		l_booksLabel.text       = Localization.getString(Localization.TXT_LABEL_BOOKS);
 		l_funLabel.text         = Localization.getString(Localization.TXT_LABEL_ACTIVITIES);
+
+		//Kev, new tab
+		l_appLabel.text 				= Localization.getString(Localization.TXT_TAB_APPLIST); 
+		//End
     }
 
 
+	private UIToggle m_appTogle;
 	private UIToggle m_videoToggle;
 	private UIToggle m_gamesToggle;
 	private UIToggle m_booksToggle;

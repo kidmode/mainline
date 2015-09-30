@@ -50,7 +50,7 @@ public class CornerProfileCanvas : UICanvas
 //		m_starMeter.sizeDelta	= new Vector2(m_kid.stars * 150.0f / ServerSettings.getInstance().levels.getLevelPoints(m_kid.level + 1), 37.0f);
 
 		//Set it to non-dynamic so it doesn't cover the menu
-		m_starMeter.sizeDelta	= new Vector2(525 * 150.0f / ServerSettings.getInstance().levels.getLevelPoints(25 + 1), 37.0f);
+		m_starMeter.sizeDelta	= new Vector2(525 * 125.0f / ServerSettings.getInstance().levels.getLevelPoints(25 + 1), 37.0f);
 	}
 	
 	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
