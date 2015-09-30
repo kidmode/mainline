@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zoodles.ellipsiskids"
+    package="com.zoodles.kidmode"
     android:installLocation="preferExternal"
     android:versionCode="4"
     android:versionName="1.0.1" >
@@ -17,13 +17,13 @@
         android:targetSdkVersion="21" />
 
     <permission
-        android:name="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
+        android:name="com.zoodles.kidmode.permission.READ_SETTINGS"
         android:protectionLevel="signatureOrSystem" />
     <permission
-        android:name="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS"
+        android:name="com.zoodles.kidmode.permission.WRITE_SETTINGS"
         android:protectionLevel="signatureOrSystem" />
     <permission
-        android:name="com.zoodles.ellipsiskids.permission.READ_HTC"
+        android:name="com.zoodles.kidmode.permission.READ_HTC"
         android:protectionLevel="signatureOrSystem" />
 
     <uses-feature
@@ -50,16 +50,16 @@
     <uses-feature android:glEsVersion="0x00020000" />
 
     <application
-        android:name="com.zoodles.ellipsiskids.App"
+        android:name="com.zoodles.kidmode.App"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:hasCode="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-        <service android:name="com.zoodles.ellipsiskids.service.KeepAliveService" />
-        <service android:name="com.zoodles.ellipsiskids.service.GlobalTouchDenyService" />
+        <service android:name="com.zoodles.kidmode.service.KeepAliveService" />
+        <service android:name="com.zoodles.kidmode.service.GlobalTouchDenyService" />
         <service
-            android:name="com.zoodles.ellipsiskids.service.NativeAppService"
+            android:name="com.zoodles.kidmode.service.NativeAppService"
             android:enabled="true"
             android:exported="false" />
 
@@ -92,7 +92,7 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.zoodles.ellipsiskids" />
+                <category android:name="com.zoodles.kidmode" />
             </intent-filter>	
         </receiver>
 
@@ -113,7 +113,7 @@
         <!-- For OOB loader end -->
 
         <activity
-            android:name="com.zoodles.ellipsiskids.activity.LauncherActivity"
+            android:name="com.zoodles.kidmode.activity.LauncherActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -183,7 +183,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.zoodles.ellipsiskids.activity.parent.ParentDashboardLauncherActivity"
+            android:name="com.zoodles.kidmode.activity.parent.ParentDashboardLauncherActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -194,7 +194,7 @@
             >
         </activity>
         <activity
-            android:name="com.zoodles.ellipsiskids.activity.kid.exit.ExitAppActivity"
+            android:name="com.zoodles.kidmode.activity.kid.exit.ExitAppActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -254,11 +254,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 
         <activity-alias
-            android:name="com.zoodles.ellipsiskids"
+            android:name="com.zoodles.kidmode"
             android:exported="true"
             android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" />
         <activity-alias
-            android:name="com.zoodles.ellipsiskids.ZoodlesHome"
+            android:name="com.zoodles.kidmode.ZoodlesHome"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -272,11 +272,11 @@
         </activity-alias>
 
         <provider
-            android:name="com.zoodles.ellipsiskids.provider.SettingsProvider"
-            android:authorities="com.zoodles.ellipsiskids.provider.settings"
+            android:name="com.zoodles.kidmode.provider.SettingsProvider"
+            android:authorities="com.zoodles.kidmode.provider.settings"
             android:exported="true"
-            android:readPermission="com.zoodles.ellipsiskids.permission.READ_SETTINGS"
-            android:writePermission="com.zoodles.ellipsiskids.permission.WRITE_SETTINGS" />
+            android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS"
+            android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" />
     </application>
 
     <uses-permission android:name="android.permission.WRITE_SESET_PREFERRED_APPLICATIONSTTINGS" />
@@ -300,7 +300,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.zoodles.kidmode.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.DEVICE_POWER"/>
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -310,7 +310,7 @@
     
         <!-- Add this to your AndroidManifest.xml -->
     <permission
-        android:name="com.zoodles.ellipsiskids.permission.C2D_MESSAGE"
+        android:name="com.zoodles.kidmode.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <!-- End of changes -->
 

@@ -871,7 +871,7 @@ public class Localization : object
 			break;
 		case SystemLanguage.Chinese :
 			#if UNITY_ANDROID && !UNITY_EDITOR
-			AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.ellipsiskids.features.DeviceInfo" );
+			AndroidJavaObject l_DI = new AndroidJavaObject ( "com.zoodles.kidmode.features.DeviceInfo" );
 			string l_locale = l_DI.Call<string>("getLanguage");
 
 			switch ( l_locale )
