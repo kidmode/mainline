@@ -10,7 +10,7 @@ public class CrittercismInit : MonoBehaviour
 	/// See the Crittercism portal https://app.crittercism.com/
 	/// </summary>
 	/// <example>A real app ID looks like this:  5671d3b6f7c78a7243000a05</example>
-	private const string CrittercismAppID = "5580f2c0d247870a1a30a59c";
+	private const string CrittercismAppID = "55b74e8ba046e30a00dc2ac9";
 
 	void Awake ()
 	{
