@@ -521,7 +521,7 @@ public class RegionBaseState : GameState
 //		if (false) {
 			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("monkeyTrigger") as UIButton, m_regionLandingCanvas.getView("Monkey_Anim") as UIMovieClip));
 			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("snakeTrigger") as UIButton, m_regionLandingCanvas.getView("Snake_Anim") as UIMovieClip));
-			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger1") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim1") as UIMovieClip));
+			m_triggers.Add(new AnimationTrigger(m_regionLandingCanvas.getView("toucanTrigger") as UIButton, m_regionLandingCanvas.getView("Toucan_Anim") as UIMovieClip));
 //		} 
 		// vzw end
 
