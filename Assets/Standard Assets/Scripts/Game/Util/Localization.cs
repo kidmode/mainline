@@ -745,6 +745,9 @@ public class Localization : object
 	public const string TXT_CPB_POPUP_MONTH = "TXT_CPB_POPUP_MONTH";
 	public const string TXT_CPB_POPUP_DAY = "TXT_CPB_POPUP_DAY";
 	public const string TXT_CPB_POPUP_OK_BTN = "TXT_CPB_POPUP_OK_BTN";
+
+	//Kevin new tab
+	public const string TXT_TAB_APPLIST             = "TXT_TAB_APPLIST";
 	
 	private string m_currLanguage   = "EN";
 	
