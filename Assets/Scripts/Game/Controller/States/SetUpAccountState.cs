@@ -466,17 +466,33 @@ public class SetUpAccountState : GameState
 		}
 	}
 
+
+
 	private void popupCheckParentBirth()
 	{
-		m_gameController.getUI().createScreen(UIScreen.PARENT_BIRTH_CHECK, false, 7);		
 
-		CheckParentBirthPopup parentBirthPop = GameObject.FindWithTag("CheckParentBirthTag").GetComponent<CheckParentBirthPopup>() as CheckParentBirthPopup;
-		if (parentBirthPop != null)
-			parentBirthPop.onClick += onCreateAccountClicked;
+		if(m_agePopPanelObject == null){
+
+			m_agePopPanelObject = m_gameController.getUI().createScreen(UIScreen.PARENT_BIRTH_CHECK, false, 7).gameObject;	
+
+			GameObject[] findObjects = GameObject.FindGameObjectsWithTag("CheckParentBirthTag");
+			Debug.Log(" findObjects " + findObjects.Length);
+
+			CheckParentBirthPopup parentBirthPop = GameObject.FindWithTag("CheckParentBirthTag").GetComponent<CheckParentBirthPopup>() as CheckParentBirthPopup;
+			if (parentBirthPop != null)
+				parentBirthPop.onClick += onCreateAccountClicked;
+
+		}
+
 	}
 
 	private void onCreateAccountClicked(bool successful)
 	{
+
+		CheckParentBirthPopup parentBirthPop = GameObject.FindWithTag("CheckParentBirthTag").GetComponent<CheckParentBirthPopup>() as CheckParentBirthPopup;
+
+		parentBirthPop.onClick -= onCreateAccountClicked;
+
 		if (successful) 
 		{
 			changeToState = ScreenChange.NextScreen;
@@ -619,4 +635,7 @@ public class SetUpAccountState : GameState
 	private UILabel 	m_pwdText;
 
 	private ScreenChange changeToState = ScreenChange.None;
+
+	[SerializeField]
+	private GameObject m_agePopPanelObject;
 }

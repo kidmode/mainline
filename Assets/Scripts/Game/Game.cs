@@ -336,14 +336,14 @@ public class Game : MonoBehaviour
 
 		#if UNITY_EDITOR
 		//honda
-//		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteAll();
 //
 //		//Kev .... for deleting kid files
-//		File.Delete( Application.persistentDataPath + "/kidList.txt");
-//
-//		File.Delete( Application.persistentDataPath + "/kidList_temp.txt");
-//
-//		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
+		File.Delete( Application.persistentDataPath + "/kidList.txt");
+
+		File.Delete( Application.persistentDataPath + "/kidList_temp.txt");
+
+		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
 
 //		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 //		dataDir.Delete(true);
