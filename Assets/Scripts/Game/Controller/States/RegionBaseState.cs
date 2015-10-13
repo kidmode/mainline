@@ -1741,12 +1741,12 @@ public class RegionBaseState : GameState
 		_cleanUpWebContent(m_videoSwipeList);
 
 		// Sean: vzw
-		List<System.Object> data = m_appSwipeList.getData();
-		foreach (System.Object o in data)
-		{
-			AppInfo l_info = o as AppInfo;
-			l_info.dispose();
-		}
+//		List<System.Object> data = m_appSwipeList.getData();
+//		foreach (System.Object o in data)
+//		{
+//			AppInfo l_info = o as AppInfo;
+//			l_info.dispose();
+//		}
 
 		// end vzw
 	}
