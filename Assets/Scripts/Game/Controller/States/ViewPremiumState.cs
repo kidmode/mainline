@@ -117,7 +117,15 @@ public class ViewPremiumState : GameState
 	{
 		p_button.removeClickCallback (backToUpsell);
 		int l_state = m_gameController.getConnectedState ( ZoodleState.VIEW_PREMIUM );
-		m_game.gameController.changeState (l_state);
+		if (l_state == ZoodleState.SIGN_IN)
+		{
+			m_game.gameController.changeState(ZoodleState.PROFILE_SELECTION);
+		}
+		else
+		{
+			m_game.gameController.changeState(l_state);
+		}
+
 	}
 
 	private void gotoMonthlyPurchase( UIButton p_button )
