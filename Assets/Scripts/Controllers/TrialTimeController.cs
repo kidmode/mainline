@@ -57,7 +57,7 @@ public class TrialTimeController : MonoBehaviour {
 
 		if(!SessionHandler.getInstance().token.isPremium()){
 
-			if(SessionHandler.getInstance().token.isTried() && SessionHandler.getInstance().token.isCurrent()){
+			if(SessionHandler.getInstance().token.isTried() ){
 
 				return true;
 
@@ -83,13 +83,9 @@ public class TrialTimeController : MonoBehaviour {
 
 		Debug.Log("  currentTime - startTime).TotalMilliseconds " + (currentTime - startTime).TotalMilliseconds);
 
-		debugTxt.text = "  currentTime - startTime).TotalMilliseconds " + (currentTime - startTime).TotalMilliseconds;
+		if(debugTxt != null)
+			debugTxt.text = "  currentTime - startTime).TotalMilliseconds " + (currentTime - startTime).TotalMilliseconds;
 
-		Debug.Log("SessionHandler.getInstance().token.isPremium() " + SessionHandler.getInstance().token.isPremium());
-
-		Debug.Log("SessionHandler.getInstance().token.isTried() " + SessionHandler.getInstance().token.isTried());
-
-		Debug.Log("SessionHandler.getInstance().token.isCurrent() " + SessionHandler.getInstance().token.isCurrent());
 
 
 		//SessionHandler
@@ -99,6 +95,17 @@ public class TrialTimeController : MonoBehaviour {
 //		}
 
 	}
+
+	public void checkToken(){
+
+		Debug.Log("SessionHandler.getInstance().token.isPremium() " + SessionHandler.getInstance().token.isPremium());
+		
+		Debug.Log("SessionHandler.getInstance().token.isTried() " + SessionHandler.getInstance().token.isTried());
+		
+		Debug.Log("SessionHandler.getInstance().token.isCurrent() " + SessionHandler.getInstance().token.isCurrent());
+
+	}
+
 
 	public bool isTrialTimeExpired(){
 
@@ -128,11 +135,13 @@ public class TrialTimeController : MonoBehaviour {
 
 		Debug.Log("  saved start time " + startTime.ToString());
 
-		debugTxt.text = "  saved start time " + startTime.ToString();
+		if(debugTxt != null)
+			debugTxt.text = "  saved start time " + startTime.ToString();
 
 	}
 
 
+	private string focusTestTxt;
 	public void OnApplicationFocus(bool p_focus)
 	{
 
@@ -141,8 +150,43 @@ public class TrialTimeController : MonoBehaviour {
 
 			Debug.Log("  p_focus " + p_focus);
 
+			if(isTrialAccount()){
+
+				if(debugTxt != null)
+					debugTxt.text = " is Trial = true ";
+
+			}
+
+		}
+
+		focusTestTxt = focusTestTxt + " focused ";
+
+		debugTxt.text = focusTestTxt;
+
+	}
+
+	void OnApplicationPause(bool p_focus) {
+
+		if(!p_focus){
+
+			focusTestTxt = focusTestTxt + " paused ";
+
+			debugTxt.text = focusTestTxt;
+
 		}
 
 	}
+
+	#region ControlsFromOtherComponents
+
+	public void firstStartTrialTime(){
+
+		setTrialTimeStart();
+
+		saveTrialStartTimeLocal();
+
+	}
+
+	#endregion
 
 }

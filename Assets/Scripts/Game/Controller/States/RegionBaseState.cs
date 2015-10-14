@@ -148,6 +148,7 @@ public class RegionBaseState : GameState
 	protected const float BACKGROUND_SPEED = 0.13f;
 
 	private RequestQueue m_queue = null;
+	private RequestQueue m_trialPlanQueue = null;
 	private RequestQueue m_bookQueue = null;
 
 	private int LAYER_GAME = 5;
@@ -186,6 +187,8 @@ public class RegionBaseState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
+
+		m_gameController = p_gameController;
 		
 		m_regionState 	= RegionState.Left;
 		m_transitioning = false;
@@ -203,6 +206,12 @@ public class RegionBaseState : GameState
 		{
 			m_queue = new RequestQueue();
 		}
+
+		if (m_trialPlanQueue == null)
+		{
+			m_trialPlanQueue = new RequestQueue();
+		}
+
 
 		//honda: check timer
 		if (!TimerController.Instance.isRunning && !TimerController.Instance.timesUp)
@@ -226,6 +235,10 @@ public class RegionBaseState : GameState
 		SoundManager.getInstance().play("96", 0, 1, "", null, true);
 
 		GAUtil.logScreen("RegionLandingScreen");
+
+
+		checkTrialEnd(p_gameController);
+
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
@@ -797,6 +810,140 @@ public class RegionBaseState : GameState
 		m_videoFavoritesList.Clear();
 		m_funViewList.Clear();
 	}
+
+
+	#region TrialCheck
+	private void checkTrialEnd(GameController p_gameController){
+
+		if(TrialTimeController.Instance.isTrialAccount()){
+
+//			
+
+			if (Application.internetReachability == NetworkReachability.NotReachable 
+			    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()){
+
+				if(TrialTimeController.Instance.isTrialTimeExpired()){
+					createTrialEndMessage(p_gameController);
+				}
+
+			}else{
+
+				getTrialTimeFromServer();
+
+			}
+
+		}
+
+	}
+
+	private void createTrialEndMessage(GameController p_gameController){
+
+		UIManager l_ui = p_gameController.getUI();
+		m_trialMessageCanvas = l_ui.createScreen(UIScreen.TRIAL_MESSAGE, false, 4);
+		
+		UIElement l_panel = m_trialMessageCanvas.getView( "mainPanel" );
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		l_pointListIn.Add( l_panel.transform.localPosition );
+		l_pointListIn.Add( l_panel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_panel.tweener.addPositionTrack( l_pointListIn, 0f );
+
+		SessionHandler.getInstance().token.setCurrent(false);
+
+
+		//===================
+		//Set up screen
+		UIButton m_subscriptionButton = m_trialMessageCanvas.getView ("subscriptionButton") 	as UIButton;
+		UIButton m_continueButton	 = m_trialMessageCanvas.getView ("continueButton") 		as UIButton;
+		UIButton m_exitButton		 = m_trialMessageCanvas.getView ("exitButton") 			as UIButton;
+		UILabel m_messageText		 = m_trialMessageCanvas.getView ("messageText") 		as UILabel;
+		UILabel m_continueText		 = m_trialMessageCanvas.getView ("continueText") 		as UILabel;
+		
+		m_subscriptionButton.addClickCallback ( onSubscriptionClick );
+		m_continueButton.addClickCallback ( onContinueClick );
+		m_exitButton.addClickCallback ( onContinueClick );
+
+		m_messageText.text = Localization.getString (Localization.TXT_103_LABEL_EXPIRED);
+		m_continueText.text = Localization.getString (Localization.TXT_103_BUTTON_NOTHANKS);
+
+
+	}
+
+	private void onSubscriptionClick(UIButton p_button)
+	{
+		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
+		{
+			Server.init (ZoodlesConstants.getHttpsHost());
+			m_queue.reset ();
+			m_queue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
+			m_queue.request ( RequestType.SEQUENCE );
+		}
+		else
+		{
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+
+			UIManager l_ui = m_gameController.getUI();
+			
+			l_ui.removeScreen(m_trialMessageCanvas);
+		}
+	}
+
+	private void viewPremiumRequestComplete(WWW p_response)
+	{
+		Server.init (ZoodlesConstants.getHost());
+		if(null == p_response.error)
+		{
+			SessionHandler.getInstance ().PremiumJson = p_response.text;
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+
+
+			UIManager l_ui = m_gameController.getUI();
+			
+			l_ui.removeScreen(m_trialMessageCanvas);
+		}
+		else
+		{
+			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
+		}
+	}
+
+
+	private void onContinueClick(UIButton p_button)
+	{
+
+		UIManager l_ui = m_gameController.getUI();
+
+		l_ui.removeScreen(m_trialMessageCanvas);
+
+	}
+
+	public void getTrialTimeFromServer(){
+		
+		m_trialPlanQueue.reset();
+		m_trialPlanQueue.add( new PremiumDetailsRequest( onGetDetailsComplete ) );
+		m_trialPlanQueue.request( RequestType.SEQUENCE );
+		
+	}
+	
+	private void onGetDetailsComplete(WWW p_response)
+	{
+		if( null == p_response.error )
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
+			
+			int trialDaysLeft = (int)((double)l_data["trial_days"]);
+
+			if(trialDaysLeft <= 0){
+
+				createTrialEndMessage(m_gameController);
+
+			}
+		}
+	}
+	#endregion
+
 
 	private void _disposeWebInfos(List<object> p_list)
 	{
@@ -1831,6 +1978,8 @@ public class RegionBaseState : GameState
 
 	//Kevin Add new app list Canvas , there is already m_regionAppCanvas but make sure there is no problems so addding a new one
 	protected UICanvas m_appListCanvas;
+	//Trial time End
+	protected GameController m_gameController;
 
 
 	protected UICanvas 	m_regionLandingCanvas;
@@ -1844,6 +1993,8 @@ public class RegionBaseState : GameState
 	protected UICanvas	m_funActivityCanvas;
 
 	protected UICanvas	m_messageCanvas;
+	protected UICanvas  m_trialMessageCanvas;
+
 	
 	protected UICanvas  m_currentActivityCanvas;
 	
