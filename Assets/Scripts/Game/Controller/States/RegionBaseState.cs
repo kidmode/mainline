@@ -405,6 +405,39 @@ public class RegionBaseState : GameState
 
 	private void checkActivityScreen()
 	{
+
+		if( m_foregroundGafGroup != null ){
+
+			if( m_foregroundGafGroup.active){
+
+//				Tweener tw = m_foregroundGafGroup.tweener;
+//				
+//				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+
+				GAFMovieClip[] gafClips = m_foregroundGafGroup.gameObject.GetComponentsInChildren<GAFMovieClip>();
+
+				for (int i = 0; i < gafClips.Length; i++) {
+
+//					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
+
+					//gafClips[i].renderer.material.
+
+					if(gafClips[i].renderer.material.GetFloat("_Alpha") < 1.0f){
+
+						gafClips[i].renderer.material.SetFloat("_Alpha", 1.0f);// = 1.0f;
+
+					}
+
+//					if(gafClips[i].renderer.material.color.a < 1.0f)
+//
+//						gafClips[i].renderer.material.color = (new Color(gafClips[i].renderer.material.color.r, gafClips[i].renderer.material.color.g, gafClips[i].renderer.material.color.b, 1.0f));
+
+				}
+
+			}
+
+		}
+
 		if( null != m_gameActivityCanvas && null != m_gameActivityCanvas.getView("mainPanel") )
 		{
 
