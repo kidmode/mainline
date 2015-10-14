@@ -246,6 +246,15 @@ public class CreateAccountUpSellState : GameState
 						SessionHandler.getInstance ().token.setTry(true);
 						SessionHandler.getInstance ().token.setCurrent(true);
 						SessionHandler.getInstance ().token.setPremium(false);
+
+						//Payment done and First started Trial account
+						//Now sets local playerprefs
+						TrialTimeController.Instance.firstStartTrialTime();
+
+
+
+
+
 						m_subState = SubState.GO_CONGRATS;
 					}
 					else

@@ -261,6 +261,10 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_DEVICE] = l_DI.Call<string>("getDevice");
 		m_params [ZoodlesConstants.PARAM_MODEL] = l_DI.Call<string>("getModel");
 
+		//Need to comment out when build   *************************
+		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "SONY";
+		m_params [ZoodlesConstants.PARAM_MODEL] = "TESTTEST";
+
 		SessionHandler.getInstance().deviceName = l_DI.Call<string>("getManufacturer");			
 		#else
 
