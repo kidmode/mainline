@@ -357,6 +357,13 @@ public class ZoodlesConstants
 	public const string MIDDLE_LINE		= "-";
 
 
+
+	/////////////////////////////////////////////////////////////////
+	// Player Prefs for local info saves
+	/////////////////////////////////////////////////////////////////
+	public const string PLAYERPREF_PREMIMUMTRIAL_START_TIME			= "premiumTrialStartTime";
+
+
     public static string getHost()
     {
         return GCS.Environment.getHost(); 
