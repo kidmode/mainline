@@ -60,7 +60,7 @@ public class SignInState : GameState
 
 
 			m_signInCanvas.active = false;
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 3);
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 3);
 			m_subState = SubState.NONE;
 			break;
 		}
@@ -88,6 +88,9 @@ public class SignInState : GameState
 						}
 						else
 						{
+							//honda: remove spinner
+							m_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 							m_queue.reset();
 							m_queue.add( new PremiumDetailsRequest( onGetDetailsComplete ) );
 							m_queue.request( RequestType.SEQUENCE );
@@ -95,6 +98,9 @@ public class SignInState : GameState
 					}
 					else
 					{
+						//honda: remove spinner
+						m_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 						m_messageText		 = m_trialMessageCanvas.getView ("messageText") as UILabel;
 						m_messageText.text = Localization.getString (Localization.TXT_103_LABEL_EXPIRED);
 						m_continueText.text = Localization.getString (Localization.TXT_103_BUTTON_NOTHANKS);
@@ -136,10 +142,8 @@ public class SignInState : GameState
 		base.exit(p_gameController);
 
 		p_gameController.getUI().removeScreenImmediately(UIScreen.SIGN_IN);
-		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
 		p_gameController.getUI().removeScreenImmediately(UIScreen.TRIAL_MESSAGE);
-
-
 	}
 	
 	//---------------- Private Implementation ----------------------
@@ -281,7 +285,7 @@ public class SignInState : GameState
 		l_pointListOut.Add( m_dialog.transform.localPosition );
 		l_pointListOut.Add( m_dialog.transform.localPosition - new Vector3( 0, 582, 0 ));
 		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
-		m_controller.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		m_controller.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 
 		//Kev
