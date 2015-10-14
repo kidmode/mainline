@@ -58,7 +58,8 @@ public class KidModeLockController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
+
 		if (!defaultLauncherChecked) {
 			
 			checkDefaultLauncherStatus();

@@ -353,11 +353,13 @@ public class VideoViewState : WebViewState
 				// Don't show the point pop up
 //				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_VIDEO);
 //				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+				Debug.Log("@@@@@@@@ SubState.GO_CONGRATS");
 				p_gameController.changeState(ZoodleState.REGION_VIDEO);
 				SessionHandler.getInstance().getPoints();
 				break;
 
 			case SubState.No_Points:
+				Debug.Log("@@@@@@@@ SubState.No_Points");
 				p_gameController.changeState(ZoodleState.REGION_VIDEO);
 				break;
 

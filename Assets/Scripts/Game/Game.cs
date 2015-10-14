@@ -260,7 +260,7 @@ public class Game : MonoBehaviour
 
 
 	public void onActivityRestart() {
-		//KidMode.onActivityRestart ();
+		KidMode.onActivityRestart ();
 	}
 
 	public void closeYoutube() {
@@ -281,7 +281,6 @@ public class Game : MonoBehaviour
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
-
 		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
 		Screen.autorotateToLandscapeRight = true;
@@ -321,7 +320,6 @@ public class Game : MonoBehaviour
 	public void Awake () 
 	{
 
-
 		// Sean: vzw
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		Application.targetFrameRate = 30;
@@ -349,7 +347,6 @@ public class Game : MonoBehaviour
 //		dataDir.Delete(true);
 		#endif
 
-
 		m_request = new RequestQueue ();
 		isClientIdCompleted = false;
 		isPremiumCompleted = false;
@@ -364,7 +361,6 @@ public class Game : MonoBehaviour
 			Text versionText = versionObject.GetComponent<Text>();
 			versionText.text = CurrentBundleVersion.version;
 		}
-
 		string[] keys = {"version"};
 		string[] values = {CurrentBundleVersion.version};
 		CrittercismAndroid.SetMetadata(keys, values);
