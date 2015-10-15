@@ -73,7 +73,17 @@ public class ProfileViewState : GameState
 	private void toProfileSelectScreen(UIButton p_button)
 	{
 		p_button.removeClickCallback (toProfileSelectScreen);
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+
+		if (!SessionHandler.getInstance().token.isPremium())
+		{
+			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		}
+		else
+		{
+			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
+		}
+
 	}
 
 	private void onkidProfileTweenFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
