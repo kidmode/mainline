@@ -376,9 +376,9 @@ public class BookReaderState : GameState {
 	{
 		m_pageImage.active = false;
 		//honda: due to book data in the local place, use getImage to set book content
-		currentPage.getImage();
+//		currentPage.getImage();
 		//honda: if book data online, use requestImage()
-//		currentPage.requestImage();
+		currentPage.requestImage();
 	}
 
 	private void _loadCurrentAudio( )

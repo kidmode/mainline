@@ -1143,7 +1143,8 @@ public class RegionBaseState : GameState
 
 	private void appListCallBack(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		if (Application.internetReachability != NetworkReachability.NotReachable 
+		    && !KidMode.isAirplaneModeOn() && KidMode.isWifiConnected()
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.AppList;
@@ -1156,7 +1157,8 @@ public class RegionBaseState : GameState
 	
 	private void videoCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		if (Application.internetReachability != NetworkReachability.NotReachable 
+		    && !KidMode.isAirplaneModeOn() && KidMode.isWifiConnected()
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
@@ -1166,7 +1168,8 @@ public class RegionBaseState : GameState
 	
 	private void gameCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn() 
+		if (Application.internetReachability != NetworkReachability.NotReachable 
+		    && !KidMode.isAirplaneModeOn() && KidMode.isWifiConnected()
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
@@ -1176,13 +1179,19 @@ public class RegionBaseState : GameState
 	
 	private void bookCallback(UIToggle p_element, bool p_toggles)
 	{
-		m_nextActivity = ActivityType.Books;
-		SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
+		if (Application.internetReachability != NetworkReachability.NotReachable 
+		    && !KidMode.isAirplaneModeOn() && KidMode.isWifiConnected()
+		    && p_toggles == true)
+		{
+			m_nextActivity = ActivityType.Books;
+			SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
+		}
 	}
 	
 	private void activityCallback(UIToggle p_element, bool p_toggles)
 	{
-		if (Application.internetReachability != NetworkReachability.NotReachable && !KidMode.isAirplaneModeOn()
+		if (Application.internetReachability != NetworkReachability.NotReachable 
+		    && !KidMode.isAirplaneModeOn() && KidMode.isWifiConnected()
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;
@@ -1300,36 +1309,37 @@ public class RegionBaseState : GameState
 	
 	private void onBookClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		// if currently on no internet status, user should still can access book tab
-//		showMsgIfNoInternet(); //cynthia
-
-		BookInfo l_bookInfo = p_data as BookInfo;
-
-		if( l_bookInfo.bookState == BookState.Recorded )
+		//honda: if no internet, won't enter book section
+		if(!showMsgIfNoInternet())
 		{
-			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
-			SessionHandler.getInstance().currentBookReading = SessionHandler.getInstance ().readingTable[l_bookInfo.bookReadingId] as BookReading;
-			
-			m_subState = SubState.GO_BOOKS;
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.RECORDED",payload);
-		}
+			BookInfo l_bookInfo = p_data as BookInfo;
 
-		if( l_bookInfo.bookState == BookState.NeedToBuy )
-		{
-			UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
-			l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
-			MessageIn();
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NEEDTOBUY",payload);
-		}
+			if( l_bookInfo.bookState == BookState.Recorded )
+			{
+				SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
+				SessionHandler.getInstance().currentBookReading = SessionHandler.getInstance ().readingTable[l_bookInfo.bookReadingId] as BookReading;
+				
+				m_subState = SubState.GO_BOOKS;
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.RECORDED",payload);
+			}
 
-		if( l_bookInfo.bookState == BookState.NotRecorded )
-		{
-			SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
-			m_subState = SubState.GO_BOOKS;
-			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-			SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
+			if( l_bookInfo.bookState == BookState.NeedToBuy )
+			{
+				UILabel l_content = m_messageCanvas.getView("messageContent") as UILabel;
+				l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
+				MessageIn();
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NEEDTOBUY",payload);
+			}
+
+			if( l_bookInfo.bookState == BookState.NotRecorded )
+			{
+				SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
+				m_subState = SubState.GO_BOOKS;
+				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
+				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
+			}
 		}
 	}
 
@@ -1417,7 +1427,7 @@ public class RegionBaseState : GameState
 	{
 		if ((Application.internetReachability == NetworkReachability.NotReachable 
 		     || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) 
-		    && !p_toggle.name.Equals("booksButton"))
+		    /*&& !p_toggle.name.Equals("booksButton")*/)
 		{
 			if (!p_isToggled)
 				return;

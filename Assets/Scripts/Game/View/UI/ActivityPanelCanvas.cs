@@ -82,7 +82,7 @@ public class ActivityPanelCanvas : UICanvas
 	{
 		if ((Application.internetReachability == NetworkReachability.NotReachable 
 		     || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected()) 
-		    && !p_toggle.name.Equals("booksButton"))
+		    /*&& !p_toggle.name.Equals("booksButton")*/)
 		{
 			m_currentToggle = p_toggle;
 			return;

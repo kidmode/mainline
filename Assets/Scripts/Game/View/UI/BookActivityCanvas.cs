@@ -60,31 +60,30 @@ public class BookInfo : object
 	{
 		//honda: Now, books are all in the local place. So, don't need to request cover image from server
 		//honda: cover images are loaded directly locally
-		string contentName = "book_" + bookId;
-		string imagePath = "Books/Images/" + contentName;
-		Texture2D texture = Resources.Load(imagePath) as Texture2D;
-		icon = texture;
-		iconRequested = true;
-		return true;
+//		string contentName = "book_" + bookId;
+//		string imagePath = "Books/Images/" + contentName;
+//		Texture2D texture = Resources.Load(imagePath) as Texture2D;
+//		icon = texture;
+//		iconRequested = true;
+//		return true;
 		//honda: comment out the code due to above reason
 		//honda: check icon existed or not. if not, load icon from server
-//		string contentName = "book_" + bookId + ".jpg";
-//		Texture2D texture = ImageCache.getCacheImage(contentName);
-//		icon = texture;
-//		if (icon == null)
-//		{
-//			request = new RequestQueue();
-//			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
-//			request.request(RequestType.RUSH);
-//			iconRequested = true;
-//		}
+		string contentName = "book_" + bookId + ".jpg";
+		Texture2D texture = ImageCache.getCacheImage(contentName);
+		icon = texture;
+		if (icon == null)
+		{
+			request = new RequestQueue();
+			request.add(new ImageRequest("icon", iconUrl, _requestBookIconComplete));
+			request.request(RequestType.RUSH);
+		}
+		iconRequested = true;
+		return true;
 	}
 
 	private void _requestBookIconComplete(WWW p_response)
 	{
-		if (p_response.error == null
-		    
-		    && false == disposed)
+		if (p_response.error == null && false == disposed)
 		{
 			icon = p_response.texture;
 			
