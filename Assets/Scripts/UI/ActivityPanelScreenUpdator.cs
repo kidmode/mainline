@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ActivityPanelScreenUpdator : MonoBehaviour {
 
-
+	//Variables for the acitvity panel
 	public Transform mainPanelLeftExtreme;
 
 	public Transform mainPanelRightExtreme;
@@ -13,6 +13,8 @@ public class ActivityPanelScreenUpdator : MonoBehaviour {
 
 	public Transform rightPanelLeftExtreme;
 
+
+	public float checkRange = 12.0f;
 
 	public enum State{
 
@@ -50,6 +52,16 @@ public class ActivityPanelScreenUpdator : MonoBehaviour {
 				RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
 				
 				Vector3 newScale = rectTrans.localScale * leftScale;
+				
+				gameObject.GetComponent<RectTransform>().localScale = newScale;
+				
+			}else if(mainPanelRightExtreme.position.x < rightPanelLeftExtreme.position.x - checkRange){ //=================== if too small for the right side
+				
+				float rightScale = getRightScale();
+				
+				RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
+				
+				Vector3 newScale = rectTrans.localScale * rightScale;
 				
 				gameObject.GetComponent<RectTransform>().localScale = newScale;
 				
