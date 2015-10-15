@@ -36,6 +36,8 @@ public class KidMode
 		#endif
 	}
 
+//	public static event Action onKidModeAndroidStop;
+
 	public static void onActivityStop() {
 
 		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
@@ -51,7 +53,13 @@ public class KidMode
 //		game.leaveAppDateTime = DateTime.Now.AddDays(-1);
 		//this one is real thing
 		game.leaveAppDateTime = DateTime.Now;
+
+		TrialTimeController.Instance.androidExit();
+
+
 	}
+
+//	public static event Action onKidModeAndroidRestart;
 
 	public static void onActivityRestart() {
 
@@ -98,6 +106,8 @@ public class KidMode
 		//==============================
 		//Google installed app, auto add to selected list Hack
 		KidMode.googleInstalledAppAutoAdd();
+
+		TrialTimeController.Instance.androidEnter();
 
 	}
 
