@@ -73,7 +73,8 @@ public class GameController
 		if (null != m_state)
 			m_state.enter(this);
 
-		TrialTimeController.Instance.changeStateCheck();
+		if(TrialTimeController.Instance != null)
+			TrialTimeController.Instance.changeStateCheck();
 
 	}
 	
