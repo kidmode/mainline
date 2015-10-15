@@ -114,7 +114,8 @@ public class SignInState : GameState
 				}
 				else
 				{
-					p_gameController.changeState(ZoodleState.SIGN_IN_FREE);
+					p_gameController.connectState(ZoodleState.SIGN_IN_UPSELL, int.Parse(p_gameController.stateName));
+					p_gameController.changeState(ZoodleState.SIGN_IN_UPSELL);
 				}
 			}
 			else

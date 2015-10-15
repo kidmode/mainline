@@ -76,7 +76,9 @@ public class SignInUpsellState : GameState
 	private void toBack(UIButton p_button)
 	{
 		int l_state = m_gameController.getConnectedState( ZoodleState.SIGN_IN_UPSELL );
-		if (l_state == ZoodleState.PROFILE_VIEW)
+		if (l_state == ZoodleState.PROFILE_VIEW 
+		    || l_state == ZoodleState.SIGN_IN 
+		    || l_state == ZoodleState.SIGN_IN_CACHE)
 		{
 			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 		}
