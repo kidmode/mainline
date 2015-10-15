@@ -14,6 +14,9 @@ public class WebContentCache : object
 	//honda
 	public delegate void onLoadingCompletedEvent();
 	public event onLoadingCompletedEvent onLoadingCompleted;
+
+	private bool isDoneWithWebcontentLoading = false;
+	private bool isDoneWithBookLoading = false;
 	//end
 
 	public void startRequests()
@@ -27,11 +30,11 @@ public class WebContentCache : object
 		m_webContentRequest.request(RequestType.SEQUENCE);
 
 		//honda
-		addBookList();
+//		addBookList();
 		//honda: comment out request book list due to book list is put in the local place
-//		m_bookListRequest = new RequestQueue();
-//		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
-//		m_bookListRequest.request();
+		m_bookListRequest = new RequestQueue();
+		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
+		m_bookListRequest.request();
 		//end
 	}
 
@@ -64,11 +67,11 @@ public class WebContentCache : object
 		}
 
 		//honda: comment out request book list due to book list is put in the local place
-//		if (null != m_bookListRequest)
-//		{
-//			m_bookListRequest.dispose();
-//			m_bookListRequest = null;
-//		}
+		if (null != m_bookListRequest)
+		{
+			m_bookListRequest.dispose();
+			m_bookListRequest = null;
+		}
 
 		if (null != m_bookContentList)
 		{
@@ -100,20 +103,12 @@ public class WebContentCache : object
 			Debug.Log("spinner: webcontent error = " + p_response.error);
 		}
 
-
-		if (onLoadingCompleted != null)
-		{
-			onLoadingCompleted();
-			onLoadingCompleted = null;
-		}
-
+		isDoneWithWebcontentLoading = true;
 		processFinishedRequests();
 	}
 
 	private void _requestBookListComplete(WWW p_response)
 	{
-		isFinishedLoadingBooks = true;
-
 		if (p_response.error == null)
 		{
 			string l_string = p_response.text;
@@ -203,6 +198,8 @@ public class WebContentCache : object
 					
 					m_sessionHandler.bookContentList = l_contentList;
 					m_bookContentList = l_contentList;
+
+					isFinishedLoadingBooks = true;
 				}
 			}
 		}
@@ -210,13 +207,23 @@ public class WebContentCache : object
 		{
 			loadBookFail = true;
 		}
+
+		isDoneWithBookLoading = true;
+		processFinishedRequests();
 	}
 
 	private void processFinishedRequests()
 	{
-		isFinishedLoading = isFinishedLoadingWebContent
-							&& isFinishedLoadingBooks;
+		if (isDoneWithWebcontentLoading && isDoneWithBookLoading)
+		{
+			if (onLoadingCompleted != null)
+			{
+				onLoadingCompleted();
+				onLoadingCompleted = null;
+			}
+		}
 
+		isFinishedLoading = isFinishedLoadingWebContent && isFinishedLoadingBooks;
 		if (isFinishedLoading)
 		{
 			isLoading = false;
@@ -307,7 +314,7 @@ public class WebContentCache : object
 	}
 	
 	//honda: comment out request book list due to book list is put in the local place
-//	private RequestQueue m_bookListRequest;
+	private RequestQueue m_bookListRequest;
 	private RequestQueue m_webContentRequest;
 	private List<object> m_bookContentList;
 	private SessionHandler m_sessionHandler;
