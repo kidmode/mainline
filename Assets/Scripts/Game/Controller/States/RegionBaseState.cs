@@ -415,23 +415,24 @@ public class RegionBaseState : GameState
 //				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
 
 				GAFMovieClip[] gafClips = m_foregroundGafGroup.gameObject.GetComponentsInChildren<GAFMovieClip>();
-
-				for (int i = 0; i < gafClips.Length; i++) {
-
-//					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
-
-					//gafClips[i].renderer.material.
-
-					if(gafClips[i].renderer.material.GetFloat("_Alpha") < 1.0f){
-
-						gafClips[i].renderer.material.SetFloat("_Alpha", 1.0f);// = 1.0f;
-
-					}
-
-//					if(gafClips[i].renderer.material.color.a < 1.0f)
 //
-//						gafClips[i].renderer.material.color = (new Color(gafClips[i].renderer.material.color.r, gafClips[i].renderer.material.color.g, gafClips[i].renderer.material.color.b, 1.0f));
-
+				for (int i = 0; i < gafClips.Length; i++) {
+//
+//					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
+//
+//					//gafClips[i].renderer.material.
+//
+//					for (int matIndex = 0; matIndex < gafClips[i].renderer.materials.Length; matIndex++) {
+//
+//						if(gafClips[i].renderer.materials[matIndex].GetFloat("_Alpha") < 1.0f){
+//							
+//							gafClips[i].renderer.materials[matIndex].SetFloat("_Alpha", 1.0f);// = 1.0f;
+//							
+//						}
+//
+//					}
+//
+//
 				}
 
 			}
