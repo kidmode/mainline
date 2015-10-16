@@ -296,8 +296,17 @@ public class TrialTimeController : MonoBehaviour {
 				}
 				
 			}else{
-				
-				getTrialTimeFromServer();
+				//Seems like the tokens will be updated when the account is expried
+//				getTrialTimeFromServer();
+
+				if(!SessionHandler.getInstance().token.isCurrent()){
+
+					createTrialEndMessage(p_gameController);
+					
+					checkState = CheckState.CHECKED;
+
+				}
+
 				
 			}
 			
