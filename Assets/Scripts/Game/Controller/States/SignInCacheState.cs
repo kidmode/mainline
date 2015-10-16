@@ -33,7 +33,7 @@ public class SignInCacheState : GameState
 			
 			m_queue.add(new GetKidListRequest(onGetKidsComplete));
 			m_queue.request(RequestType.SEQUENCE);
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		}
 
 	}
@@ -65,6 +65,9 @@ public class SignInCacheState : GameState
 						}
 						else
 						{
+							//honda: remove spinner
+							m_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 							m_queue.reset();
 							m_queue.add( new PremiumDetailsRequest( onGetDetailsComplete ) );
 							m_queue.request( RequestType.SEQUENCE );
@@ -72,6 +75,9 @@ public class SignInCacheState : GameState
 					}
 					else
 					{
+						//honda: remove spinner
+						m_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 						m_messageText.text = Localization.getString (Localization.TXT_103_LABEL_EXPIRED);
 						m_continueText.text = Localization.getString (Localization.TXT_103_BUTTON_NOTHANKS);
 						
@@ -207,7 +213,7 @@ public class SignInCacheState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		p_gameController.getUI().removeScreen(UIScreen.TRIAL_MESSAGE);
-		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 		base.exit(p_gameController);
 	}

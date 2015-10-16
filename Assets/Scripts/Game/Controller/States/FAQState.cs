@@ -144,8 +144,19 @@ public class FAQState : GameState
 	
 	private void toPremiumScreen(UIButton p_button)
 	{
-		m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-		m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		if (LocalSetting.find("User").getBool("UserTry",true))
+		{
+			if(!SessionHandler.getInstance().token.isCurrent())
+			{
+				m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
+				m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
+			}
+		}
+		else
+		{
+			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		}
 	}
 	
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)

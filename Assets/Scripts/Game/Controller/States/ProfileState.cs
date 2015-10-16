@@ -183,8 +183,15 @@ public class ProfileState : GameState
 		m_tryFreeButton.addClickCallback(toSignInUpsell);
 
 		UIElement l_tryFreeArea = m_profileScreen.getView("tryFreeButtonArea") as UIElement;
-		if (SessionHandler.getInstance().token.isTried() || SessionHandler.getInstance().token.isPremium())
+		if (/*SessionHandler.getInstance().token.isTried() ||*/ 
+		    SessionHandler.getInstance().token.isPremium())
 			l_tryFreeArea.active = false;
+
+		if (SessionHandler.getInstance().token.isTried() && !SessionHandler.getInstance().token.isCurrent())
+		{
+			UILabel text = l_tryFreeArea.getView("btnText") as UILabel;
+			text.active = false;
+		}
 
 		UIButton l_termsButton = m_profileScreen.getView("termsOfService") as UIButton;
 		l_termsButton.addClickCallback(_onTermsButtonClick);
@@ -227,8 +234,19 @@ public class ProfileState : GameState
 
 	private void toSignInUpsell(UIButton p_button)
 	{
-		m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-		m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		if (LocalSetting.find("User").getBool("UserTry",true))
+		{
+			if(!SessionHandler.getInstance().token.isCurrent())
+			{
+				m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
+				m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
+			}
+		}
+		else
+		{
+			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
+			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
+		}
 	}
 
 	private void sendTellFriendEmail(UIButton p_button)

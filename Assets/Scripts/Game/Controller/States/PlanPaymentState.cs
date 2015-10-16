@@ -16,7 +16,7 @@ public class PlanPaymentState : GameState
 	
 	public override void exit(GameController p_gameController)
 	{
-		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		p_gameController.getUI().removeScreen(m_paymentCanvas);
 
 		base.exit(p_gameController);
@@ -160,7 +160,7 @@ public class PlanPaymentState : GameState
 			{
 				m_gameController.getUI().removeScreen(m_paymentCanvas);
 				m_paymentCanvas = null;
-				m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+				m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 				string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
 				string l_returnJson = SessionHandler.getInstance().PremiumJson;
 				Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;

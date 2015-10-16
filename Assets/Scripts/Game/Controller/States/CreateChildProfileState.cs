@@ -51,7 +51,7 @@ public class CreateChildProfileState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER, false, 1);
+			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 1);
 			m_createChildCanvas = null;
 			m_subState = SubState.NONE;
 			break;
@@ -91,7 +91,7 @@ public class CreateChildProfileState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		p_gameController.getUI().removeScreen(UIScreen.CREATE_CHILDPROFILE);
-		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
 //		SessionHandler.getInstance().currentKid.requestPhotoAndSaveLocal();
 
