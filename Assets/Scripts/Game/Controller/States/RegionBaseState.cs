@@ -237,7 +237,7 @@ public class RegionBaseState : GameState
 		GAUtil.logScreen("RegionLandingScreen");
 
 
-		checkTrialEnd(p_gameController);
+//		checkTrialEnd(p_gameController);
 
 	}
 	
@@ -1448,15 +1448,66 @@ public class RegionBaseState : GameState
 
 					appListToggle.interactable = true;
 
+					//---------------
+					Color newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+					UIImage toggleImageBg = m_appListButton.getView("background") as UIImage;
+					Image toggleUIImage = toggleImageBg.gameObject.GetComponent<Image>();
+					toggleUIImage.color = newColor;
+					
+					UIImage toggleIconUIImage = m_appListButton.getView("icon") as UIImage;
+					Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
+					toggleIconImage.color = newColor;
+
+					//Set lebel color
+					UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+					Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+					toggleLabelText.color = newColor;
+
+
+
 				}else{
 
 					appListToggle.interactable = false;
+
+					//---------------
+					Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+
+					UIImage toggleImageBg = m_appListButton.getView("background") as UIImage;
+					Image toggleUIImage = toggleImageBg.gameObject.GetComponent<Image>();
+					toggleUIImage.color = newColor;
+
+					UIImage toggleIconUIImage = m_appListButton.getView("icon") as UIImage;
+					Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
+					toggleIconImage.color = newColor;
+
+					//Set lebel color
+					UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+					Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+					toggleLabelText.color = newColor;
 
 				}
 
 			}else{
 
 				appListToggle.interactable = false;
+
+				//---------------
+				Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+				
+				UIImage toggleImageBg = m_appListButton.getView("background") as UIImage;
+				Image toggleUIImage = toggleImageBg.gameObject.GetComponent<Image>();
+				toggleUIImage.color = newColor;
+				
+				UIImage toggleIconUIImage = m_appListButton.getView("icon") as UIImage;
+				Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
+				toggleIconImage.color = newColor;
+
+				//Set lebel color
+				UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+				Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+				toggleLabelText.color = newColor;
 
 			}
 

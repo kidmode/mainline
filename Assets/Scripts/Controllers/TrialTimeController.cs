@@ -74,10 +74,14 @@ public class TrialTimeController : MonoBehaviour {
 			int trialDaysLeft = (int)((double)l_data["trial_days"]);
 
 			if(trialDaysLeft <= 0){
-				
-				createTrialEndMessage(game.gameController);
 
-				checkState = CheckState.CHECKED;
+				if(checkState != CheckState.CHECKED){
+				
+					createTrialEndMessage(game.gameController);
+
+					checkState = CheckState.CHECKED;
+
+				}
 				
 			}
 		}
@@ -222,6 +226,8 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void androidEnter(){
 
+		return;
+
 		if(checkState == CheckState.NOT_CHECKED){
 
 			for (int i = 0; i < checkTrialStates.Length; i++) {
@@ -229,10 +235,6 @@ public class TrialTimeController : MonoBehaviour {
 				if(checkTrialStates[i] == int.Parse(game.gameController.stateName)){
 
 					checkTrialEnd(game.gameController);
-					
-					focusTestTxt = focusTestTxt + " focused ";
-					
-					debugTxt.text = focusTestTxt;
 
 
 				}
@@ -255,10 +257,6 @@ public class TrialTimeController : MonoBehaviour {
 				if(checkTrialStates[i] == int.Parse(game.gameController.stateName)){
 					
 					checkTrialEnd(game.gameController);
-					
-					focusTestTxt = focusTestTxt + " focused ";
-					
-					debugTxt.text = focusTestTxt;
 					
 					
 				}
@@ -299,7 +297,7 @@ public class TrialTimeController : MonoBehaviour {
 				
 			}else{
 				//Seems like the tokens will be updated when the account is expried
-//				getTrialTimeFromServer();
+				getTrialTimeFromServer();
 
 				if(!SessionHandler.getInstance().token.isCurrent()){
 
@@ -319,7 +317,7 @@ public class TrialTimeController : MonoBehaviour {
 	private void createTrialEndMessage(GameController p_gameController){
 		
 		UIManager l_ui = p_gameController.getUI();
-		m_trialMessageCanvas = l_ui.createScreen(UIScreen.TRIAL_MESSAGE, false, 4);
+		m_trialMessageCanvas = l_ui.createScreen(UIScreen.TRIAL_MESSAGE, false, 16);
 		
 		UIElement l_panel = m_trialMessageCanvas.getView( "mainPanel" );
 		List<Vector3> l_pointListIn = new List<Vector3>();
