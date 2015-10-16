@@ -13,7 +13,8 @@ public class TutClick2NextPage : MonoBehaviour {
 		
 		if(Input.GetMouseButtonDown(0)){
 
-			TutorialController.Instance.showNextPage();
+			if(TutorialController.Instance != null)
+				TutorialController.Instance.showNextPage();
 
 		}
 		

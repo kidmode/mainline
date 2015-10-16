@@ -42,7 +42,8 @@ public class TutorialScreen : MonoBehaviour {
 
 		if(currIndex >= sequencePanels.Length - 1){
 
-			TutorialController.Instance.sequenceScreenFinished();
+			if(TutorialController.Instance != null)
+				TutorialController.Instance.sequenceScreenFinished();
 
 			return;
 
@@ -76,7 +77,8 @@ public class TutorialScreen : MonoBehaviour {
 
 	public void closeTutorialScreen(){
 
-		TutorialController.Instance.sequenceScreenFinished();
+		if(TutorialController.Instance != null)
+			TutorialController.Instance.sequenceScreenFinished();
 		SwrveComponent.Instance.SDK.NamedEvent("Tutorial.skip");
 	}
 

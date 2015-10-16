@@ -14,7 +14,8 @@ public class ControlViolenceState : GameState
 		_setupElment();
 
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.VIOLENCE_LEVEL);
-		TutorialController.Instance.showNextPage();
+		if(TutorialController.Instance != null)
+			TutorialController.Instance.showNextPage();
 
 	}
 	

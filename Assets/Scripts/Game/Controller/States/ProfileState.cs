@@ -24,7 +24,8 @@ public class ProfileState : GameState
 			splashCanvas.gameObject.SetActive(true);
 		//Kev
 
-		TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
+		if(TutorialController.Instance != null)
+			TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
 		
 		m_requestQueue = new RequestQueue ();
 

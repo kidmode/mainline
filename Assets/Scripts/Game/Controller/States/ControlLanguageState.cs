@@ -13,7 +13,8 @@ public class ControlLanguageState : GameState
 		_setupScreen( p_gameController );
 		_setupElment();
 
-		TutorialController.Instance.showNextPage();
+		if(TutorialController.Instance != null)
+			TutorialController.Instance.showNextPage();
 	}
 	
 	public override void update (GameController p_gameController, int p_time)

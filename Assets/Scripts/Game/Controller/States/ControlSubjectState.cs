@@ -13,7 +13,8 @@ public class ControlSubjectState : GameState
 		_setupScreen( p_gameController );
 		_setupElment();
 
-		TutorialController.Instance.showNextPage();
+		if(TutorialController.Instance != null)
+			TutorialController.Instance.showNextPage();
 		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.controls");
 	}
 
