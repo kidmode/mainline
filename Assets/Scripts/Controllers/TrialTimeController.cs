@@ -246,7 +246,7 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void changeStateCheck(){
 
-		return;
+//		return;
 
 		if(checkState == CheckState.NOT_CHECKED){
 			
