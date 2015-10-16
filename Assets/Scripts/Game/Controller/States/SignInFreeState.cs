@@ -36,11 +36,11 @@ public class SignInFreeState : GameState
 		m_signInFreeCanvas = p_uiManager.createScreen(UIScreen.SIGN_IN_FREE, false, 1);
 
 		m_premiumButton = m_signInFreeCanvas.getView ("upgradeButton") 	as UIButton;
-		m_freeButton 	= m_signInFreeCanvas.getView ("freeButton") 	as UIButton;
-		m_backButton 	= m_signInFreeCanvas.getView ("backButton") 	as UIButton;
+		m_freeButton 	= m_signInFreeCanvas.getView ("cancelButton") 	as UIButton;
+//		m_backButton 	= m_signInFreeCanvas.getView ("backButton") 	as UIButton;
 		m_premiumButton	.addClickCallback ( onPremiumClick );
 		m_freeButton	.addClickCallback ( onFreeClick );
-		m_backButton	.addClickCallback ( onBackClick );
+//		m_backButton	.addClickCallback ( onBackClick );
 	}
 
 	private void onPremiumClick( UIButton p_button )
@@ -78,5 +78,5 @@ public class SignInFreeState : GameState
 	private UICanvas m_signInFreeCanvas;
 	private UIButton m_premiumButton;
 	private UIButton m_freeButton;
-	private UIButton m_backButton;
+//	private UIButton m_backButton;
 }

@@ -12,11 +12,11 @@ public class LeftMenuCanvas : UICanvas
 		
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
-		if(SessionHandler.getInstance ().token.isTried())
-		{
-			UIElement l_tryArea = getView("tryPremiumButtonArea") as UIElement;
-			l_tryArea.active = false;
-		}
+//		if(SessionHandler.getInstance ().token.isTried())
+//		{
+//			UIElement l_tryArea = getView("tryPremiumButtonArea") as UIElement;
+//			l_tryArea.active = false;
+//		}
 
 		if (SessionHandler.getInstance ().token.isCurrent() || SessionHandler.getInstance ().token.isPremium())
 		{

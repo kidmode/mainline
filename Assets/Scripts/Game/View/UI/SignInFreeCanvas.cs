@@ -19,16 +19,18 @@ public class SignInFreeCanvas : UICanvas
 		l_list2.text = Localization.getString (Localization.TXT_100_LABEL_LIST2);
 		UILabel l_list3 = getView ("list3").getView ("Text") as UILabel;
 		l_list3.text = Localization.getString (Localization.TXT_100_LABEL_LIST3);
-		UILabel l_messageText = getView ("messageText") as UILabel;
-		l_messageText.text = Localization.getString (Localization.TXT_100_LABEL_MESSAGE_TEXT);
-		UILabel l_continuedText = getView ("continueText") as UILabel;
-		l_continuedText.text = Localization.getString (Localization.TXT_100_LABEL_CONTINU_TEXT);
-		UILabel l_kidModeFree = getView ("freeButton").getView("Text") as UILabel;
-		l_kidModeFree.text = Localization.getString (Localization.TXT_100_BUTTON_KIDMODE_FREE);
-		UILabel l_back = getView ("backButton").getView("Text") as UILabel;
-		l_back.text = Localization.getString (Localization.TXT_BUTTON_BACK);
+//		UILabel l_messageText = getView ("messageText") as UILabel;
+//		l_messageText.text = Localization.getString (Localization.TXT_100_LABEL_MESSAGE_TEXT);
+//		UILabel l_continuedText = getView ("continueText") as UILabel;
+//		l_continuedText.text = Localization.getString (Localization.TXT_100_LABEL_CONTINU_TEXT);
+//		UILabel l_kidModeFree = getView ("freeButton").getView("Text") as UILabel;
+//		l_kidModeFree.text = Localization.getString (Localization.TXT_100_BUTTON_KIDMODE_FREE);
+//		UILabel l_back = getView ("backButton").getView("Text") as UILabel;
+//		l_back.text = Localization.getString (Localization.TXT_BUTTON_BACK);
 		UILabel l_getPremium = getView ("upgradeButton").getView("Text") as UILabel;
 		l_getPremium.text = Localization.getString (Localization.TXT_100_BUTTON_GET_PREMIUM);
+		UILabel l_cancelBtn = getView ("cancelButton").getView("Text") as UILabel;
+		l_cancelBtn.text = Localization.getString (Localization.TXT_65_LABEL_THANKS);
 	}
 
 	public override void update ()

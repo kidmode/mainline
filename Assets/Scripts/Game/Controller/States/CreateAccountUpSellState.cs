@@ -70,7 +70,7 @@ public class CreateAccountUpSellState : GameState
 						{
 							p_gameController.getUI().removeScreen(m_payConfirmCanvas);
 							m_payConfirmCanvas = null;
-							p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER);
+							p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 							Server.init(ZoodlesConstants.getHttpsHost());
 							m_queue.add(new PaymentRequest("-1", CreditCardHelper.parseType(m_cardNumber.text), m_cardNumber.text, m_monthComBox.currentData.entryValue.ToString(), m_yearComBox.currentData.entryValue.ToString(), _onPaymentComplete));
 							m_queue.request(RequestType.RUSH);
@@ -108,7 +108,7 @@ public class CreateAccountUpSellState : GameState
 	
 	public override void exit(GameController p_gameController)
 	{
-		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER);
+		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
 		p_gameController.getUI().removeScreenImmediately(m_payConfirmCanvas);
 
 		base.exit(p_gameController);
