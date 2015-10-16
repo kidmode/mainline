@@ -1460,6 +1460,11 @@ public class RegionBaseState : GameState
 					Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
 					toggleIconImage.color = newColor;
 
+					//Set lebel color
+					UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+					Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+					toggleLabelText.color = newColor;
+
 
 
 				}else{
@@ -1477,6 +1482,11 @@ public class RegionBaseState : GameState
 					Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
 					toggleIconImage.color = newColor;
 
+					//Set lebel color
+					UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+					Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+					toggleLabelText.color = newColor;
+
 				}
 
 			}else{
@@ -1493,6 +1503,11 @@ public class RegionBaseState : GameState
 				UIImage toggleIconUIImage = m_appListButton.getView("icon") as UIImage;
 				Image toggleIconImage = toggleIconUIImage.gameObject.GetComponent<Image>();
 				toggleIconImage.color = newColor;
+
+				//Set lebel color
+				UILabel toggUILabel = m_appListButton.getView("titleLabel") as UILabel;
+				Text toggleLabelText = toggUILabel.gameObject.GetComponent<Text>();
+				toggleLabelText.color = newColor;
 
 			}
 
