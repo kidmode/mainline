@@ -74,10 +74,14 @@ public class TrialTimeController : MonoBehaviour {
 			int trialDaysLeft = (int)((double)l_data["trial_days"]);
 
 			if(trialDaysLeft <= 0){
-				
-				createTrialEndMessage(game.gameController);
 
-				checkState = CheckState.CHECKED;
+				if(checkState != CheckState.CHECKED){
+				
+					createTrialEndMessage(game.gameController);
+
+					checkState = CheckState.CHECKED;
+
+				}
 				
 			}
 		}
@@ -229,10 +233,6 @@ public class TrialTimeController : MonoBehaviour {
 				if(checkTrialStates[i] == int.Parse(game.gameController.stateName)){
 
 					checkTrialEnd(game.gameController);
-					
-					focusTestTxt = focusTestTxt + " focused ";
-					
-					debugTxt.text = focusTestTxt;
 
 
 				}
@@ -255,10 +255,6 @@ public class TrialTimeController : MonoBehaviour {
 				if(checkTrialStates[i] == int.Parse(game.gameController.stateName)){
 					
 					checkTrialEnd(game.gameController);
-					
-					focusTestTxt = focusTestTxt + " focused ";
-					
-					debugTxt.text = focusTestTxt;
 					
 					
 				}
@@ -299,7 +295,7 @@ public class TrialTimeController : MonoBehaviour {
 				
 			}else{
 				//Seems like the tokens will be updated when the account is expried
-//				getTrialTimeFromServer();
+				getTrialTimeFromServer();
 
 				if(!SessionHandler.getInstance().token.isCurrent()){
 

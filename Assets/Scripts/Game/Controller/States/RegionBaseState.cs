@@ -237,7 +237,7 @@ public class RegionBaseState : GameState
 		GAUtil.logScreen("RegionLandingScreen");
 
 
-		checkTrialEnd(p_gameController);
+//		checkTrialEnd(p_gameController);
 
 	}
 	
