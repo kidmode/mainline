@@ -226,6 +226,8 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void androidEnter(){
 
+//		return;
+
 		if(checkState == CheckState.NOT_CHECKED){
 
 			for (int i = 0; i < checkTrialStates.Length; i++) {
@@ -315,7 +317,7 @@ public class TrialTimeController : MonoBehaviour {
 	private void createTrialEndMessage(GameController p_gameController){
 		
 		UIManager l_ui = p_gameController.getUI();
-		m_trialMessageCanvas = l_ui.createScreen(UIScreen.TRIAL_MESSAGE, false, 4);
+		m_trialMessageCanvas = l_ui.createScreen(UIScreen.TRIAL_MESSAGE, false, 16);
 		
 		UIElement l_panel = m_trialMessageCanvas.getView( "mainPanel" );
 		List<Vector3> l_pointListIn = new List<Vector3>();
