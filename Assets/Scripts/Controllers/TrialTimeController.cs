@@ -183,23 +183,23 @@ public class TrialTimeController : MonoBehaviour {
 	public void OnApplicationFocus(bool p_focus)
 	{
 
-		if (p_focus)
-		{
-
-			Debug.Log("  p_focus " + p_focus);
-
-			if(isTrialAccount()){
-
-				if(debugTxt != null)
-					debugTxt.text = " is Trial = true ";
-
-			}
-
-		}
-
-		focusTestTxt = focusTestTxt + " focused ";
-
-		debugTxt.text = focusTestTxt;
+//		if (p_focus)
+//		{
+//
+//			Debug.Log("  p_focus " + p_focus);
+//
+//			if(isTrialAccount()){
+//
+//				if(debugTxt != null)
+//					debugTxt.text = " is Trial = true ";
+//
+//			}
+//
+//		}
+//
+//		focusTestTxt = focusTestTxt + " focused ";
+//
+//		debugTxt.text = focusTestTxt;
 
 	}
 
@@ -245,6 +245,8 @@ public class TrialTimeController : MonoBehaviour {
 	}
 
 	public void changeStateCheck(){
+
+		return;
 
 		if(checkState == CheckState.NOT_CHECKED){
 			

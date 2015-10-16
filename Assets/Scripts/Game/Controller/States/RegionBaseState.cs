@@ -559,6 +559,9 @@ public class RegionBaseState : GameState
 		m_profileButton = m_cornerProfileCanvas.getView("profileButton") as UIButton;
 		m_profileButton.addClickCallback(onProfileClick);
 
+		checkAcitivityActivate();
+
+
 		m_foregroundGafGroup = m_regionLandingCanvas.getView("gafGroup");
 		// Sean: vzw
 //		this._setupGafGroup(false);
@@ -927,6 +930,7 @@ public class RegionBaseState : GameState
 		Server.init (ZoodlesConstants.getHost());
 		if(null == p_response.error)
 		{
+
 			SessionHandler.getInstance ().PremiumJson = p_response.text;
 			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
@@ -1412,6 +1416,10 @@ public class RegionBaseState : GameState
 		cornerProfile.refreshInfo ();
 
 			//refreshInfo
+
+		//=----------
+		//Check Acitivity Panel
+		checkAcitivityActivate();
 	}
 
 	// Sean: vzw
@@ -1422,7 +1430,44 @@ public class RegionBaseState : GameState
 		m_cornerProfileCanvas.canvasGroup.interactable = true;
 	}
 	// end vzw
-	
+
+
+	private void checkAcitivityActivate(){
+
+		Toggle appListToggle = m_appListButton.gameObject.GetComponent<Toggle>();
+
+		if(SessionHandler.getInstance().token.isPremium()){
+
+			appListToggle.interactable = true;
+
+		}else{
+
+			if(TrialTimeController.Instance.isTrialAccount()){
+
+				if(SessionHandler.getInstance().token.isCurrent()){
+
+					appListToggle.interactable = true;
+
+				}else{
+
+					appListToggle.interactable = false;
+
+				}
+
+			}else{
+
+				appListToggle.interactable = false;
+
+			}
+
+		}
+
+
+
+
+
+	}
+
 	private void onActivityToggleClicked(UIToggle p_toggle, bool p_isToggled)
 	{
 		if ((Application.internetReachability == NetworkReachability.NotReachable 
