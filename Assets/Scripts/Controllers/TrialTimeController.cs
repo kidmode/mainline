@@ -226,7 +226,7 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void androidEnter(){
 
-//		return;
+		return;
 
 		if(checkState == CheckState.NOT_CHECKED){
 
@@ -248,7 +248,7 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void changeStateCheck(){
 
-//		return;
+		return;
 
 		if(checkState == CheckState.NOT_CHECKED){
 			
