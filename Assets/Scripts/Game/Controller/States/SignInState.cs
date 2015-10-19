@@ -18,10 +18,10 @@ public class SignInState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		//Kev
-		UIManager l_ui = p_gameController.getUI();
-		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-		if(splashCanvas != null)
-			splashCanvas.gameObject.SetActive(false);
+//		UIManager l_ui = p_gameController.getUI();
+//		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+//		if(splashCanvas != null)
+//			splashCanvas.gameObject.SetActive(false);
 		//Kev
 
 		base.enter(p_gameController);
@@ -51,10 +51,10 @@ public class SignInState : GameState
 		case SubState.LOADING:
 
 			//Kev
-			UIManager l_ui = p_gameController.getUI();
-			SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-			if(splashCanvas != null)
-				splashCanvas.gameObject.SetActive(true);
+//			UIManager l_ui = p_gameController.getUI();
+//			SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+//			if(splashCanvas != null)
+//				splashCanvas.gameObject.SetActive(true);
 			//Kev
 
 
@@ -290,10 +290,10 @@ public class SignInState : GameState
 
 
 		//Kev
-		UIManager l_ui = m_controller.getUI();
-		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
-		if(splashCanvas != null)
-			splashCanvas.gameObject.SetActive(false);
+//		UIManager l_ui = m_controller.getUI();
+//		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+//		if(splashCanvas != null)
+//			splashCanvas.gameObject.SetActive(false);
 		//Kev
 	}
 
