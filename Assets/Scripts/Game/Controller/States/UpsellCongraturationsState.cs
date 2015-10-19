@@ -16,6 +16,7 @@ public class UpsellCongraturationsState : GameState
 
 		_setupScreen( p_gameController.getUI() );
 		p_gameController.game.StartCoroutine( _tweenFillBar( 1.0f, 1.25f ) );
+
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
