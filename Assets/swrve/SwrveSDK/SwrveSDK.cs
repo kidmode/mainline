@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 /// </remarks>
 public partial class SwrveSDK
 {
-    public const String SdkVersion = "3.4.1";
+    public const String SdkVersion = "3.5";
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
@@ -54,6 +54,9 @@ public partial class SwrveSDK
 
     [DllImport ("__Internal")]
     private static extern string _swrveiOSUUID();
+
+    [DllImport ("__Internal")]
+    private static extern string _swrveLocaleCountry();
 #endif
 
     private int gameId;
@@ -374,8 +377,6 @@ public partial class SwrveSDK
         StartCampaignsAndResourcesTimer();
         DisableAutoShowAfterDelay();
 #endif
-		SwrveComponent.Instance.SDK.GlobalMessageListener = new CustomMessageListener ();
-		SwrveComponent.Instance.SDK.GlobalCustomButtonListener = new CustomButtonListener ();
     }
 
     /// <summary>
@@ -1033,6 +1034,13 @@ public partial class SwrveSDK
         } catch (Exception e) {
             SwrveLog.LogWarning("Couldn't get device timezone on iOS, make sure you have the plugin inside your project and you are running on a device: " + e.ToString());
         }
+
+        try {
+            deviceInfo ["swrve.device_region"] = _swrveLocaleCountry();
+        } catch (Exception e) {
+            SwrveLog.LogWarning("Couldn't get device region on iOS, make sure you have the plugin inside your project and you are running on a device: " + e.ToString());
+        }
+
 #elif UNITY_ANDROID
         if (!string.IsNullOrEmpty(gcmDeviceToken)) {
             deviceInfo["swrve.gcm_token"] = gcmDeviceToken;
@@ -1629,37 +1637,4 @@ public partial class SwrveSDK
         }
     }
 #endif
-	
-	/// <summary>
-	/// Process in-app message custom button clicks.
-	/// </summary>
-	private class CustomButtonListener : ISwrveCustomButtonListener
-	{
-		public void OnAction (string customAction)
-		{
-			// Custom button logic
-			UnityEngine.Debug.Log ("Custom action triggered " + customAction);
-		}
-	}
-	/// <summary>
-	/// Observe the SDK for in-app messages and pause/resume your game.
-	/// </summary>
-	class CustomMessageListener : ISwrveMessageListener {
-		public void OnShow (SwrveMessageFormat format) {
-			// Pause app, disable clicks on other UI elements
-			GameObject gameLogic = GameObject.FindWithTag("GameController");
-			gameLogic.GetComponent<Game> ().gameSwitcher (false);
-		}
-		public void OnShowing (SwrveMessageFormat format) {
-			// Message displaying, UI elements must continue to be disabled
-		}
-		public void OnDismiss (SwrveMessageFormat format) {
-			// Resume app and clicks in other UI elements
-			GameObject gameLogic = GameObject.FindWithTag("GameController");
-			gameLogic.GetComponent<Game> ().gameSwitcher (true);
-		}
-	}
 }
-
-
-

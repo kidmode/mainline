@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: .39199999}
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 3}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
@@ -2286,7 +2286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2449,7 +2449,7 @@ Transform:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_PrefabInternal: {fileID: 1753845902}
+  m_PrefabInternal: {fileID: 1101269329}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 944673971}
@@ -2466,7 +2466,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48,
     type: 2}
-  m_PrefabInternal: {fileID: 1753845902}
+  m_PrefabInternal: {fileID: 1101269329}
   m_GameObject: {fileID: 944673969}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -2484,10 +2484,10 @@ MonoBehaviour:
     TalkEnabled: 1
     AutoDownloadCampaignsAndResources: 1
     Orientation: 2
-    EventsServer: http://2785.api.swrve.com
-    UseHttpsForEventsServer: 0
-    ContentServer: http://2785.content.swrve.com
-    UseHttpsForContentServer: 0
+    EventsServer: http://api.swrve.com
+    UseHttpsForEventsServer: 1
+    ContentServer: http://content.swrve.com
+    UseHttpsForContentServer: 1
     AutomaticSessionManagement: 1
     NewSessionInterval: 30
     MaxBufferChars: 20000
@@ -2495,7 +2495,7 @@ MonoBehaviour:
     StoreDataInPlayerPrefs: 0
     PushNotificationEnabled: 1
     GCMSenderId: 249368169554
-    GCMPushNotificationTitle: Kid Mode
+    GCMPushNotificationTitle: '#Your App Title'
     AutoShowMessagesMaxDelay: 5
   FlushEventsOnApplicationQuit: 1
   InitialiseOnStart: 1
@@ -2503,7 +2503,7 @@ MonoBehaviour:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_PrefabInternal: {fileID: 1753845902}
+  m_PrefabInternal: {fileID: 1101269329}
   m_GameObject: {fileID: 944673969}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2684,6 +2684,50 @@ MonoBehaviour:
   stateHomeLauncher: 0
   stateKidMode: 1
   defaultLauncherChecked: 0
+--- !u!1001 &1101269329
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+  m_RootGameObject: {fileID: 944673969}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &1133215939
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,7 +3302,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
@@ -4027,7 +4071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4135,58 +4179,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1749795094}
---- !u!1001 &1753845902
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: Config.GCMSenderId
-      value: 249368169554
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-      propertyPath: Config.PushNotificationEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
-  m_RootGameObject: {fileID: 944673969}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1001 &1760899808
 Prefab:
   m_ObjectHideFlags: 0
@@ -4301,7 +4293,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
@@ -4471,7 +4463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4657,7 +4649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4808,7 +4800,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
