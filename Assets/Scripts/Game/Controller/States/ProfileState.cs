@@ -183,10 +183,18 @@ public class ProfileState : GameState
 		m_tryFreeButton.addClickCallback(toSignInUpsell);
 
 		UIElement l_tryFreeArea = m_profileScreen.getView("tryFreeButtonArea") as UIElement;
-		if (/*SessionHandler.getInstance().token.isTried() ||*/ 
-		    SessionHandler.getInstance().token.isPremium())
+		///**********************************************************************************************///
+		//honda: free mode                  -> isCurrent:false, isPremium: false, isTried: false
+		//		 premium-trial mode         -> isCurrent:true,  isPremium: false, isTried: true
+		//		 premium-trial expired mode -> isCurrent:false, isPremium: false, isTried: true
+		//		 premium mode               -> isCurrent:true,  isPremium: true,  isTried: true
+		///**********************************************************************************************///
+		//honda: hide premium badge on premium-trial mode or premium mode
+		if (SessionHandler.getInstance().token.isTried() && SessionHandler.getInstance().token.isCurrent())
+		{
 			l_tryFreeArea.active = false;
-
+		}
+		//honda: hide "Try Free" label of premium badge on premium-trial expired mode
 		if (SessionHandler.getInstance().token.isTried() && !SessionHandler.getInstance().token.isCurrent())
 		{
 			UILabel text = l_tryFreeArea.getView("btnText") as UILabel;
