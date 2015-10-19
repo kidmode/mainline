@@ -478,6 +478,13 @@ public class ProfileState : GameState
 
 		KidModeLockController.Instance.swith2DefaultLauncher ();
 		KidMode.openDefaultLauncher ();
+//
+//		KidModeLockController.Instance.swith2DefaultLauncher ();
+//		KidMode.openDefaultLauncher ();
+
+//		KidModeLockController.Instance.swith2DParentMode();
+
+//		Application.Quit();
 
 //		if(SessionHandler.getInstance().childLockSwitch)
 //		{

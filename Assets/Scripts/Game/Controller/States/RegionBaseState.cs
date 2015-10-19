@@ -538,6 +538,8 @@ public class RegionBaseState : GameState
 		m_appListButton = m_activityPanelCanvas.getView("appListButton") as UIToggle;
 		m_appListButton.addValueChangedCallback(appListCallBack);
 		m_appListButton.addValueChangedCallback(onActivityToggleClicked);
+
+		appListButtonLockImageIcon = m_activityPanelCanvas.getView("icon_lock") as UIImage;
 		//appListCallBack
 
 		m_videoButton = m_activityPanelCanvas.getView("videoButton") as UIToggle;
@@ -1440,6 +1442,8 @@ public class RegionBaseState : GameState
 
 			appListToggle.interactable = true;
 
+			appListButtonLockImageIcon.gameObject.SetActive(false);
+
 		}else{
 
 			if(TrialTimeController.Instance.isTrialAccount()){
@@ -1447,6 +1451,8 @@ public class RegionBaseState : GameState
 				if(SessionHandler.getInstance().token.isCurrent()){
 
 					appListToggle.interactable = true;
+
+					appListButtonLockImageIcon.gameObject.SetActive(false);
 
 					//---------------
 					Color newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1471,6 +1477,8 @@ public class RegionBaseState : GameState
 
 					appListToggle.interactable = false;
 
+					appListButtonLockImageIcon.gameObject.SetActive(true);
+
 					//---------------
 					Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
 
@@ -1492,6 +1500,8 @@ public class RegionBaseState : GameState
 			}else{
 
 				appListToggle.interactable = false;
+
+				appListButtonLockImageIcon.gameObject.SetActive(true);
 
 				//---------------
 				Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
@@ -2120,6 +2130,7 @@ public class RegionBaseState : GameState
 	protected UICanvas m_appListCanvas;
 	//Trial time End
 	protected GameController m_gameController;
+	protected UIImage appListButtonLockImageIcon;
 
 
 	protected UICanvas 	m_regionLandingCanvas;
