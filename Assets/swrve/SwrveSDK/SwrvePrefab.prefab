@@ -56,21 +56,21 @@ MonoBehaviour:
     TalkEnabled: 1
     AutoDownloadCampaignsAndResources: 1
     Orientation: 2
-    EventsServer: http://2785.api.swrve.com
-    UseHttpsForEventsServer: 0
-    ContentServer: http://2785.content.swrve.com
-    UseHttpsForContentServer: 0
+    EventsServer: http://api.swrve.com
+    UseHttpsForEventsServer: 1
+    ContentServer: http://content.swrve.com
+    UseHttpsForContentServer: 1
     AutomaticSessionManagement: 1
     NewSessionInterval: 30
     MaxBufferChars: 20000
     SendEventsIfBufferTooLarge: 1
     StoreDataInPlayerPrefs: 0
     PushNotificationEnabled: 1
-    GCMSenderId: 1093303544366
-    GCMPushNotificationTitle: Kid Mode
+    GCMSenderId: 249368169554
+    GCMPushNotificationTitle: '#Your App Title'
     AutoShowMessagesMaxDelay: 5
   FlushEventsOnApplicationQuit: 1
-  InitialiseOnStart: 1
+  InitialiseOnStart: 0
 --- !u!1002 &11400001
 EditorExtensionImpl:
   serializedVersion: 6
