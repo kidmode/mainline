@@ -207,12 +207,16 @@ public class VideoActivityCanvas : UICanvas
 	{		
 		UILabel l_allVideosLabel 	= getView("allContentLabel") as UILabel;
 		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_allContentLabelOff   = getView("allContentLabelOff") as UILabel;
+		UILabel l_favorateLabelOff 	= getView("favorateLabelOff") as UILabel;
 		UILabel l_infoLabel 		= getView("info") as UILabel;
 		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
 		UILabel l_headerLabel 		= getView("header") as UILabel;
 
-		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
 		l_allVideosLabel.text 		= Localization.getString(Localization.TXT_TAB_ALL_VIDEOS);
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allContentLabelOff.text = l_allVideosLabel.text;
+		l_favorateLabelOff.text = l_favorateLabel.text;
 //		l_infoLabel.text 			= Localization.getString(Localization.TXT_11_LABEL_INFO);
 //		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_11_LABEL_FAVORITE);
 		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);

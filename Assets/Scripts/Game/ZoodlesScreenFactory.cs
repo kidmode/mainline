@@ -126,7 +126,7 @@ public class UIScreen
 	public const int NO_INTERNET            = 1202;
 	public const int LOADING_PAGE           = 1203;
 	public const int TIMES_UP				= 1204;
-	// Cathy : Loading Spinner
+	//Cathy : Loading Spinner
 	public const int LOADING_SPINNER_ELEPHANT        = 1205;
 	//Honda
 	public const int FOTA_POPUP				= 1206;

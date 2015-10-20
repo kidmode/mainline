@@ -346,12 +346,16 @@ public class BookActivityCanvas : UICanvas
 	{		
 		UILabel l_allContentLabel   = getView("allContentLabel") as UILabel;
 		UILabel l_favorateLabel 	= getView("favorateLabel") as UILabel;
+		UILabel l_allContentLabelOff   = getView("allContentLabelOff") as UILabel;
+		UILabel l_favorateLabelOff 	= getView("favorateLabelOff") as UILabel;
 		UILabel l_infoLabel 		= getView("info") as UILabel;
 		UILabel l_favorateInfoLabel = getView("favoriteInfo") as UILabel;
 		UILabel l_headerLabel 		= getView("header") as UILabel;
-		
-		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+
 		l_allContentLabel.text    	= Localization.getString(Localization.TXT_TAB_ALL_BOOKS);
+		l_favorateLabel.text 		= Localization.getString(Localization.TXT_TAB_FAVORITES);
+		l_allContentLabelOff.text = l_allContentLabel.text;
+		l_favorateLabelOff.text = l_favorateLabel.text;
 //		l_infoLabel.text 			= Localization.getString(Localization.TXT_14_LABEL_INFO);
 //		l_favorateInfoLabel.text 	= Localization.getString(Localization.TXT_14_LABEL_FAVORITE);
 		l_infoLabel.text 			= Localization.getString(Localization.TXT_LABEL_LOADING);

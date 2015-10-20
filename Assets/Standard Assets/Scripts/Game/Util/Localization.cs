@@ -715,10 +715,10 @@ public class Localization : object
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_1";
 	public const string TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2 	    				= "TXT_TUTORIAL_VIOLENCE_LEVEL_DIALOG_2";
 
-	public const string TXT_TUTORIAL_PLEASE_CLICK_PARENT	    						= "TXT_TUTORIAL_PLEASE_CLICK_PARENT";
-	public const string TXT_TUTORIAL_PLEASE_TAP_CONTROLS	    						= "TXT_TUTORIAL_PLEASE_TAP_CONTROLS";
-	public const string TXT_TUTORIAL_TAP_NAVIGATION	    						= "TXT_TUTORIAL_TAP_NAVIGATION";
-	public const string TXT_TUTORIAL_CONTROL_TIME    						= "TXT_TUTORIAL_CONTROL_TIME"; //new
+	public const string TXT_TUTORIAL_PLEASE_CLICK_PARENT	    					= "TXT_TUTORIAL_PLEASE_CLICK_PARENT";
+	public const string TXT_TUTORIAL_PLEASE_TAP_CONTROLS	    					= "TXT_TUTORIAL_PLEASE_TAP_CONTROLS";
+	public const string TXT_TUTORIAL_TAP_NAVIGATION	    							= "TXT_TUTORIAL_TAP_NAVIGATION";
+	public const string TXT_TUTORIAL_CONTROL_TIME    								= "TXT_TUTORIAL_CONTROL_TIME"; //new
 
 
 	public const string TXT_TUTORIAL_PROMOTE_SUBJECTS	    						= "TXT_TUTORIAL_PROMOTE_SUBJECTS";//new
@@ -746,12 +746,23 @@ public class Localization : object
 	public const string TXT_CPB_POPUP_DAY = "TXT_CPB_POPUP_DAY";
 	public const string TXT_CPB_POPUP_OK_BTN = "TXT_CPB_POPUP_OK_BTN";
 
-	//Kevin new tab
+	//Kevin: tab in Jungle
 	public const string TXT_TAB_APPLIST             = "TXT_TAB_APPLIST";
-	
-	private string m_currLanguage   = "EN";
-	
+
+	//honda: Navigation bar's buttons in parent dashboard
+	public const string TXT_26_LABEL_APPS		= "TXT_26_LABEL_APPS";
+	public const string TXT_26_LABEL_SETTINGS	= "TXT_26_LABEL_SETTINGS";
+
+	//honda: labels in sign up/in screen 
+	public const string TXT_STATE_9_OR				= "TXT_STATE_9_OR";
+	public const string TXT_STATE_9_SIGNIN_LABEL	= "TXT_STATE_9_SIGNIN_LABEL";
+	public const string TXT_STATE_9_SIGNIN_BTN		= "TXT_STATE_9_SIGNIN_BTN";
+
 	public const string TXT_BASELINE = "Baseline";
+
+	/**************************************************************************************/
+
+	private string m_currLanguage   = "EN";
 
 	private Hashtable m_dictionary  = new Hashtable();
 	
@@ -861,6 +872,10 @@ public class Localization : object
 
 	public static void loadLanguage()
 	{
+		//testing
+		changeLanguage("TraChinese");
+		return;
+
 		switch( Application.systemLanguage )
 		{
 		case SystemLanguage.English :
