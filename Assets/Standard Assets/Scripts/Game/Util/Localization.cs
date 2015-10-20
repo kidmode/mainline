@@ -826,6 +826,9 @@ public class Localization : object
 		m_currLanguage = p_language;
 		
 		TextAsset l_asset = Resources.Load("Localization/localization" + m_currLanguage) as TextAsset;
+
+		Debug.Log("  m_currLanguage " + m_currLanguage);
+
 		Hashtable l_object = MiniJSON.MiniJSON.jsonDecode( (l_asset).text) as Hashtable;
 		Resources.UnloadAsset(l_asset);
 		parseData( l_object );
@@ -835,6 +838,9 @@ public class Localization : object
 	{
 		foreach ( string key in p_object.Keys )
 		{
+
+//			Debug.LogWarning(" key " + key);
+
 			m_dictionary[key] = p_object[key];
 		}
 	}
