@@ -74,7 +74,7 @@ public class ProfileViewState : GameState
 	{
 		p_button.removeClickCallback (toProfileSelectScreen);
 
-		if (!SessionHandler.getInstance().token.isPremium())
+		if (!SessionHandler.getInstance().token.isCurrent() && !SessionHandler.getInstance().token.isPremium())
 		{
 			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
 			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);

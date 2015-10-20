@@ -98,10 +98,6 @@ public class SetUpAccountState : GameState
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
-
-
-
-
 		m_createAccountBackgroundCanvas = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND ) as SplashBackCanvas;
 		if( m_createAccountBackgroundCanvas == null )
             m_createAccountBackgroundCanvas = p_uiManager.createScreen( UIScreen.SPLASH_BACKGROUND, true, -1 ) as SplashBackCanvas;
@@ -127,6 +123,12 @@ public class SetUpAccountState : GameState
 		//Honda
 		m_SignInAccountButton = m_signUpCanvas.getView("signInAccountButton") as UIButton;
 		m_SignInAccountButton.addClickCallback(onSignInAccountButtonClicked);
+		UILabel signInText = m_SignInAccountButton.getView("signInAccountText") as UILabel;
+		signInText.text = Localization.getString(Localization.TXT_STATE_9_SIGNIN_BTN);
+		UILabel orLabel = m_signUpCanvas.getView("orText") as UILabel;
+		UILabel signInLabel = m_signUpCanvas.getView("existingAccountText") as UILabel;
+		orLabel.text = Localization.getString(Localization.TXT_STATE_9_OR);
+		signInLabel.text = Localization.getString(Localization.TXT_STATE_9_SIGNIN_LABEL);
 		//end
 
 		//Kev
@@ -140,9 +142,7 @@ public class SetUpAccountState : GameState
 
 		quitText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
-
 //		UILabel quitFakeText = m_signUpCanvas.getView ("quitButtonFakeMove").getView("btnText") as UILabel;
-		
 //		quitFakeText.text = Localization.getString (Localization.TXT_BUTTON_QUIT);
 
 		//end
