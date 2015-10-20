@@ -117,9 +117,8 @@ public class SelectAvatarState : GameState
 		{
 			SessionHandler.getInstance ().selectAvatar = m_avatarImgPath;
 			m_gameController.connectState(ZoodleState.CREATE_CHILD,int.Parse(m_gameController.stateName));
-			m_game.gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_game.gameController.changeState(ZoodleState.CREATE_CHILD);
 			SwrveComponent.Instance.SDK.NamedEvent("AddChild.end", null);
-
 		}
 		else
 		{
