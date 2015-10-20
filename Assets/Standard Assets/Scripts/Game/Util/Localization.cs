@@ -872,9 +872,10 @@ public class Localization : object
 
 	public static void loadLanguage()
 	{
-		//testing
-		changeLanguage("TraChinese");
-		return;
+		//honda: only for localization testing
+//		changeLanguage("TraChinese");
+//		return;
+		//end
 
 		switch( Application.systemLanguage )
 		{
