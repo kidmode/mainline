@@ -37,7 +37,7 @@ public class SetUpAccountState : GameState
 //		{
 //			m_postData = new Hashtable();
 //		}
-		SwrveComponent.Instance.SDK.NamedEvent("SignUp.SET_UP_ACCOUNT_UI");
+		//SwrveComponent.Instance.SDK.NamedEvent("SignUp.SET_UP_ACCOUNT_UI");
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
@@ -440,7 +440,7 @@ public class SetUpAccountState : GameState
 ////				l_queue.add(new ClientIdRequest());
 //			l_queue.add(new SignUpRequest(m_account.text, m_password.text,createAccountComplete));
 //			l_queue.request(RequestType.SEQUENCE);
-//			SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
+//			//SwrveComponent.Instance.SDK.NamedEvent("SignUp.end");
 		}
 		else
 		{
@@ -500,7 +500,7 @@ public class SetUpAccountState : GameState
 //			l_queue.add(new ClientIdRequest());
 			l_queue.add (new SignUpRequest (m_account.text, m_password.text, createAccountComplete));
 			l_queue.request (RequestType.SEQUENCE);
-			SwrveComponent.Instance.SDK.NamedEvent ("SignUp.end");
+			//SwrveComponent.Instance.SDK.NamedEvent ("SignUp.end");
 		}
 		else 
 		{

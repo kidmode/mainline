@@ -2,14 +2,16 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 3
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: MesaFrontParticles
   m_Shader: {fileID: 4800000, guid: 80e88302364f3fb4fafd9a4e53c54c51, type: 3}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: 2000
+  stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
@@ -25,4 +27,8 @@ Material:
         first:
           name: _Alpha
         second: 1
-    m_Colors: {}
+    m_Colors:
+      data:
+        first:
+          name: _EmisColor
+        second: {r: .985294104, g: .985294104, b: .985294104, a: 1}

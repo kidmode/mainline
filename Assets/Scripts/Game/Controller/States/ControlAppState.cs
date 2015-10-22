@@ -18,7 +18,7 @@ public class ControlAppState : GameState
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
 
-		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
+		//SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
 
 		GoogleInstallAutoAddController.OnNewAppAdded += OnNewAppAdded;
 	}
@@ -423,7 +423,7 @@ public class ControlAppState : GameState
 			
 			m_appList.Add( l_appData );
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"AppName", l_appInfo.appName}};
-			SwrveComponent.Instance.SDK.NamedEvent("AddApps",payload);
+			//SwrveComponent.Instance.SDK.NamedEvent("AddApps",payload);
 		}
 		_Debug.log ( MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
 		

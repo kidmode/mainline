@@ -263,7 +263,7 @@ namespace GAF
 			if (_Refresh)
 				m_RenderProcessor.state |= GAFRenderProcessor.MeshState.VertexSet;
 
-			m_RenderProcessor.process(m_MovieClip, m_Filter, renderer);
+			m_RenderProcessor.process(m_MovieClip, m_Filter, GetComponent<Renderer>());
 		}
 
 		#endregion // Interface

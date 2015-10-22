@@ -229,7 +229,7 @@ public class GCSBuild : EditorWindow
 		}
 		
 		UnityEngine.Debug.Log("Starting iPhone Build!");
-		BuildPipeline.BuildPlayer(scenes, path, BuildTarget.iPhone, BuildOptions.None);		
+		BuildPipeline.BuildPlayer(scenes, path, BuildTarget.iOS, BuildOptions.None);		
 	}
 	
 	

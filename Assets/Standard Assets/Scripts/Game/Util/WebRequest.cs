@@ -76,16 +76,32 @@ public class WebRequest : object
 			//honda: add header "API_VERSION" = "v2"
 			if( m_form != null )
 			{
-				Hashtable headers = m_form.headers;
+				Hashtable headers = new Hashtable( m_form.headers );
+	
 				byte[] rawData = m_form.data;
 				headers.Add("API_VERSION", "v2");
-				m_www = new WWW(l_url, rawData, headers);
+
+				Dictionary<string, string> d = new Dictionary<string, string>();
+				foreach (var key in headers.Keys)
+				{
+					d.Add((string)key, (string)headers[key]);
+				}
+
+				m_www = new WWW(l_url, rawData, d);
 			}
             else
 			{
-				Hashtable headers = new Hashtable();
+				Hashtable headers = new Hashtable( );
+
 				headers.Add("API_VERSION", "v2");
-                m_www = new WWW(l_url, null, headers);
+
+				Dictionary<string, string> d = new Dictionary<string, string>();
+				foreach (var key in headers.Keys)
+				{
+					d.Add((string)key, (string)headers[key]);
+				}
+
+                m_www = new WWW(l_url, null, d);
 			}
 			//end
 		}

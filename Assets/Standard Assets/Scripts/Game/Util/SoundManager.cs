@@ -68,7 +68,7 @@ public class SoundManager : object
 		GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
 		if(m_gameObject == null)
 			m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
-		AudioSource l_audioSource = m_gameObject.audio;
+		AudioSource l_audioSource = m_gameObject.GetComponent<AudioSource>();
 		l_audioSource.Stop();
 		GameObject.Destroy (m_gameObject);
 	}
@@ -78,7 +78,7 @@ public class SoundManager : object
 		GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
 		if(m_gameObject == null)
 			m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
-		AudioSource l_audioSource = m_gameObject.audio;
+		AudioSource l_audioSource = m_gameObject.GetComponent<AudioSource>();
 		return l_audioSource.isPlaying;
 	}
 
@@ -110,7 +110,7 @@ public class SoundManager : object
 			if(m_gameObject == null)
 				m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
 			GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
-			l_audioSource = m_gameObject.audio;
+			l_audioSource = m_gameObject.GetComponent<AudioSource>();
 			
 			if (l_audioSource.clip != l_clip
 				|| l_audioSource.isPlaying == false)
@@ -185,7 +185,7 @@ public class SoundManager : object
 			if(m_gameObject == null)
 				m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
 			GameObject l_gameObject = GameObject.FindGameObjectWithTag ("AudioSource");
-			l_audioSource = m_gameObject.audio;
+			l_audioSource = m_gameObject.GetComponent<AudioSource>();
 			
 			if (l_audioSource.clip != l_clip
 				|| l_audioSource.isPlaying == false) {
@@ -206,7 +206,7 @@ public class SoundManager : object
 		if(m_gameObject == null)
 			m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
 		GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
-		AudioSource l_audioSource = m_gameObject.audio;
+		AudioSource l_audioSource = m_gameObject.GetComponent<AudioSource>();
 			
 		if (l_audioSource.isPlaying)
 		{
@@ -362,7 +362,7 @@ public class SoundManager : object
 			GameObject l_gameObject = GameObject.FindGameObjectWithTag("AudioSource");
 			if(m_gameObject == null)
 				m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
-			AudioSource l_audioSource = m_gameObject.audio;
+			AudioSource l_audioSource = m_gameObject.GetComponent<AudioSource>();
 			if (l_audioSource.clip != null && l_audioSource.isPlaying == true)
 			{
 				if (m_isMutedForMusic)

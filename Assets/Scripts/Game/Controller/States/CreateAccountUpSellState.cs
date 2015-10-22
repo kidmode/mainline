@@ -35,7 +35,7 @@ public class CreateAccountUpSellState : GameState
 			else
 				_setupScreen(p_gameController.getUI());
 		}
-		SwrveComponent.Instance.SDK.NamedEvent("SignUp.GET_PREMIUM_UI");
+		//SwrveComponent.Instance.SDK.NamedEvent("SignUp.GET_PREMIUM_UI");
 	}
 	
 	public override void update(GameController p_gameController, int p_time)
@@ -208,7 +208,7 @@ public class CreateAccountUpSellState : GameState
 
 	private void onThanksClick( UIButton p_button )
 	{
-		SwrveComponent.Instance.SDK.NamedEvent("SignUp.NO_THANKS_IN_PREMIUM_UI");
+		//SwrveComponent.Instance.SDK.NamedEvent("SignUp.NO_THANKS_IN_PREMIUM_UI");
 		//TODO create free account
 		p_button.removeClickCallback ( onThanksClick );
 		int l_state = m_gameController.getConnectedState (ZoodleState.SIGN_UP_UPSELL);
@@ -221,13 +221,13 @@ public class CreateAccountUpSellState : GameState
 	private void goBack(UIButton p_button)
 	{
 		m_subState = SubState.GO_REFUSE;
-		SwrveComponent.Instance.SDK.NamedEvent("SignUp.BACK_FROM_PREMIUM_UI");
+		//SwrveComponent.Instance.SDK.NamedEvent("SignUp.BACK_FROM_PREMIUM_UI");
 	}
 
 	private void startFreeTrial(UIButton p_button)
 	{
 		m_subState = SubState.GO_TRIAL;
-		SwrveComponent.Instance.SDK.NamedEvent("SignUp.START_TRIAL");
+		//SwrveComponent.Instance.SDK.NamedEvent("SignUp.START_TRIAL");
 	}
 
 	private void _onPaymentComplete(WWW p_response)

@@ -79,7 +79,7 @@ public class TutorialScreen : MonoBehaviour {
 
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.sequenceScreenFinished();
-		SwrveComponent.Instance.SDK.NamedEvent("Tutorial.skip");
+		//SwrveComponent.Instance.SDK.NamedEvent("Tutorial.skip");
 	}
 
 }

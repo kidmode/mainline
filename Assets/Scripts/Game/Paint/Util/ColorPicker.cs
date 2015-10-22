@@ -179,7 +179,7 @@ public class ColorPicker : System.Object
 		
 		//Convert the world points to screen points
 		GameObject l_cameraObject = GameObject.Find("CameraView");
-		Camera l_camera = l_cameraObject.camera;
+		Camera l_camera = l_cameraObject.GetComponent<Camera>();
 		for (int i = 0 ; i < 4 ; ++i)
 		{
 			Vector3 l_worldPoint = l_fourCorners[i];

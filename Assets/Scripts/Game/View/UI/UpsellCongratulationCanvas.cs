@@ -14,7 +14,7 @@ public class UpsellCongratulationCanvas : UICanvas
 
         tweener.addAlphaTrack(0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
 
-        m_starParticles = GameObject.Find("starParticles").particleSystem;
+        m_starParticles = GameObject.Find("starParticles").GetComponent<ParticleSystem>();
         DebugUtils.Assert(m_starParticles != null);
 	}
 
@@ -58,7 +58,7 @@ public class UpsellCongratulationCanvas : UICanvas
 	{
 		if(null != m_starParticles)
 		{
-			Material l_material = m_starParticles.renderer.material;
+			Material l_material = m_starParticles.GetComponent<Renderer>().material;
 			Color l_col = l_material.GetColor( "_TintColor" );
 			l_col.a = alpha;
 			l_material.SetColor( "_TintColor", l_col );

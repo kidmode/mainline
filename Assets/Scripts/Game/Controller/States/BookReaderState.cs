@@ -162,12 +162,12 @@ public class BookReaderState : GameState {
 		if (m_finishReading)
 		{
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.title},{"Duration", readingtime.ToString()}};
-			SwrveComponent.Instance.SDK.NamedEvent("Book.FINISH",payload);
+			//SwrveComponent.Instance.SDK.NamedEvent("Book.FINISH",payload);
 		}
 		else
 		{
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", m_book.title},{"Duration", readingtime.ToString()}};
-			SwrveComponent.Instance.SDK.NamedEvent("Book.NOTFINISH",payload);
+			//SwrveComponent.Instance.SDK.NamedEvent("Book.NOTFINISH",payload);
 		}
 
 	}

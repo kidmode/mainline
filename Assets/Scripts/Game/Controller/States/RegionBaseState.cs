@@ -328,7 +328,7 @@ public class RegionBaseState : GameState
 	{
 		if (m_linkLoaded == false)
 		{
-			Debug.Log("spinner: 1. checkIfLinksCacheLoaded");
+//			Debug.Log("spinner: 1. checkIfLinksCacheLoaded");
 			Game l_game = p_gameController.game;
 			User l_user = l_game.user;
 			WebContentCache l_cache = l_user.contentCache;
@@ -414,23 +414,40 @@ public class RegionBaseState : GameState
 //				
 //				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
 
-				GAFMovieClip[] gafClips = m_foregroundGafGroup.gameObject.GetComponentsInChildren<GAFMovieClip>();
+				GAFMovieClip[] gafClips = m_regionLandingCanvas.gameObject.GetComponentsInChildren<GAFMovieClip>();
 //
 				for (int i = 0; i < gafClips.Length; i++) {
 //
 //					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
 //
 //					//gafClips[i].renderer.material.
+
+					Renderer gafRenderer = gafClips[i].GetComponent<Renderer>();
+
+					Shader betterUpdateShader = Shader.Find("Particles/VertexLit Blended");
+
+//					gafRenderer.material.shader = betterUpdateShader;
+
+//					Debug.Log("gafClips[i] " + gafClips[i].gameObject.name);
 //
-//					for (int matIndex = 0; matIndex < gafClips[i].renderer.materials.Length; matIndex++) {
-//
-//						if(gafClips[i].renderer.materials[matIndex].GetFloat("_Alpha") < 1.0f){
-//							
-//							gafClips[i].renderer.materials[matIndex].SetFloat("_Alpha", 1.0f);// = 1.0f;
-//							
+
+					int size = 0;
+
+					for (int matIndex = 0; matIndex < gafRenderer.materials.Length; matIndex++) {
+
+						gafRenderer.materials[matIndex].shader = betterUpdateShader;
+
+						size++;
+
+//						if(gafRenderer.materials[matIndex].GetFloat("_Alpha") >= 1.0f){
+////							
+//							gafRenderer.materials[matIndex].shader = betterUpdateShader;
+////							
 //						}
-//
-//					}
+
+					}
+
+//					Debug.Log("   size " + size);
 //
 //
 				}
@@ -1155,7 +1172,7 @@ public class RegionBaseState : GameState
 		{
 			m_nextActivity = ActivityType.AppList;
 //			m_nextActivity = ActivityType.Video;
-			SwrveComponent.Instance.SDK.NamedEvent("Tab.AppList");
+			//SwrveComponent.Instance.SDK.NamedEvent("Tab.AppList");
 
 			Debug.Log("     +++++    appListCallBack ");
 		}
@@ -1168,7 +1185,7 @@ public class RegionBaseState : GameState
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Video;
-			SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
+			//SwrveComponent.Instance.SDK.NamedEvent("Tab.VIDEO");
 		}
 	}
 	
@@ -1179,7 +1196,7 @@ public class RegionBaseState : GameState
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Game;
-			SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
+			//SwrveComponent.Instance.SDK.NamedEvent("Tab.GAME");
 		}
 	}
 	
@@ -1190,7 +1207,7 @@ public class RegionBaseState : GameState
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Books;
-			SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
+			//SwrveComponent.Instance.SDK.NamedEvent("Tab.BOOK");
 		}
 	}
 	
@@ -1201,7 +1218,7 @@ public class RegionBaseState : GameState
 		    && p_toggles == true)
 		{
 			m_nextActivity = ActivityType.Fun;
-			SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
+			//SwrveComponent.Instance.SDK.NamedEvent("Tab.ACTIVITY");
 		}
 	}
 	
@@ -1230,7 +1247,7 @@ public class RegionBaseState : GameState
 			m_subState = SubState.GO_VIDEO;
 			
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
-			SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
+			//SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 		}
 	}
 
@@ -1269,7 +1286,7 @@ public class RegionBaseState : GameState
 				
 				m_subState = SubState.GO_GAME;
 				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
-				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+				//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 			}
 			else
 			{
@@ -1280,7 +1297,7 @@ public class RegionBaseState : GameState
 				
 				KidMode.startActivity(l_game.appData.packageName);
 				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
-				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+				//SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
 			}
 		}
 	}
@@ -1327,7 +1344,7 @@ public class RegionBaseState : GameState
 				
 				m_subState = SubState.GO_BOOKS;
 				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.RECORDED",payload);
+				//SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.RECORDED",payload);
 			}
 
 			if( l_bookInfo.bookState == BookState.NeedToBuy )
@@ -1336,7 +1353,7 @@ public class RegionBaseState : GameState
 				l_content.text = Localization.getString(Localization.TXT_STATE_REGIONBASE_ASK_BOOK);
 				MessageIn();
 				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NEEDTOBUY",payload);
+				//SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NEEDTOBUY",payload);
 			}
 
 			if( l_bookInfo.bookState == BookState.NotRecorded )
@@ -1344,7 +1361,7 @@ public class RegionBaseState : GameState
 				SessionHandler.getInstance().currentBook = SessionHandler.getInstance ().bookTable[l_bookInfo.bookId] as Book;
 				m_subState = SubState.GO_BOOKS;
 				Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookName", l_bookInfo.bookName}};
-				SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
+				//SwrveComponent.Instance.SDK.NamedEvent("Book.CLICK.NORECORDED",payload);
 			}
 		}
 	}

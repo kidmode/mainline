@@ -125,7 +125,7 @@ public class SetBirthYearState : GameState
 				l_queue.add(l_request);
 				l_queue.request(RequestType.RUSH);
 				p_button.removeClickCallback (onSetBirthYear);
-				SwrveComponent.Instance.SDK.NamedEvent("SignUp.SET_BIRTHDAY_YEAR");
+				//SwrveComponent.Instance.SDK.NamedEvent("SignUp.SET_BIRTHDAY_YEAR");
 			}
 			else
 			{

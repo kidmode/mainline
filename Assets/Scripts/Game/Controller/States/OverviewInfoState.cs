@@ -24,7 +24,7 @@ public class OverviewInfoState : GameState {
 
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
-		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.overview");
+		//SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.overview");
 	}
 
 	private void turnOffChildLock()
