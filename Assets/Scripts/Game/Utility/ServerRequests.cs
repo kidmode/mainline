@@ -261,15 +261,23 @@ public class ClientIdRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_DEVICE] = l_DI.Call<string>("getDevice");
 		m_params [ZoodlesConstants.PARAM_MODEL] = l_DI.Call<string>("getModel");
 
+		Debug.Log("ModelTest os: " + m_params [ZoodlesConstants.PARAM_OS_VERSION]);
+		Debug.Log("ModelTest brand: " + m_params [ZoodlesConstants.PARAM_BRAND]);
+		Debug.Log("ModelTest manufacturer: " + m_params[ZoodlesConstants.PARAM_MANUFACTURER]);
+		Debug.Log("ModelTest device: " + m_params [ZoodlesConstants.PARAM_DEVICE]);
+		Debug.Log("ModelTest model: " + m_params [ZoodlesConstants.PARAM_MODEL]);
+
 		//Need to comment out when build   *************************
-		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "SONY";
-		m_params [ZoodlesConstants.PARAM_MODEL] = "TESTTEST";
+//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "SONY";
+//		m_params [ZoodlesConstants.PARAM_MODEL] = "TESTTEST";
 
 		SessionHandler.getInstance().deviceName = l_DI.Call<string>("getManufacturer");			
 		#else
 
 		string l_os = SystemInfo.operatingSystem;
+		Debug.Log("ModelTest os: " + l_os);
 		string[] l_osPara = l_os.Split (ZoodlesConstants.BLANK.ToCharArray());
+		Debug.Log("ModelTest split os: " + l_osPara);
 		if(l_osPara.Length >= 3)
 		{
 			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_osPara[2];
@@ -280,7 +288,9 @@ public class ClientIdRequest : RequestQueue.Request
 		}
 		
 		string l_brand = SystemInfo.deviceModel;
+		Debug.Log("ModelTest brand: " + l_brand);
 		string[] l_brandPara = l_brand.Split (ZoodlesConstants.BLANK.ToCharArray());
+		Debug.Log("ModelTest split brand: " + l_brandPara);
 		if(l_osPara.Length >= 2)
 		{
 			m_params [ZoodlesConstants.PARAM_BRAND] = l_brandPara[0];
@@ -293,6 +303,10 @@ public class ClientIdRequest : RequestQueue.Request
 		}
 		m_params [ZoodlesConstants.PARAM_DEVICE] = SystemInfo.deviceName;
 		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
+
+		Debug.Log("ModelTest manufacturer: " + m_params[ZoodlesConstants.PARAM_MANUFACTURER]);
+		Debug.Log("ModelTest device: " + SystemInfo.deviceName);
+		Debug.Log("ModelTest model: " + SystemInfo.deviceModel);
 
 		//honda: add these to test create premium screen on unity editor
 //		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";

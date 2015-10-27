@@ -528,6 +528,42 @@ public class Game : MonoBehaviour
 	//honda
 	public void clientIdAndPremiumRequests(onRequestCompletedEvent completedEvent)
 	{
+		Hashtable m_params = new Hashtable();
+
+		string l_os = SystemInfo.operatingSystem;
+		Debug.Log("GameModelTest os: " + l_os);
+		string[] l_osPara = l_os.Split (ZoodlesConstants.BLANK.ToCharArray());
+		Debug.Log("GameModelTest split os: " + l_osPara);
+		if(l_osPara.Length >= 3)
+		{
+			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_osPara[2];
+		}
+		else
+		{
+			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_os;
+		}
+		
+		string l_brand = SystemInfo.deviceModel;
+		Debug.Log("GameModelTest brand: " + l_brand);
+		string[] l_brandPara = l_brand.Split (ZoodlesConstants.BLANK.ToCharArray());
+		Debug.Log("GameModelTest split brand: " + l_brandPara);
+		if(l_osPara.Length >= 2)
+		{
+			m_params [ZoodlesConstants.PARAM_BRAND] = l_brandPara[0];
+			m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_brandPara[0];
+		}
+		else
+		{
+			m_params [ZoodlesConstants.PARAM_BRAND] = l_brand;
+			m_params [ZoodlesConstants.PARAM_MANUFACTURER] = l_brand;
+		}
+		m_params [ZoodlesConstants.PARAM_DEVICE] = SystemInfo.deviceName;
+		m_params [ZoodlesConstants.PARAM_MODEL] = SystemInfo.deviceModel;
+		
+		Debug.Log("GameModelTest manufacturer: " + m_params[ZoodlesConstants.PARAM_MANUFACTURER]);
+		Debug.Log("GameModelTest device: " + SystemInfo.deviceName);
+		Debug.Log("GameModelTest model: " + SystemInfo.deviceModel);
+
 		if (completedEvent != null)
 		{
 			onRequestCompleted += completedEvent;
