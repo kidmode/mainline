@@ -48,7 +48,7 @@ public class UpsellSplashCanvas : UICanvas
 		UILabel l_gems   = getView("getGemsButton").getView("getGemsBtnText") as UILabel;
 		UILabel l_dashboard   = getView("continueButton").getView("continueBtnText") as UILabel;
 		
-		l_profiles.text = Localization.getString( Localization.TXT_BUTTON_PROFILES );
+		l_profiles.text = Localization.getString( Localization.TXT_BUTTON_BACK );
 		l_premiumTitle.text = Localization.getString( Localization.TXT_34_LABEL_PREMIUM_TITLE );
 		l_premiumContent.text = Localization.getString( Localization.TXT_34_LABEL_PREMIUM_CONTENT );
 		l_plan.text = Localization.getString( Localization.TXT_34_LABEL_PLAN );
