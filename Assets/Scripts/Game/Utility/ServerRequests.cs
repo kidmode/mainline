@@ -277,7 +277,6 @@ public class ClientIdRequest : RequestQueue.Request
 		string l_os = SystemInfo.operatingSystem;
 		Debug.Log("ModelTest os: " + l_os);
 		string[] l_osPara = l_os.Split (ZoodlesConstants.BLANK.ToCharArray());
-		Debug.Log("ModelTest split os: " + l_osPara);
 		if(l_osPara.Length >= 3)
 		{
 			m_params [ZoodlesConstants.PARAM_OS_VERSION] = l_osPara[2];
@@ -290,7 +289,6 @@ public class ClientIdRequest : RequestQueue.Request
 		string l_brand = SystemInfo.deviceModel;
 		Debug.Log("ModelTest brand: " + l_brand);
 		string[] l_brandPara = l_brand.Split (ZoodlesConstants.BLANK.ToCharArray());
-		Debug.Log("ModelTest split brand: " + l_brandPara);
 		if(l_osPara.Length >= 2)
 		{
 			m_params [ZoodlesConstants.PARAM_BRAND] = l_brandPara[0];
