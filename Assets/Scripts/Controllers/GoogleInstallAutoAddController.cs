@@ -40,7 +40,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 	
 	}
 
-	public void testList(){
+	public void checkList(){
 
 //		Invoke("autoAdd", 1.0f);
 
@@ -48,19 +48,19 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	}
 
-	private void checkList (){
-
-//		KidMode.getAllSystemApps();
-		
-		List<object> l_list = KidMode.getApps();
-
-//		List<object> l_listSystemApps = 
-
-		Debug.Log(" *1111111111111111111111111  h  l_list " + l_list.Count);
-
-//		Debug.Log(" *1111111111111111111111111 l_listSystemApps " + l_listSystemApps.Count);
-
-	}
+//	private void checkList (){
+//
+////		KidMode.getAllSystemApps();
+//		
+//		List<object> l_list = KidMode.getApps();
+//
+////		List<object> l_listSystemApps = 
+//
+//		Debug.Log(" *1111111111111111111111111  h  l_list " + l_list.Count);
+//
+////		Debug.Log(" *1111111111111111111111111 l_listSystemApps " + l_listSystemApps.Count);
+//
+//	}
 
 	private void autoAdd (){
 
@@ -68,7 +68,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 //		int hasLuanchedGoogle = PlayerPrefs.GetInt("hasLaunchedGoogle");
 
-		if(hasLuanchedGoogle == 1){
+//		if(hasLuanchedGoogle == 1){
 			
 			List<object> l_list =  KidMode.getApps();
 
@@ -168,7 +168,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 				CancelInvoke("autoAdd");
 
-			}
+//			}
 			
 
 
