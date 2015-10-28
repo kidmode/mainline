@@ -307,8 +307,8 @@ public class ClientIdRequest : RequestQueue.Request
 		Debug.Log("ModelTest model: " + SystemInfo.deviceModel);
 
 		//honda: add these to test create premium screen on unity editor
-//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "Quanta";
-//		m_params [ZoodlesConstants.PARAM_MODEL] = "QTAQZ3KID";
+		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "HTC";
+		m_params [ZoodlesConstants.PARAM_MODEL] = "M8";
 		//end
 		#endif
 
