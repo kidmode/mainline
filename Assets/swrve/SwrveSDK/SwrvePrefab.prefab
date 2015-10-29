@@ -30,7 +30,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
 --- !u!1002 &400001
 EditorExtensionImpl:
   serializedVersion: 6
@@ -44,9 +43,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47a6e343a3a6a47659f180ae8178ccf7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  GameId: 2785
-  ApiKey: HdS4VZE4nYr48T58c
+  GameId: 0
+  ApiKey: your_api_key_here
   Config:
     UserId: 
     AppVersion: 
@@ -63,10 +61,9 @@ MonoBehaviour:
     AutomaticSessionManagement: 1
     NewSessionInterval: 30
     MaxBufferChars: 20000
-    SendEventsIfBufferTooLarge: 1
     StoreDataInPlayerPrefs: 0
-    PushNotificationEnabled: 1
-    GCMSenderId: 249368169554
+    PushNotificationEnabled: 0
+    GCMSenderId: 
     GCMPushNotificationTitle: '#Your App Title'
     AutoShowMessagesMaxDelay: 5
   FlushEventsOnApplicationQuit: 1

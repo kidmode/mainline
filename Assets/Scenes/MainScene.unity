@@ -2494,8 +2494,8 @@ MonoBehaviour:
     SendEventsIfBufferTooLarge: 1
     StoreDataInPlayerPrefs: 0
     PushNotificationEnabled: 1
-    GCMSenderId: 249368169554
-    GCMPushNotificationTitle: '#Your App Title'
+    GCMSenderId: 1093303544366
+    GCMPushNotificationTitle: Kid Mode
     AutoShowMessagesMaxDelay: 5
   FlushEventsOnApplicationQuit: 1
   InitialiseOnStart: 1
@@ -2722,6 +2722,26 @@ Prefab:
     - target: {fileID: 400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: GameId
+      value: 2785
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: ApiKey
+      value: HdS4VZE4nYr48T58c
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: Config.GCMPushNotificationTitle
+      value: Kid Mode
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: Config.GCMSenderId
+      value: 1093303544366
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
+      propertyPath: Config.PushNotificationEnabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 035bc9a24db7f4733be8484046919a48, type: 2}
