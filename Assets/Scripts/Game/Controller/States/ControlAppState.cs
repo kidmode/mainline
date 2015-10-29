@@ -439,7 +439,8 @@ public class ControlAppState : GameState
 
 		try 
 		{
-			m_addAppCanvas.firstLoadApp();
+//			m_addAppCanvas.firstLoadApp();
+			GoogleInstallAutoAddController.Instance.checkList();
 		}
 		catch (System.Exception e)
 		{
