@@ -53,6 +53,7 @@ public class InitializeGameState : GameState
 		
 		if (m_gotoLogin)
 		{
+			m_gotoLogin = false;
 //			SessionHandler.getInstance().token.clear();
 				if( SessionHandler.getInstance().token.isExist() )
 			{
@@ -68,9 +69,16 @@ public class InitializeGameState : GameState
 			}
 			else
 			{
-				p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
+				if( SessionHandler.getInstance().renewalPeriod > 0 )
+				{
+					p_gameController.changeState(ZoodleState.PREMIUM_ELIGIBLE_PAGE);
+				}
+				else
+				{
+					p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
+				}
 			}
-			m_gotoLogin = false;
+
 		}
 	}
 	

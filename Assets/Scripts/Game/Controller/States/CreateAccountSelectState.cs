@@ -84,16 +84,16 @@ public class CreateAccountSelectState : GameState
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 		if( SessionHandler.getInstance().renewalPeriod > 0 )
 		{
-//			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
-//			l_mainPanel.active = false;
-//			l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
+			UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+			l_mainPanel.active = false;
+			l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
 
-//			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
-//			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
-//			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
-//			l_continueButton.addClickCallback( onContinueClick );
-//			l_exitButton.addClickCallback( onContinueClick );
-//			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
+			UICanvas l_premiumEligibleCanvas = p_uiManager.createScreen( UIScreen.PREMIUM_ELIGIBLE, false , 2 );
+			UIButton l_continueButton = l_premiumEligibleCanvas.getView("continueButton") as UIButton;
+			UIButton l_exitButton = l_premiumEligibleCanvas.getView("exitButton") as UIButton;
+			l_continueButton.addClickCallback( onContinueClick );
+			l_exitButton.addClickCallback( onContinueClick );
+			UILabel l_message = l_premiumEligibleCanvas.getView("messageText") as UILabel;
 
 			string l_deviceName = SessionHandler.getInstance().deviceName;
 			int l_renewalPeriod = SessionHandler.getInstance().renewalPeriod;
@@ -145,12 +145,12 @@ public class CreateAccountSelectState : GameState
         m_createAccountBackgroundCanvas.transitionUp(2.5f);
 	}
 
-//	private void onContinueClick(UIButton p_button)
-//	{
-//		m_gameController.getUI ().removeScreen ( UIScreen.PREMIUM_ELIGIBLE );
-//		UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
-//		l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
-//	}
+	private void onContinueClick(UIButton p_button)
+	{
+		m_gameController.getUI ().removeScreen ( UIScreen.PREMIUM_ELIGIBLE );
+		UIElement l_mainPanel = m_createAccountSelectCanvas.getView("mainPanel");
+		l_mainPanel.tweener.addAlphaTrack ( 0f, 1.0f, 0.5f);
+	}
 
 	private void gotoSetUpScreen(UIButton p_button)
 	{
