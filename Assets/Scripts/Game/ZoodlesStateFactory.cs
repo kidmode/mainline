@@ -74,6 +74,7 @@ public class ZoodleState
 	public const int PAY_GEMS_CONFIRM	= 72;
 	//honda
 	public const int LOADING_PAGE       = 101;
+	public const int PREMIUM_ELIGIBLE_PAGE = 102;
 	//end
 }
 
@@ -151,6 +152,7 @@ public class ZoodlesStateFactory : IGameStateFactory
 		p_gameController.addState( ZoodleState.PAY_GEMS_CONFIRM,	new PayGemsConfirmState()		);
 		//honda
 		p_gameController.addState( ZoodleState.LOADING_PAGE,   		new LoadingPageState()			);
+		p_gameController.addState( ZoodleState.PREMIUM_ELIGIBLE_PAGE, new PremiumEligibleState()  	);
 		//end
 	}
 

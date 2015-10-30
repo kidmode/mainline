@@ -21,6 +21,8 @@ public class ControlAppState : GameState
 		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
 
 		GoogleInstallAutoAddController.OnNewAppAdded += OnNewAppAdded;
+
+//		GoogleInstallAutoAddController.Instance.checkList();
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -437,7 +439,8 @@ public class ControlAppState : GameState
 
 		try 
 		{
-			m_addAppCanvas.firstLoadApp();
+//			m_addAppCanvas.firstLoadApp();
+			GoogleInstallAutoAddController.Instance.checkList();
 		}
 		catch (System.Exception e)
 		{

@@ -718,7 +718,7 @@ public class KidMode
 
 		Debug.Log("  ++++++++++++++++++++++++++++++++++++++++++++++++++++     ++googleInstalledAppAutoAdd");
 
-		GoogleInstallAutoAddController.Instance.testList();
+		GoogleInstallAutoAddController.Instance.checkList();
 
 		return;
 
