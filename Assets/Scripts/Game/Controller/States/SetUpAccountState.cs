@@ -545,7 +545,7 @@ public class SetUpAccountState : GameState
 				SessionHandler.getInstance().token.setToken(l_secret, l_premium,l_tried,l_current,l_vpc);
 				
 				SessionHandler.getInstance().username = m_account.text;
-				CrittercismAndroid.SetUsername(m_account.text);
+				//CrittercismAndroid.SetUsername(m_account.text);
 
 				RequestQueue l_queue = new RequestQueue();
 				l_queue.add(new GetUserSettingRequest());

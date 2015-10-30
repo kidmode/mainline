@@ -321,7 +321,7 @@ public class SocialPlatfromSettingsEditor : Editor {
 		
 
 
-			ApplicationId_meta.SetValue("android:value", "\\ " + FBSettings.AppId);
+//			ApplicationId_meta.SetValue("android:value", "\\ " + FBSettings.AppId);
 
 			LoginActivity.SetValue("android:label", "@string/app_name");
 			LoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar");

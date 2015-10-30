@@ -391,7 +391,7 @@ public class SignInState : GameState
 				SessionHandler.getInstance().hasPin = l_data.ContainsKey("has_pin") && "true".Equals(l_data["has_pin"].ToString());
 				SessionHandler.getInstance().pin = l_data.ContainsKey("pin")&& null != l_data["pin"] ? int.Parse(l_data["pin"].ToString()) : -1;
 
-				CrittercismAndroid.SetUsername(m_account.text);
+				//CrittercismAndroid.SetUsername(m_account.text);
 
 				if (m_queue == null)
 					m_queue = new RequestQueue();

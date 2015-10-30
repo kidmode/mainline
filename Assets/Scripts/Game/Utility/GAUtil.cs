@@ -137,7 +137,7 @@ public class GAUtil
 	{
 		_init();
 
-		s_googleAnalytics.LogException(p_builder);
+//		s_googleAnalytics.LogException(p_builder);
 	}
 
 	public static void logException(string p_exceptionDescription, bool p_isFatal)

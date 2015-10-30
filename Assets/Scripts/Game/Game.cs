@@ -363,11 +363,11 @@ public class Game : MonoBehaviour
 		}
 		string[] keys = {"version"};
 		string[] values = {CurrentBundleVersion.version};
-		CrittercismAndroid.SetMetadata(keys, values);
+		//CrittercismAndroid.SetMetadata(keys, values);
 		//end
 
 		GCS.Environment.init();
-		FB.Init(_initFacebookComplete);
+//		FB.Init(_initFacebookComplete);
 
 		ZoodlesScreenFactory l_screenFactory = new ZoodlesScreenFactory();
 		ZoodlesStateFactory	 l_stateFactory	= new ZoodlesStateFactory();

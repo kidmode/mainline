@@ -163,7 +163,7 @@ public class LoadingPageState : GameState {
 
 	private void toDoActivityRequest(bool isCompleted)
 	{
-		CrittercismAndroid.SetUsername(SessionHandler.getInstance().username);
+//		//CrittercismAndroid.SetUsername(SessionHandler.getInstance().username);
 
 		SessionHandler.getInstance().resetWebBookContentsCache();
 		game.user.contentCache.startRequests(onLoadingCompleted);

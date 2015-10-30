@@ -12,7 +12,7 @@ public class SignInCacheState : GameState
 		m_loginSuccess = false;
 		_setupScreen(p_gameController.getUI());
 		{
-			CrittercismAndroid.SetUsername(SessionHandler.getInstance().username);
+			//CrittercismAndroid.SetUsername(SessionHandler.getInstance().username);
 
 			//	SessionHandler.getInstance ().clientId = 600;
 			m_queue = new RequestQueue();
