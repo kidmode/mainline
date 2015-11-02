@@ -84,29 +84,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-<!--       <receiver
-            android:name="com.swrve.unity.gcm.SwrveGcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.zoodles.kidmode" />
-            </intent-filter>	
-        </receiver>
-       <service android:name="com.swrve.unity.gcm.SwrveGcmIntentService" />
-        <service android:name="com.swrve.unity.gcm.SwrveGcmIntentService">
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        </intent-filter>
-    	</service>
-	    <service android:name="com.swrve.unity.gcm.SwrveGcmInstanceIDListenerService"
-	        android:exported="false">
-	        <intent-filter>
-	            <action android:name="com.google.android.gms.iid.InstanceID"/>
-	        </intent-filter>
-	    </service>-->
 	    
 	        <receiver
         android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -176,8 +153,6 @@
 
             <intent-filter android:priority="1000" />
             <intent-filter>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -188,12 +163,12 @@
         <activity
             android:name="com.onevcat.uniwebview.FakeHome"
             android:enabled="false" >
-<!--            <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
