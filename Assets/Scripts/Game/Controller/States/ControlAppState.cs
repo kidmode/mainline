@@ -439,8 +439,24 @@ public class ControlAppState : GameState
 
 		try 
 		{
-//			m_addAppCanvas.firstLoadApp();
-			GoogleInstallAutoAddController.Instance.checkList();
+
+			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
+			
+			Debug.LogWarning("      ****************************   lastLocalAppsList " + lastLocalAppsList.Count);
+
+			m_addAppCanvas.firstLoadApp();
+
+//			if(lastLocalAppsList.Count > 0 || PlayerPrefs.GetString( "lastLocalApps" ) == ""){
+//
+//				GoogleInstallAutoAddController.Instance.checkList();
+//
+//			}else{
+//
+//				m_addAppCanvas.firstLoadApp();
+//
+//			}
+
+
 		}
 		catch (System.Exception e)
 		{
