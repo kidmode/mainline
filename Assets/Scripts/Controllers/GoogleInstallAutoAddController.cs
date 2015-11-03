@@ -75,6 +75,11 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 //			Debug.Log(" ******************************* 0-00000000000000000000000000000000000000  h  l_list " + l_list.Count);
 			
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
+
+
+//		if(lastLocalAppsList.Count > 0 ){
+
+
 			
 			ArrayList lastLocalAppsArrayList = new ArrayList(lastLocalAppsList);
 			
