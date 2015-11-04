@@ -406,55 +406,55 @@ public class RegionBaseState : GameState
 	private void checkActivityScreen()
 	{
 
-		if( m_foregroundGafGroup != null ){
-
-			if( m_foregroundGafGroup.active){
-
-//				Tweener tw = m_foregroundGafGroup.tweener;
-//				
-//				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
-
-				GAFMovieClip[] gafClips = m_regionLandingCanvas.gameObject.GetComponentsInChildren<GAFMovieClip>();
+//		if( m_foregroundGafGroup != null ){
 //
-				for (int i = 0; i < gafClips.Length; i++) {
+//			if( m_foregroundGafGroup.active){
 //
-//					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
+////				Tweener tw = m_foregroundGafGroup.tweener;
+////				
+////				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
 //
-//					//gafClips[i].renderer.material.
-
-					Renderer gafRenderer = gafClips[i].GetComponent<Renderer>();
-
-					Shader betterUpdateShader = Shader.Find("Particles/VertexLit Blended");
-
-//					gafRenderer.material.shader = betterUpdateShader;
-
-//					Debug.Log("gafClips[i] " + gafClips[i].gameObject.name);
+//				GAFMovieClip[] gafClips = m_regionLandingCanvas.gameObject.GetComponentsInChildren<GAFMovieClip>();
+////
+//				for (int i = 0; i < gafClips.Length; i++) {
+////
+////					Debug.Log("gafClips " + gafClips[i].gameObject.name + "   alpha " + gafClips[i].renderer.material.HasProperty("_Alpha") );
+////
+////					//gafClips[i].renderer.material.
 //
-
-					int size = 0;
-
-					for (int matIndex = 0; matIndex < gafRenderer.materials.Length; matIndex++) {
-
-						gafRenderer.materials[matIndex].shader = betterUpdateShader;
-
-						size++;
-
-//						if(gafRenderer.materials[matIndex].GetFloat("_Alpha") >= 1.0f){
-////							
-//							gafRenderer.materials[matIndex].shader = betterUpdateShader;
-////							
-//						}
-
-					}
-
-//					Debug.Log("   size " + size);
+//					Renderer gafRenderer = gafClips[i].GetComponent<Renderer>();
 //
+//					Shader betterUpdateShader = Shader.Find("Particles/VertexLit Blended");
 //
-				}
-
-			}
-
-		}
+////					gafRenderer.material.shader = betterUpdateShader;
+//
+////					Debug.Log("gafClips[i] " + gafClips[i].gameObject.name);
+////
+//
+//					int size = 0;
+//
+//					for (int matIndex = 0; matIndex < gafRenderer.materials.Length; matIndex++) {
+//
+//						gafRenderer.materials[matIndex].shader = betterUpdateShader;
+//
+//						size++;
+//
+////						if(gafRenderer.materials[matIndex].GetFloat("_Alpha") >= 1.0f){
+//////							
+////							gafRenderer.materials[matIndex].shader = betterUpdateShader;
+//////							
+////						}
+//
+//					}
+//
+////					Debug.Log("   size " + size);
+////
+////
+//				}
+//
+//			}
+//
+//		}
 
 		if( null != m_gameActivityCanvas && null != m_gameActivityCanvas.getView("mainPanel") )
 		{
