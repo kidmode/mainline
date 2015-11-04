@@ -82,6 +82,9 @@ namespace GAF
 			sortedObjects = objectsToRender.Values.ToList();
 			sortedObjects.Sort();
 
+			if(_Filter.sharedMesh == null)
+				return;
+
 			_Filter.sharedMesh.Clear();
 
 			int capacity = sortedObjects.Count;

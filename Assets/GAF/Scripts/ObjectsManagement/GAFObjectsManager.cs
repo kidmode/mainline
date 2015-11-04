@@ -69,12 +69,14 @@ namespace GAF
 					m_AllObjects = new Dictionary<int, IGAFObject>();
 					foreach (var _object in m_Objects)
 					{
-						m_AllObjects.Add(_object.getID(), _object);
+						if(_object != null)
+ 							m_AllObjects.Add(_object.getID(), _object);
 					}
 
 					foreach (var _object in m_BakedObjects)
 					{
-						m_AllObjects.Add(_object.getID(), _object);
+						if(_object != null)
+							m_AllObjects.Add(_object.getID(), _object);
 					}
 				}
 
@@ -256,7 +258,9 @@ namespace GAF
 			{
 				if (objectsDict.ContainsKey((int)state.id))
 				{
-					objectsDict[(int)state.id].updateToState(state, m_RenderProcessor, _Refresh);
+
+					if(objectsDict[(int)state.id] != null)
+						objectsDict[(int)state.id].updateToState(state, m_RenderProcessor, _Refresh);
 				}
 			}
 

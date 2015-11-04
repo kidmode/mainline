@@ -318,6 +318,10 @@ namespace GAF
 			var setColorsShift = false;
 
 			var currentState = getCurrentState();
+
+			if(currentState == null)
+				return;
+
 			if (currentState.alpha != _State.alpha ||
 				_Refresh)
 			{
@@ -385,6 +389,9 @@ namespace GAF
 
 			var currentState	= getCurrentState();
 			var movieClip		= getMovieClip();
+
+			if(currentState == null)
+				return;
 
 			if (currentState.alpha > 0)
 			{
