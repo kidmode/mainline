@@ -558,6 +558,7 @@ GameObject:
   - 33: {fileID: 3317210}
   - 114: {fileID: 11417222}
   - 114: {fileID: 11417224}
+  - 114: {fileID: 11488822}
   m_Layer: 0
   m_Name: Monkey_Anim
   m_TagString: Untagged
@@ -594,6 +595,7 @@ GameObject:
   - 33: {fileID: 3377548}
   - 114: {fileID: 11477550}
   - 114: {fileID: 11477548}
+  - 114: {fileID: 11421888}
   m_Layer: 0
   m_Name: Snake_Anim
   m_TagString: Untagged
@@ -631,6 +633,7 @@ GameObject:
   - 33: {fileID: 3396814}
   - 114: {fileID: 11496816}
   - 114: {fileID: 11496814}
+  - 114: {fileID: 11485456}
   m_Layer: 0
   m_Name: Toucan_Anim
   m_TagString: Untagged
@@ -3144,6 +3147,18 @@ MonoBehaviour:
   m_CurrentFrameNumber: 1
   m_IsInitialized: 1
   m_Resource: {fileID: 11400000, guid: edfbb5a9efa50534aab8172e826d0843, type: 2}
+--- !u!114 &11421888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 177548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b4e8d0ce18b47bdaa1934b39a76494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderName: Particles/Alpha Blended
 --- !u!114 &11438610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4036,6 +4051,30 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11485456
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b4e8d0ce18b47bdaa1934b39a76494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderName: Particles/Alpha Blended
+--- !u!114 &11488822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b4e8d0ce18b47bdaa1934b39a76494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderName: Particles/Alpha Blended
 --- !u!114 &11496814
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -5,9 +5,17 @@ public class GAFShaderSet : MonoBehaviour {
 
 	public string shaderName = "Particles/VertexLit Blended";
 
+	void Awake(){
+
+		setShader();
+
+	}
+
 	// Use this for initialization
 	void Start () {
 	
+		setShader();
+
 	}
 	
 	// Update is called once per frame
@@ -30,9 +38,9 @@ public class GAFShaderSet : MonoBehaviour {
 		
 		int size = 0;
 		
-		for (int matIndex = 0; matIndex < gafRenderer.materials.Length; matIndex++) {
+		for (int matIndex = 0; matIndex < gafRenderer.sharedMaterials.Length; matIndex++) {
 			
-			gafRenderer.materials[matIndex].shader = betterUpdateShader;
+			gafRenderer.sharedMaterials[matIndex].shader = betterUpdateShader;
 			
 			size++;
 			
