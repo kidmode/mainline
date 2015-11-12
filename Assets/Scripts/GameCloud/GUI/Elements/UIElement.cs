@@ -89,9 +89,12 @@ public class UIElement : System.Object
 		get { return gameObject.activeSelf; 	}
 		set 
 		{
-			if (gameObject.activeSelf != value)
+			if (gameObject != null)
 			{
-				gameObject.SetActive(value); 	
+				if (gameObject.activeSelf != value)
+				{
+					gameObject.SetActive(value); 	
+				}
 			}
 		}
 	}

@@ -1136,13 +1136,12 @@ public class RegionBaseState : GameState
 		SessionHandler.getInstance ().IsParent = false;
 		if( null == SessionHandler.getInstance().currentDrawing )
 		{
-//			m_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
-
+			p_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
 			p_gameController.changeState(ZoodleState.PAINT_ACTIVITY);
 		}
 		else
 		{
-//			p_gameController.connectState(ZoodleState.PAINT_VIEW, ZoodleState.REGION_FUN);
+			p_gameController.connectState(ZoodleState.PAINT_VIEW, ZoodleState.REGION_FUN);
 			p_gameController.changeState(ZoodleState.PAINT_VIEW);
 		}
 	}
@@ -1598,7 +1597,7 @@ public class RegionBaseState : GameState
 			m_createActivity = m_nextActivity;
 		}
 	}
-	bool isrun = true;
+	
 	private void onBackButtonClicked(UIButton p_button)
 	{
 		if (m_transitioning)
@@ -2118,6 +2117,41 @@ public class RegionBaseState : GameState
 			return false;
 		}
 	}
+	
+	//honda: debug mode
+	private void updateVideoList()
+	{
+
+		List<object> videoList  = new List<object>();
+
+		videoList.Add(new WebViewInfo(null));
+
+		//add single item list to video list
+		foreach (WebViewInfo info in m_singleVideoList)
+		{
+			videoList.Add(info);
+		}
+		//add multiple item list from google drive to video list
+		foreach (WebViewInfo info in m_multipleVideoList)
+		{
+			videoList.Add(info);
+		}
+		//add original list from server to video list
+		foreach (WebViewInfo info in m_videoViewList)
+		{
+			videoList.Add(info);
+		}
+		m_videoSwipeList.setData(videoList);
+
+		KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+		viewUpdator.setContentDataSize(videoList.Count);
+	}
+
+	private void updateGameList()
+	{
+
+	}
+	//end debug mode
 
 	// Sean: vzw
 	protected UICanvas m_regionAppCanvas;
@@ -2129,9 +2163,8 @@ public class RegionBaseState : GameState
 	//Kevin Add new app list Canvas , there is already m_regionAppCanvas but make sure there is no problems so addding a new one
 	protected UICanvas m_appListCanvas;
 	//Trial time End
-	protected GameController m_gameController;
-	protected UIImage appListButtonLockImageIcon;
 
+	protected UIImage appListButtonLockImageIcon;
 
 	protected UICanvas 	m_regionLandingCanvas;
 	protected UICanvas 	m_activityPanelCanvas;
@@ -2202,7 +2235,13 @@ public class RegionBaseState : GameState
 	protected Vector3 m_backButtonPosition;
 
 	protected RegionState m_regionState;
-	
+
+	//honda: use them for debug app(add videos or games manually)
+	protected List<object> m_singleVideoList      = new List<object>();
+	protected List<object> m_multipleVideoList    = new List<object>();
+	protected List<object> m_singleGameList       = new List<object>();
+	protected List<object> m_multipleGameList     = new List<object>();
+	//end
 	protected List<object> m_videoViewList        = new List<object>();
 	protected List<object> m_videoFavoritesList   = new List<object>();
 	protected WebViewInfo  m_videoFeatured		  = null;
