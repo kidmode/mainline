@@ -402,8 +402,7 @@ public class DeviceOptionsState : GameState
 		{
 			m_allowCall = false;
 
-			//honda: vzw version comment out incoming call due to no use
-//			IncomingCallControl.StartBlock();
+			IncomingCallControl.StartBlock();
 
 			m_settingCache.allowCall = false;
 		}
@@ -411,8 +410,7 @@ public class DeviceOptionsState : GameState
 		{
 			m_allowCall = true;
 
-			//honda: vzw version comment out incoming call due to no use
-//			IncomingCallControl.EndBlock();
+			IncomingCallControl.EndBlock();
 
 			m_settingCache.allowCall = true;
 		}

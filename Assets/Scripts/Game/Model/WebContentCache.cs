@@ -88,8 +88,8 @@ public class WebContentCache : object
 		if (p_response.error == null)
 		{
 			List<object> l_contentList = new List<object> ();
-			string text = p_response.text;
 			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList;
+			Debug.Log("WebContent: " + p_response.text);
 			foreach (object o in l_data)
 			{
 				l_contentList.Add(new WebContent(o as Hashtable));
