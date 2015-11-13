@@ -383,6 +383,13 @@ public class SessionHandler
 		set{m_recordKidList = value;}
 	}
 
+	//honda: debug mode
+	public List<object> singleVideoList      = new List<object>();
+	public List<object> multipleVideoList    = new List<object>();
+	public List<object> singleGameList       = new List<object>();
+	public List<object> multipleGameList     = new List<object>();
+	//end debug mode
+
 	public List<object> webContentList
 	{
 		get
@@ -522,6 +529,7 @@ public class SessionHandler
 		get{return m_bookRequest;}
 		set{m_bookRequest = value;}
 	}
+
 	public void clearUserData(bool cleanClientId)
 	{
 		if (cleanClientId)

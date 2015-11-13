@@ -16,6 +16,10 @@ public class AddItemManuallyPopup : MonoBehaviour {
 	private InputField url;
 	private InputField displayName;
 
+	private UIButton addItemButton;
+	private UIButton updateGDriveButton;
+	private UIButton closeButton;
+
 	//popup type should be "Game" or "Video"
 	public string popupType;
 
@@ -43,28 +47,36 @@ public class AddItemManuallyPopup : MonoBehaviour {
 
 	private void setupScreen()
 	{
-		url = m_addNewItemPopupCanvas.getView ("URLField").gameObject.GetComponent<InputField>();
-		displayName = m_addNewItemPopupCanvas.getView ("DisplayNameField").gameObject.GetComponent<InputField>();
+		url = m_addNewItemPopupCanvas.getView("URLField").gameObject.GetComponent<InputField>();
+		displayName = m_addNewItemPopupCanvas.getView("DisplayNameField").gameObject.GetComponent<InputField>();
 
+		addItemButton = m_addNewItemPopupCanvas.getView("AddItemButton") as UIButton;
+		updateGDriveButton = m_addNewItemPopupCanvas.getView("DownloadItemButton") as UIButton;
+		closeButton = m_addNewItemPopupCanvas.getView("QuitButton") as UIButton;
 	}
 
 	private void setupLocalization()
 	{
-//		UILabel errorLabel = m_addNewItemPopupCanvas.getView("errorLabel") as UILabel;
-//		errorLabel.text = Localization.getString(Localization.ERROR_MESSAGE_ERROR_TEXT);
-
+		UILabel titlelabel = m_addNewItemPopupCanvas.getView("TitleLabel") as UILabel;
+		UILabel addItemlabel = m_addNewItemPopupCanvas.getView("AddItemText") as UILabel;
 		if (popupType.Equals("Game"))
 		{
-
+			titlelabel.text = "Add New Games";
+			addItemlabel.text = "Add Game";
 		}
 		else
 		{
-
+			titlelabel.text = "Add New Videos";
+			addItemlabel.text = "Add Video";
 		}
 	}
 
 	public void singleItemClicked()
 	{
+		addItemButton.enabled = false;
+		updateGDriveButton.enabled = false;
+		closeButton.enabled = false;
+
 		List<string> item = new List<string>();
 		item.Add(displayName.text);
 		item.Add(url.text);
@@ -82,6 +94,10 @@ public class AddItemManuallyPopup : MonoBehaviour {
 
 	public void leavePopup()
 	{
+		addItemButton.enabled = false;
+		updateGDriveButton.enabled = false;
+		closeButton.enabled = false;
+
 		onClick = null;
 		onItemsFromGDriveCompleted = null;
 		if (game != null) 
@@ -92,6 +108,10 @@ public class AddItemManuallyPopup : MonoBehaviour {
 
 	public void updateItemsFromGDrive()
 	{
+		addItemButton.enabled = false;
+		updateGDriveButton.enabled = false;
+		closeButton.enabled = false;
+
 		KidMode.refreshTestingContent(popupType.ToUpper());
 	}
 

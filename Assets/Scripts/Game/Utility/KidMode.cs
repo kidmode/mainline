@@ -116,8 +116,8 @@ public class KidMode
 
 	public static void refreshTestingContent(string type)
 	{
-		Debug.Log("start to fetch items from google drive");
-		Debug.Log("content type: " + type);
+		Debug.Log("~DebugMode~ start to fetch items from google drive");
+		Debug.Log("~DebugMode~ content type: " + type);
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
 		jc.CallStatic("refreshContentData", type);
@@ -127,7 +127,7 @@ public class KidMode
 	// On testing content refresh finish
 	public static void onTestingContentRefreshFinish(string contents)
 	{
-		Debug.Log("complete fetching items from google drive");
+		Debug.Log("~DebugMode~ complete fetching items from google drive");
 		AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
 		popup.itemsFromGDriveCompleted(contents);
 	}
