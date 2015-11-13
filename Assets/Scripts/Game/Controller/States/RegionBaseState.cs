@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 public class GameInfo : System.Object
@@ -9,6 +10,12 @@ public class GameInfo : System.Object
 	public WebViewInfo webViewData;
 	public AppInfo appData;
 	public bool isWebView = true;
+
+	public GameInfo()
+	{
+		webViewData = new WebViewInfo();
+		isWebView = true;
+	}
 
 	public GameInfo(WebViewInfo p_webView)
 	{
@@ -298,7 +305,7 @@ public class RegionBaseState : GameState
 		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
-			Debug.Log("spinner: 3. canSetWebContent");
+			Debug.Log("~DebugMode~ canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
 		}
@@ -359,13 +366,13 @@ public class RegionBaseState : GameState
 	{
 		if (m_linkLoaded == false)
 		{
-			Debug.Log("spinner: 1. checkIfLinksCacheLoaded");
+			Debug.Log("~DebugMode~ checkIfLinksCacheLoaded");
 			Game l_game = p_gameController.game;
 			User l_user = l_game.user;
 			WebContentCache l_cache = l_user.contentCache;
 			if (l_cache.isFinishedLoadingWebContent)
 			{
-				Debug.Log("spinner: 2. isFinishedLoadingWebContent");
+				Debug.Log("~DebugMode~ isFinishedLoadingWebContent");
 				m_linkLoaded = true;
 				canSetWebContent = true;
 			}
@@ -675,7 +682,7 @@ public class RegionBaseState : GameState
 
 		if (m_createActivity == ActivityType.Video)
 		{
-			Debug.Log("spinner: 8. _handleDynamicActivities");
+			Debug.Log("~DebugMode~ _handleDynamicActivities");
 
 			m_videoActivityCanvas = m_gameController.getUI().createScreen(UIScreen.VIDEO_ACTIVITY, true, LAYER_GAME);
 			m_createActivity = ActivityType.None;
@@ -685,15 +692,15 @@ public class RegionBaseState : GameState
 			updateVideoList();
 //			m_videoSwipeList.setData(m_videoViewList);
 //			m_videoSwipeList.addClickListener("RemoveButton", onRemoveButtonClicked);
-			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+//			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
 			
 			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
 
 			//Get Scroll view updator
-			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-			viewUpdator.setContentDataSize(m_videoViewList.Count);
+//			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_videoViewList.Count);
 
 			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
 			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
@@ -723,12 +730,13 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_gameActivityCanvas;
 
 			m_gameSwipeList = m_gameActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			m_gameSwipeList.setData(m_gameViewList);
-			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+			updateGameList();
+//			m_gameSwipeList.setData(m_gameViewList);
+//			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
 			//Get Scroll view updateor
-			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-			viewUpdator.setContentDataSize(m_gameViewList.Count);
+//			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_gameViewList.Count);
 			
 			m_gameFavorateSwipeList = m_gameActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_gameFavorateSwipeList.setData(m_gameFavoritesList);
@@ -1311,6 +1319,24 @@ public class RegionBaseState : GameState
 		if(!showMsgIfNoInternet())
 		{
 			GameInfo l_game = p_data as GameInfo;
+
+			//honda: show add item ui on debug mode 
+			if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
+			{
+				m_gameController.getUI().createScreen(UIScreen.ADD_ITEMS_MANUALLY, false, 6);
+				
+				AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
+				popup.setPopupType("Game");
+				if (popup != null)
+				{
+					popup.onClick += AddSingleItemButtonClicked;
+					popup.onItemsFromGDriveCompleted += AddItemsFromGDrive;
+				}
+				
+				return;
+			}
+			//end debug mode
+
 			
 			if( l_game.isWebView )
 			{
@@ -1896,12 +1922,12 @@ public class RegionBaseState : GameState
 
 	private void _setupWebContentList(List<object> p_contentList)
 	{
-		Debug.Log("spinner: 4. _setupWebContentList = " + p_contentList.Count);
+		Debug.Log("~DebugMode~ _setupWebContentList = " + p_contentList.Count);
 		//TODO: honda comment: p_contentList could be null and it will cause null reference issue
 		if (p_contentList.Count <= 0)
 		{
 			WebContentCache l_cache = m_gameController.game.user.contentCache;
-			Debug.Log("spinner: 4_1. _setupWebContentList no WebContentLis");
+//			Debug.Log("spinner: 4_1. _setupWebContentList no WebContentLis");
 			if( l_cache.loadWebContentFail )
 			{
 				if (m_videoActivityCanvas != null) {
@@ -1925,21 +1951,21 @@ public class RegionBaseState : GameState
 			}
 		}
 
-		Debug.Log("spinner: 5. _setupWebContentList clear data");
+//		Debug.Log("spinner: 5. _setupWebContentList clear data");
 		m_videoViewList.Clear();
 		m_videoFavoritesList.Clear();
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
 
-		#if UNITY_EDITOR
-		for (int i = 0; i < 300; i++) {
-			
-			m_gameViewList.Add( new GameInfo(new AppInfo() ) );
-			
-		}
-
-//		m_gameViewList.Add(l_game);
-		#endif
+//		#if UNITY_EDITOR
+//		for (int i = 0; i < 300; i++) {
+//			
+//			m_gameViewList.Add( new GameInfo(new AppInfo() ) );
+//			
+//		}
+//
+////		m_gameViewList.Add(l_game);
+//		#endif
 
 		int l_gameCount = 0;
 		int l_videoCount = 0;
@@ -1995,8 +2021,16 @@ public class RegionBaseState : GameState
 //						m_gameFeatured = l_info;
 				}
 			}
-			Debug.Log("spinner: 6. m_videoViewList = " + m_videoViewList.Count);
-			Debug.Log("spinner: 7. m_gameViewList = " + m_gameViewList.Count);
+			Debug.Log("~DebugMode~ m_videoViewList = " + m_videoViewList.Count);
+			Debug.Log("~DebugMode~ m_gameViewList = " + m_gameViewList.Count);
+			if (m_videoSwipeList != null)
+			{
+				updateVideoList();
+			}
+			if (m_gameSwipeList != null)
+			{
+				updateGameList();
+			}
 		}
 
 		if( null != m_videoActivityCanvas )
@@ -2172,6 +2206,7 @@ public class RegionBaseState : GameState
 	//honda: debug mode
 	private void AddSingleItemButtonClicked(List<object> list)
 	{
+		string contentType = "Video";
 		foreach (List<string> item in list)
 		{
 			//name: item[0]
@@ -2180,58 +2215,133 @@ public class RegionBaseState : GameState
 			WebViewInfo newInfo = new WebViewInfo(item[0] as string, item[1] as string, item[2] as string, WebViewInfoStatus.FromLocal);
 			if ((item[2] as string).Equals("Video"))
 			{
-				m_singleVideoList.Insert(0, newInfo);
+				contentType = "Video";
+				SessionHandler.getInstance().singleVideoList.Insert(0, newInfo);
 			}
 			else //if type == "Game"
 			{
-				m_singleGameList.Insert(0, newInfo);
+				contentType = "Game";
+				GameInfo gameInfo = new GameInfo(newInfo);
+				SessionHandler.getInstance().singleGameList.Insert(0, gameInfo);
 			}
 		}
-		updateVideoList();
+
+		if (contentType.Equals("Video"))
+		{
+			updateVideoList();
+		}
+		else // if (contentType.Equals("Game"))
+		{
+			updateGameList();
+		}
 	}
 	
 	private void AddItemsFromGDrive(string jsonData)
 	{
-		Debug.Log(jsonData);
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(jsonData) as Hashtable;
-		Debug.Log("items count = " + l_data.Count);
+		Debug.Log("~DebugMode~ json: " + jsonData);
+
+		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode(jsonData) as ArrayList;
+		Debug.Log("~DebugMode~ items count = " + l_data.Count);
+		string contentType = "Video";
+		Hashtable info = l_data[0] as Hashtable;
+		if ((info["type"] as string).Equals("Video"))
+		{
+			contentType = "Video";
+			SessionHandler.getInstance().multipleVideoList.Clear();
+		}
+		else
+		{
+			contentType = "Game";
+			SessionHandler.getInstance().multipleGameList.Clear();
+		}
+
 		foreach (Hashtable item in l_data)
 		{
-			Debug.Log("type: " + item["type"] + "name: " + item["name"] + "url: " + item["url"]);
+			Debug.Log("~DebugMode~ type: " + item["type"] + " & name: " + item["name"] + "& url: " + item["url"]);
+
+			WebViewInfo newInfo = new WebViewInfo(item["name"] as string, item["url"] as string, item["type"] as string, WebViewInfoStatus.FromGDrive);
+			if ((item["type"] as string).Equals("Video"))
+			{
+				SessionHandler.getInstance().multipleVideoList.Add(newInfo);
+			}
+			else //if type == "Game"
+			{
+				GameInfo gameInfo = new GameInfo(newInfo);
+				SessionHandler.getInstance().multipleGameList.Add(gameInfo);
+			}
+		}
+
+		if (contentType.Equals("Video"))
+		{
+			Debug.Log("~DebugMode~ video list updated");
+			updateVideoList();
+		}
+		else // if (contentType.Equals("Game"))
+		{
+			updateGameList();
 		}
 	}
 
 	private void updateVideoList()
 	{
-
 		List<object> videoList  = new List<object>();
 
 		videoList.Add(new WebViewInfo());
 
 		//add single item list to video list
-		foreach (WebViewInfo info in m_singleVideoList)
+		foreach (WebViewInfo info in SessionHandler.getInstance().singleVideoList)
 		{
 			videoList.Add(info);
 		}
+		Debug.Log("~DebugMode~ single video list: " + SessionHandler.getInstance().singleVideoList.Count);
 		//add multiple item list from google drive to video list
-		foreach (WebViewInfo info in m_multipleVideoList)
+		foreach (WebViewInfo info in SessionHandler.getInstance().multipleVideoList)
 		{
 			videoList.Add(info);
 		}
+		Debug.Log("~DebugMode~ multiple video list: " + SessionHandler.getInstance().multipleVideoList.Count);
 		//add original list from server to video list
 		foreach (WebViewInfo info in m_videoViewList)
 		{
 			videoList.Add(info);
 		}
+		Debug.Log("~DebugMode~ video view list: " + m_videoViewList.Count);
 		m_videoSwipeList.setData(videoList);
+		m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
 
 		KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-		viewUpdator.setContentDataSize(videoList.Count);
+		viewUpdator.setContentDataSize(m_videoViewList.Count);
 	}
 
 	private void updateGameList()
 	{
-
+		List<object> gameList  = new List<object>();
+		
+		gameList.Add(new GameInfo());
+		
+		//add single item list to video list
+		foreach (GameInfo info in SessionHandler.getInstance().singleGameList)
+		{
+			gameList.Add(info);
+		}
+		Debug.Log("~DebugMode~ single game list: " + SessionHandler.getInstance().singleGameList.Count);
+		//add multiple item list from google drive to video list
+		foreach (GameInfo info in SessionHandler.getInstance().multipleGameList)
+		{
+			gameList.Add(info);
+		}
+		Debug.Log("~DebugMode~ multiple game list: " + SessionHandler.getInstance().multipleGameList.Count);
+		//add original list from server to video list
+		foreach (GameInfo info in m_gameViewList)
+		{
+			gameList.Add(info);
+		}
+		Debug.Log("~DebugMode~ game view list: " + m_gameViewList.Count);
+		m_gameSwipeList.setData(gameList);
+		m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+		
+		KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+		viewUpdator.setContentDataSize(m_gameViewList.Count);
 	}
 
 	private void onRemoveButtonClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
@@ -2245,21 +2355,21 @@ public class RegionBaseState : GameState
 			contentType = "Video";
 			if (info.infoStatus == WebViewInfoStatus.FromLocal)
 			{
-				int index = getListIndex(m_singleVideoList, info);
+				int index = getListIndex(SessionHandler.getInstance().singleVideoList, info);
 				Debug.Log("item index to be deleted on single video list: " + index);
 				if (index >= 0)
 				{
-					m_singleVideoList.RemoveAt(index);
+					SessionHandler.getInstance().singleVideoList.RemoveAt(index);
 					isItemRemoved = true;
 				}
 			}
 			else if (info.infoStatus == WebViewInfoStatus.FromGDrive)
 			{
-				int index = getListIndex(m_multipleVideoList, info);
+				int index = getListIndex(SessionHandler.getInstance().multipleVideoList, info);
 				Debug.Log("item index to be deleted on multipla video list: " + index);
 				if (index >= 0)
 				{
-					m_multipleVideoList.RemoveAt(index);
+					SessionHandler.getInstance().multipleVideoList.RemoveAt(index);
 					isItemRemoved = true;
 				}
 			}
@@ -2269,21 +2379,21 @@ public class RegionBaseState : GameState
 			contentType = "Game";
 			if (info.infoStatus == WebViewInfoStatus.FromLocal)
 			{
-				int index = getListIndex(m_singleGameList, info);
+				int index = getListIndex(SessionHandler.getInstance().singleGameList, info);
 				Debug.Log("item index to be deleted on single game list: " + index);
 				if (index >= 0)
 				{
-					m_singleGameList.RemoveAt(index);
+					SessionHandler.getInstance().singleGameList.RemoveAt(index);
 					isItemRemoved = true;
 				}
 			}
 			else if (info.infoStatus == WebViewInfoStatus.FromGDrive)
 			{
-				int index = getListIndex(m_multipleGameList, info);
+				int index = getListIndex(SessionHandler.getInstance().multipleGameList, info);
 				Debug.Log("item index to be deleted on multipla game list: " + index);
 				if (index >= 0)
 				{
-					m_multipleGameList.RemoveAt(index);
+					SessionHandler.getInstance().multipleGameList.RemoveAt(index);
 					isItemRemoved = true;
 				}
 			}
@@ -2409,10 +2519,10 @@ public class RegionBaseState : GameState
 	protected RegionState m_regionState;
 
 	//honda: use them for debug app(add videos or games manually)
-	protected List<object> m_singleVideoList      = new List<object>();
-	protected List<object> m_multipleVideoList    = new List<object>();
-	protected List<object> m_singleGameList       = new List<object>();
-	protected List<object> m_multipleGameList     = new List<object>();
+//	protected List<object> m_singleVideoList      = new List<object>();
+//	protected List<object> m_multipleVideoList    = new List<object>();
+//	protected List<object> m_singleGameList       = new List<object>();
+//	protected List<object> m_multipleGameList     = new List<object>();
 	//end
 	protected List<object> m_videoViewList        = new List<object>();
 	protected List<object> m_videoFavoritesList   = new List<object>();

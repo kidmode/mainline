@@ -26,6 +26,8 @@ public class VideoActivityCanvas : UICanvas
 		m_videoFavorateInfo = getView("favoriteInfo") as UILabel;
 		
 		m_emptyTexture = new Texture2D (1, 1);
+		m_emptyTexture.SetPixel(0, 0, new Color(0.88f, 0.88f, 0.88f, 1.0f));
+		m_emptyTexture.Apply();
 
 		_setupList();
 
@@ -94,6 +96,9 @@ public class VideoActivityCanvas : UICanvas
 		WebViewInfo l_info = p_data as WebViewInfo;
 		DebugUtils.Assert( l_info != null );
 
+		UILabel l_numberLabel = p_element.getView("number") as UILabel;
+		UIImage l_rawImage = p_element.getView("icon") as UIImage;
+
 		//honda: Debug mode
 		UILabel title = p_element.getView("AddTitle") as UILabel;
 		UIImage plus = p_element.getView("Plus") as UIImage;
@@ -106,6 +111,7 @@ public class VideoActivityCanvas : UICanvas
 			name.active = false;
 			removeBtn.active = false;
 			removeBtn.enabled = false;
+			l_rawImage.setTexture( m_emptyTexture );
 			return;
 		}
 		else if (l_info.infoStatus == WebViewInfoStatus.FromLocal || l_info.infoStatus == WebViewInfoStatus.FromGDrive)
@@ -114,8 +120,10 @@ public class VideoActivityCanvas : UICanvas
 			plus.active = false;
 			name.active = true;
 			name.text = l_info.webData.name;
-			removeBtn.active = true;
-			removeBtn.enabled = true;
+			removeBtn.active = false;//true;
+			removeBtn.enabled = false;//true;
+			l_rawImage.setTexture( m_emptyTexture );
+			return;
 		}
 		else
 		{
@@ -126,17 +134,9 @@ public class VideoActivityCanvas : UICanvas
 			removeBtn.enabled = false;
 		}
 		//end debug mode
-
-
-        //*Temporary*
-        UILabel l_numberLabel = p_element.getView("number") as UILabel;
+	
 //        DebugUtils.Assert(l_numberLabel != null);
-
         l_numberLabel.text = string.Empty;
-
-		UIImage l_rawImage = p_element.getView("icon") as UIImage;
-        if (l_rawImage == null)
-            return;
 
 		//honda comment: requestIcon check icon from local or server
 		if( !l_info.iconRequested )
@@ -144,7 +144,7 @@ public class VideoActivityCanvas : UICanvas
 			l_info.requestIcon();
 		}
 
-		if( l_info.icon == null )
+		if( l_info.icon == null)
 		{
 			l_rawImage.setTexture( m_emptyTexture );
 		}

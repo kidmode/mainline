@@ -26,6 +26,8 @@ public class GameActivityCanvas : UICanvas
 		m_gameInfo = getView("info") as UILabel;
 
 		m_emptyTexture = new Texture2D (1, 1);
+		m_emptyTexture.SetPixel(0, 0, new Color(0.88f, 0.88f, 0.88f, 1.0f));
+		m_emptyTexture.Apply();
 
 		_setupList();
 		
@@ -111,16 +113,58 @@ public class GameActivityCanvas : UICanvas
 		GameInfo l_game = p_data as GameInfo;
 		DebugUtils.Assert( l_game != null );
 
-        //*Temporary*
 		UILabel l_numberLabel = p_element.getView("number") as UILabel;
 		DebugUtils.Assert(l_numberLabel != null);
-
-        l_numberLabel.text = (p_index + 1).ToString();
 
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
 
+		//honda: Debug mode
+		UILabel title = p_element.getView("AddTitle") as UILabel;
+		UIImage plus = p_element.getView("Plus") as UIImage;
+		UILabel name = p_element.getView("NameTitle") as UILabel;
+		UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
+		if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
+		{
+			title.active = true;
+			plus.active = true;
+			name.active = false;
+			removeBtn.active = false;
+			removeBtn.enabled = false;
+			l_rawImage.setTexture( m_emptyTexture );
+			l_appImage.active = false;
+			l_appName.active = false;
+			l_numberLabel.active = false;
+			return;
+		}
+		else if (l_game.webViewData.infoStatus == WebViewInfoStatus.FromLocal || l_game.webViewData.infoStatus == WebViewInfoStatus.FromGDrive)
+		{
+			title.active = false;
+			plus.active = false;
+			name.active = true;
+			name.text = l_game.webViewData.webData.name;
+			removeBtn.active = false;//true;
+			removeBtn.enabled = false;//true;
+			l_rawImage.setTexture( m_emptyTexture );
+			l_appImage.active = false;
+			l_appName.active = false;
+			l_numberLabel.active = false;
+			return;
+		}
+		else
+		{
+			title.active = false;
+			plus.active = false;
+			name.active = false;
+			removeBtn.active = false;
+			removeBtn.enabled = false;
+			l_numberLabel.active = false;
+		}
+		//end debug mode
+
+
+//        l_numberLabel.text = (p_index + 1).ToString();
 		if (l_appImage != null)
 			l_appImage.active = false;
 	
@@ -144,6 +188,7 @@ public class GameActivityCanvas : UICanvas
 			if( l_info.icon == null )
 			{
 				l_rawImage.setTexture( m_emptyTexture );
+
 			}
 			else if (l_info.icon != null)
 			{
