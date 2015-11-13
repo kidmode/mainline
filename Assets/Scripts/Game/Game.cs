@@ -292,8 +292,6 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
-		KidMode.refreshTestingContent("VIDEO");
-
 //		switch (Input.deviceOrientation) 
 //		{
 //		case DeviceOrientation.FaceDown:
