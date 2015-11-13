@@ -8,6 +8,9 @@ public class AddItemManuallyPopup : MonoBehaviour {
 	public delegate void onClickEvent(List<object> list);
 	public event onClickEvent onClick;
 
+	public delegate void onItemsFromGDriveCompletedEvent(string jsonData);
+	public event onItemsFromGDriveCompletedEvent onItemsFromGDriveCompleted;
+
 	private Game game;
 	private UICanvas m_addNewItemPopupCanvas;
 	private InputField url;
@@ -80,6 +83,7 @@ public class AddItemManuallyPopup : MonoBehaviour {
 	public void leavePopup()
 	{
 		onClick = null;
+		onItemsFromGDriveCompleted = null;
 		if (game != null) 
 		{
 			game.gameController.getUI().removeScreen(UIScreen.ADD_ITEMS_MANUALLY);
@@ -88,7 +92,16 @@ public class AddItemManuallyPopup : MonoBehaviour {
 
 	public void updateItemsFromGDrive()
 	{
+		KidMode.refreshTestingContent(popupType.ToUpper());
+	}
 
+	public void itemsFromGDriveCompleted(string jsonData)
+	{
+		if (onItemsFromGDriveCompleted != null)
+		{
+			onItemsFromGDriveCompleted(jsonData);
+		}
+		leavePopup();
 	}
 
 }
