@@ -131,6 +131,8 @@ public class UIScreen
 	//Honda
 	public const int FOTA_POPUP				= 1206;
 	public const int PARENT_BIRTH_CHECK     = 1207;
+	//honda: Debug Mode
+	public const int ADD_ITEMS_MANUALLY     = 1208;
 }
 
 
@@ -271,6 +273,11 @@ public class ZoodlesScreenFactory : IScreenFactory
 		//honda
 		m_directoryMap.Add( UIScreen.FOTA_POPUP,				SCREEN_DIRECTORY + "FOTAPopup" );
 		m_directoryMap.Add( UIScreen.PARENT_BIRTH_CHECK,		SCREEN_DIRECTORY + "CheckParentBirthPopup" );
+	
+		//honda: debug mode
+		m_directoryMap.Add( UIScreen.ADD_ITEMS_MANUALLY, 		SCREEN_DIRECTORY + "AddItemManuallyPopup" );
+
+
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -408,6 +415,10 @@ public class ZoodlesScreenFactory : IScreenFactory
 			//honda
 			case UIScreen.FOTA_POPUP:				return new UICanvas()			as UICanvas;
 			case UIScreen.PARENT_BIRTH_CHECK:		return new UICanvas()			as UICanvas;
+
+			//honda: debug mode
+			case UIScreen.ADD_ITEMS_MANUALLY:		return new UICanvas()			as UICanvas;
+
 		}
 		return new UICanvas();
 	}

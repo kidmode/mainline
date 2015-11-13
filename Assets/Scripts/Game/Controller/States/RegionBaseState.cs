@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class GameInfo : System.Object
 {
 	public WebViewInfo webViewData;
@@ -22,6 +23,13 @@ public class GameInfo : System.Object
 	}
 }
 
+public class WebViewInfoStatus
+{
+	public const int AddItem = 0;
+	public const int FromLocal = 1;
+	public const int FromServer = 2;
+}
+
 public class WebViewInfo : System.Object
 {
 	public const string DEFAULT_URL = "https://www.youtube.com/embed/v53mhRXXT2g?rel=0";
@@ -33,7 +41,28 @@ public class WebViewInfo : System.Object
 	public WebContent   webData;
 	//honda: new property
 	public bool 		iconRequested;
-	
+
+	public int infoStatus;
+
+	public WebViewInfo()
+	{
+		icon = null;
+		urlString = null;
+		webData = null;
+		iconRequested = true;
+		infoStatus = WebViewInfoStatus.AddItem;
+		iconRequested = true;
+	}
+
+	public WebViewInfo(string name, string url, string contentType)
+	{
+		icon = null;
+		urlString = url;
+		iconRequested = true;
+		webData = new WebContent(name, url, contentType);
+		infoStatus = WebViewInfoStatus.FromLocal;
+	}
+
 	public WebViewInfo(Texture2D p_icon, WebContent p_content = null, string p_urlString = DEFAULT_URL)
 	{
 		icon 		= p_icon;
@@ -41,6 +70,7 @@ public class WebViewInfo : System.Object
 		webData     = p_content;
 		//honda
 		iconRequested = false;
+		infoStatus = WebViewInfoStatus.FromServer;
 	}
 
 	public void requestIcon()
@@ -651,8 +681,8 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_videoActivityCanvas;
 			
 			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			m_videoSwipeList.setData(m_videoViewList);
-			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+			updateVideoList();
+//			m_videoSwipeList.setData(m_videoViewList);
 			
 			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
@@ -1223,7 +1253,23 @@ public class RegionBaseState : GameState
 		//honda: if no internet, won't enter video section
 		if (!showMsgIfNoInternet())
 		{
-			WebContent l_webContent = (p_data as WebViewInfo).webData;
+			WebViewInfo webViewInfo = p_data as WebViewInfo;
+
+			//honda: show add item ui on debug mode 
+			if (webViewInfo.infoStatus == WebViewInfoStatus.AddItem)
+			{
+				m_gameController.getUI().createScreen(UIScreen.ADD_ITEMS_MANUALLY, false, 6);
+
+				AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
+				popup.setPopupType("Video");
+				if (popup != null)
+					popup.onClick += AddSingleItemButtonClicked;
+
+				return;
+			}
+			//end debug mode
+
+			WebContent l_webContent = webViewInfo.webData;
 			SessionHandler.getInstance().currentContent = l_webContent;
 			
 			m_subState = SubState.GO_VIDEO;
@@ -1231,6 +1277,26 @@ public class RegionBaseState : GameState
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
 			SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 		}
+	}
+
+	private void AddSingleItemButtonClicked(List<object> list)
+	{
+		foreach (List<string> item in list)
+		{
+			//name: item[0]
+			//url: item[1]
+			//content type: item[2]
+			WebViewInfo newInfo = new WebViewInfo(item[0] as string, item[1] as string, item[2] as string);
+			if ((item[2] as string).Equals("Video"))
+			{
+				m_singleVideoList.Add(newInfo);
+			}
+			else //if type == "Game"
+			{
+				m_singleGameList.Add(newInfo);
+			}
+		}
+		updateVideoList();
 	}
 
 	//honda: comment out because we remove feature toy box
@@ -2124,7 +2190,7 @@ public class RegionBaseState : GameState
 
 		List<object> videoList  = new List<object>();
 
-		videoList.Add(new WebViewInfo(null));
+		videoList.Add(new WebViewInfo());
 
 		//add single item list to video list
 		foreach (WebViewInfo info in m_singleVideoList)
@@ -2142,6 +2208,7 @@ public class RegionBaseState : GameState
 			videoList.Add(info);
 		}
 		m_videoSwipeList.setData(videoList);
+		m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
 
 		KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 		viewUpdator.setContentDataSize(videoList.Count);
