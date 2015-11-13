@@ -94,29 +94,36 @@ public class VideoActivityCanvas : UICanvas
 		WebViewInfo l_info = p_data as WebViewInfo;
 		DebugUtils.Assert( l_info != null );
 
-
 		//honda: Debug mode
 		UILabel title = p_element.getView("AddTitle") as UILabel;
 		UIImage plus = p_element.getView("Plus") as UIImage;
+		UILabel name = p_element.getView("NameTitle") as UILabel;
+		UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
 		if (l_info.infoStatus == WebViewInfoStatus.AddItem)
 		{
 			title.active = true;
 			plus.active = true;
+			name.active = false;
+			removeBtn.active = false;
+			removeBtn.enabled = false;
 			return;
 		}
-		else if (l_info.infoStatus == WebViewInfoStatus.FromLocal)
+		else if (l_info.infoStatus == WebViewInfoStatus.FromLocal || l_info.infoStatus == WebViewInfoStatus.FromGDrive)
 		{
-			UILabel name = p_element.getView("NameTitle") as UILabel;
-			UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
-			name.active = true;
-			removeBtn.active = true;
 			title.active = false;
 			plus.active = false;
+			name.active = true;
+			name.text = l_info.webData.name;
+			removeBtn.active = true;
+			removeBtn.enabled = true;
 		}
 		else
 		{
 			title.active = false;
 			plus.active = false;
+			name.active = false;
+			removeBtn.active = false;
+			removeBtn.enabled = false;
 		}
 		//end debug mode
 

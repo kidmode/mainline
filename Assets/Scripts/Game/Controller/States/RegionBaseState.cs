@@ -27,7 +27,8 @@ public class WebViewInfoStatus
 {
 	public const int AddItem = 0;
 	public const int FromLocal = 1;
-	public const int FromServer = 2;
+	public const int FromGDrive = 2;
+	public const int FromServer = 3;
 }
 
 public class WebViewInfo : System.Object
@@ -54,13 +55,13 @@ public class WebViewInfo : System.Object
 		iconRequested = true;
 	}
 
-	public WebViewInfo(string name, string url, string contentType)
+	public WebViewInfo(string name, string url, string contentType, int from)
 	{
 		icon = null;
 		urlString = url;
 		iconRequested = true;
 		webData = new WebContent(name, url, contentType);
-		infoStatus = WebViewInfoStatus.FromLocal;
+		infoStatus = from;
 	}
 
 	public WebViewInfo(Texture2D p_icon, WebContent p_content = null, string p_urlString = DEFAULT_URL)
@@ -683,11 +684,12 @@ public class RegionBaseState : GameState
 			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
 			updateVideoList();
 //			m_videoSwipeList.setData(m_videoViewList);
+//			m_videoSwipeList.addClickListener("RemoveButton", onRemoveButtonClicked);
+			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
 			
 			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
-
 
 			//Get Scroll view updator
 			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
@@ -1263,7 +1265,10 @@ public class RegionBaseState : GameState
 				AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
 				popup.setPopupType("Video");
 				if (popup != null)
+				{
 					popup.onClick += AddSingleItemButtonClicked;
+					popup.onItemsFromGDriveCompleted += AddItemsFromGDrive;
+				}
 
 				return;
 			}
@@ -1277,26 +1282,6 @@ public class RegionBaseState : GameState
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"VideoName", l_webContent.name}};
 			SwrveComponent.Instance.SDK.NamedEvent("Video.CLICK",payload);
 		}
-	}
-
-	private void AddSingleItemButtonClicked(List<object> list)
-	{
-		foreach (List<string> item in list)
-		{
-			//name: item[0]
-			//url: item[1]
-			//content type: item[2]
-			WebViewInfo newInfo = new WebViewInfo(item[0] as string, item[1] as string, item[2] as string);
-			if ((item[2] as string).Equals("Video"))
-			{
-				m_singleVideoList.Add(newInfo);
-			}
-			else //if type == "Game"
-			{
-				m_singleGameList.Add(newInfo);
-			}
-		}
-		updateVideoList();
 	}
 
 	//honda: comment out because we remove feature toy box
@@ -2185,6 +2170,37 @@ public class RegionBaseState : GameState
 	}
 	
 	//honda: debug mode
+	private void AddSingleItemButtonClicked(List<object> list)
+	{
+		foreach (List<string> item in list)
+		{
+			//name: item[0]
+			//url: item[1]
+			//content type: item[2]
+			WebViewInfo newInfo = new WebViewInfo(item[0] as string, item[1] as string, item[2] as string, WebViewInfoStatus.FromLocal);
+			if ((item[2] as string).Equals("Video"))
+			{
+				m_singleVideoList.Insert(0, newInfo);
+			}
+			else //if type == "Game"
+			{
+				m_singleGameList.Insert(0, newInfo);
+			}
+		}
+		updateVideoList();
+	}
+	
+	private void AddItemsFromGDrive(string jsonData)
+	{
+		Debug.Log(jsonData);
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(jsonData) as Hashtable;
+		Debug.Log("items count = " + l_data.Count);
+		foreach (Hashtable item in l_data)
+		{
+			Debug.Log("type: " + item["type"] + "name: " + item["name"] + "url: " + item["url"]);
+		}
+	}
+
 	private void updateVideoList()
 	{
 
@@ -2208,7 +2224,6 @@ public class RegionBaseState : GameState
 			videoList.Add(info);
 		}
 		m_videoSwipeList.setData(videoList);
-		m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
 
 		KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 		viewUpdator.setContentDataSize(videoList.Count);
@@ -2217,6 +2232,96 @@ public class RegionBaseState : GameState
 	private void updateGameList()
 	{
 
+	}
+
+	private void onRemoveButtonClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
+	{
+		Debug.Log("remove button clicked");
+		WebViewInfo info = p_data as WebViewInfo;
+		bool isItemRemoved = false;
+		string contentType = "Video";
+		if (info.webData.gameType == WebContent.LINK_YOUTUBE)
+		{
+			contentType = "Video";
+			if (info.infoStatus == WebViewInfoStatus.FromLocal)
+			{
+				int index = getListIndex(m_singleVideoList, info);
+				Debug.Log("item index to be deleted on single video list: " + index);
+				if (index >= 0)
+				{
+					m_singleVideoList.RemoveAt(index);
+					isItemRemoved = true;
+				}
+			}
+			else if (info.infoStatus == WebViewInfoStatus.FromGDrive)
+			{
+				int index = getListIndex(m_multipleVideoList, info);
+				Debug.Log("item index to be deleted on multipla video list: " + index);
+				if (index >= 0)
+				{
+					m_multipleVideoList.RemoveAt(index);
+					isItemRemoved = true;
+				}
+			}
+		}
+		else // if info.webData.gameType == WebContent.LINK_HTML
+		{
+			contentType = "Game";
+			if (info.infoStatus == WebViewInfoStatus.FromLocal)
+			{
+				int index = getListIndex(m_singleGameList, info);
+				Debug.Log("item index to be deleted on single game list: " + index);
+				if (index >= 0)
+				{
+					m_singleGameList.RemoveAt(index);
+					isItemRemoved = true;
+				}
+			}
+			else if (info.infoStatus == WebViewInfoStatus.FromGDrive)
+			{
+				int index = getListIndex(m_multipleGameList, info);
+				Debug.Log("item index to be deleted on multipla game list: " + index);
+				if (index >= 0)
+				{
+					m_multipleGameList.RemoveAt(index);
+					isItemRemoved = true;
+				}
+			}
+		}
+
+		if (isItemRemoved)
+		{
+			if (contentType.Equals("Video"))
+			{
+				updateVideoList();
+			}
+			else // if (contentType.Equals("Game"))
+			{
+				updateGameList();
+			}
+		}
+	}
+
+	private int getListIndex(List<object> list, WebViewInfo currentInfo)
+	{
+		int index = 0;
+		bool isFound = false;
+		foreach (WebViewInfo info in list)
+		{
+			if (currentInfo.webData.name != string.Empty && 
+			    currentInfo.webData.name.Equals(info.webData.name))
+			{
+
+				isFound = true;
+				break;
+			}
+			index++;
+		}
+
+		if (isFound)
+			return index;
+		else
+			return -1;
 	}
 	//end debug mode
 
