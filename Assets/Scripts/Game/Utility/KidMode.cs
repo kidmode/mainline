@@ -111,6 +111,24 @@ public class KidMode
 
 	}
 
+	// For refresh testing content
+	// Type parameter : VIDEO, GAME
+
+	public static void refreshTestingContent(string type)
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		jc.CallStatic("refreshContentData", type);
+		#endif
+	}
+
+	// On testing content refresh finish
+	public static void onTestingContentRefreshFinish(string contents)
+	{
+
+	}
+
+
 	public static void closeNativeWebview()
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR

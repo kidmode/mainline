@@ -276,6 +276,10 @@ public class Game : MonoBehaviour
 		KidMode.getAllSystemApps();
 	}
 
+	public void onTestingContentRefreshFinish(string contents) {;
+		KidMode.onTestingContentRefreshFinish(contents);
+	}
+
 
 
 	public void Start()
@@ -287,6 +291,8 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+		KidMode.refreshTestingContent("VIDEO");
 
 //		switch (Input.deviceOrientation) 
 //		{
