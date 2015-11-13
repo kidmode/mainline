@@ -57,10 +57,12 @@ public class PaintViewSate : GameState
 		m_yesButton		.addClickCallback (onYesButtonClick);
 		m_noButton		.addClickCallback (onNoButtonClick);
 
-
+		//honda: if parents open drawings from parent dashboard, 
+		//       we should not let them edit or delete any drawing because those are childern's property.
 		if( true == SessionHandler.getInstance().IsParent )
 		{
 			m_editButton.enabled = false;
+			m_deleteButton.enabled = false;
 		}
 
 		getCurrentIndex ();
@@ -171,10 +173,10 @@ public class PaintViewSate : GameState
 
 	private void onBackButtonClick( UIButton p_button )
 	{
-//		int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
-//		m_gameController.changeState (l_state);
+		int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
+		m_gameController.changeState (l_state);
 
-		m_gameController.changeState (ZoodleState.REGION_FUN);
+//		m_gameController.changeState (ZoodleState.REGION_FUN);
 	}
 
 	private void onEditButtonClick( UIButton p_button )

@@ -77,7 +77,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
 
 
-//		if(lastLocalAppsList.Count > 0 ){
+		if(lastLocalAppsList.Count > 0 ){
 
 
 			
@@ -173,7 +173,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 				CancelInvoke("autoAdd");
 
-//			}
+			}
 			
 
 
