@@ -689,18 +689,21 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_videoActivityCanvas;
 			
 			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			updateVideoList();
-//			m_videoSwipeList.setData(m_videoViewList);
-//			m_videoSwipeList.addClickListener("RemoveButton", onRemoveButtonClicked);
-//			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
-			
+			//honda: for debug mode
+//			updateVideoList();
+			//end
+			//honda: for normal mainline
+			m_videoSwipeList.setData(m_videoViewList);
+			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+
+			//Get Scroll view updator
+			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+			viewUpdator.setContentDataSize(m_videoViewList.Count);
+			//end
+
 			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_videoFavorateSwipeList.setData(m_videoFavoritesList);
 			m_videoFavorateSwipeList.addClickListener("Prototype", onVideoClicked);
-
-			//Get Scroll view updator
-//			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-//			viewUpdator.setContentDataSize(m_videoViewList.Count);
 
 			UILabel l_videoInfo = m_videoActivityCanvas.getView("info") as UILabel;
 			l_videoInfo.active = (m_videoSwipeList.getData().Count <= 0);
@@ -730,14 +733,18 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_gameActivityCanvas;
 
 			m_gameSwipeList = m_gameActivityCanvas.getView("allContentScrollView") as UISwipeList;
-			updateGameList();
-//			m_gameSwipeList.setData(m_gameViewList);
-//			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+			//honda: for debug mode
+//			updateGameList();
+			//end
+			//honda: for normal mainline
+			m_gameSwipeList.setData(m_gameViewList);
+			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
 			//Get Scroll view updateor
-//			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-//			viewUpdator.setContentDataSize(m_gameViewList.Count);
-			
+			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+			viewUpdator.setContentDataSize(m_gameViewList.Count);
+			//snd
+
 			m_gameFavorateSwipeList = m_gameActivityCanvas.getView("favorateScrollView") as UISwipeList;
 			m_gameFavorateSwipeList.setData(m_gameFavoritesList);
 			m_gameFavorateSwipeList.addClickListener("Prototype", onGameClicked);
