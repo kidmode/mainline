@@ -308,6 +308,15 @@ public class RegionBaseState : GameState
 			Debug.Log("~DebugMode~ canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
+
+
+			List<object> l_list = KidMode.getSelectedAppsSorted();
+			foreach (AppInfo l_app in l_list)
+			{
+				if(! m_appList.Contains(l_app))
+					m_gameViewList.Add(l_app);
+			}
+
 		}
 		//after complete books loading, set contents to WebContentCache
 		if( canSetBook )
