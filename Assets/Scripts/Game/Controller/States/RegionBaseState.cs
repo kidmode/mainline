@@ -2030,6 +2030,7 @@ public class RegionBaseState : GameState
 			}
 			Debug.Log("~DebugMode~ m_videoViewList = " + m_videoViewList.Count);
 			Debug.Log("~DebugMode~ m_gameViewList = " + m_gameViewList.Count);
+			//honda: for debug mode
 //			if (m_videoSwipeList != null)
 //			{
 //				updateVideoList();
@@ -2038,6 +2039,7 @@ public class RegionBaseState : GameState
 //			{
 //				updateGameList();
 //			}
+			//end
 		}
 
 		if( null != m_videoActivityCanvas )
