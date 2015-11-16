@@ -33,6 +33,21 @@ public class WebContent : object
         fromHashtable( p_table );
     }
 
+	public WebContent(string n, string u, string type)
+	{
+		id = -1;
+		name = n;
+		url = u;
+		if (type.Equals("Game"))
+		{
+			gameType = LINK_HTML;
+		}
+		else// if (type.Equals("Video"))
+		{
+			gameType = LINK_YOUTUBE;
+		}
+	}
+
 
 	public int      id              { get; set; }	// unique ID in local database
 	public int      serverId		{ get; set; }	// key from REST API backend

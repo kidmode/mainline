@@ -31,6 +31,13 @@ public class MapState : GameState
 //		Handheld.StartActivityIndicator();
 		KidMode.showProgressBar ();
 
+		//honda: debug mode
+		SessionHandler.getInstance().singleGameList.Clear();
+		SessionHandler.getInstance().singleVideoList.Clear();
+		SessionHandler.getInstance().multipleGameList.Clear();
+		SessionHandler.getInstance().multipleVideoList.Clear();
+		//end debug mode
+
 		KidMode.systemGC ();
 		_setupMap(p_gameController);
 		_setupKidProfile(p_gameController);

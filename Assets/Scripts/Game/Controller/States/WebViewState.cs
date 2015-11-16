@@ -30,12 +30,11 @@ public class WebViewState : GameState
 		m_linkId = SessionHandler.getInstance().currentContent.id;
 		m_duration = 0;
 
-
-		m_requestQueue = new RequestQueue();
-		
-		m_requestQueue.reset ();
-		m_requestQueue.add( new LinkVisitRequest( m_linkId ) );
-		m_requestQueue.request (RequestType.RUSH);
+//		m_requestQueue = new RequestQueue();
+//		
+//		m_requestQueue.reset ();
+//		m_requestQueue.add( new LinkVisitRequest( m_linkId ) );
+//		m_requestQueue.request (RequestType.RUSH);
 
 
 
@@ -186,15 +185,15 @@ public class WebViewState : GameState
 	{
 		GameObject.Destroy(m_webObj);
 
-
-
 		m_webObj = null;
 		m_webView = null;
 
 		p_gameController.getUI().removeScreenImmediately(UIScreen.WEBVIEW);
 
-		new VisitLinkTrackRequest().send(m_linkId, (int)Math.Ceiling(m_duration * 0.001));
-
+		if (m_linkId != -1)
+		{
+			new VisitLinkTrackRequest().send(m_linkId, (int)Math.Ceiling(m_duration * 0.001));
+		}
 		base.exit(p_gameController);
 	}
 
