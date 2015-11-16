@@ -118,7 +118,7 @@ public class KidMode
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
-		jc.CallStatic("refreshContentData", type);
+		jc.CallStatic("refreshTestingContent", type);
 		#endif
 	}
 

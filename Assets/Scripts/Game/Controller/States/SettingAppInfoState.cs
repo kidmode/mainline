@@ -252,9 +252,14 @@ public class SettingAppInfoState : GameState
 			jo_intent.Call<AndroidJavaObject>( "putExtra", jo_subject, l_subject );
 			jo_intent.Call<AndroidJavaObject>( "putExtra", jo_text, "" );
 
+			AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+			jc.CallStatic("sendFeedback");
+
 			AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>( "createChooser", jo_intent, Localization.getString(Localization.TXT_STATE_29_CHOOSE) );
 
 			l_joActivity.Call("startActivity", jo_chooser );
+
+
 			#endif
 		}
 	}
