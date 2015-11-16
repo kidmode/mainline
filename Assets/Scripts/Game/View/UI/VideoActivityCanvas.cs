@@ -120,8 +120,8 @@ public class VideoActivityCanvas : UICanvas
 			plus.active = false;
 			name.active = true;
 			name.text = l_info.webData.name;
-			removeBtn.active = false;//true;
-			removeBtn.enabled = false;//true;
+			removeBtn.active = true;
+			removeBtn.enabled = true;
 			l_rawImage.setTexture( m_emptyTexture );
 			return;
 		}

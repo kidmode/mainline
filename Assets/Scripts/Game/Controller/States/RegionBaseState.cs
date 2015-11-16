@@ -2308,6 +2308,7 @@ public class RegionBaseState : GameState
 		Debug.Log("~DebugMode~ video view list: " + m_videoViewList.Count);
 		m_videoSwipeList.setData(videoList);
 		m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+		m_videoSwipeList.addClickListener("RemoveButton", onRemoveButtonClicked);
 
 		KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 		viewUpdator.setContentDataSize(m_videoViewList.Count);
@@ -2339,6 +2340,7 @@ public class RegionBaseState : GameState
 		Debug.Log("~DebugMode~ game view list: " + m_gameViewList.Count);
 		m_gameSwipeList.setData(gameList);
 		m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+		m_gameSwipeList.addClickListener("RemoveButton", onRemoveButtonClicked);
 		
 		KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 		viewUpdator.setContentDataSize(m_gameViewList.Count);
@@ -2347,7 +2349,18 @@ public class RegionBaseState : GameState
 	private void onRemoveButtonClicked(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
 		Debug.Log("remove button clicked");
-		WebViewInfo info = p_data as WebViewInfo;
+
+		WebViewInfo info = null;
+		if (p_data is GameInfo)
+		{
+			info = (p_data as GameInfo).webViewData;
+		}
+		else 
+		{
+			info = p_data as WebViewInfo;
+		}
+
+//		WebViewInfo info = p_data as WebViewInfo;
 		bool isItemRemoved = false;
 		string contentType = "Video";
 		if (info.webData.gameType == WebContent.LINK_YOUTUBE)
@@ -2416,8 +2429,18 @@ public class RegionBaseState : GameState
 	{
 		int index = 0;
 		bool isFound = false;
-		foreach (WebViewInfo info in list)
+		foreach (object item in list)
 		{
+			WebViewInfo info = null;
+			if (item is GameInfo)
+			{
+				info = (item as GameInfo).webViewData;
+			}
+			else
+			{
+				info = item as WebViewInfo;
+			}
+
 			if (currentInfo.webData.name != string.Empty && 
 			    currentInfo.webData.name.Equals(info.webData.name))
 			{
