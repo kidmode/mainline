@@ -733,6 +733,55 @@ public class RegionBaseState : GameState
 			m_currentActivityCanvas = m_gameActivityCanvas;
 
 			m_gameSwipeList = m_gameActivityCanvas.getView("allContentScrollView") as UISwipeList;
+
+
+#if UNITY_EDITOR
+
+			for (int i = 0; i < 6; i++) {
+				
+				
+				
+				GameInfo info = new GameInfo();
+				
+				for (int j = 0; j < i; j++) {
+					
+//					info. = info.appName + "t";
+					
+				}
+				
+//				info.appName = info.appName + i;
+				
+				//			info.appName ="test " + i;
+				
+				m_gameViewList.Add( info );
+				
+			}
+
+
+			for (int i = 0; i < 3; i++) {
+
+
+				
+				AppInfo info = new AppInfo();
+				
+				for (int j = 0; j < i; j++) {
+					
+					info.appName = info.appName + "t";
+					
+				}
+				
+				info.appName = info.appName + i;
+				
+				//			info.appName ="test " + i;
+				
+				m_gameViewList.Add( info );
+				
+			}
+
+
+#endif	
+			//m_gameSwipeList
+
 			//honda: for debug mode
 //			updateGameList();
 			//end
