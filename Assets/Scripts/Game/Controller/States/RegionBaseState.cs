@@ -305,10 +305,11 @@ public class RegionBaseState : GameState
 		//after complete games and video loading, set contents to WebContentCache
 		if( canSetWebContent )
 		{
+
+
 			Debug.Log("~DebugMode~ canSetWebContent");
 			canSetWebContent = false;
 			_setupWebContentList(SessionHandler.getInstance().webContentList);
-
 
 			List<object> l_list = KidMode.getSelectedAppsSorted();
 			foreach (AppInfo l_app in l_list)
@@ -316,6 +317,7 @@ public class RegionBaseState : GameState
 				if(! m_appList.Contains(l_app))
 					m_gameViewList.Add(l_app);
 			}
+
 
 		}
 		//after complete books loading, set contents to WebContentCache
@@ -2022,7 +2024,16 @@ public class RegionBaseState : GameState
 		m_gameViewList.Clear();
 		m_gameFavoritesList.Clear();
 
-//		#if UNITY_EDITOR
+
+//		List<object> l_list = KidMode.getSelectedAppsSorted();
+//		foreach (AppInfo l_app in l_list)
+//		{
+//			if(! m_appList.Contains(l_app))
+//				m_gameViewList.Add(l_app);
+//		}
+
+		
+		//		#if UNITY_EDITOR
 //		for (int i = 0; i < 300; i++) {
 //			
 //			m_gameViewList.Add( new GameInfo(new AppInfo() ) );

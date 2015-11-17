@@ -122,7 +122,16 @@ public class GameActivityCanvas : UICanvas
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
-		
+
+		UIImage l_backgroundImage = p_element.getView("background") as UIImage;
+		UIImage l_shadowImage = p_element.getView("shadow") as UIImage;
+
+		UIImage l_panel = p_element.getView("Panel") as UIImage;
+
+		UIImage l_PanelShadow = p_element.getView("PanelShadow") as UIImage;
+
+		//PanelShadow
+
 		if(l_game != null){
 
 //		DebugUtils.Assert( l_game != null );
@@ -186,16 +195,24 @@ public class GameActivityCanvas : UICanvas
 			{
 				WebViewInfo l_info = l_game.webViewData;
 
+				Mask mask = l_panel.gameObject.GetComponent<Mask>();
+				mask.enabled = true;
+
 				//honda comment: requestIcon check icon from local or server
 				if( !l_info.iconRequested )
 				{
 					l_info.requestIcon();
 				}
 
-				if (l_appName.active)
-				{
-					l_appName.active = false;
-				}
+//				if (l_appName.active)
+//				{
+//					l_appName.active = false;
+//				}
+
+				l_appName.active = true;
+				l_appName.text = l_game.webViewData.webData.name;
+
+
 				if( l_info.icon == null )
 				{
 					l_rawImage.setTexture( m_emptyTexture );
@@ -208,6 +225,13 @@ public class GameActivityCanvas : UICanvas
 					if (l_appImage != null)
 						l_appImage.active = false;
 				}
+
+
+				//===================
+				//Need to move the app icon info to the child of the 
+				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+
+				l_PanelShadow.active = true;
 			}
 		}
 		else
@@ -219,6 +243,9 @@ public class GameActivityCanvas : UICanvas
 				l_appName.active = true;
 			}
 
+
+//			l_backgroundImage.
+
 			Vector2 l_textSize = l_appName.calcSize();
 			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
 			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
@@ -226,7 +253,9 @@ public class GameActivityCanvas : UICanvas
 			
 			if( l_info.appIcon == null )
 			{
+//				l_rawImage.setTexture( m_emptyTexture );
 				l_appImage.setTexture( m_emptyTexture );
+				l_rawImage.active = false;
 			}
 			else if (l_info.appIcon != null)
 			{
@@ -234,6 +263,34 @@ public class GameActivityCanvas : UICanvas
 				l_appImage.active = true;
 				l_rawImage.active = false;
 			}
+
+
+			l_shadowImage.active = false;
+
+			//==========================================================================================
+			//Turn off the mask
+			Mask mask = l_panel.gameObject.GetComponent<Mask>();
+			mask.enabled = false;
+
+
+			//===================
+			//Need to move the app icon info to the child of the 
+			l_appImage.gameObject.transform.parent = p_element.gameObject.transform;// l_panel.gameObject.transform;
+			l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+
+			
+			//Turn off the background image
+			l_backgroundImage.gameObject.SetActive(false);
+			l_backgroundImage.active = false;
+			//Turn off the panel shadow
+			l_PanelShadow.gameObject.SetActive(false);
+
+
+
+			l_panel.active = false;
+
+
+
 		}
 	}
 
