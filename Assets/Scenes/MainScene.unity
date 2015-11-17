@@ -146,6 +146,22 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 171900, guid: 82ee4053a79364124b7b627ad4d17f99, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22475368, guid: 82ee4053a79364124b7b627ad4d17f99, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 142.660004
+      objectReference: {fileID: 0}
+    - target: {fileID: 22475368, guid: 82ee4053a79364124b7b627ad4d17f99, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 235.399994
+      objectReference: {fileID: 0}
+    - target: {fileID: 11475368, guid: 82ee4053a79364124b7b627ad4d17f99, type: 2}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 82ee4053a79364124b7b627ad4d17f99, type: 2}
   m_RootGameObject: {fileID: 1170525160}
@@ -2399,7 +2415,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 50, y: 141}
-  m_SizeDelta: {x: 151.800049, y: 277.009979}
+  m_SizeDelta: {x: 142.660004, y: 235.399994}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &352237914
 MonoBehaviour:
@@ -5342,7 +5358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1177524011
 RectTransform:
   m_ObjectHideFlags: 0
