@@ -110,97 +110,109 @@ public class GameActivityCanvas : UICanvas
 		UIButton l_button = p_element as UIButton;
 		DebugUtils.Assert( l_button != null );
 
+		AppInfo appInfo = p_data as AppInfo;
+
 		GameInfo l_game = p_data as GameInfo;
-		DebugUtils.Assert( l_game != null );
+
+
 
 		UILabel l_numberLabel = p_element.getView("number") as UILabel;
 		DebugUtils.Assert(l_numberLabel != null);
-
+		
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
 		UILabel l_appName = p_element.getView("appName") as UILabel;
+		
+		if(l_game != null){
 
-		//honda: Debug mode
-		UILabel title = p_element.getView("AddTitle") as UILabel;
-		UIImage plus = p_element.getView("Plus") as UIImage;
-		UILabel name = p_element.getView("NameTitle") as UILabel;
-		UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
-		if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
-		{
-			title.active = true;
-			plus.active = true;
-			name.active = false;
-			removeBtn.active = false;
-			removeBtn.enabled = false;
-			l_rawImage.setTexture( m_emptyTexture );
-			l_appImage.active = false;
-			l_appName.active = false;
-			l_numberLabel.active = false;
-			return;
-		}
-		else if (l_game.webViewData.infoStatus == WebViewInfoStatus.FromLocal || l_game.webViewData.infoStatus == WebViewInfoStatus.FromGDrive)
-		{
-			title.active = false;
-			plus.active = false;
-			name.active = true;
-			name.text = l_game.webViewData.webData.name;
-			removeBtn.active = true;
-			removeBtn.enabled = true;
-			l_rawImage.setTexture( m_emptyTexture );
-			l_appImage.active = false;
-			l_appName.active = false;
-			l_numberLabel.active = false;
-			return;
-		}
-		else
-		{
-			title.active = false;
-			plus.active = false;
-			name.active = false;
-			removeBtn.active = false;
-			removeBtn.enabled = false;
-			l_numberLabel.active = false;
-		}
-		//end debug mode
+//		DebugUtils.Assert( l_game != null );
 
 
-//        l_numberLabel.text = (p_index + 1).ToString();
-		if (l_appImage != null)
-			l_appImage.active = false;
-	
-		if (l_rawImage == null)
-            return;
 
-		if( l_game.isWebView )
-		{
-			WebViewInfo l_info = l_game.webViewData;
 
-			//honda comment: requestIcon check icon from local or server
-			if( !l_info.iconRequested )
+
+			//honda: Debug mode
+			UILabel title = p_element.getView("AddTitle") as UILabel;
+			UIImage plus = p_element.getView("Plus") as UIImage;
+			UILabel name = p_element.getView("NameTitle") as UILabel;
+			UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
+			if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
 			{
-				l_info.requestIcon();
-			}
-
-			if (l_appName.active)
-			{
-				l_appName.active = false;
-			}
-			if( l_info.icon == null )
-			{
+				title.active = true;
+				plus.active = true;
+				name.active = false;
+				removeBtn.active = false;
+				removeBtn.enabled = false;
 				l_rawImage.setTexture( m_emptyTexture );
-
+				l_appImage.active = false;
+				l_appName.active = false;
+				l_numberLabel.active = false;
+				return;
 			}
-			else if (l_info.icon != null)
+			else if (l_game.webViewData.infoStatus == WebViewInfoStatus.FromLocal || l_game.webViewData.infoStatus == WebViewInfoStatus.FromGDrive)
 			{
-				l_rawImage.setTexture(l_info.icon);
-				l_rawImage.active = true;
-				if (l_appImage != null)
-					l_appImage.active = false;
+				title.active = false;
+				plus.active = false;
+				name.active = true;
+				name.text = l_game.webViewData.webData.name;
+				removeBtn.active = true;
+				removeBtn.enabled = true;
+				l_rawImage.setTexture( m_emptyTexture );
+				l_appImage.active = false;
+				l_appName.active = false;
+				l_numberLabel.active = false;
+				return;
+			}
+			else
+			{
+				title.active = false;
+				plus.active = false;
+				name.active = false;
+				removeBtn.active = false;
+				removeBtn.enabled = false;
+				l_numberLabel.active = false;
+			}
+			//end debug mode
+
+
+	//        l_numberLabel.text = (p_index + 1).ToString();
+			if (l_appImage != null)
+				l_appImage.active = false;
+		
+			if (l_rawImage == null)
+	            return;
+
+			if( l_game.isWebView )
+			{
+				WebViewInfo l_info = l_game.webViewData;
+
+				//honda comment: requestIcon check icon from local or server
+				if( !l_info.iconRequested )
+				{
+					l_info.requestIcon();
+				}
+
+				if (l_appName.active)
+				{
+					l_appName.active = false;
+				}
+				if( l_info.icon == null )
+				{
+					l_rawImage.setTexture( m_emptyTexture );
+
+				}
+				else if (l_info.icon != null)
+				{
+					l_rawImage.setTexture(l_info.icon);
+					l_rawImage.active = true;
+					if (l_appImage != null)
+						l_appImage.active = false;
+				}
 			}
 		}
 		else
 		{
-			AppInfo l_info = l_game.appData;
+			AppInfo l_info =  p_data as AppInfo;//l_game.appData;
 			l_appName.text = l_info.appName;
 			if (l_appName.active == false)
 			{
