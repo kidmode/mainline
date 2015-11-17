@@ -1113,13 +1113,23 @@ public class RegionBaseState : GameState
 			for (int i = 0; i < l_numInfos; ++i)
 			{
 				GameInfo l_info = p_list[i] as GameInfo;
-				if( l_info.isWebView )
-				{
-					l_info.webViewData.dispose();
-				}
-				else
-				{
-					l_info.appData.dispose();
+
+				if(l_info != null){
+					if( l_info.isWebView )
+					{
+						l_info.webViewData.dispose();
+					}
+					else
+					{
+						l_info.appData.dispose();
+					}
+				}else{
+
+					AppInfo l_appInfo = p_list[i] as AppInfo;
+
+					l_appInfo.dispose();
+
+
 				}
 			}
 		}
@@ -1385,45 +1395,60 @@ public class RegionBaseState : GameState
 		//honda: if no internet, won't enter game section
 		if(!showMsgIfNoInternet())
 		{
+
+			AppInfo appInfo = p_data as AppInfo;
+
 			GameInfo l_game = p_data as GameInfo;
 
-			//honda: show add item ui on debug mode 
-			if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
-			{
-				m_gameController.getUI().createScreen(UIScreen.ADD_ITEMS_MANUALLY, false, 6);
-				
-				AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
-				popup.setPopupType("Game");
-				if (popup != null)
-				{
-					popup.onClick += AddSingleItemButtonClicked;
-					popup.onItemsFromGDriveCompleted += AddItemsFromGDrive;
-				}
-				
-				return;
-			}
-			//end debug mode
+			if(l_game != null){
 
-			
-			if( l_game.isWebView )
-			{
-				WebContent l_webContent = l_game.webViewData.webData;
-				SessionHandler.getInstance().currentContent = l_webContent;
+				//honda: show add item ui on debug mode 
+				if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
+				{
+					m_gameController.getUI().createScreen(UIScreen.ADD_ITEMS_MANUALLY, false, 6);
+					
+					AddItemManuallyPopup popup = GameObject.FindWithTag("AddItemManuallyTag").GetComponent<AddItemManuallyPopup>() as AddItemManuallyPopup;
+					popup.setPopupType("Game");
+					if (popup != null)
+					{
+						popup.onClick += AddSingleItemButtonClicked;
+						popup.onItemsFromGDriveCompleted += AddItemsFromGDrive;
+					}
+					
+					return;
+				}
+				//end debug mode
+
 				
-				m_subState = SubState.GO_GAME;
-				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
-				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
-			}
-			else
-			{
+				if( l_game.isWebView )
+				{
+					WebContent l_webContent = l_game.webViewData.webData;
+					SessionHandler.getInstance().currentContent = l_webContent;
+					
+					m_subState = SubState.GO_GAME;
+					Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_webContent.name}};
+					SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+				}
+//				else
+//				{
+//					
+//					KidMode.taskManagerLockFalse();
+//					
+//					KidMode.setKidsModeActive(false);
+//					
+//					KidMode.startActivity(l_game.appData.packageName);
+//					Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
+//					SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+//				}
+
+			}else{
+
+				TimerController.Instance.pauseTimer();
+				//tap native app(leave kidmode)
+				m_gameController.game.IsNativeAppRunning = true;
 				
-				KidMode.taskManagerLockFalse();
-				
-				KidMode.setKidsModeActive(false);
-				
-				KidMode.startActivity(l_game.appData.packageName);
-				Dictionary<string,string> payload = new Dictionary<string,string>() { {"GameName", l_game.appData.appName}};
-				SwrveComponent.Instance.SDK.NamedEvent("Game.CLICK",payload);
+				KidMode.startActivity(appInfo.packageName);
+
 			}
 		}
 	}

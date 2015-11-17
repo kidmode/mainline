@@ -108,7 +108,7 @@ public class GameActivityCanvas : UICanvas
 	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
 		UIButton l_button = p_element as UIButton;
-		DebugUtils.Assert( l_button != null );
+//		DebugUtils.Assert( l_button != null );
 
 		AppInfo appInfo = p_data as AppInfo;
 
@@ -117,7 +117,7 @@ public class GameActivityCanvas : UICanvas
 
 
 		UILabel l_numberLabel = p_element.getView("number") as UILabel;
-		DebugUtils.Assert(l_numberLabel != null);
+//		DebugUtils.Assert(l_numberLabel != null);
 		
 		UIImage l_rawImage = p_element.getView("icon") as UIImage;
 		UIImage l_appImage = p_element.getView("appIcon") as UIImage;
