@@ -285,12 +285,21 @@ public class Game : MonoBehaviour
 	public void Start()
 	{
 		_Debug.mode = OutputMode.DISABLE;
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("setImagePath", Application.persistentDataPath + "/ImageCache/");
+		
+		#endif
+
 		getAllSystemApps ();
 		Screen.autorotateToLandscapeLeft = true;
 		Screen.autorotateToLandscapeRight = true;
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
+
+
 
 //		switch (Input.deviceOrientation) 
 //		{
