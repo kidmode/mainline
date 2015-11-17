@@ -128,7 +128,9 @@ public class GameActivityCanvas : UICanvas
 
 		UIImage l_panel = p_element.getView("Panel") as UIImage;
 
-		//shadow
+		UIImage l_PanelShadow = p_element.getView("PanelShadow") as UIImage;
+
+		//PanelShadow
 
 		if(l_game != null){
 
@@ -202,10 +204,15 @@ public class GameActivityCanvas : UICanvas
 					l_info.requestIcon();
 				}
 
-				if (l_appName.active)
-				{
-					l_appName.active = false;
-				}
+//				if (l_appName.active)
+//				{
+//					l_appName.active = false;
+//				}
+
+				l_appName.active = true;
+				l_appName.text = l_game.webViewData.webData.name;
+
+
 				if( l_info.icon == null )
 				{
 					l_rawImage.setTexture( m_emptyTexture );
@@ -218,6 +225,13 @@ public class GameActivityCanvas : UICanvas
 					if (l_appImage != null)
 						l_appImage.active = false;
 				}
+
+
+				//===================
+				//Need to move the app icon info to the child of the 
+				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+
+				l_PanelShadow.active = true;
 			}
 		}
 		else
@@ -268,6 +282,8 @@ public class GameActivityCanvas : UICanvas
 			//Turn off the background image
 			l_backgroundImage.gameObject.SetActive(false);
 			l_backgroundImage.active = false;
+			//Turn off the panel shadow
+			l_PanelShadow.gameObject.SetActive(false);
 
 
 
