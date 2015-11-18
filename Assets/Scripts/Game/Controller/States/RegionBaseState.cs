@@ -588,7 +588,7 @@ public class RegionBaseState : GameState
 		m_appListButton.addValueChangedCallback(appListCallBack);
 		m_appListButton.addValueChangedCallback(onActivityToggleClicked);
 
-		appListButtonLockImageIcon = m_activityPanelCanvas.getView("icon_lock") as UIImage;
+//		appListButtonLockImageIcon = m_activityPanelCanvas.getView("icon_lock") as UIImage;
 		//appListCallBack
 
 		m_videoButton = m_activityPanelCanvas.getView("videoButton") as UIToggle;
@@ -1610,7 +1610,7 @@ public class RegionBaseState : GameState
 
 			appListToggle.interactable = true;
 
-			appListButtonLockImageIcon.gameObject.SetActive(false);
+//			appListButtonLockImageIcon.gameObject.SetActive(false);
 
 		}else{
 
@@ -1620,7 +1620,7 @@ public class RegionBaseState : GameState
 
 					appListToggle.interactable = true;
 
-					appListButtonLockImageIcon.gameObject.SetActive(false);
+//					appListButtonLockImageIcon.gameObject.SetActive(false);
 
 					//---------------
 					Color newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1645,7 +1645,7 @@ public class RegionBaseState : GameState
 
 					appListToggle.interactable = false;
 
-					appListButtonLockImageIcon.gameObject.SetActive(true);
+//					appListButtonLockImageIcon.gameObject.SetActive(true);
 
 					//---------------
 					Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
@@ -1669,7 +1669,7 @@ public class RegionBaseState : GameState
 
 				appListToggle.interactable = false;
 
-				appListButtonLockImageIcon.gameObject.SetActive(true);
+//				appListButtonLockImageIcon.gameObject.SetActive(true);
 
 				//---------------
 				Color newColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
