@@ -748,7 +748,7 @@ public class RegionBaseState : GameState
 
 #if UNITY_EDITOR
 
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 12; i++) {
 				
 				
 				
@@ -759,6 +759,14 @@ public class RegionBaseState : GameState
 //					info. = info.appName + "t";
 					
 				}
+
+				info.webViewData.infoStatus = WebViewInfoStatus.FromServer;
+
+				info.webViewData.webData = new WebContent();
+
+			
+
+				info.webViewData.webData.name = "sd fasdfadsjf dsf ds fa";
 				
 //				info.appName = info.appName + i;
 				
@@ -769,7 +777,7 @@ public class RegionBaseState : GameState
 			}
 
 
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 8; i++) {
 
 
 				
@@ -777,7 +785,7 @@ public class RegionBaseState : GameState
 				
 				for (int j = 0; j < i; j++) {
 					
-					info.appName = info.appName + "t";
+					info.appName = info.appName + "esateat aesra aera rea aer t";
 					
 				}
 				
