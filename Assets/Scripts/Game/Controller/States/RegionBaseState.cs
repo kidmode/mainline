@@ -777,7 +777,7 @@ public class RegionBaseState : GameState
 			}
 
 
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 18; i++) {
 
 
 				
@@ -785,7 +785,7 @@ public class RegionBaseState : GameState
 				
 				for (int j = 0; j < i; j++) {
 					
-					info.appName = info.appName + "esateat aesra aera rea aer t";
+					info.appName = info.appName + "east aesra aera rea aer t";
 					
 				}
 				
@@ -808,6 +808,9 @@ public class RegionBaseState : GameState
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
+
+
+
 			//Get Scroll view updateor
 			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 			viewUpdator.setContentDataSize(m_gameViewList.Count);
@@ -824,6 +827,8 @@ public class RegionBaseState : GameState
 			{
 				l_gameInfo.text = Localization.getString(Localization.TXT_12_LABEL_INFO);
 			}
+
+//			GameActivityScreen.Instance.setContentListData();
 
 			//honda: comment out because we remove feature toy box
 //			if (m_gameFeatured != null)

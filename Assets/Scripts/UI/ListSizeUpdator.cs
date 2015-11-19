@@ -15,7 +15,7 @@ public class ListSizeUpdator : MonoBehaviour {
 	[SerializeField]
 	private float moveSpeed = 3.0f;
 	[SerializeField]
-	private GameObject[] featureGroup;
+	public GameObject[] featureGroup;
 
 	public enum State{
 		NONE,
@@ -70,11 +70,9 @@ public class ListSizeUpdator : MonoBehaviour {
 				
 				state = State.NONE;
 
-				for (int i = 0; i < featureGroup.Length; i++) {
-					
-					featureGroup[i].SetActive(true);
-					
-				}
+
+
+				gameObject.SendMessage("onContractDone");
 				
 			}
 			
