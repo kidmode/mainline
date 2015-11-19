@@ -873,7 +873,7 @@ public class Localization : object
 	public static void loadLanguage()
 	{
 		//honda: only for localization testing
-//		changeLanguage("TraChinese");
+//		changeLanguage("French");
 //		return;
 		//end
 
