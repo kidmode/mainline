@@ -22,7 +22,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 
 
-	private int currPageIndex;
+	private int currPageIndex = 0;
 
 	public Image appIconImage;
 
@@ -71,7 +71,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 
-		currPageIndex = 0;
+		int changedPage = 0;
 
 		for (int i = 0; i < buttons.Length; i++) {
 
@@ -85,7 +85,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 					int currPage = (item.index + 1) / itemCountPerPage;
 
-					currPageIndex = currPage;
+					changedPage = currPage;
 
 
 
@@ -94,15 +94,21 @@ public class GameActivityScreen : MonoBehaviour {
 				}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
 
 					Debug.Log(" current page Index " + currPageIndex);
+
+					if(currPageIndex != changedPage){
+
+						currPageIndex = changedPage;
 					
-					if(currPageIndex > features.Length - 1){
-						
-						gameListUpdator.startStretch();
-						
-					}else{
-						
-						gameListUpdator.startContract();
-						
+						if(currPageIndex > features.Length - 1){
+							
+							gameListUpdator.startStretch();
+							
+						}else{
+							
+							gameListUpdator.startContract();
+							
+						}
+
 					}
 
 					return;
