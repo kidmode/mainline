@@ -1523,17 +1523,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   features:
-  - appIconTexture: {fileID: 2800000, guid: 81c278c76794545199acd417bedc8fcc, type: 3}
-    appNameTexture: {fileID: 2800000, guid: e2731251f1a7e4229924ee12cab58091, type: 3}
-    sponsorLogoTexture: {fileID: 2800000, guid: 764e20f59465c47a7a2c17a525e9d31b,
+  - appIconTexture: {fileID: 21300000, guid: 81c278c76794545199acd417bedc8fcc, type: 3}
+    appNameTexture: {fileID: 21300000, guid: e2731251f1a7e4229924ee12cab58091, type: 3}
+    sponsorLogoTexture: {fileID: 21300000, guid: 764e20f59465c47a7a2c17a525e9d31b,
       type: 3}
-  - appIconTexture: {fileID: 2800000, guid: 40fc7e4972d9d40d789e092ab4b7dea7, type: 3}
-    appNameTexture: {fileID: 2800000, guid: be4630bd50bf6ff4c90a764859980f29, type: 3}
-    sponsorLogoTexture: {fileID: 2800000, guid: 8092fcc8e2f8f66499901610a66a1535,
+  - appIconTexture: {fileID: 21300000, guid: cc0aab78ce0f14ea0b26af2200e50239, type: 3}
+    appNameTexture: {fileID: 21300000, guid: 5b92ccfffca5d47f58bc0c5dda9bfb4e, type: 3}
+    sponsorLogoTexture: {fileID: 21300000, guid: 5b92ccfffca5d47f58bc0c5dda9bfb4e,
       type: 3}
   contentTrans: {fileID: 22483430}
   scrollRect: {fileID: 11483474}
   scrollRectLeftPoint: {fileID: 22483420}
+  itemCountPerPage: 8
+  appIconImage: {fileID: 11475372}
+  appNameImage: {fileID: 11475374}
+  sponsorLogoImage: {fileID: 11483540}
 --- !u!114 &11458412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4307,10 +4311,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22483426}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80, y: 17}
-  m_SizeDelta: {x: 40.1000061, y: -20.3999939}
+  m_AnchorMin: {x: 1, y: .5}
+  m_AnchorMax: {x: 1, y: .5}
+  m_AnchoredPosition: {x: 0, y: 17}
+  m_SizeDelta: {x: 200.100006, y: 149.600006}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22466078
 RectTransform:
@@ -4785,10 +4789,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22483434}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -308.820007, y: 113.160004}
-  m_SizeDelta: {x: -417.731628, y: -232.619965}
+  m_AnchorMin: {x: 0, y: .5}
+  m_AnchorMax: {x: 0, y: .5}
+  m_AnchoredPosition: {x: .179992676, y: 113.160004}
+  m_SizeDelta: {x: 200.268372, y: 149.380035}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22483422
 RectTransform:

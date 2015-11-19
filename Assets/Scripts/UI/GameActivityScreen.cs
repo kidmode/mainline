@@ -16,6 +16,20 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public Transform scrollRectLeftPoint;
 
+	public int itemCountPerPage = 8;
+
+	private ListSizeUpdator gameListUpdator;
+
+
+
+	private int currPageIndex;
+
+	public Image appIconImage;
+
+	public Image appNameImage;
+
+	public Image sponsorLogoImage;
+
 	void Awake(){
 
 		Instance = this;
@@ -26,6 +40,8 @@ public class GameActivityScreen : MonoBehaviour {
 	void Start () {
 
 		scrollRect.onValueChanged.AddListener( onValueChanged ); 
+
+		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
 //		scrollRect.content
 	
@@ -55,13 +71,67 @@ public class GameActivityScreen : MonoBehaviour {
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 
+		currPageIndex = 0;
+
 		for (int i = 0; i < buttons.Length; i++) {
 
 			ListItem item = buttons[i].GetComponent<ListItem>();
 
+			if(i % 2 == 1){
+
+				if(item.pointRightEnd.gameObject.transform.position.x < scrollRectLeftPoint.position.x){
+
+					Debug.Log(" current over Index  " + item.index);
+
+					int currPage = (item.index + 1) / itemCountPerPage;
+
+					currPageIndex = currPage;
+
+
+
+//					return;
+
+				}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
+
+					Debug.Log(" current page Index " + currPageIndex);
+					
+					if(currPageIndex > features.Length - 1){
+						
+						gameListUpdator.startStretch();
+						
+					}else{
+						
+						gameListUpdator.startContract();
+						
+					}
+
+					return;
+
+				}
+
+			}
+
 		}
 //		Debug.Log(" buttons " + buttons.Length);
 		
+	}
+
+
+	void onContractDone(){
+
+		for (int i = 0; i < gameListUpdator.featureGroup.Length; i++) {
+			
+			gameListUpdator.featureGroup[i].SetActive(true);
+			
+		}
+
+
+		appIconImage.sprite = features[currPageIndex].appIconTexture;
+
+		appNameImage.sprite = features[currPageIndex].appNameTexture;
+		
+		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
+
 	}
 
 }
@@ -72,10 +142,10 @@ public class GameActivityScreen : MonoBehaviour {
 
 //	public string companyName;
 
-	public Texture2D appIconTexture;
+	public Sprite appIconTexture;
 
-	public Texture2D appNameTexture;
+	public Sprite appNameTexture;
 
-	public Texture2D sponsorLogoTexture;
+	public Sprite sponsorLogoTexture;
 
 }

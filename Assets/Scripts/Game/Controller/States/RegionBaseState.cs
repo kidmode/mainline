@@ -777,7 +777,7 @@ public class RegionBaseState : GameState
 			}
 
 
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 18; i++) {
 
 
 				
@@ -785,7 +785,7 @@ public class RegionBaseState : GameState
 				
 				for (int j = 0; j < i; j++) {
 					
-					info.appName = info.appName + "esateat aesra aera rea aer t";
+					info.appName = info.appName + "east aesra aera rea aer t";
 					
 				}
 				
