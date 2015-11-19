@@ -808,7 +808,7 @@ public class RegionBaseState : GameState
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
-			GameActivityScreen.Instance.setContentListData();
+
 
 
 			//Get Scroll view updateor
@@ -827,6 +827,8 @@ public class RegionBaseState : GameState
 			{
 				l_gameInfo.text = Localization.getString(Localization.TXT_12_LABEL_INFO);
 			}
+
+//			GameActivityScreen.Instance.setContentListData();
 
 			//honda: comment out because we remove feature toy box
 //			if (m_gameFeatured != null)

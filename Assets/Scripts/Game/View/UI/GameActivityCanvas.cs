@@ -130,6 +130,12 @@ public class GameActivityCanvas : UICanvas
 
 		UIImage l_PanelShadow = p_element.getView("PanelShadow") as UIImage;
 
+		//==========
+		//Update List item so we could get the index latter on other scripts
+		ListItem item = p_element.transform.gameObject.GetComponent<ListItem>();
+
+		item.index = p_index;
+
 		//PanelShadow
 
 		if(l_game != null){

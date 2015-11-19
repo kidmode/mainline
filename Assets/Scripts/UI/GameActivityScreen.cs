@@ -7,20 +7,25 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public static GameActivityScreen Instance;
 
+	[SerializeField]
+	private FeatureData[] features;
+	
+	public Transform contentTrans;
+	
+	public ScrollRect scrollRect;
+
+	public Transform scrollRectLeftPoint;
+
 	void Awake(){
 
 		Instance = this;
 
 	}
 
-	[SerializeField]
-	private FeatureData[] features;
-
-	public Transform contentTrans;
-	
-
 	// Use this for initialization
 	void Start () {
+
+		scrollRect.onValueChanged.AddListener( onValueChanged ); 
 
 //		scrollRect.content
 	
@@ -38,6 +43,25 @@ public class GameActivityScreen : MonoBehaviour {
 		Debug.Log(" buttons " + buttons.Length);
 
 
+	}
+
+	void onValueChanged(Vector2 scrolRectPos){
+		
+		//		Debug.Log("  scrolRectPos " + scrolRectPos);
+		
+//		currPos = scrolRectPos;
+//		
+//		updateChanges (scrolRectPos);
+
+		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
+
+		for (int i = 0; i < buttons.Length; i++) {
+
+			ListItem item = buttons[i].GetComponent<ListItem>();
+
+		}
+//		Debug.Log(" buttons " + buttons.Length);
+		
 	}
 
 }
