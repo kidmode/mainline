@@ -808,6 +808,9 @@ public class RegionBaseState : GameState
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
 
+			GameActivityScreen.Instance.setContentListData();
+
+
 			//Get Scroll view updateor
 			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
 			viewUpdator.setContentDataSize(m_gameViewList.Count);
