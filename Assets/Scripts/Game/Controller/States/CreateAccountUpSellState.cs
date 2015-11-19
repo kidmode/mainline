@@ -276,6 +276,7 @@ public class CreateAccountUpSellState : GameState
 		if (null == p_response.error)
 		{
 			SessionHandler.getInstance().PremiumJson = p_response.text;
+			Debug.Log("plan details: " + p_response.text);
 			_setupScreen(m_gameController.getUI());
 		}
 		else

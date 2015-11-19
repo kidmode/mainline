@@ -54,6 +54,7 @@ public class ViewPremiumState : GameState
 
 		
 		string l_returnJson = SessionHandler.getInstance ().PremiumJson;
+		Debug.Log("@@@ Json: " + l_returnJson);
 		Hashtable l_data = null;
 
 		if(l_returnJson.Length > 0)
