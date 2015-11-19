@@ -22,7 +22,6 @@ public class ListSizeUpdator : MonoBehaviour {
 		STRETCH,
 		CONTRACT
 	}
-	[SerializeField]
 	public State state;
 
 
@@ -84,11 +83,11 @@ public class ListSizeUpdator : MonoBehaviour {
 
 	public void startStretch(){
 
-		for (int i = 0; i < featureGroup.Length; i++) {
-
-			featureGroup[i].SetActive(false);
-
-		}
+//		for (int i = 0; i < featureGroup.Length; i++) {
+//
+//			featureGroup[i].SetActive(false);
+//
+//		}
 
 		state = State.STRETCH;
 

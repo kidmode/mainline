@@ -20,6 +20,9 @@ public class GameActivityScreen : MonoBehaviour {
 
 	private ListSizeUpdator gameListUpdator;
 
+	[SerializeField]
+	private UIMoveLeftRight featureSpaceMoveLeftRight;
+
 
 
 	private int currPageIndex = 0;
@@ -102,10 +105,14 @@ public class GameActivityScreen : MonoBehaviour {
 						if(currPageIndex > features.Length - 1){
 							
 							gameListUpdator.startStretch();
+
+							featureSpaceMoveLeftRight.startMoveLeft();
 							
 						}else{
 							
 							gameListUpdator.startContract();
+
+							featureSpaceMoveLeftRight.startMoveRight();
 							
 						}
 
@@ -125,11 +132,11 @@ public class GameActivityScreen : MonoBehaviour {
 
 	void onContractDone(){
 
-		for (int i = 0; i < gameListUpdator.featureGroup.Length; i++) {
-			
-			gameListUpdator.featureGroup[i].SetActive(true);
-			
-		}
+//		for (int i = 0; i < gameListUpdator.featureGroup.Length; i++) {
+//			
+//			gameListUpdator.featureGroup[i].SetActive(true);
+//			
+//		}
 
 
 		appIconImage.sprite = features[currPageIndex].appIconTexture;
