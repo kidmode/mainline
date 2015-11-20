@@ -20,7 +20,7 @@ public class StringManipulator : MonoBehaviour {
 
 		if(appName.Length > maxLength){
 
-			string returnName = appName.Substring(0, maxLength - 3) + " . . .";
+			string returnName = appName.Substring(0, maxLength - 3) + "...";
 
 			return returnName;
 
