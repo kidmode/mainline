@@ -102,6 +102,7 @@ public class BuyGemsState : GameState
 	{
 		_Debug.log("_onProductPurchased: " + p_result.message + "(" + p_result.response + ")");
 
+
 		if (p_result.isSuccess || p_result.response == BillingResponseCodes.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED)
 		{
 			GooglePurchaseTemplate l_purchase = p_result.purchase;
@@ -140,8 +141,10 @@ public class BuyGemsState : GameState
 	private void _onPurchaseRequestComplete(WWW p_response)
 	{
 		_Debug.log("result: " + p_response.text);
+
 		if(null == p_response.error && !"null".Equals(p_response.text))
 		{
+
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
 			if(null != l_data && l_data.ContainsKey("error") && "false".Equals(l_data["error"].ToString()))
@@ -244,6 +247,11 @@ public class BuyGemsState : GameState
 		Hashtable l_good = l_response["good"] as Hashtable;
 		m_gameController.board.write("gems", l_good["gems"].ToString());
 
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		jc.CallStatic("openGoogleIAP");
+		#endif
+
 #if UNITY_EDITOR
 		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 #elif UNITY_ANDROID
@@ -259,6 +267,11 @@ public class BuyGemsState : GameState
 		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
 		Hashtable l_better = l_response["better"] as Hashtable;
 		m_gameController.board.write("gems", l_better["gems"].ToString());
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		jc.CallStatic("openGoogleIAP");
+		#endif
 		
 #if UNITY_EDITOR
 		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
@@ -275,6 +288,11 @@ public class BuyGemsState : GameState
 		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
 		Hashtable l_best = l_response["best"] as Hashtable;
 		m_gameController.board.write("gems", l_best["gems"].ToString());
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
+		jc.CallStatic("openGoogleIAP");
+		#endif
 		
 #if UNITY_EDITOR
 		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);

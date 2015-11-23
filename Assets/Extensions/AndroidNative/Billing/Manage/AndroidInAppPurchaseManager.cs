@@ -175,6 +175,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 
 	public void OnPurchaseFinishedCallback(string data) {
+
 		Debug.Log(data);
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
@@ -212,6 +213,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 
 	public void OnConsumeFinishedCallBack(string data) {
+
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
 
@@ -245,6 +247,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 
 	public void OnBillingSetupFinishedCallback(string data) {
+
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
 
@@ -261,6 +264,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 
 	public void OnQueryInventoryFinishedCallBack(string data) {
+
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
 
@@ -278,6 +282,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 
 	public void OnPurchasesRecive(string data) {
+
 		if(data.Equals(string.Empty)) {
 			Debug.Log("InAppPurchaseManager, no purchases avaiable");
 			return;
@@ -285,8 +290,6 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 
 		string[] storeData;
 		storeData = data.Split(AndroidNative.DATA_SPLITTER [0]);
-
-
 
 		for(int i = 0; i < storeData.Length; i+=9) {
 			GooglePurchaseTemplate tpl =  new GooglePurchaseTemplate();
@@ -303,12 +306,15 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 			_inventory.addPurchase (tpl);
 		}
 
+
+
 		Debug.Log("InAppPurchaseManager, tottal purchases loaded: " + _inventory.purchases.Count);
 
 	}
 
-
 	public void OnProducttDetailsRecive(string data) {
+
+
 		if(data.Equals(string.Empty)) {
 			Debug.Log("InAppPurchaseManager, no products avaiable");
 			return;
@@ -328,6 +334,7 @@ public class AndroidInAppPurchaseManager : SA_Singleton<AndroidInAppPurchaseMana
 			tpl.priceCurrencyCode   		= storeData[i + 5];
 			tpl.originalJson   				= storeData[i + 6];
 			_inventory.addProduct (tpl);
+
 		}
 
 		Debug.Log("InAppPurchaseManager, tottal products loaded: " + _inventory.products.Count);

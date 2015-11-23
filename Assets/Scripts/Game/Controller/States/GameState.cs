@@ -126,7 +126,11 @@ public class GameStateBoard
 {
 	public void write(string p_key, object p_value)
 	{
-		m_storage.Add(p_key, p_value);
+		if (!m_storage.ContainsKey (p_key))
+			m_storage.Add (p_key, p_value);
+		else {
+			m_storage[p_key] = p_value;
+		}
 	}
 
 	public object read(string p_key)
