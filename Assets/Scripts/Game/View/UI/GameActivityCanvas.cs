@@ -254,8 +254,8 @@ public class GameActivityCanvas : UICanvas
 
 			Vector2 l_textSize = l_appName.calcSize();
 			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
-			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
-			l_transform.localScale = new Vector3(l_scale, l_scale, 1);
+//			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
+//			l_transform.localScale = new Vector3(l_scale, l_scale, 1);
 			
 			if( l_info.appIcon == null )
 			{
