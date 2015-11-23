@@ -34,6 +34,12 @@ public class UIMoveLeftRight : MonoBehaviour {
 
 				pos.x = pos.x - speed * Time.deltaTime;  
 
+				if(pos.x < pointMoveLeft.position.x){
+
+					pos.x = pointMoveLeft.position.x;
+
+				}
+
 				gameObject.transform.position = pos;
 
 			}else{
@@ -49,6 +55,12 @@ public class UIMoveLeftRight : MonoBehaviour {
 				Vector3 pos = gameObject.transform.position;
 				
 				pos.x = pos.x + speed * Time.deltaTime;
+
+				if(pos.x > pointMoveRight.position.x){
+					
+					pos.x = pointMoveRight.position.x;
+					
+				}
 
 				gameObject.transform.position = pos;
 				
