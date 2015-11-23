@@ -216,7 +216,7 @@ public class GameActivityCanvas : UICanvas
 //				}
 
 				l_appName.active = true;
-				l_appName.text = l_game.webViewData.webData.name;
+				l_appName.text = StringManipulator.getShortenOneLineAppName( l_game.webViewData.webData.name );
 
 
 				if( l_info.icon == null )
@@ -243,7 +243,7 @@ public class GameActivityCanvas : UICanvas
 		else
 		{
 			AppInfo l_info =  p_data as AppInfo;//l_game.appData;
-			l_appName.text = l_info.appName;
+			l_appName.text = StringManipulator.getShortenOneLineAppName( l_info.appName );
 			if (l_appName.active == false)
 			{
 				l_appName.active = true;

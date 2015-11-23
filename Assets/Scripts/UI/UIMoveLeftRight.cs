@@ -68,6 +68,18 @@ public class UIMoveLeftRight : MonoBehaviour {
 		state = State.MOVELEFT;
 		
 	}
+
+	public void setPosToLeft(){
+
+		state = State.NONE;
+
+		Vector3 pos = gameObject.transform.position;
+
+		pos = pointMoveLeft.position;
+
+		gameObject.transform.position = pos;
+
+	}
 	
 	public void startMoveRight(){
 		

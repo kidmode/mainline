@@ -72,61 +72,85 @@ public class GameActivityScreen : MonoBehaviour {
 //		
 //		updateChanges (scrolRectPos);
 
-		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 
+//		Debug.Log(" buttons " + buttons.Length);
+		checkFeature();
+		
+	}
+
+
+	void checkFeature(){
+
+		Debug.Log("  checkFeature ");
+
+		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
+		
 		int changedPage = 0;
 
-		for (int i = 0; i < buttons.Length; i++) {
+//		gameListUpdator.startStretch();
+//
+//		return;
 
-			ListItem item = buttons[i].GetComponent<ListItem>();
+		if(features.Length > 0){
 
-			if(i % 2 == 1){
-
-				if(item.pointRightEnd.gameObject.transform.position.x < scrollRectLeftPoint.position.x){
-
-					Debug.Log(" current over Index  " + item.index);
-
-					int currPage = (item.index + 1) / itemCountPerPage;
-
-					changedPage = currPage;
-
-
-
-//					return;
-
-				}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
-
-					Debug.Log(" current page Index " + currPageIndex);
-
-					if(currPageIndex != changedPage){
-
-						currPageIndex = changedPage;
+			for (int i = 0; i < buttons.Length; i++) {
+				
+				ListItem item = buttons[i].GetComponent<ListItem>();
+				
+				if(i % 2 == 1){
 					
-						if(currPageIndex > features.Length - 1){
+					if(item.pointRightEnd.gameObject.transform.position.x < scrollRectLeftPoint.position.x){
+						
+						Debug.Log(" current over Index  " + item.index);
+						
+						int currPage = (item.index + 1) / itemCountPerPage;
+						
+						changedPage = currPage;
+						
+						
+						
+						//					return;
+						
+					}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
+						
+						Debug.Log(" current page Index " + currPageIndex);
+						
+						if(currPageIndex != changedPage){
 							
-							gameListUpdator.startStretch();
-
-							featureSpaceMoveLeftRight.startMoveLeft();
+							currPageIndex = changedPage;
 							
-						}else{
-							
-							gameListUpdator.startContract();
-
-							featureSpaceMoveLeftRight.startMoveRight();
+							if(currPageIndex > features.Length - 1){
+								
+								gameListUpdator.startStretch();
+								
+								featureSpaceMoveLeftRight.startMoveLeft();
+								
+							}else{
+								
+								gameListUpdator.startContract();
+								
+								featureSpaceMoveLeftRight.startMoveRight();
+								
+							}
 							
 						}
-
+						
+						return;
+						
 					}
-
-					return;
-
+					
 				}
-
+				
 			}
 
+		}else{
+
+			gameListUpdator.startStretch();
+
+			featureSpaceMoveLeftRight.setPosToLeft();
+
 		}
-//		Debug.Log(" buttons " + buttons.Length);
-		
+
 	}
 
 
