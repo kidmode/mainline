@@ -3,7 +3,7 @@ using System.Collections;
 
 public class StringManipulator : MonoBehaviour {
 
-	public static int maxLength = 18; 
+	public static int maxLength = 25; 
 
 	// Use this for initialization
 	void Start () {
