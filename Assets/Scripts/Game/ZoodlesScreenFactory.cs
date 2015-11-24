@@ -119,7 +119,10 @@ public class UIScreen
 
 	//Tutorials
 	public const int TUTORIAL_MAIN_PROCESS				= 1101;
+
 	public const int TUTORIAL_CONTROL_VIOLENCE			= 1102;
+
+	public const int TUTORIAL_MAIN_PROCESS_FREE_ACCOUNT				= 1103;
 
 	//Honda: Error Message
 	public const int ERROR_MESSAGE			= 1201;
@@ -258,6 +261,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 		//Add_YOUR_APP
 		m_directoryMap.Add( UIScreen.TUTORIAL_MAIN_PROCESS,				SCREEN_DIRECTORY + "Tutorials/TutMainProcess" );
+		m_directoryMap.Add( UIScreen.TUTORIAL_MAIN_PROCESS_FREE_ACCOUNT,				SCREEN_DIRECTORY + "Tutorials/TutMainProcess_FreeAccount" );
 		m_directoryMap.Add( UIScreen.TUTORIAL_CONTROL_VIOLENCE,				SCREEN_DIRECTORY + "Tutorials/TutControlViolenceScreen" );
 		// end vzw
 

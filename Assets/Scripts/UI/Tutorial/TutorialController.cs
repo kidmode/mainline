@@ -142,6 +142,7 @@ public class TutorialSequence
 public enum TutorialSequenceName
 {	
 	MAIN_PROCESS,
+	MAIN_PROCESS_FREE_ACCOUNT,
 	VIOLENCE_LEVEL
 }
 
