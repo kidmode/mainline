@@ -17,6 +17,8 @@ public class UpsellSplashState : GameState
 
 		_setupScreen( p_gameController.getUI() );
 
+		//Set Trial Tutorial
+
 	}
 	
 	public override void update( GameController p_gameController, int p_time )

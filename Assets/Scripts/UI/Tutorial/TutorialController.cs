@@ -87,6 +87,12 @@ public class TutorialController : MonoBehaviour {
 		}
 	}
 
+	public int currShowingIndex(){
+
+		return currTutorialScreenCanvasObject.transform.parent.gameObject.GetComponent<TutorialScreen>().currShowingIndex();
+
+	}
+
 
 	public void sequenceScreenFinished()
 	{
