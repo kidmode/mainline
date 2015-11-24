@@ -628,7 +628,6 @@ GameObject:
   - 224: {fileID: 22471380}
   - 222: {fileID: 22271380}
   - 114: {fileID: 11471378}
-  - 114: {fileID: 11471384}
   m_Layer: 0
   m_Name: gemText
   m_TagString: Untagged
@@ -2979,17 +2978,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0
---- !u!114 &11471384
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1bc11c59370d49e18c52e1c5908347f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11473092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6025,7 +6013,7 @@ RectTransform:
   - {fileID: 22400186}
   - {fileID: 22400184}
   m_Father: {fileID: 22400196}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -80}
@@ -6081,8 +6069,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 22400192}
-  - {fileID: 22400190}
   - {fileID: 22471380}
+  - {fileID: 22400190}
   m_Father: {fileID: 22400198}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -6193,7 +6181,7 @@ RectTransform:
   m_Children:
   - {fileID: 22471382}
   m_Father: {fileID: 22400196}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_AnchorMin: {x: .735000014, y: .919558704}
   m_AnchorMax: {x: .880141139, y: .983838081}
   m_AnchoredPosition: {x: .5, y: -1.13999939}
