@@ -17,7 +17,10 @@ public class UpsellSplashState : GameState
 
 		_setupScreen( p_gameController.getUI() );
 
-		//Set Trial Tutorial
+		//Set Free acount Tutorial Page
+
+		TutorialController.Instance.showIndex(1);
+
 
 	}
 	
