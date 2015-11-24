@@ -128,6 +128,7 @@ public class BuyGemsState : GameState
 			_Debug.log("json: " + l_purchase.originalJson);
 			_Debug.log("---------------------------------------------------");
 
+
 			// Send request to server to validate the receipt and pay the product to the user
 			Server.init (ZoodlesConstants.getHttpsHost());
 			RequestQueue l_queue = new RequestQueue();
@@ -141,6 +142,7 @@ public class BuyGemsState : GameState
 	private void _onPurchaseRequestComplete(WWW p_response)
 	{
 		_Debug.log("result: " + p_response.text);
+
 
 		if(null == p_response.error && !"null".Equals(p_response.text))
 		{

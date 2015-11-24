@@ -31,6 +31,7 @@ public class RequestQueue
 			
 			m_params["version"] = "v2";
 			m_request = Server.request(m_call, m_params, m_method, _requestComplete);
+
 		}
 
 		public RequestHandler handler
@@ -2339,6 +2340,7 @@ public class PurchaseGemsRequest : RequestQueue.Request
 		m_SKU = p_SKU;
 		m_purchaseToken = p_purchaseToken;
 		m_developerPayload = p_developerPayload;
+		m_package = p_package;
 	}
 
 	protected override void init()

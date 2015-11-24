@@ -17,6 +17,11 @@ public class UpsellSplashState : GameState
 
 		_setupScreen( p_gameController.getUI() );
 
+		//Set Free acount Tutorial Page
+
+		TutorialController.Instance.showIndex(1);
+
+
 	}
 	
 	public override void update( GameController p_gameController, int p_time )

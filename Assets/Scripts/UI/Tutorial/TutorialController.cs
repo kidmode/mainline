@@ -87,6 +87,12 @@ public class TutorialController : MonoBehaviour {
 		}
 	}
 
+	public int currShowingIndex(){
+
+		return currTutorialScreenCanvasObject.transform.parent.gameObject.GetComponent<TutorialScreen>().currShowingIndex();
+
+	}
+
 
 	public void sequenceScreenFinished()
 	{
@@ -136,6 +142,7 @@ public class TutorialSequence
 public enum TutorialSequenceName
 {	
 	MAIN_PROCESS,
+	MAIN_PROCESS_FREE_ACCOUNT,
 	VIOLENCE_LEVEL
 }
 

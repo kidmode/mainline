@@ -279,8 +279,7 @@ public class Game : MonoBehaviour
 	public void onTestingContentRefreshFinish(string contents) {;
 		KidMode.onTestingContentRefreshFinish(contents);
 	}
-
-
+	
 
 	public void Start()
 	{

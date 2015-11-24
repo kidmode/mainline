@@ -82,4 +82,12 @@ public class TutorialScreen : MonoBehaviour {
 		SwrveComponent.Instance.SDK.NamedEvent("Tutorial.skip");
 	}
 
+	public int currShowingIndex(){
+
+		return currIndex;
+
+	}
+
+
+
 }
