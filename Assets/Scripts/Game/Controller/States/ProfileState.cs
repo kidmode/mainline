@@ -24,8 +24,25 @@ public class ProfileState : GameState
 			splashCanvas.gameObject.SetActive(true);
 		//Kev
 
-		if(TutorialController.Instance != null)
-			TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
+		if(TutorialController.Instance != null){
+
+			SessionHandler l_sessionHandler = SessionHandler.getInstance();
+			Token l_token = l_sessionHandler.token;
+			if (l_token.isPremium())
+			{
+
+				TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS);
+
+			}
+			else{
+
+//				TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS_FREE_ACCOUNT);
+
+			}
+
+			
+
+		}
 		
 		m_requestQueue = new RequestQueue ();
 
