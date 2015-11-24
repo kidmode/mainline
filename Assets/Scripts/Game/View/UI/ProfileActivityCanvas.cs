@@ -83,7 +83,7 @@ public class ProfileActivityCanvas : UICanvas
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 
 		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_star_rating", Localization.getString( Localization.TXT_54_LABEL_ZP ), l_kid.stars.ToString("N0") ) );
-//		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_gems", Localization.getString( Localization.TXT_54_LABEL_GEMS ), l_kid.gems.ToString("N0") ) );
+		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_gems", Localization.getString( Localization.TXT_54_LABEL_GEMS ), l_kid.gems.ToString("N0") ) );
 		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_videos", Localization.getString( Localization.TXT_54_LABEL_VIDEOS ), l_kid.videoWatchedCount.ToString("N0") ) );
 		l_infoData.Add( new ProfileInfoData( l_imagePath + "icon_games", Localization.getString( Localization.TXT_54_LABEL_GAMES ), l_kid.gamePlayedCount.ToString("N0") ) );
 

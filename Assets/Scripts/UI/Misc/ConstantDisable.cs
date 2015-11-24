@@ -13,7 +13,11 @@ public class ConstantDisable : MonoBehaviour {
 
 		if(gameObject.activeSelf){
 
-			gameObject.SetActive(false);
+
+			if (SessionHandler.getInstance().token.isPremium() == true)
+			{
+				gameObject.SetActive(false);
+			}
 
 		}
 	

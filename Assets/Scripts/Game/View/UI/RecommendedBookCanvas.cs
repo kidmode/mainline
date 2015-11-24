@@ -40,11 +40,11 @@ public class RecommendedBookCanvas : UICanvas
 	private void SetupLocalizition()
 	{
 		UILabel l_top = getView ("titleText") as UILabel;
-//		UILabel l_gem = getView ("gemText").getView ("Text") as UILabel;
+		UILabel l_gem = getView ("gemText") as UILabel;
 		UILabel l_more = getView ("bookListButton").getView ("Text") as UILabel;
 		
 		l_top.text = Localization.getString (Localization.TXT_69_LABEL_TITLE);
-//		l_gem.text = Localization.getString (Localization.TXT_68_LABEL_GEMS);
+		l_gem.text = Localization.getString (Localization.TXT_68_LABEL_GEMS);
 		l_more.text = Localization.getString (Localization.TXT_69_LABEL_MORE);
 
 		UILabel l_loading = getView ("loadingText") as UILabel;
