@@ -36,7 +36,7 @@ public class ProfileState : GameState
 			}
 			else{
 
-				TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS_FREE_ACCOUNT);
+//				TutorialController.Instance.showTutorial(TutorialSequenceName.MAIN_PROCESS_FREE_ACCOUNT);
 
 			}
 
