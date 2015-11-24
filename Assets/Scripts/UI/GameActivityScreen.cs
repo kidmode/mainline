@@ -59,7 +59,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 
-		Debug.Log(" buttons " + buttons.Length);
+//		Debug.Log(" buttons " + buttons.Length);
 
 
 	}
@@ -81,7 +81,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 	void checkFeature(){
 
-		Debug.Log("  checkFeature ");
+//		Debug.Log("  checkFeature ");
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 		
@@ -101,7 +101,7 @@ public class GameActivityScreen : MonoBehaviour {
 					
 					if(item.pointRightEnd.gameObject.transform.position.x < scrollRectLeftPoint.position.x){
 						
-						Debug.Log(" current over Index  " + item.index);
+//						Debug.Log(" current over Index  " + item.index);
 						
 						int currPage = (item.index + 1) / itemCountPerPage;
 						
@@ -113,7 +113,7 @@ public class GameActivityScreen : MonoBehaviour {
 						
 					}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
 						
-						Debug.Log(" current page Index " + currPageIndex);
+//						Debug.Log(" current page Index " + currPageIndex);
 						
 						if(currPageIndex != changedPage){
 							

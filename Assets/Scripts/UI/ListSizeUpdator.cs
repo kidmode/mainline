@@ -17,6 +17,14 @@ public class ListSizeUpdator : MonoBehaviour {
 	[SerializeField]
 	public GameObject[] featureGroup;
 
+	[SerializeField]
+	private float contractRectLeft = 104.74f;
+
+	[SerializeField]
+	private float expandRectLeft = -80.0f;
+
+	//-80
+
 	public enum State{
 		NONE,
 		STRETCH,
@@ -41,26 +49,39 @@ public class ListSizeUpdator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(state == State.STRETCH){
+		Debug.Log("   mainPanel.GetComponent<RectTransform>().offsetMin " + mainPanel.GetComponent<RectTransform>().offsetMin.x);
 
-			if(leftArrowTrans.position.x > pointExpandLeft.position.x){
+		if(state == State.STRETCH){
 
 			Rect transRect = mainPanel.GetComponent<RectTransform>().rect;
 
-			mainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(
-				mainPanel.GetComponent<RectTransform>().offsetMin.x - moveSpeed * Time.deltaTime, mainPanel.GetComponent<RectTransform>().offsetMin.y);
+//			if(leftArrowTrans.position.x > pointExpandLeft.position.x){
+
+			if(mainPanel.GetComponent<RectTransform>().offsetMin.x > expandRectLeft){
+
+
+
+				mainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(
+					mainPanel.GetComponent<RectTransform>().offsetMin.x - moveSpeed * Time.deltaTime, mainPanel.GetComponent<RectTransform>().offsetMin.y);
 
 			}else{
+
+				mainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(
+					expandRectLeft, mainPanel.GetComponent<RectTransform>().offsetMin.y);
+
 
 				state = State.NONE;
 
 			}
 
 		}else if(state == State.CONTRACT){
-			
-			if(leftArrowTrans.position.x < pointContractLeft.position.x){
+
+			Rect transRect = mainPanel.GetComponent<RectTransform>().rect;
+
+//			if(leftArrowTrans.position.x < pointContractLeft.position.x){
+			if(mainPanel.GetComponent<RectTransform>().offsetMin.x <  contractRectLeft){
 				
-				Rect transRect = mainPanel.GetComponent<RectTransform>().rect;
+
 				
 				mainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(
 					mainPanel.GetComponent<RectTransform>().offsetMin.x + moveSpeed * Time.deltaTime, mainPanel.GetComponent<RectTransform>().offsetMin.y);
@@ -69,8 +90,10 @@ public class ListSizeUpdator : MonoBehaviour {
 				
 				state = State.NONE;
 
+				mainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(
+					contractRectLeft, mainPanel.GetComponent<RectTransform>().offsetMin.y);
 
-
+				
 				gameObject.SendMessage("onContractDone");
 				
 			}

@@ -401,6 +401,9 @@ public class GameActivityCanvas : UICanvas
 	
 	public void onLeftButtonClick( UIButton p_button )
 	{
+
+		Debug.Log("   < - -- - - - - ----- - -- -  -- -   onLeftButtonClick    " );
+
 		mMovingOffset = 1;
 		if (move == moveTotal) {
 			moveTotal = move + mMovingOffset * OFFSET;
@@ -409,6 +412,9 @@ public class GameActivityCanvas : UICanvas
 	
 	public void onRightButtonClick( UIButton p_button )
 	{
+
+		Debug.Log("  onRightButtonClick   -- - - - - - - - - -  - ->" );
+
 		mMovingOffset = -1;
 		if (moveTotal == 0) {
 			if(isFavor)

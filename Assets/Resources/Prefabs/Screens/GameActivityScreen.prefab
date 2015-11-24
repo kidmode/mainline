@@ -1280,7 +1280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &183500
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,16 +4342,16 @@ RectTransform:
   m_GameObject: {fileID: 112330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .428465366, y: .428465426, z: .343135893}
+  m_LocalScale: {x: .428465366, y: .428465396, z: .343135893}
   m_Children:
   - {fileID: 22475376}
   - {fileID: 22422904}
   - {fileID: 22475374}
   m_Father: {fileID: 22483498}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_AnchorMin: {x: 0, y: .5}
   m_AnchorMax: {x: 0, y: .5}
-  m_AnchoredPosition: {x: 132, y: -25}
+  m_AnchoredPosition: {x: 132, y: -25.0000229}
   m_SizeDelta: {x: 527.400024, y: 700}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22416064
@@ -4478,7 +4478,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: .5}
   m_AnchorMax: {x: 0, y: .5}
   m_AnchoredPosition: {x: 8, y: 1.16179729}
-  m_SizeDelta: {x: 155, y: 380}
+  m_SizeDelta: {x: 0, y: 380}
   m_Pivot: {x: 0, y: .5}
 --- !u!224 &22425152
 RectTransform:
@@ -4719,10 +4719,10 @@ RectTransform:
   - {fileID: 22472298}
   m_Father: {fileID: 22425150}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -15, y: -180}
-  m_SizeDelta: {x: 160, y: 170}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &22461092
 RectTransform:
@@ -5627,8 +5627,8 @@ RectTransform:
   - {fileID: 22483486}
   - {fileID: 22483484}
   - {fileID: 22483482}
-  - {fileID: 22495176}
   - {fileID: 22412330}
+  - {fileID: 22495176}
   - {fileID: 22475368}
   - {fileID: 22495174}
   - {fileID: 22416064}
@@ -5696,7 +5696,7 @@ RectTransform:
   - {fileID: 22483474}
   - {fileID: 22483472}
   m_Father: {fileID: 22483498}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_AnchorMin: {x: .376275539, y: 0}
   m_AnchorMax: {x: 1, y: .769261241}
   m_AnchoredPosition: {x: 59.7000008, y: 37}
