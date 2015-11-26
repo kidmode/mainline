@@ -773,6 +773,8 @@ public class RegionBaseState : GameState
 				//			info.appName ="test " + i;
 				
 				m_gameViewList.Add( info );
+
+				m_gameFavoritesList.Add( info );
 				
 			}
 
@@ -2070,16 +2072,10 @@ public class RegionBaseState : GameState
 //				m_gameViewList.Add(l_app);
 //		}
 
-		
-		//		#if UNITY_EDITOR
-//		for (int i = 0; i < 300; i++) {
-//			
-//			m_gameViewList.Add( new GameInfo(new AppInfo() ) );
-//			
-//		}
-//
-////		m_gameViewList.Add(l_game);
-//		#endif
+
+
+//		m_gameViewList.Add(l_game);
+
 
 		int l_gameCount = 0;
 		int l_videoCount = 0;
