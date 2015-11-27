@@ -124,27 +124,23 @@ public class GameActivityCanvas : UICanvas
 		UILabel l_appName = p_element.getView("appName") as UILabel;
 
 		UIImage l_backgroundImage = p_element.getView("background") as UIImage;
+		//honda: we don't use shadow anymore, we use panel's shadow
 		UIImage l_shadowImage = p_element.getView("shadow") as UIImage;
-
+		l_shadowImage.active  = false;
 		UIImage l_panel = p_element.getView("Panel") as UIImage;
-
 		UIImage l_PanelShadow = p_element.getView("PanelShadow") as UIImage;
+		Mask mask = l_panel.gameObject.GetComponent<Mask>();
 
 		//==========
 		//Update List item so we could get the index latter on other scripts
 		ListItem item = p_element.transform.gameObject.GetComponent<ListItem>();
-
 		item.index = p_index;
 
 		//PanelShadow
 
-		if(l_game != null){
-
+		if(l_game != null)
+		{
 //		DebugUtils.Assert( l_game != null );
-
-
-
-
 
 			//honda: Debug mode
 			UILabel title = p_element.getView("AddTitle") as UILabel;
@@ -153,6 +149,8 @@ public class GameActivityCanvas : UICanvas
 			UIButton removeBtn = p_element.getView("RemoveButton") as UIButton;
 			if (l_game.webViewData.infoStatus == WebViewInfoStatus.AddItem)
 			{
+				mask.enabled = true;
+
 				title.active = true;
 				plus.active = true;
 				name.active = false;
@@ -166,15 +164,18 @@ public class GameActivityCanvas : UICanvas
 			}
 			else if (l_game.webViewData.infoStatus == WebViewInfoStatus.FromLocal || l_game.webViewData.infoStatus == WebViewInfoStatus.FromGDrive)
 			{
+				mask.enabled = true;
+
 				title.active = false;
 				plus.active = false;
-				name.active = true;
-				name.text = l_game.webViewData.webData.name;
-				removeBtn.active = true;
-				removeBtn.enabled = true;
+				name.active = false;
+//				name.text = l_game.webViewData.webData.name;
+				removeBtn.active = false;//true;
+				removeBtn.enabled = false;//true;
 				l_rawImage.setTexture( m_emptyTexture );
 				l_appImage.active = false;
-				l_appName.active = false;
+				l_appName.active = true;
+				l_appName.text = l_game.webViewData.webData.name;
 				l_numberLabel.active = false;
 				return;
 			}
@@ -201,23 +202,14 @@ public class GameActivityCanvas : UICanvas
 			{
 				WebViewInfo l_info = l_game.webViewData;
 
-				Mask mask = l_panel.gameObject.GetComponent<Mask>();
-				mask.enabled = true;
-
 				//honda comment: requestIcon check icon from local or server
 				if( !l_info.iconRequested )
 				{
 					l_info.requestIcon();
 				}
 
-//				if (l_appName.active)
-//				{
-//					l_appName.active = false;
-//				}
-
 				l_appName.active = true;
 				l_appName.text = StringManipulator.getShortenOneLineAppName( l_game.webViewData.webData.name );
-
 
 				if( l_info.icon == null )
 				{
@@ -232,8 +224,9 @@ public class GameActivityCanvas : UICanvas
 						l_appImage.active = false;
 				}
 
-
 				//===================
+				mask.enabled = true;
+
 				//Need to move the app icon info to the child of the 
 				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
 
@@ -249,9 +242,6 @@ public class GameActivityCanvas : UICanvas
 				l_appName.active = true;
 			}
 
-
-//			l_backgroundImage.
-
 			Vector2 l_textSize = l_appName.calcSize();
 			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
 //			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
@@ -259,7 +249,6 @@ public class GameActivityCanvas : UICanvas
 			
 			if( l_info.appIcon == null )
 			{
-//				l_rawImage.setTexture( m_emptyTexture );
 				l_appImage.setTexture( m_emptyTexture );
 				l_rawImage.active = false;
 			}
@@ -270,33 +259,21 @@ public class GameActivityCanvas : UICanvas
 				l_rawImage.active = false;
 			}
 
-
-			l_shadowImage.active = false;
-
 			//==========================================================================================
 			//Turn off the mask
-			Mask mask = l_panel.gameObject.GetComponent<Mask>();
 			mask.enabled = false;
-
 
 			//===================
 			//Need to move the app icon info to the child of the 
 			l_appImage.gameObject.transform.parent = p_element.gameObject.transform;// l_panel.gameObject.transform;
 			l_appName.gameObject.transform.parent = p_element.gameObject.transform;
 
-			
 			//Turn off the background image
 			l_backgroundImage.gameObject.SetActive(false);
 			l_backgroundImage.active = false;
 			//Turn off the panel shadow
 			l_PanelShadow.gameObject.SetActive(false);
-
-
-
 			l_panel.active = false;
-
-
-
 		}
 	}
 
