@@ -404,7 +404,7 @@ public class KidMode
 					continue;
 				}
 			}
-			if( l_packageName.Equals("com.zoodles.kidmode") )
+			if( l_packageName.Equals("com.zoodles.debugmainline") )
 			{
 				continue;
 			}
