@@ -17,13 +17,13 @@
         android:targetSdkVersion="23" />
 
     <permission
-        android:name="com.zoodles.kidmode.permission.READ_SETTINGS"
+        android:name="com.zoodles.debugmainline.permission.READ_SETTINGS"
         android:protectionLevel="signatureOrSystem" />
     <permission
-        android:name="com.zoodles.kidmode.permission.WRITE_SETTINGS"
+        android:name="com.zoodles.debugmainline.permission.WRITE_SETTINGS"
         android:protectionLevel="signatureOrSystem" />
     <permission
-        android:name="com.zoodles.kidmode.permission.READ_HTC"
+        android:name="com.zoodles.debugmainline.permission.READ_HTC"
         android:protectionLevel="signatureOrSystem" />
 
     <uses-feature
@@ -50,16 +50,16 @@
     <uses-feature android:glEsVersion="0x00020000" />
 
     <application
-        android:name="com.zoodles.kidmode.App"
+        android:name="com.zoodles.debugmainline.App"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:hasCode="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-        <service android:name="com.zoodles.kidmode.service.KeepAliveService" />
+        <service android:name="com.zoodles.debugmainline.service.KeepAliveService" />
 <!--        <service android:name="com.zoodles.kidmode.service.GlobalTouchDenyService" />-->
         <service
-            android:name="com.zoodles.kidmode.service.NativeAppService"
+            android:name="com.zoodles.debugmainline.service.NativeAppService"
             android:enabled="true"
             android:exported="false" />
 
@@ -92,7 +92,7 @@
         <intent-filter>
             <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
             <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <category android:name="com.zoodles.kidmode" />
+            <category android:name="com.zoodles.debugmainline" />
         </intent-filter>
     </receiver>
     <service android:name="com.swrve.unity.gcm.SwrveGcmIntentService">
@@ -123,7 +123,7 @@
         <!-- For OOB loader end -->
 
         <activity
-            android:name="com.zoodles.kidmode.activity.LauncherActivity"
+            android:name="com.zoodles.debugmainline.activity.LauncherActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -191,7 +191,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.parent.ParentDashboardLauncherActivity"
+            android:name="com.zoodles.debugmainline.activity.parent.ParentDashboardLauncherActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -202,7 +202,7 @@
             >
         </activity>
         <activity
-            android:name="com.zoodles.kidmode.activity.kid.exit.ExitAppActivity"
+            android:name="com.zoodles.debugmainline.activity.kid.exit.ExitAppActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:excludeFromRecents="true"
@@ -262,11 +262,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 
         <activity-alias
-            android:name="com.zoodles.kidmode"
+            android:name="com.zoodles.debugmainline"
             android:exported="true"
             android:targetActivity="com.onevcat.uniwebview.AndroidPlugin" />
         <activity-alias
-            android:name="com.zoodles.kidmode.ZoodlesHome"
+            android:name="com.zoodles.debugmainline.ZoodlesHome"
             android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -280,11 +280,11 @@
         </activity-alias>
 
         <provider
-            android:name="com.zoodles.kidmode.provider.SettingsProvider"
-            android:authorities="com.zoodles.kidmode.provider.settings"
+            android:name="com.zoodles.debugmainline.provider.SettingsProvider"
+            android:authorities="com.zoodles.debugmainline.provider.settings"
             android:exported="true"
-            android:readPermission="com.zoodles.kidmode.permission.READ_SETTINGS"
-            android:writePermission="com.zoodles.kidmode.permission.WRITE_SETTINGS" />
+            android:readPermission="com.zoodles.debugmainline.permission.READ_SETTINGS"
+            android:writePermission="com.zoodles.debugmainline.permission.WRITE_SETTINGS" />
     </application>
 
     <uses-permission android:name="android.permission.WRITE_SESET_PREFERRED_APPLICATIONSTTINGS" />
@@ -308,7 +308,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.zoodles.kidmode.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.zoodles.debugmainline.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.DEVICE_POWER"/>
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -318,7 +318,7 @@
     
         <!-- Add this to your AndroidManifest.xml -->
     <permission
-        android:name="com.zoodles.kidmode.permission.C2D_MESSAGE"
+        android:name="com.zoodles.debugmainline.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <!-- End of changes -->
 
