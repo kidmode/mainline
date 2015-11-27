@@ -174,6 +174,7 @@ public class GameActivityCanvas : UICanvas
 				removeBtn.enabled = false;//true;
 				l_rawImage.setTexture( m_emptyTexture );
 				l_appImage.active = false;
+				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
 				l_appName.active = true;
 				l_appName.text = l_game.webViewData.webData.name;
 				l_numberLabel.active = false;
