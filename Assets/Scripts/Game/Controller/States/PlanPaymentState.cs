@@ -10,7 +10,7 @@ public class PlanPaymentState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
-		
+		SwrveComponent.Instance.SDK.NamedEvent("ViewCreditCardPage");
 		_setupScreen(p_gameController.getUI());
 	}
 	
@@ -141,6 +141,7 @@ public class PlanPaymentState : GameState
 	
 	private void _goBack(UIButton p_button)
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("BackFromPayment");
 		m_gameController.changeState(ZoodleState.VIEW_PREMIUM);
 	}
 	
@@ -194,6 +195,58 @@ public class PlanPaymentState : GameState
 				{
 					if(null != l_response["response"])
 					{
+						if(SessionHandler.getInstance ().token.isTried())
+						{
+							SwrveComponent.Instance.SDK.NamedEvent("FreeTrialToPremium");
+						} else
+						{
+							SwrveComponent.Instance.SDK.NamedEvent("PremiumWithoutTrial");
+						}
+						string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
+						Dictionary<string,string> payload = new Dictionary<string,string>() { {"PurchasePlan", l_purchaseObject}};
+						SwrveComponent.Instance.SDK.NamedEvent("PaymentSuccess",payload);
+
+						//swrve start
+						string l_returnJson = SessionHandler.getInstance ().PremiumJson;
+						Debug.Log("@@@ Json: " + l_returnJson);
+						Hashtable l_data = null;
+						
+						if(l_returnJson.Length > 0)
+							l_data = MiniJSON.MiniJSON.jsonDecode (l_returnJson) as Hashtable;
+						//		m_transparentImage = m_premiumCanvas.getView ("topImage") as UIImage;
+						if(null != l_data && l_data.ContainsKey("plan_info"))
+						{
+							float monthCost = 0;
+							float yearCost = 0;
+							float l_monthDiscount;
+							float l_yealyDiscount;
+							float l_nowMonthPrice = 0;
+							float l_nowYearPrice = 0;
+
+							ArrayList l_planList = l_data["plan_info"] as ArrayList;
+							Hashtable l_detail = _getPlanDetailByName(l_planList, "Monthly");
+							l_nowMonthPrice = float.Parse(l_detail["amount"].ToString());
+							l_detail = _getPlanDetailByName(l_planList, "Annual");
+							l_nowYearPrice =float.Parse(l_detail["amount"].ToString());
+							
+							l_monthDiscount = 0.20f;
+							l_yealyDiscount = 0.50f;
+
+							monthCost = (l_nowMonthPrice /(1- l_monthDiscount));
+							yearCost = (l_nowYearPrice /(1- l_yealyDiscount));
+							
+							if("Monthly".Equals(l_purchaseObject))
+							{
+								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", monthCost, 1);
+							}
+							else if ("Annual".Equals(l_purchaseObject))
+							{
+								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", yearCost, 1);
+							}
+						}
+						//swrve end
+
+
 						SessionHandler.getInstance ().token.setTry(true);
 						SessionHandler.getInstance ().token.setCurrent(true);
 						SessionHandler.getInstance ().token.setPremium(true);
@@ -201,6 +254,7 @@ public class PlanPaymentState : GameState
 					}
 					else
 					{
+						SwrveComponent.Instance.SDK.NamedEvent("PaymentFailure");
 						setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_INCORRECT));
 					}
 				}
@@ -208,6 +262,7 @@ public class PlanPaymentState : GameState
 		}
 		else
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("PaymentFailure");
 			setErrorMessage(m_gameController, Localization.getString( Localization.TXT_STATE_65_INVALID_VALUE), Localization.getString( Localization.TXT_STATE_65_INCORRECT));
 		}
 	}

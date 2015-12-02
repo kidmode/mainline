@@ -12,7 +12,8 @@ public class ViewPremiumState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
-		
+		SwrveComponent.Instance.SDK.NamedEvent("ViewPremiumPlan");
+
 		m_game = p_gameController.game;
 
 		_setupScreen( p_gameController.getUI() );
@@ -131,12 +132,16 @@ public class ViewPremiumState : GameState
 
 	private void gotoMonthlyPurchase( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("GotoMonthlyPurchase");
+
 		SessionHandler.getInstance ().purchaseObject = "Monthly";
 		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
 	}
 
 	private void gotoYearlyPurchase( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("gotoYearlyPurchase");
+
 		SessionHandler.getInstance ().purchaseObject = "Annual";
 		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
 	}

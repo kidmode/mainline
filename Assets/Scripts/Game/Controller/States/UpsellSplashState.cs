@@ -85,6 +85,8 @@ public class UpsellSplashState : GameState
 
 	private void gotoViewPlan( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("GotoViewPlan");
+
 		p_button.removeClickCallback (gotoViewPlan);
 		string l_returnJson = SessionHandler.getInstance ().PremiumJson;
 		
@@ -115,6 +117,8 @@ public class UpsellSplashState : GameState
 
 	private void gotoGetGems( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("gotoGetGems");
+
 		p_button.removeClickCallback (gotoGetGems);
 		string l_returnJson = SessionHandler.getInstance ().GemsJson;
 

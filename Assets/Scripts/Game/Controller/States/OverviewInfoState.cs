@@ -795,6 +795,8 @@ public class OverviewInfoState : GameState {
 		}
 		else
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("GotoPremiumFromLeftMenu");
+
 			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
 			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
 		}
@@ -803,7 +805,10 @@ public class OverviewInfoState : GameState {
 	private void toBuyGemsScreen(UIButton p_button)
 	{
 		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
+		SwrveComponent.Instance.SDK.NamedEvent("GotoGetGemsFromLeftMenu");
+
 		gotoGetGems ();
+
 	}
 	
 	private void gotoGetGems()

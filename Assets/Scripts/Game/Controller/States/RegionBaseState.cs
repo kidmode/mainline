@@ -1502,6 +1502,7 @@ public class RegionBaseState : GameState
 		if(!showMsgIfNoInternet())
 		{
 			BookInfo l_bookInfo = p_data as BookInfo;
+			SwrveComponent.Instance.SDK.NamedEvent("Book.START");
 
 			if( l_bookInfo.bookState == BookState.Recorded )
 			{
