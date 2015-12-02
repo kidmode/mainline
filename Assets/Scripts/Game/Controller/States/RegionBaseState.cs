@@ -701,15 +701,15 @@ public class RegionBaseState : GameState
 			
 			m_videoSwipeList = m_videoActivityCanvas.getView("allContentScrollView") as UISwipeList;
 			//honda: for debug mode
-//			updateVideoList();
+			updateVideoList();
 			//end
 			//honda: for normal mainline
-			m_videoSwipeList.setData(m_videoViewList);
-			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
-
-			//Get Scroll view updator
-			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-			viewUpdator.setContentDataSize(m_videoViewList.Count);
+//			m_videoSwipeList.setData(m_videoViewList);
+//			m_videoSwipeList.addClickListener("Prototype", onVideoClicked);
+//
+//			//Get Scroll view updator
+//			KidModeScrollViewUpdator viewUpdator = m_videoSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_videoViewList.Count);
 			//end
 
 			m_videoFavorateSwipeList = m_videoActivityCanvas.getView("favorateScrollView") as UISwipeList;
@@ -803,15 +803,15 @@ public class RegionBaseState : GameState
 #endif	
 
 			//honda: for debug mode
-//			updateGameList();
+			updateGameList();
 			//end
 			//honda: for normal mainline
-			m_gameSwipeList.setData(m_gameViewList);
-			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
-
-			//Get Scroll view updateor
-			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
-			viewUpdator.setContentDataSize(m_gameViewList.Count);
+//			m_gameSwipeList.setData(m_gameViewList);
+//			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
+//
+//			//Get Scroll view updateor
+//			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
+//			viewUpdator.setContentDataSize(m_gameViewList.Count);
 			//snd
 
 			m_gameFavorateSwipeList = m_gameActivityCanvas.getView("favorateScrollView") as UISwipeList;
@@ -2130,14 +2130,14 @@ public class RegionBaseState : GameState
 			Debug.Log("~DebugMode~ m_videoViewList = " + m_videoViewList.Count);
 			Debug.Log("~DebugMode~ m_gameViewList = " + m_gameViewList.Count);
 			//honda: for debug mode
-//			if (m_videoSwipeList != null)
-//			{
-//				updateVideoList();
-//			}
-//			if (m_gameSwipeList != null)
-//			{
-//				updateGameList();
-//			}
+			if (m_videoSwipeList != null)
+			{
+				updateVideoList();
+			}
+			if (m_gameSwipeList != null)
+			{
+				updateGameList();
+			}
 			//end
 		}
 
