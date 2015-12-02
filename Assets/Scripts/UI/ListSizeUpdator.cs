@@ -49,7 +49,7 @@ public class ListSizeUpdator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Debug.Log("   mainPanel.GetComponent<RectTransform>().offsetMin " + mainPanel.GetComponent<RectTransform>().offsetMin.x);
+//		Debug.Log("   mainPanel.GetComponent<RectTransform>().offsetMin " + mainPanel.GetComponent<RectTransform>().offsetMin.x);
 
 		if(state == State.STRETCH){
 

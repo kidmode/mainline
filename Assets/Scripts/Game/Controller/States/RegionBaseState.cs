@@ -801,7 +801,6 @@ public class RegionBaseState : GameState
 
 
 #endif	
-			//m_gameSwipeList
 
 			//honda: for debug mode
 //			updateGameList();
@@ -809,9 +808,6 @@ public class RegionBaseState : GameState
 			//honda: for normal mainline
 			m_gameSwipeList.setData(m_gameViewList);
 			m_gameSwipeList.addClickListener("Prototype", onGameClicked);
-
-
-
 
 			//Get Scroll view updateor
 			KidModeScrollViewUpdator viewUpdator = m_gameSwipeList.gameObject.GetComponent<KidModeScrollViewUpdator>();
@@ -1829,6 +1825,22 @@ public class RegionBaseState : GameState
 	private void onMapButtonClicked(UIButton p_button)
 	{
 		m_subState = SubState.GO_MAP;
+
+		if( m_foregroundGafGroup != null ){
+			
+			if( m_foregroundGafGroup.active){
+				
+				GAFMovieClip[] gafClips = m_foregroundGafGroup.gameObject.GetComponentsInChildren<GAFMovieClip>();
+				//
+				for (int i = 0; i < gafClips.Length; i++) {
+
+					gafClips[i].disposeResources();
+
+				}
+
+			}
+
+		}
 	}	
 	
 	private void onSpeechClick(UIButton p_button)
@@ -2446,7 +2458,7 @@ public class RegionBaseState : GameState
 		}
 		Debug.Log("~DebugMode~ multiple game list: " + SessionHandler.getInstance().multipleGameList.Count);
 		//add original list from server to video list
-		foreach (GameInfo info in m_gameViewList)
+		foreach (object info in m_gameViewList)
 		{
 			gameList.Add(info);
 		}
