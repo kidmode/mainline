@@ -873,7 +873,7 @@ public class Localization : object
 	public static void loadLanguage()
 	{
 		//honda: only for localization testing
-//		changeLanguage("French");
+//		changeLanguage("Dutch");
 //		return;
 		//end
 
@@ -922,7 +922,9 @@ public class Localization : object
 		case SystemLanguage.Italian :
 			changeLanguage("Italian");
 			break;
-			
+		case SystemLanguage.Dutch:
+			changeLanguage("Dutch");
+			break;
 		default :
 			changeLanguage("EN");
 			break;
