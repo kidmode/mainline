@@ -456,12 +456,22 @@ public class GAFMovieClip :
 
 	private void OnDestroy()
 	{
+//		if (null != resource)
+//		{
+//			resource.dispose();
+//		}
+
+		clear (true);
+	}
+
+	public void disposeResources(){
+
 		if (null != resource)
 		{
 			resource.dispose();
 		}
 
-		clear (true);
+
 	}
 
 	private void OnApplicationFocus(bool _FocusStatus) 

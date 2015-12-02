@@ -153,6 +153,7 @@ public class BuyGemsState : GameState
 			{
 				if(l_data.ContainsKey("gems"))
 				{
+
 					int l_gemsCount = int.Parse(l_data["gems"].ToString());
 					SessionHandler.getInstance().currentKid.gems = l_gemsCount;
 					List<Kid> l_kidList = SessionHandler.getInstance().kidList;
@@ -160,20 +161,34 @@ public class BuyGemsState : GameState
 					{
 						l_k.gems = l_gemsCount;
 					}
+					//swrve start
+					string l_gemAmount = m_gameController.board.read("gems") as string;
+					string l_gemPrice = m_gameController.board.read("gemsPrice") as string;
+
+					Dictionary<string,string> payload = new Dictionary<string,string>() { {"GemsCount", l_gemAmount.ToString()}};
+					SwrveComponent.Instance.SDK.NamedEvent("GemPurchaseSucess",payload);
+					//SwrveComponent.Instance.SDK.Purchase("Gems", "usd", int.Parse(l_gemPrice), int.Parse(l_gemAmount));
+					//swrve end
 					m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 				}
 				else
 				{
+					SwrveComponent.Instance.SDK.NamedEvent("GemPurchaseFailure");
+
 					_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
 				}
 			}
 			else
 			{
+				SwrveComponent.Instance.SDK.NamedEvent("GemPurchaseFailure");
+
 				_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
 			}
 		}
 		else
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("GemPurchaseFailure");
+
 			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_PURCHASE));
 		}
 	}
@@ -235,6 +250,8 @@ public class BuyGemsState : GameState
 	
 	private void goBack( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("BackFromBuyGems");
+
 		p_button.removeClickCallback ( goBack );
 		int l_state = m_gameController.getConnectedState ( ZoodleState.BUY_GEMS );
 		m_gameController.changeState (l_state);
@@ -247,7 +264,9 @@ public class BuyGemsState : GameState
 		Hashtable l_jsonResponse = l_data["jsonResponse"] as Hashtable;
 		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
 		Hashtable l_good = l_response["good"] as Hashtable;
+
 		m_gameController.board.write("gems", l_good["gems"].ToString());
+		m_gameController.board.write("gemsPrice", l_good["amount"].ToString());
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
@@ -269,6 +288,7 @@ public class BuyGemsState : GameState
 		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
 		Hashtable l_better = l_response["better"] as Hashtable;
 		m_gameController.board.write("gems", l_better["gems"].ToString());
+		m_gameController.board.write("gemsPrice", l_better["amount"].ToString());
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
@@ -290,6 +310,7 @@ public class BuyGemsState : GameState
 		Hashtable l_response = l_jsonResponse["response"] as Hashtable;
 		Hashtable l_best = l_response["best"] as Hashtable;
 		m_gameController.board.write("gems", l_best["gems"].ToString());
+		m_gameController.board.write("gemsPrice", l_best["amount"].ToString());
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
