@@ -168,7 +168,7 @@ public class BuyGemsState : GameState
 
 					Dictionary<string,string> payload = new Dictionary<string,string>() { {"GemsCount", l_gemAmount.ToString()}};
 					SwrveComponent.Instance.SDK.NamedEvent("GemPurchaseSucess",payload);
-					SwrveComponent.Instance.SDK.Purchase("Gems", "usd", l_gemPrice, l_gemAmount.ToString());
+					SwrveComponent.Instance.SDK.Purchase("Gems", "usd", int.Parse(l_gemPrice), int.Parse(l_gemAmount));
 
 					//swrve end
 					m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);

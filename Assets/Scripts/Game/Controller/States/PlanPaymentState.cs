@@ -237,11 +237,11 @@ public class PlanPaymentState : GameState
 							
 							if("Monthly".Equals(l_purchaseObject))
 							{
-								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", monthCost, 1);
+								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(monthCost), 1);
 							}
 							else if ("Annual".Equals(l_purchaseObject))
 							{
-								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", yearCost, 1);
+								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(yearCost), 1);
 							}
 						}
 						//swrve end
