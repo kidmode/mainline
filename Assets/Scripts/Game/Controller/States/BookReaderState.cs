@@ -157,6 +157,7 @@ public class BookReaderState : GameState {
 //		}
 
 		GAUtil.logVisit("Book", m_duration);
+		SwrveComponent.Instance.SDK.NamedEvent("Book.BACK");
 
 		int readingtime = (int)Math.Ceiling(m_duration * 0.001);
 		if (m_finishReading)

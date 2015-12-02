@@ -458,6 +458,7 @@ public class ControlLanguageState : GameState
 
 	private void onUpgradeButtonClick(UIButton p_button)
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
 		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
 		{
 			Server.init (ZoodlesConstants.getHttpsHost());

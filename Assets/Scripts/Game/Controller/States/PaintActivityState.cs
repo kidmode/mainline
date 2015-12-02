@@ -9,6 +9,7 @@ public class PaintActivityState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
+		SwrveComponent.Instance.SDK.NamedEvent("DrawingGame.new");
 
 		_setupScreen(p_gameController.getUI());
 

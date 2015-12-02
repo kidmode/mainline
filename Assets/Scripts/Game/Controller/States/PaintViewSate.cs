@@ -181,6 +181,8 @@ public class PaintViewSate : GameState
 
 	private void onEditButtonClick( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("DrawingGame.edit");
+
 		p_button.removeClickCallback (onEditButtonClick);
 
 //		m_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
@@ -200,6 +202,8 @@ public class PaintViewSate : GameState
 	{
 		if( null == p_response.error )
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("DrawingGame.delete");
+
 			m_drawingList.RemoveAt (m_currentIndex);
 
 			List<Vector3> l_pointListOut = new List<Vector3>();
