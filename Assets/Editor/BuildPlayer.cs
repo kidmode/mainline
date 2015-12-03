@@ -12,32 +12,7 @@ public class BuildPlayer : MonoBehaviour
 
 
 
-	#region Android VZW
 
-
-	[MenuItem( "Build/Android/VZW_RELEASE" )]
-    public static void Build_VZW_RELEASE()
-    {
-        Dictionary<string , string> stringsParams = new Dictionary<string , string>();
-
-		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
-
-		build("Assets/keystore/android", "android", "android", "android", BuildOptions.None);
-    }
-
-
-	[MenuItem( "Build/Android/VZW_DEV_DEBUG_PLAY" )]
-	public static void BUILD_VZW_DEV_DEBUG_PLAY()
-	{
-		Dictionary<string , string> stringsParams = new Dictionary<string , string>();
-
-		BuildOptions androidBuildOptions = BuildOptions.Development | BuildOptions.AllowDebugging | BuildOptions.AutoRunPlayer | BuildOptions.ShowBuiltPlayer;
-
-		build("Assets/keystore/android", "android", "android", "android", androidBuildOptions);
-	}
-	
-	
-	#endregion
 
 	#region Android MAIN_LINE
 	
@@ -49,7 +24,7 @@ public class BuildPlayer : MonoBehaviour
 		
 		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
 		
-		build("Assets/keystore/android", "android", "android", "android", BuildOptions.None);
+		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
 	}
 	
 	
@@ -60,7 +35,7 @@ public class BuildPlayer : MonoBehaviour
 		
 		BuildOptions androidBuildOptions = BuildOptions.Development | BuildOptions.AllowDebugging | BuildOptions.AutoRunPlayer | BuildOptions.ShowBuiltPlayer;
 		
-		build("Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
 	}
 	
 	
@@ -68,7 +43,7 @@ public class BuildPlayer : MonoBehaviour
 	
 	#region BuildFunctions
 
-	private static void  build( string keystoreName, string keystorePass, string keyAlias, string keyAliasPass, BuildOptions buildOptions )
+	private static void  build(string branch, string keystoreName, string keystorePass, string keyAlias, string keyAliasPass, BuildOptions buildOptions )
      {
  		//=============================================
  		//=============================================
@@ -97,8 +72,15 @@ public class BuildPlayer : MonoBehaviour
 
 		Debug.Log("  path " + path);
 
+		if(path == ""){
+
+			Debug.Log(" no path");
+			return;
+
+		}
+
 		//Set the file name of the build
-        string targetFileName = "KidMode" + "_" + System.DateTime.Now.ToString( "yyyyMMddHHmm" ) + ".apk";
+		string targetFileName = "KidMode" + "_"  + branch + "_" + System.DateTime.Now.ToString( "yyyyMMddHHmm" ) + ".apk";
 
 		//Get the string array of enabled build scenes
 		string[] scenesArray = getEnabledBuildScenes();
