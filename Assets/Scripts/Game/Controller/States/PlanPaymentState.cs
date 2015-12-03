@@ -113,7 +113,7 @@ public class PlanPaymentState : GameState
 	private void _fillPremiunDate(Hashtable p_data)
 	{
 		string l_title = p_data["en_name"].ToString();
-		if ("Annual".Equals(l_title))
+		if ("Yearly".Equals(l_title))
 			m_bestDealImg.active = true;
 
 		float l_nowMonthPrice = float.Parse(p_data["amount"].ToString());
@@ -235,14 +235,14 @@ public class PlanPaymentState : GameState
 							monthCost = (l_nowMonthPrice /(1- l_monthDiscount));
 							yearCost = (l_nowYearPrice /(1- l_yealyDiscount));
 							
-							if("Monthly".Equals(l_purchaseObject))
-							{
-								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(monthCost), 1);
-							}
-							else if ("Annual".Equals(l_purchaseObject))
-							{
-								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(yearCost), 1);
-							}
+//							if("Monthly".Equals(l_purchaseObject))
+//							{
+//								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(monthCost), 1);
+//							}
+//							else if ("Annual".Equals(l_purchaseObject))
+//							{
+//								SwrveComponent.Instance.SDK.Purchase(l_purchaseObject, "usd", (int)(yearCost), 1);
+//							}
 						}
 						//swrve end
 

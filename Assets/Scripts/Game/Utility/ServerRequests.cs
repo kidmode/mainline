@@ -1531,6 +1531,7 @@ public class BuyBookRequest : RequestQueue.Request
 		{
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookTitle", m_book.title}};
 			SwrveComponent.Instance.SDK.NamedEvent("BuyBook",payload);
+			SwrveComponent.Instance.SDK.Purchase(m_book.title,"Gems",m_book.gems,1);
 
 			List<Kid> l_kid = SessionHandler.getInstance().kidList;
 			foreach (Kid l_k in l_kid)
