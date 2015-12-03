@@ -20,7 +20,6 @@ public class BuildPlayer : MonoBehaviour
 	[MenuItem( "Build/Android/MAINLINE_RELEASE" )]
 	public static void Build_MAINLINE_RELEASE()
 	{
-		Dictionary<string , string> stringsParams = new Dictionary<string , string>();
 		
 		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
 		
