@@ -477,6 +477,7 @@ public class GameViewState : WebViewState
 		{
 			SwrveComponent.Instance.SDK.NamedEvent("Game.DURATION.<2mins",payload);
 		}
+		SwrveComponent.Instance.SDK.NamedEvent ("Game.BACK");
 
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;

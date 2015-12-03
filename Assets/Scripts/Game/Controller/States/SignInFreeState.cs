@@ -45,6 +45,7 @@ public class SignInFreeState : GameState
 
 	private void onPremiumClick( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("GoToPremiumAfterSignIn");
 		p_button.removeClickCallback ( onPremiumClick );
 
 		m_gameController.changeState(ZoodleState.SIGN_UP_UPSELL);

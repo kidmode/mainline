@@ -1529,6 +1529,9 @@ public class BuyBookRequest : RequestQueue.Request
 		UIElement l_element = m_button.parent.parent;
 		if(null == p_response.error)
 		{
+			Dictionary<string,string> payload = new Dictionary<string,string>() { {"BookTitle", m_book.title}};
+			SwrveComponent.Instance.SDK.NamedEvent("BuyBook",payload);
+
 			List<Kid> l_kid = SessionHandler.getInstance().kidList;
 			foreach (Kid l_k in l_kid)
 			{

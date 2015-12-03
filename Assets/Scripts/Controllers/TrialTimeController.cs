@@ -389,7 +389,8 @@ public class TrialTimeController : MonoBehaviour {
 	
 	private void onContinueClick(UIButton p_button)
 	{
-		
+		SwrveComponent.Instance.SDK.NamedEvent("TapExitBtnWhenExpired");
+
 		UIManager l_ui = game.gameController.getUI();
 		
 		l_ui.removeScreen(m_trialMessageCanvas);
