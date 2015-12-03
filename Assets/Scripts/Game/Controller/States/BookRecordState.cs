@@ -632,6 +632,9 @@ public class BookRecordState : GameState
 		l_clip = AudioClip.Create( "clip", FREQUENCY * m_runningTime,
 		                               m_newClip.channels, m_newClip.frequency, false, false);
 		float[] l_newData = new float[ FREQUENCY * m_runningTime ];
+
+
+//		AudioClip.Create(
 		m_newClip.GetData ( l_newData, 0 );
 		l_clip.SetData ( l_newData, 0 );
 
