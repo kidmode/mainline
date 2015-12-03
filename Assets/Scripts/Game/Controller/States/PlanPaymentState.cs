@@ -113,7 +113,7 @@ public class PlanPaymentState : GameState
 	private void _fillPremiunDate(Hashtable p_data)
 	{
 		string l_title = p_data["en_name"].ToString();
-		if ("Yearly".Equals(l_title))
+		if ("Annual".Equals(l_title))
 			m_bestDealImg.active = true;
 
 		float l_nowMonthPrice = float.Parse(p_data["amount"].ToString());

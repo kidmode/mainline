@@ -83,7 +83,7 @@ public class PaymentState : GameState
 			case "Monthly":
 				fillPremiunDate(l_planList,Localization.getString(Localization.TXT_STATE_21_MONTH));
 				break;
-			case "Yearly":
+			case "Annual":
 				fillPremiunDate(l_planList,Localization.getString(Localization.TXT_STATE_21_YEAR));
 				break;
 			case "good":
@@ -156,7 +156,7 @@ public class PaymentState : GameState
 	private void goBack( UIButton p_button )
 	{
 		string l_purchaseObject = SessionHandler.getInstance ().purchaseObject;
-		if("Monthly".Equals(l_purchaseObject) || "Yearly".Equals(l_purchaseObject))
+		if("Monthly".Equals(l_purchaseObject) || "Annual".Equals(l_purchaseObject))
 		{
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
 		}
