@@ -24,17 +24,18 @@ public class BuildPlayer : MonoBehaviour
 		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
 		
 		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+
 	}
 	
 	
 	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PLAY" )]
 	public static void Build_MAINLINE_DEV_DEBUG_PLAY()
 	{
-		Dictionary<string , string> stringsParams = new Dictionary<string , string>();
 		
 		BuildOptions androidBuildOptions = BuildOptions.Development | BuildOptions.AllowDebugging | BuildOptions.AutoRunPlayer | BuildOptions.ShowBuiltPlayer;
 		
 		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+
 	}
 	
 	
