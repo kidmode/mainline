@@ -59,6 +59,20 @@ public class KidMode
 
 	}
 
+	
+	public static float getFreeSpace()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		string freeSpace = "0";
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		freeSpace = jc.CallStatic<string>("getFreeSpace");
+		
+		return float.Parse(freeSpace);
+		#else
+		return 0;		
+		#endif
+	}
+
 //	public static event Action onKidModeAndroidRestart;
 
 	public static void onActivityRestart() {
