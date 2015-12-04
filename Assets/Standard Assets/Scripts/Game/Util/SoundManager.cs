@@ -70,7 +70,7 @@ public class SoundManager : object
 			m_gameObject = GameObject.Instantiate(Resources.Load("Prefabs/AudioSource")) as GameObject; 
 		AudioSource l_audioSource = m_gameObject.audio;
 		l_audioSource.Stop();
-		GameObject.Destroy (m_gameObject);
+//		GameObject.Destroy (m_gameObject);
 	}
 
 	public bool isPlayingMusic()
