@@ -50,7 +50,7 @@ public class BookRecordState : GameState
 		{
 			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
 			{
-				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
+//				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
 			}
 		}
 
@@ -685,12 +685,17 @@ public class BookRecordState : GameState
             m_audioSource == null )
         {
             _Debug.logError("Index is out of bounds or Audio source is null!");
+
+			Debug.LogError("Index is out of bounds or Audio source is null!");
             return;
         }
 
 		if (m_currentClip == null)
 		{
 			_Debug.logError("Audio Clip for page: " + p_index + " is null!");
+
+			Debug.LogError("Audio Clip for page: " + p_index + " is null!");
+
 			return;
 		}
 
@@ -809,6 +814,8 @@ public class BookRecordState : GameState
 		m_exitRerecordButton.addClickCallback( onExitRerecordButtonClicked );
 		m_exitMessageButton.addClickCallback( onExitMessageButtonClicked );
 		m_exitMessageButton.active = false;
+
+//		_loadPage(0);
     }
 
 
