@@ -532,6 +532,8 @@ public class BookRecordState : GameState
         _loadCurrentPageContent();
         _setPageContent();
 
+		m_gameController.game.StartCoroutine( _loadPage( 0 ) );
+
 //		for( int i = 0; i < m_book.pageList.Count; i++ )
 //		{
 //			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
@@ -844,7 +846,7 @@ public class BookRecordState : GameState
     }
 	
 //	private const int FREQUENCY = 44100;
-	private const int FREQUENCY = 8000;
+	private const int FREQUENCY = 24000;
 
     private Book        m_book;
 
