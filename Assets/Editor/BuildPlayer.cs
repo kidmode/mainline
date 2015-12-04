@@ -6,12 +6,19 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 
+//=============================================
+//Kevin
+//Build menu for building the app so some settings could be set automatically
+//=============================================
+
 public class BuildPlayer : MonoBehaviour
 {
 
 
 
-
+	//=============================================
+	//Build Menu for Main Line
+	//=============================================
 
 
 	#region Android MAIN_LINE
@@ -43,6 +50,15 @@ public class BuildPlayer : MonoBehaviour
 	
 	#region BuildFunctions
 
+	//=============================================
+	//build Function
+	//Branch string will be used for naming of the build
+	//keystoreName will be used to get the actual keystore
+	//keystorePass: password for the keystore
+	//keyAlias: alias used
+	//keyAliasPass: password for the alias
+	//buildOptions: options for the build pipeline
+	//=============================================
 	private static void  build(string branch, string keystoreName, string keystorePass, string keyAlias, string keyAliasPass, BuildOptions buildOptions )
      {
  		//=============================================
@@ -93,7 +109,7 @@ public class BuildPlayer : MonoBehaviour
 
      }
 
-
+	//Get all the scenes that are enabled in the build settings
 	private static string[] getEnabledBuildScenes(){
 
 		List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
