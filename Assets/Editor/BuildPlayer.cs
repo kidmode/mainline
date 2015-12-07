@@ -33,6 +33,16 @@ public class BuildPlayer : MonoBehaviour
 		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
 
 	}
+
+	[MenuItem( "Build/Android/MAINLINE_RELEASE_PLAY" )]
+	public static void Build_MAINLINE_RELEASE_PLAY()
+	{
+		
+		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer | BuildOptions.AutoRunPlayer;
+		
+		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+		
+	}
 	
 	
 	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PLAY" )]
