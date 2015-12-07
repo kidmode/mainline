@@ -726,8 +726,8 @@ public class OverviewBookState : GameState
 	{
 		if (checkInternet())
 		{
-//			m_gameController.changeState (ZoodleState.OVERVIEW_APP);
-			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
+			m_gameController.changeState (ZoodleState.OVERVIEW_ART);
+//			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
 		}
 	}
 	

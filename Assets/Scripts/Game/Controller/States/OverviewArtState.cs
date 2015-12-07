@@ -180,8 +180,8 @@ public class OverviewArtState : GameState {
 	{
 		if (checkInternet())
 		{
-//			m_gameController.changeState (ZoodleState.OVERVIEW_BOOK);
-			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
+			m_gameController.changeState (ZoodleState.OVERVIEW_BOOK);
+//			m_gameController.changeState (ZoodleState.OVERVIEW_READING);
 		}
 	}
 	
