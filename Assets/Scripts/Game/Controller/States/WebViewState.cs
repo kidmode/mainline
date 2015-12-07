@@ -373,11 +373,18 @@ public class VideoViewState : WebViewState
 	{
 		GAUtil.logVisit("Video", m_duration);
 		// add this later
-//		int videotime = (int)Math.Ceiling(m_duration * 0.001);
-//		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", videotime.ToString()}};
+		int videotime = (int)Math.Ceiling(m_duration * 0.001);
+		Dictionary<string,string> payload = new Dictionary<string,string>() { {"Duration", videotime.ToString()}};
 		SwrveComponent.Instance.SDK.NamedEvent("Video.end");
 
-
+		if (videotime > 120)
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("Video.DURATION.>2mins",payload);
+		}
+		else
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("Video.DURATION.<2mins",payload);
+		}
 
 
 		base.exit(p_gameController);
@@ -477,6 +484,7 @@ public class GameViewState : WebViewState
 		{
 			SwrveComponent.Instance.SDK.NamedEvent("Game.DURATION.<2mins",payload);
 		}
+		SwrveComponent.Instance.SDK.NamedEvent ("Game.BACK");
 
 		Screen.autorotateToPortrait = false;
 		Screen.autorotateToPortraitUpsideDown = false;

@@ -59,11 +59,11 @@ public class PaintViewSate : GameState
 
 		//honda: if parents open drawings from parent dashboard, 
 		//       we should not let them edit or delete any drawing because those are childern's property.
-		if( true == SessionHandler.getInstance().IsParent )
-		{
-			m_editButton.enabled = false;
-			m_deleteButton.enabled = false;
-		}
+//		if( true == SessionHandler.getInstance().IsParent )
+//		{
+//			m_editButton.enabled = false;
+//			m_deleteButton.enabled = false;
+//		}
 
 		getCurrentIndex ();
 		setupElement ();
@@ -181,9 +181,20 @@ public class PaintViewSate : GameState
 
 	private void onEditButtonClick( UIButton p_button )
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("DrawingGame.edit");
+
 		p_button.removeClickCallback (onEditButtonClick);
 
 //		m_gameController.connectState (ZoodleState.PAINT_ACTIVITY, ZoodleState.REGION_FUN);
+
+		int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
+
+		if(l_state == ZoodleState.OVERVIEW_ART){
+
+			m_gameController.connectState ( ZoodleState.PAINT_ACTIVITY, ZoodleState.OVERVIEW_ART );
+
+		}
+
 
 		m_gameController.changeState(ZoodleState.PAINT_ACTIVITY);
 	}
@@ -200,6 +211,8 @@ public class PaintViewSate : GameState
 	{
 		if( null == p_response.error )
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("DrawingGame.delete");
+
 			m_drawingList.RemoveAt (m_currentIndex);
 
 			List<Vector3> l_pointListOut = new List<Vector3>();
@@ -215,8 +228,8 @@ public class PaintViewSate : GameState
 			}
 			else
 			{
-//				int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
-				m_gameController.changeState (ZoodleState.REGION_FUN);
+				int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
+				m_gameController.changeState (l_state);
 			}
 		}
 	}

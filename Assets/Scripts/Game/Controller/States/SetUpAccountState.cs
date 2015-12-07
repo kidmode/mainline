@@ -409,7 +409,7 @@ public class SetUpAccountState : GameState
 	//Kev
 	private void onBackClicked(UIButton p_button)
 	{
-		
+		SwrveComponent.Instance.SDK.NamedEvent ("ExitAppFromSignUp");
 		KidModeLockController.Instance.swith2DefaultLauncher ();
 		KidMode.openDefaultLauncher ();
 

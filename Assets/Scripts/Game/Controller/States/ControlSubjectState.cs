@@ -398,6 +398,8 @@ public class ControlSubjectState : GameState
 
 	private void updateSubjects ()
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.AdjustSubjects");
+
 		Hashtable l_param = new Hashtable ();
 		l_param [ZoodlesConstants.PARAM_WEIGHT_MATH] 					= m_mathSlider.value.ToString();
 		l_param [ZoodlesConstants.PARAM_WEIGHT_READING] 				= m_readingSlider.value.ToString();
@@ -422,6 +424,8 @@ public class ControlSubjectState : GameState
 
 	private void onUpgradeButtonClick(UIButton p_button)
 	{
+		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
+
 		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
 		{
 			Server.init (ZoodlesConstants.getHttpsHost());
