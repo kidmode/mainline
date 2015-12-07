@@ -253,19 +253,21 @@ public class CreateAccountUpSellState : GameState
 
 
 
-
-
 						m_subState = SubState.GO_CONGRATS;
+						SwrveComponent.Instance.SDK.NamedEvent("FreeTrialPaymentSucess");
 					}
 					else
 					{
 						setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_39_INVAILD), Localization.getString(Localization.TXT_STATE_39_CREDIT));
+						SwrveComponent.Instance.SDK.NamedEvent("FreeTrialPaymentFalure");
+
 					}
 				}
 			}
 		}
 		else
 		{
+			SwrveComponent.Instance.SDK.NamedEvent("FreeTrialPaymentFalure");
 			setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_39_INVAILD), Localization.getString(Localization.TXT_STATE_39_CREDIT));
 		}
 	}

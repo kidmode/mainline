@@ -1498,6 +1498,7 @@ public class RegionBaseState : GameState
 		if(!showMsgIfNoInternet())
 		{
 			BookInfo l_bookInfo = p_data as BookInfo;
+			SwrveComponent.Instance.SDK.NamedEvent("Book.START");
 
 			if( l_bookInfo.bookState == BookState.Recorded )
 			{
@@ -1824,6 +1825,22 @@ public class RegionBaseState : GameState
 	private void onMapButtonClicked(UIButton p_button)
 	{
 		m_subState = SubState.GO_MAP;
+
+		if( m_foregroundGafGroup != null ){
+			
+			if( m_foregroundGafGroup.active){
+				
+				GAFMovieClip[] gafClips = m_foregroundGafGroup.gameObject.GetComponentsInChildren<GAFMovieClip>();
+				//
+				for (int i = 0; i < gafClips.Length; i++) {
+
+					gafClips[i].disposeResources();
+
+				}
+
+			}
+
+		}
 	}	
 	
 	private void onSpeechClick(UIButton p_button)
