@@ -450,34 +450,62 @@ public class BookRecordState : GameState
 
     private void onRecordClicked( UIToggle p_toggle, bool p_isOn )
 	{
-		if(p_isOn)
-		{
-			_Debug.log( "on record" );
-			if( m_isRecording )
-			{
-				_onRecordingFinish();
-				_stopRecording();
-				m_isRunning = false;
-				if( null != m_currentClip )
-				{
-					_askRecord();
-					return;
-				}
 
-				if( getRecordedCount() >= m_book.pageList.Count )
-					_allRecorded ();
-			}
-			else
+		if(KidMode.getFreeSpace() < 5.0f){
+
+			setErrorMessage(m_gameController, "Not Enough Space", "There is not enough space for a recording");
+
+		}else{
+
+			if(p_isOn)
 			{
-				if( null != m_currentClip )
+				_Debug.log( "on record" );
+				if( m_isRecording )
 				{
-					_askRecord();
-					return;
+					_onRecordingFinish();
+					_stopRecording();
+					m_isRunning = false;
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+
+					if( getRecordedCount() >= m_book.pageList.Count )
+						_allRecorded ();
 				}
-				_startRecording();
+				else
+				{
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+					_startRecording();
+				}
 			}
 		}
     }
+
+
+	protected void setErrorMessage(GameController p_gameController, string p_errorName, string p_errorMessage)
+	{
+		int l_thisState = int.Parse(p_gameController.stateName);
+		
+		if(ZoodleState.CALL_SERVER == l_thisState)
+		{
+			l_thisState = SessionHandler.getInstance().invokeCallServerState;
+		}
+		
+		p_gameController.connectState(ZoodleState.ERROR_STATE, l_thisState);
+		
+		SessionHandler l_handler = SessionHandler.getInstance();
+		
+		l_handler.errorName 	= p_errorName;
+		l_handler.errorMessage 	= p_errorMessage;
+		
+		p_gameController.changeState(ZoodleState.ERROR_STATE);
+	}
 
     private void onStopClicked(UIToggle p_toggle, bool p_isOn)
 	{
