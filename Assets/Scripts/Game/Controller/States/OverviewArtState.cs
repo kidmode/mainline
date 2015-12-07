@@ -136,6 +136,9 @@ public class OverviewArtState : GameState {
 		m_tryPremiumButton.addClickCallback (toPremiumScreen);
 		m_buyGemsButton.addClickCallback (toBuyGemsScreen);
 
+
+//		loadDrawingList
+
 		if( null != SessionHandler.getInstance().drawingList)
 		{
 			if( SessionHandler.getInstance().drawingList.Count > 0 )
@@ -360,6 +363,21 @@ public class OverviewArtState : GameState {
 				if(null == l_drawingList[l_i].largeIcon)
 					downLoadDrawing(p_element, l_drawingList[l_i]);
 			}
+
+
+//			m_funViewList.Clear();
+//			m_funViewList.Add(new ActivityInfo(null));
+//			
+//			if (l_drawingList != null)
+//			{
+//				foreach (Drawing drawing in l_drawingList)
+//				{
+//					ActivityInfo l_info = new ActivityInfo(drawing);
+//					m_funViewList.Add(l_info);
+//				}
+//			}
+
+
 			m_requestQueue.request ();
 			m_drawingList.setData( infoData );
 			m_drawingList.setDrawFunction( onDrawingListDraw );
@@ -470,19 +488,41 @@ public class OverviewArtState : GameState {
 		}
 
 		m_moreArtButton.active = true;
+
+
+		//=================
+		//Write all drawing infos to FunActivityInfo List
+		funActivityList = new ArrayList();
+		for(int l_i = 0; l_i < l_count; l_i++)
+		{
+			Drawing l_drawing = l_list[l_i];
+
+			ActivityInfo info = new ActivityInfo(l_drawing);
+
+			funActivityList.Add(info);
+
+		}
+
+
 		
 		for(int l_i = 0; l_i < l_count; l_i++)
 		{
 			UIButton l_element = l_canvasList[l_i] as UIButton;
 			Drawing l_drawing = l_list[l_i];
+
+
+
 			if(null == l_drawing.largeIcon)
 				downLoadDrawing(l_element,l_drawing);
 			else
 			{
 				UIImage l_image = l_element.getView("artImage") as UIImage;
 				l_image.setTexture(l_drawing.largeIcon);
-
-//				downLoadDrawing(l_element,l_drawing);
+//
+//				ActivityInfo info = funActivityList[l_i] as ActivityInfo;
+//				info.requestIcon();
+				//l_drawing.m
+//				delayedDownload(l_element,l_drawing);
 			}
 			l_element.active = true;
 			l_element.addClickCallback( onArtButtonClick );
@@ -490,6 +530,15 @@ public class OverviewArtState : GameState {
 		
 		m_requestQueue.request ();
 	}
+
+
+
+	private IEnumerator delayedDownload(UIButton l_element, Drawing l_drawing) {
+		yield return new WaitForSeconds(2f);
+		downLoadDrawing(l_element,l_drawing);
+	}
+
+
 
 	private void loadDrawingList()
 	{
@@ -605,4 +654,7 @@ public class OverviewArtState : GameState {
 	private UISwipeList m_drawingList;
 	
 	private RequestQueue m_requestQueue;
+
+	private ArrayList funActivityList;
+	private List<object> 	m_funViewList = new List<object>();
 }
