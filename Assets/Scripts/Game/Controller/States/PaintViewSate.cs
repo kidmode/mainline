@@ -219,8 +219,8 @@ public class PaintViewSate : GameState
 			}
 			else
 			{
-//				int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
-				m_gameController.changeState (ZoodleState.REGION_FUN);
+				int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_VIEW);
+				m_gameController.changeState (l_state);
 			}
 		}
 	}
