@@ -60,23 +60,36 @@ public class PaintAcitivityController : System.Object
 
 			dispose();
 
+			int l_state = m_gameController.getConnectedState (ZoodleState.PAINT_ACTIVITY);
+			
+			if(l_state == ZoodleState.OVERVIEW_ART){
 
-			if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
-				
-//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
-//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
-				p_gameController.changeState(ZoodleState.REGION_FUN);
-				SessionHandler.getInstance().getPoints();
+				m_gameController.changeState(l_state);
 
-			} else {
+			}else{
 
-//				int l_nextState = p_gameController.getConnectedState(ZoodleState.REGION_FUN);
-				
-				PointSystemController.Instance.stopPointSystemTimer();
-				
-				p_gameController.changeState( ZoodleState.REGION_FUN );
-				
+
+				if (PointSystemController.Instance.pointSystemState () == PointSystemController.PointRewardState.OK) {
+					
+	//				p_gameController.connectState(ZoodleState.CONGRATS_STATE, ZoodleState.REGION_FUN);
+	//				p_gameController.changeState(ZoodleState.CONGRATS_STATE);
+					p_gameController.changeState(ZoodleState.REGION_FUN);
+					SessionHandler.getInstance().getPoints();
+
+				} else {
+
+	//				int l_nextState = p_gameController.getConnectedState(ZoodleState.REGION_FUN);
+					
+					PointSystemController.Instance.stopPointSystemTimer();
+					
+					p_gameController.changeState( ZoodleState.REGION_FUN );
+					
+				}
+
 			}
+
+
+
 		}
 	}
 

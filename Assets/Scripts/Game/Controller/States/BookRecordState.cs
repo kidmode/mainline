@@ -23,6 +23,8 @@ public class BookRecordState : GameState
 	{
 		base.enter( p_gameController );
 
+
+
         m_book          = SessionHandler.getInstance().currentBook;
 
         m_audioSource   = GameObject.FindObjectOfType<AudioSource>();
@@ -41,7 +43,8 @@ public class BookRecordState : GameState
 		m_isRunning = false;
 		m_length = 0;
 		m_runningTime = 0;
-		m_recordedCount = 0;
+		m_recordedCount = getRecordedCount();
+//		m_recordedCount = 0;
 		m_uploadedCount = 0;
 		m_isFinished = false;
 		m_request = new RequestQueue ();
@@ -50,7 +53,7 @@ public class BookRecordState : GameState
 		{
 			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
 			{
-				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
+//				File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav");
 			}
 		}
 
@@ -61,6 +64,8 @@ public class BookRecordState : GameState
 		SoundManager.getInstance().stopMusic();
 
 		GAUtil.logScreen("BookRecordScreen");
+
+//		Debug.Log("  getRecordedCount " + getRecordedCount() );
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
@@ -109,7 +114,7 @@ public class BookRecordState : GameState
 			m_setMessage = false;
 		}
 
-		if( m_recordedCount > 0 && m_uploadedCount > 0 && m_recordedCount == m_uploadedCount && !m_isFinished )
+		if( getRecordedCount() > 0 && m_uploadedCount > 0 && getRecordedCount() == m_uploadedCount && !m_isFinished )
 		{
 			m_isFinished = true;
 
@@ -284,6 +289,8 @@ public class BookRecordState : GameState
 		}
 	}
 
+
+
 	private void _onUploadComplete(object p_sender, UploadDataCompletedEventArgs p_event)
 	{
 //		_Debug.log(Encoding.UTF8.GetString(p_event.Result));
@@ -357,7 +364,7 @@ public class BookRecordState : GameState
 		if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + currentPage.id + ".wav"))
 		{
 			File.Delete(Application.persistentDataPath + "//" + m_book.id + "//" + currentPage.id + ".wav");
-			m_recordedCount--;
+//			m_recordedCount--;
 		}
 
 		_startRecording();
@@ -372,7 +379,7 @@ public class BookRecordState : GameState
 		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
 		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
 
-		if( m_recordedCount >= m_book.pageList.Count )
+		if( getRecordedCount() >= m_book.pageList.Count )
 			_allRecorded ();
 	}
 
@@ -443,34 +450,62 @@ public class BookRecordState : GameState
 
     private void onRecordClicked( UIToggle p_toggle, bool p_isOn )
 	{
-		if(p_isOn)
-		{
-			_Debug.log( "on record" );
-			if( m_isRecording )
-			{
-				_onRecordingFinish();
-				_stopRecording();
-				m_isRunning = false;
-				if( null != m_currentClip )
-				{
-					_askRecord();
-					return;
-				}
 
-				if( m_recordedCount >= m_book.pageList.Count )
-					_allRecorded ();
-			}
-			else
+		if(KidMode.getFreeSpace() < 5.0f){
+
+			setErrorMessage(m_gameController, "Not Enough Space", "There is not enough space for a recording");
+
+		}else{
+
+			if(p_isOn)
 			{
-				if( null != m_currentClip )
+				_Debug.log( "on record" );
+				if( m_isRecording )
 				{
-					_askRecord();
-					return;
+					_onRecordingFinish();
+					_stopRecording();
+					m_isRunning = false;
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+
+					if( getRecordedCount() >= m_book.pageList.Count )
+						_allRecorded ();
 				}
-				_startRecording();
+				else
+				{
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+					_startRecording();
+				}
 			}
 		}
     }
+
+
+	protected void setErrorMessage(GameController p_gameController, string p_errorName, string p_errorMessage)
+	{
+		int l_thisState = int.Parse(p_gameController.stateName);
+		
+		if(ZoodleState.CALL_SERVER == l_thisState)
+		{
+			l_thisState = SessionHandler.getInstance().invokeCallServerState;
+		}
+		
+		p_gameController.connectState(ZoodleState.ERROR_STATE, l_thisState);
+		
+		SessionHandler l_handler = SessionHandler.getInstance();
+		
+		l_handler.errorName 	= p_errorName;
+		l_handler.errorMessage 	= p_errorMessage;
+		
+		p_gameController.changeState(ZoodleState.ERROR_STATE);
+	}
 
     private void onStopClicked(UIToggle p_toggle, bool p_isOn)
 	{
@@ -480,7 +515,7 @@ public class BookRecordState : GameState
 			_stopRecording();
 			_stopPageAudio();
 
-			if( m_recordedCount >= m_book.pageList.Count )
+			if( getRecordedCount() >= m_book.pageList.Count )
 				_allRecorded ();
 		}
     }
@@ -531,6 +566,8 @@ public class BookRecordState : GameState
 
         _loadCurrentPageContent();
         _setPageContent();
+
+		m_gameController.game.StartCoroutine( _loadPage( 0 ) );
 
 //		for( int i = 0; i < m_book.pageList.Count; i++ )
 //		{
@@ -592,8 +629,8 @@ public class BookRecordState : GameState
 		m_canSetImage = true;
 		_setPageContent();
 
-		if( m_recordedCount >= m_book.pageList.Count )
-			_allRecorded ();
+//		if( getRecordedCount() >= m_book.pageList.Count )
+//			_allRecorded ();
 	}
 
 	private void _askRecord()
@@ -648,7 +685,7 @@ public class BookRecordState : GameState
 
 		//TODO handle exception when no enough space in disk.
 		AudioSave.Save( m_book.id + "//" + currentPage.id, l_clip );
-		m_recordedCount++;
+//		m_recordedCount++;
 
 		GAUtil.logRecord("Audio", (int)(l_clip.length * 1000));
 
@@ -685,12 +722,17 @@ public class BookRecordState : GameState
             m_audioSource == null )
         {
             _Debug.logError("Index is out of bounds or Audio source is null!");
+
+			Debug.LogError("Index is out of bounds or Audio source is null!");
             return;
         }
 
 		if (m_currentClip == null)
 		{
 			_Debug.logError("Audio Clip for page: " + p_index + " is null!");
+
+			Debug.LogError("Audio Clip for page: " + p_index + " is null!");
+
 			return;
 		}
 
@@ -809,6 +851,8 @@ public class BookRecordState : GameState
 		m_exitRerecordButton.addClickCallback( onExitRerecordButtonClicked );
 		m_exitMessageButton.addClickCallback( onExitMessageButtonClicked );
 		m_exitMessageButton.active = false;
+
+//		_loadPage(0);
     }
 
 
@@ -835,9 +879,28 @@ public class BookRecordState : GameState
 
 		m_audioSource.pitch = 1.0f;
     }
-	
+
+
+	private int getRecordedCount(){
+
+		int recordedCount = 0;
+
+		for( int i = 0; i < m_book.pageList.Count; i++ )
+		{
+			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
+			{
+
+				recordedCount++;
+
+			}
+
+		}
+
+		return recordedCount;
+
+	}
 //	private const int FREQUENCY = 44100;
-	private const int FREQUENCY = 8000;
+	private const int FREQUENCY = 24000;
 
     private Book        m_book;
 

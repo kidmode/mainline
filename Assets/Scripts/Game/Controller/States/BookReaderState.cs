@@ -23,7 +23,7 @@ public class BookReaderState : GameState {
 		m_bookReading 	= SessionHandler.getInstance ().currentBookReading;
 
 		//honda: play voice recording, currently comment it out
-//		m_audioSource   = GameObject.FindObjectOfType<AudioSource>();
+		m_audioSource   = GameObject.FindObjectOfType<AudioSource>();
 		
 		_setupPageAudio();
 		

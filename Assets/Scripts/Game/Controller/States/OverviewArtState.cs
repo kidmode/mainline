@@ -481,6 +481,8 @@ public class OverviewArtState : GameState {
 			{
 				UIImage l_image = l_element.getView("artImage") as UIImage;
 				l_image.setTexture(l_drawing.largeIcon);
+
+//				downLoadDrawing(l_element,l_drawing);
 			}
 			l_element.active = true;
 			l_element.addClickCallback( onArtButtonClick );
