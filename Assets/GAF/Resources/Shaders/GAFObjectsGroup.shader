@@ -2,8 +2,10 @@ Shader "GAF/GAFObjectsGroup"
 {
 	Properties 
 	{
-		_MainTex ("Particle Texture", 2D) = "white" {}
-		_Alpha ("Alpha factor", Range(0.0,1.0)) = 1.0
+		_MainTex ("Main Texture", 2D) = "white" {}
+		_StencilID ("Stencil ID", Float) = 0
+		_CustomColorMultiplier ("Color multiplier", Color) = (1,1,1,1)
+		_CustomColorOffset("Color offset", Vector) = (0,0,0,0)
 	}
 
 	SubShader 
@@ -16,53 +18,31 @@ Shader "GAF/GAFObjectsGroup"
 		}
 
 		Blend SrcAlpha OneMinusSrcAlpha
-		AlphaTest Greater .01
 		Cull Off
 		Zwrite Off
 		Lighting Off
-	
-		CGPROGRAM
-				
-		#pragma surface surf Unlit noambient vertex:vert
-		#pragma glsl_no_auto_normalization
-				
-		#include "UnityCG.cginc"
-	
-		sampler2D _MainTex;
-		float 		_Alpha;		
-				
-		struct Input
+		
+		Stencil
 		{
-			float2 uv_MainTex;
-			fixed4 color;
-			fixed4 colorShift;
-		};
-	
-		void vert(inout appdata_full v, out Input o)
-		{
-			UNITY_INITIALIZE_OUTPUT(Input, o);
-			o.color = v.color;
-			o.colorShift = v.tangent;
+			Ref [_StencilID]
+			Comp Equal
+			Pass Keep
+			Fail Keep
 		}
-				
-		fixed4 LightingUnlit(SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
+		
+		Pass 
 		{
-			fixed4 c;
-			c.rgb = s.Albedo; 
-			c.a = s.Alpha * _Alpha;
-			return c;
+			CGPROGRAM
+			
+			#include "GAFShaderBase.cginc"
+
+			#pragma multi_compile GAF_VERTICES_TRANSFORM_ON GAF_VERTICES_TRANSFORM_OFF
+			#pragma glsl_no_auto_normalization
+
+			#pragma vertex gaf_base_vert_group
+			#pragma fragment gaf_base_frag
+
+			ENDCG
 		}
-
-		void surf (Input input, inout SurfaceOutput o)
-		{
-			fixed4 mainColor = tex2D(_MainTex, input.uv_MainTex );
-
-			o.Albedo = mainColor.rgb * input.color.rgb + input.colorShift.rgb;
-			o.Alpha  = mainColor.a   * input.color.a   + input.colorShift.a;
-		}
-
-		ENDCG 
 	}
-	
-	Fallback "GAF/GAFObjectsGroupFallback"
 }

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using GAF.Core;
 
 
 public class GameInfo : System.Object
@@ -1834,7 +1835,7 @@ public class RegionBaseState : GameState
 				//
 				for (int i = 0; i < gafClips.Length; i++) {
 
-					gafClips[i].disposeResources();
+//					gafClips[i].disposeResources();
 
 				}
 
