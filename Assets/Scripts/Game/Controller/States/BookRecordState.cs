@@ -17,6 +17,8 @@ public class BookRecordState : GameState
 
     private const float PAGE_FADE_TIME = 0.4f;
 
+	private const float RECORD_DISK_MINIMUM_SPACE = 20.0f;
+
 	//--------------------Public Interface -----------------------
 	
 	public override void enter( GameController p_gameController )
@@ -451,7 +453,7 @@ public class BookRecordState : GameState
     private void onRecordClicked( UIToggle p_toggle, bool p_isOn )
 	{
 
-		if(KidMode.getFreeSpace() < 5.0f){
+		if(KidMode.getFreeSpace() < RECORD_DISK_MINIMUM_SPACE){
 
 			setErrorMessage(m_gameController, "Not Enough Space", "There is not enough space for a recording");
 
