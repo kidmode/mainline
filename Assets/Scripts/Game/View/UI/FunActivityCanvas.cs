@@ -46,6 +46,20 @@ public class ActivityInfo : object
 		}
 	}
 
+	public void forceRequestIcon()
+	{
+//		if( m_icon == null && m_drawing != null && isRequested == false)
+//		{
+			if (rQueue == null)
+			{
+				rQueue = new RequestQueue();
+			}
+			rQueue.add(new ImageRequest("icon", m_drawing.mediumUrl, _requestIconComplete));
+			rQueue.request(RequestType.RUSH);
+			isRequested = true;
+//		}
+	}
+
 	private void _requestIconComplete(WWW p_response)
 	{
 		if (p_response.error == null)
