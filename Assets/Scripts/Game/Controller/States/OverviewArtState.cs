@@ -9,21 +9,23 @@ public class OverviewArtState : GameState {
 		base.enter (p_gameController);
 
 
-//		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;	
-//		
-//		//=================
-//		//Write all drawing infos to FunActivityInfo List
-//		funActivityList = new ArrayList();
-//		for(int l_i = 0; l_i < l_list.Count; l_i++)
-//		{
-//			
-//			Drawing l_drawing = l_list[l_i];
-//			
-//			ActivityInfo info = new ActivityInfo(l_drawing);
-//			
-//			funActivityList.Add(info);
-//			
-//		}
+		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;	
+		
+		//=================
+		//Write all drawing infos to FunActivityInfo List
+		funActivityList = new ArrayList();
+		if(l_list != null){
+			for(int l_i = 0; l_i < l_list.Count; l_i++)
+			{
+				
+				Drawing l_drawing = l_list[l_i];
+				
+				ActivityInfo info = new ActivityInfo(l_drawing);
+				
+				funActivityList.Add(info);
+				
+			}
+		}
 
 		
 		m_uiManager = m_gameController.getUI();
@@ -572,21 +574,6 @@ public class OverviewArtState : GameState {
 		}
 
 		m_moreArtButton.active = true;
-
-
-		//=================
-		//Write all drawing infos to FunActivityInfo List
-		funActivityList = new ArrayList();
-		for(int l_i = 0; l_i < l_count; l_i++)
-		{
-
-			Drawing l_drawing = l_list[l_i];
-
-			ActivityInfo info = new ActivityInfo(l_drawing);
-
-			funActivityList.Add(info);
-
-		}
 
 
 		
