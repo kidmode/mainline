@@ -453,11 +453,47 @@ public class BookRecordState : GameState
     private void onRecordClicked( UIToggle p_toggle, bool p_isOn )
 	{
 
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
 		if(KidMode.getFreeSpace() < RECORD_DISK_MINIMUM_SPACE){
-
+			
 			setErrorMessage(m_gameController, "Not Enough Space", "There is not enough space for a recording");
-
+			
 		}else{
+			
+			if(p_isOn)
+			{
+				_Debug.log( "on record" );
+				if( m_isRecording )
+				{
+					_onRecordingFinish();
+					_stopRecording();
+					m_isRunning = false;
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+					
+					if( getRecordedCount() >= m_book.pageList.Count )
+						_allRecorded ();
+				}
+				else
+				{
+					if( null != m_currentClip )
+					{
+						_askRecord();
+						return;
+					}
+					_startRecording();
+				}
+			}
+		}
+
+
+#else
+
+
 
 			if(p_isOn)
 			{
@@ -486,7 +522,9 @@ public class BookRecordState : GameState
 					_startRecording();
 				}
 			}
-		}
+
+#endif
+
     }
 
 
