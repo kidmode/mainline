@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using GAF.Core;
 
 public class UIMovieClip: UIElement 
 {
@@ -56,20 +57,22 @@ public class UIMovieClip: UIElement
 		{
 			return base.alpha;
 		}
-		set 
+		set //Removed set alpha for now
 		{
-			if (value != base.alpha)
-			{
-				base.alpha = value;
-
-				List<Material> l_materials = m_movieclip.resource.materials;
-				int l_numMaterials = l_materials.Count;
-				for (int i = 0; i < l_numMaterials; ++i)
-				{
-					Material l_material = l_materials[i];
-					l_material.SetFloat("_Alpha", value);
-				}
-			}
+//			if (value != base.alpha)
+//			{
+//				base.alpha = value;
+//
+////				m_movieclip.resource
+//
+//				List<Material> l_materials = m_movieclip.resource.materials;
+//				int l_numMaterials = l_materials.Count;
+//				for (int i = 0; i < l_numMaterials; ++i)
+//				{
+//					Material l_material = l_materials[i];
+//					l_material.SetFloat("_Alpha", value);
+//				}
+//			}
 		}
 	}
 
@@ -77,14 +80,14 @@ public class UIMovieClip: UIElement
 	{
 		get 
 		{ 
-			return m_movieclip.getAnimationWrapMode() == GAFWrapMode.Loop; 
+			return m_movieclip.getAnimationWrapMode() == GAFInternal.Core.GAFWrapMode.Loop; 
 		}
 		set 
 		{ 
 			if (value)
-				m_movieclip.setAnimationWrapMode(GAFWrapMode.Loop);
+				m_movieclip.setAnimationWrapMode(GAFInternal.Core.GAFWrapMode.Loop);
 			else
-				m_movieclip.setAnimationWrapMode(GAFWrapMode.Once);
+				m_movieclip.setAnimationWrapMode(GAFInternal.Core.GAFWrapMode.Once);
 		}
 	}
 	
