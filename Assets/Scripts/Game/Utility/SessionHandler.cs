@@ -928,6 +928,9 @@ public class SessionHandler
 
 	public void saveDrawingCompleted(WWW p_response)
 	{
+
+		Debug.LogError("   saveDrawingCompleted  save drawing completed ");
+
 		if (p_response.error == null)
 		{
 			Debug.Log("saveDrawingCompleted: " + p_response.text);

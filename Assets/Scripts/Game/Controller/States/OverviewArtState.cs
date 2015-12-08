@@ -13,8 +13,29 @@ public class OverviewArtState : GameState {
 		
 		_setupScreen( p_gameController );
 		_setupElment();
+
+		SessionHandler.getInstance().onUpdateDrawingList += onSessionDrawingListUpdated;
 	}
-	
+
+
+	public void onSessionDrawingListUpdated(){
+
+		Debug.LogWarning("    onSessionDrawingListUpdated   " );
+
+		for(int l_i = 0; l_i < l_canvasList.Count; l_i++)
+		{
+			UIButton l_element = l_canvasList[l_i] as UIButton;
+			//			Drawing l_drawing = l_list[l_i];
+			
+			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+			
+			info.forceRequestIcon();
+			
+		}
+
+	}
+
 	public override void update (GameController p_gameController, int p_time)
 	{
 		base.update (p_gameController, p_time);
@@ -36,6 +57,49 @@ public class OverviewArtState : GameState {
 				}
 			}
 		}
+
+
+
+
+		for(int l_i = 0; l_i < l_canvasList.Count; l_i++)
+		{
+			UIButton l_element = l_canvasList[l_i] as UIButton;
+//			Drawing l_drawing = l_list[l_i];
+			
+			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+			
+//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+			
+			if( null != info.icon )
+			{
+				UIImage l_image = l_element.getView("artImage") as UIImage;
+				l_image.setTexture(info.icon);
+
+			}
+
+		}
+
+//		Debug.Log("   SessionHandler.getInstance().IsDrawingUpdated " + SessionHandler.getInstance().IsDrawingUpdated);
+//
+//		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;
+//		for(int l_i = 0; l_i < l_canvasList.Count; l_i++)
+//		{
+//			UIButton l_element = l_canvasList[l_i] as UIButton;
+//			Drawing l_drawing = l_list[l_i];
+//			
+//			
+//			if(null == l_drawing.largeIcon){
+////				downLoadDrawing(l_element,l_drawing);
+//			}else
+//			{
+//				UIImage l_image = l_element.getView("artImage") as UIImage;
+//				l_image.setTexture(l_drawing.largeIcon);
+//			}
+//			l_element.active = true;
+//			l_element.addClickCallback( onArtButtonClick );
+//		}
+
 	}
 	
 	public override void exit (GameController p_gameController)
@@ -48,6 +112,8 @@ public class OverviewArtState : GameState {
 		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
 		m_uiManager.removeScreen( UIScreen.ART_LIST );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
+
+		SessionHandler.getInstance().onUpdateDrawingList -= onSessionDrawingListUpdated;
 	}
 	
 	//----------------- Private Implementation -------------------
@@ -461,7 +527,7 @@ public class OverviewArtState : GameState {
 		
 		UILabel l_artCountLabel = m_artListCanvas.getView ("artCountText") as UILabel;
 
-		List<UIElement> l_canvasList = new List<UIElement> ();
+		l_canvasList = new List<UIElement> ();
 		UIElement l_art1 = m_artGalleryCanvas.getView( "artOne" );
 		UIElement l_art2 = m_artGalleryCanvas.getView( "artTwo" );
 		UIElement l_art3 = m_artGalleryCanvas.getView( "artThree" );
@@ -495,6 +561,7 @@ public class OverviewArtState : GameState {
 		funActivityList = new ArrayList();
 		for(int l_i = 0; l_i < l_count; l_i++)
 		{
+
 			Drawing l_drawing = l_list[l_i];
 
 			ActivityInfo info = new ActivityInfo(l_drawing);
@@ -510,6 +577,24 @@ public class OverviewArtState : GameState {
 			UIButton l_element = l_canvasList[l_i] as UIButton;
 			Drawing l_drawing = l_list[l_i];
 
+//			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+//			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+//
+//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+//
+//			if( null != info.icon )
+//			{
+//				UIImage l_image = l_element.getView("artImage") as UIImage;
+//				l_image.setTexture(info.icon);
+//
+//				Debug.LogWarning( "  ****** texture okay ");
+//			}
+//			else
+//			{
+//				info.requestIcon();
+//
+//				Debug.LogWarning( "  ****** texture request ");
+//			}
 
 
 			if(null == l_drawing.largeIcon)
@@ -656,5 +741,6 @@ public class OverviewArtState : GameState {
 	private RequestQueue m_requestQueue;
 
 	private ArrayList funActivityList;
+	private List<UIElement> l_canvasList;
 	private List<object> 	m_funViewList = new List<object>();
 }
