@@ -120,6 +120,8 @@ public class ZoodlesConstants
 	public const string SEND_PIN							= "/api/pin/send_forgot_pin";
 	public const string SEND_TELL_FRIEND_EMAIL				= "/api/send_emails/tell_friend";
 	public const string CHECK_USERNAME						= "/api/user/check_email";
+	public const string CLIENTCERTNAME						= "/6453d681f746c56f68123468c8313ffe1612553e";
+	public const string CLIENT_CERT							= "/httpskeystore.p12";
 
 	
 	//////////////////////////////////////////////////////////////////////
