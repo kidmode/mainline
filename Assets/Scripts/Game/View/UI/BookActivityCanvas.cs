@@ -81,7 +81,7 @@ public class BookInfo : object
 		return true;
 	}
 
-	private void _requestBookIconComplete(WWW p_response)
+	private void _requestBookIconComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null && false == disposed)
 		{

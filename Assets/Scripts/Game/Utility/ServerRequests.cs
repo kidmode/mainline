@@ -15,7 +15,7 @@ public enum RequestType
 
 public class RequestQueue
 {
-	public delegate void RequestHandler(WWW p_response);
+	public delegate void RequestHandler(HttpsWWW p_response);
 
 	public class Request
 	{
@@ -29,7 +29,7 @@ public class RequestQueue
 		{
 			init();
 			
-			m_params["version"] = "v2";
+//			m_params["version"] = "v2";
 			m_request = Server.request(m_call, m_params, m_method, _requestComplete);
 
 		}
@@ -48,7 +48,7 @@ public class RequestQueue
 			get { return m_context; }
 		}
 
-		private void _requestComplete(WWW p_response)
+		private void _requestComplete(HttpsWWW p_response)
 		{
 			if (m_handler != null)
 			{
@@ -186,7 +186,7 @@ public class RequestQueue
 //		}
 //	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		--m_total;
 		if (RequestType.SEQUENCE == m_type)
@@ -418,7 +418,7 @@ public class GetUserSettingRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -498,7 +498,7 @@ public class GetLevelsInfoRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.ZPS_LEVEL, p_response.text);
 	}
@@ -519,7 +519,7 @@ public class GetExperiencePointsInfoRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.EXPERIENCE_POINTS, p_response.text);
 	}
@@ -540,7 +540,7 @@ public class GetCategoriesInfoRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.CATEGORIES, p_response.text);
 	}
@@ -561,7 +561,7 @@ public class GetTagsInfoRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.TAGS, p_response.text);
 	}
@@ -582,7 +582,7 @@ public class GetSubjectsInfoRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.SUBJECTS, p_response.text);
 	}
@@ -617,7 +617,7 @@ public class TryTrialRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -652,7 +652,7 @@ public class SetPinRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		SessionHandler.getInstance().pin = m_pin;
 	}
@@ -677,7 +677,7 @@ public class VerifyPinRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 	}
 
@@ -687,26 +687,27 @@ public class VerifyPinRequest : RequestQueue.Request
 // create a child
 public class CreateChildRequest : RequestQueue.Request
 {
-	public CreateChildRequest(string p_name, string p_birthday, string p_imageVeraible, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public CreateChildRequest(string p_name, string p_birthday, byte[] p_bytes, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_name = p_name;
 		m_birthday = p_birthday;
-		m_imageVariable = p_imageVeraible;
+//		m_imageVariable = p_imageVeraible;
+		m_bytes = p_bytes;
 		handler += _requestComplete;
 	}
 
 	protected override void init()
 	{
 		m_call = "/api/kids";
-		WWW l_www = context.getVariable(m_imageVariable) as WWW;
+//		WWW l_www = context.getVariable(m_imageVariable) as WWW;
 		m_params[ZoodlesConstants.PARAM_NAME] = m_name;
 		m_params[ZoodlesConstants.PARAM_BIRTHDAY] = m_birthday;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
-		m_params[ZoodlesConstants.PARAM_PICTURE] = l_www.bytes;
+		m_params[ZoodlesConstants.PARAM_PICTURE] = m_bytes;//l_www.bytes;
 		m_method = CallMethod.POST;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 		Kid l_kid = new Kid(l_data);
@@ -740,7 +741,8 @@ public class CreateChildRequest : RequestQueue.Request
 	
 	private string m_name;
 	private string m_birthday;
-	private string m_imageVariable;
+//	private string m_imageVariable;
+	private byte[] m_bytes;
 }
 
 // Request an image
@@ -753,7 +755,7 @@ public class ImageRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -781,7 +783,7 @@ public class IconRequest : RequestQueue.Request
 			handler += _requestComplete;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -823,7 +825,7 @@ public class DrawingRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -863,7 +865,7 @@ public class BookIconRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -903,22 +905,50 @@ public class AudioRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 
-	private void _requestComplete( WWW p_response )
+	private void _requestComplete( HttpsWWW p_response )
 	{
 		if (p_response.error != null)
 			_Debug.log ( p_response.error );
 		else
 		{
-			AudioClip l_clip = p_response.GetAudioClip( false, false, AudioType.WAV );
-			
-			AudioSave.Save( m_bookId + "//" + m_pageId, l_clip );
-			
-			UnityEngine.Object.Destroy(l_clip);
+//			AudioClip l_clip = p_response.GetAudioClip( false, false, AudioType.WAV );
+//			AudioSave.Save( m_bookId + "//" + m_pageId, l_clip );
+//			UnityEngine.Object.Destroy(l_clip);
+
+			using (System.IO.FileStream lxFS = new FileStream(Application.persistentDataPath + "/" + m_bookId + "/" + m_pageId + ".wav", FileMode.Create))
+			{
+				lxFS.Write(p_response.bytes, 0, p_response.bytes.Length);
+			}
 		}
 	}
 
 	private int m_bookId;
 	private int m_pageId;
+}
+
+public class UploadAudioRequest : RequestQueue.Request
+{
+	public UploadAudioRequest(string p_slug, string p_timeSeconds, byte[] p_bytes, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		m_slug = p_slug;
+		m_time = p_timeSeconds;
+		m_bytes = p_bytes;
+	}
+	
+	protected override void init()
+	{
+		m_call = "/audios/story/" + m_slug;
+		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_params ["time_seconds"] = m_time;
+		m_params ["file"] = m_bytes;
+		m_params[ZoodlesConstants.PARAM_CONTENT_TYPE] = "wav";
+		m_method = CallMethod.POST;
+		
+	}
+	
+	private string m_slug;
+	private string m_time;
+	private byte[] m_bytes;
 }
 
 // Web content request
@@ -1072,7 +1102,7 @@ public class NewDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-//	private void _requestComplete(WWW p_response)
+//	private void _requestComplete(HttpsWWW p_response)
 //	{
 //		if (p_response.error == null)
 //			_Debug.log("#####################: " + p_response.text);
@@ -1098,7 +1128,7 @@ public class SaveDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 
-//	private void _requestComplete(WWW p_response)
+//	private void _requestComplete(HttpsWWW p_response)
 //	{
 //		if (p_response.error == null)
 //			_Debug.log(p_response.text);
@@ -1172,7 +1202,7 @@ public class SetSubjectsRequest : RequestQueue.Request
 		m_params [ZoodlesConstants.PARAM_KID_ID] 	= SessionHandler.getInstance ().currentKid.id;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		string l_string = "";
 		
@@ -1309,7 +1339,7 @@ public class NewGetAppByPageRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -1383,7 +1413,7 @@ public class GetAppRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		string l_string = UnicodeDecoder.Unicode(p_response.text);
 		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
@@ -1431,7 +1461,7 @@ public class GetBookRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -1489,7 +1519,7 @@ public class GetDrawingRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (p_response.text) as ArrayList;
 		int l_dataCount = l_data.Count;
@@ -1524,7 +1554,7 @@ public class BuyBookRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		UIElement l_element = m_button.parent.parent;
 		if(null == p_response.error)
@@ -1647,7 +1677,7 @@ public class GetAppOwnRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -1732,22 +1762,25 @@ public class SetSiteListRequest : RequestQueue.Request
 
 public class UpdatePhotoRequest : RequestQueue.Request
 {
-	public UpdatePhotoRequest(string p_imageVeraible, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public UpdatePhotoRequest(string p_imageVeraible, byte[] l_byte, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_imageVariable = p_imageVeraible;
+		m_byte = l_byte;
 	}
 	
 	protected override void init()
 	{
 		m_call = "/api/kids/update_photo";
-		WWW l_www = context.getVariable(m_imageVariable) as WWW;
+//		WWW l_www = context.getVariable(m_imageVariable) as WWW;
 		m_params[ZoodlesConstants.PARAM_KID_ID] = SessionHandler.getInstance ().currentKid.id;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
-		m_params[ZoodlesConstants.PARAM_PICTURE] = l_www.bytes;
+		m_params[ZoodlesConstants.PARAM_PICTURE] = m_byte;//l_www.bytes;
+		m_params["contentType"] = "png";
 		m_method = CallMethod.POST;
 	}
 
 	private string m_imageVariable;
+	private byte[] m_byte;
 }
 
 //Get plan details
@@ -2030,7 +2063,7 @@ public class GetTopRecommandRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error && !"null".Equals(p_response.text))
 		{
@@ -2070,7 +2103,7 @@ public class EditChildRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		string l_string = "";
 		
@@ -2254,7 +2287,7 @@ public class LinkVisitRequest : RequestQueue.Request
 		m_method = CallMethod.GET;
 	}
 	
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		string l_string = "";
 		

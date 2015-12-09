@@ -19,13 +19,16 @@ public class WebRequest : object
 	private Server m_server;
 	private string m_call = null;
 
-	private WWWForm m_form;
+//	private WWWForm m_form;
+	private Hashtable m_form;
     private Hashtable m_param;
 
-    private WebCallHandler m_callback;
+//  private WebCallHandler m_callback;
+    private HttpsWebCallHandler m_callback;
 	private float m_time;
-	private WWW m_www;
-	
+//	private WWW m_www;
+	private HttpsWWW m_www;
+
 	private int m_retryLimit = 10;
 //	private int m_retries = 0;
 	private float m_timeout = 60.0f;
@@ -36,7 +39,7 @@ public class WebRequest : object
     private CallMethod m_callMethod;
 
 
-    public WebRequest(Server p_server, string p_call, Hashtable p_postData, CallMethod p_callMethod, WebCallHandler p_callback )
+    public WebRequest(Server p_server, string p_call, Hashtable p_postData, CallMethod p_callMethod, HttpsWebCallHandler p_callback )
 	{
 		m_server        = p_server;
 		m_call          = p_call;
@@ -73,21 +76,28 @@ public class WebRequest : object
 #if UNITY_EDITOR
 			Debug.Log(l_url);
 #endif
-			//honda: add header "API_VERSION" = "v2"
+
 			if( m_form != null )
-			{
-				Hashtable headers = m_form.headers;
-				byte[] rawData = m_form.data;
-				headers.Add("API_VERSION", "v2");
-				m_www = new WWW(l_url, rawData, headers);
-			}
-            else
-			{
-				Hashtable headers = new Hashtable();
-				headers.Add("API_VERSION", "v2");
-                m_www = new WWW(l_url, null, headers);
-			}
-			//end
+				m_www = new HttpsWWW( l_url, m_form );
+			else
+				m_www = new HttpsWWW( l_url );
+
+			//honda: adding header code moves to HttpsWWW.cs due to update http to https
+//			//honda: add header "API_VERSION" = "v2"
+//			if( m_form != null )
+//			{
+//				Hashtable headers = m_form.headers;
+//				byte[] rawData = m_form.data;
+//				headers.Add("API_VERSION", "v2");
+//				m_www = new WWW(l_url, rawData, headers);
+//			}
+//            else
+//			{
+//				Hashtable headers = new Hashtable();
+//				headers.Add("API_VERSION", "v2");
+//                m_www = new WWW(l_url, null, headers);
+//			}
+//			//end
 		}
 		else
 		{
@@ -177,19 +187,20 @@ public class WebRequest : object
 
     private void _setupPOST(  )
     {
-        if( null != m_param )
-        {
-            m_form = new WWWForm();
-            foreach (string key in m_param.Keys)
-            {
-                if (m_param[key].GetType() == typeof(int))
-                    m_form.AddField(key, Mathf.CeilToInt( float.Parse( m_param[key].ToString() ) ));
-                else if (m_param[key].GetType() == typeof(String))
-                    m_form.AddField(key, m_param[key] as String);
-				else if (m_param[key].GetType() == typeof(byte[]))
-					m_form.AddBinaryData(key, m_param[key] as byte[]);
-            }
-        }
+//        if( null != m_param )
+//        {
+//            m_form = new WWWForm();
+//            foreach (string key in m_param.Keys)
+//            {
+//                if (m_param[key].GetType() == typeof(int))
+//                    m_form.AddField(key, Mathf.CeilToInt( float.Parse( m_param[key].ToString() ) ));
+//                else if (m_param[key].GetType() == typeof(String))
+//                    m_form.AddField(key, m_param[key] as String);
+//				else if (m_param[key].GetType() == typeof(byte[]))
+//					m_form.AddBinaryData(key, m_param[key] as byte[]);
+//            }
+//        }
+		m_form = m_param;
     }
 
 	public void destroy()
@@ -238,6 +249,7 @@ public class WebRequest : object
 		l_request.Credentials = CredentialCache.DefaultCredentials;
 		l_request.ContentLength = p_data.Length;
 		l_request.ContentType =  "application/x-www-form-urlencoded";
+		l_request.Headers["API_VERSION"] = "v2";
 
 		Stream l_requestStream = l_request.GetRequestStream();          
 		l_requestStream.Write( System.Text.Encoding.UTF8.GetBytes(p_data), 0, p_data.Length);           

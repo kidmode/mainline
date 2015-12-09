@@ -51,7 +51,7 @@ public class BookPage : System.Object
 		}
 	}
 
-	private void onPageImageRecieved(WWW p_response)
+	private void onPageImageRecieved(HttpsWWW p_response)
 	{
 		if( p_response.error == null )
 		{

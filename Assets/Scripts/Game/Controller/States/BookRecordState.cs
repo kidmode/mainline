@@ -223,7 +223,7 @@ public class BookRecordState : GameState
 		m_request.request (RequestType.RUSH);
 	}
 
-	private void onCreateReadingFinish( WWW p_response )
+	private void onCreateReadingFinish(HttpsWWW p_response)
 	{
 		if (p_response.error != null)
 			m_gameController.changeState(ZoodleState.SERVER_ERROR);
@@ -268,15 +268,21 @@ public class BookRecordState : GameState
 
 							string l_slug = (l_bookReadingPageTable[m_book.pageList[i].id] as BookReadingPage).audioSlug;
 
-							string l_url = "/audios/story/" + l_slug;
+//							string l_url = "/audios/story/" + l_slug;
+//
+//							UploadHelper l_upload = new UploadHelper(l_url);
+//							l_upload.AddTextParameter("token", SessionHandler.getInstance().token.getSecret());
+//	//						l_upload.AddTextParameter("time_seconds", Mathf.CeilToInt(l_clip.length).ToString());
+//							l_upload.AddTextParameter("time_seconds", "0");
+//							l_upload.AddFileParameter("file",new FileInfo(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"));
+//
+//							l_upload.SendAsync(_onUploadComplete);
 
-							UploadHelper l_upload = new UploadHelper(l_url);
-							l_upload.AddTextParameter("token", SessionHandler.getInstance().token.getSecret());
-	//						l_upload.AddTextParameter("time_seconds", Mathf.CeilToInt(l_clip.length).ToString());
-							l_upload.AddTextParameter("time_seconds", "0");
-							l_upload.AddFileParameter("file",new FileInfo(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"));
-
-							l_upload.SendAsync(_onUploadComplete);
+							FileStream fs = new FileStream(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav", FileMode.Open);
+							byte[] l_bytes = new byte[fs.Length];
+							fs.Read(l_bytes,0,(int)fs.Length);
+							
+							m_request.add ( new UploadAudioRequest(l_slug, "0", l_bytes, onUploadFinished));
 						}
 					}
 					catch(Exception)
@@ -290,13 +296,17 @@ public class BookRecordState : GameState
 			}
 		}
 	}
-
-
-
+	
 	private void _onUploadComplete(object p_sender, UploadDataCompletedEventArgs p_event)
 	{
 //		_Debug.log(Encoding.UTF8.GetString(p_event.Result));
 
+		m_uploadedCount++;
+		m_setMessage = true;
+	}
+
+	private void onUploadFinished(HttpsWWW p_response)
+	{
 		m_uploadedCount++;
 		m_setMessage = true;
 	}

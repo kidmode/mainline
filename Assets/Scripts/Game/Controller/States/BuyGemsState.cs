@@ -25,7 +25,7 @@ public class BuyGemsState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_buyGemsCanvas );
 	}

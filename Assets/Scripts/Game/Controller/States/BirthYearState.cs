@@ -180,7 +180,7 @@ public class BirthYearState : GameState
 		}
 	}
 
-	private void sendPinRequestComplete(WWW p_response)
+	private void sendPinRequestComplete(HttpsWWW p_response)
 	{
 		m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
 		m_dialogCanvas.setOriginalPosition ();

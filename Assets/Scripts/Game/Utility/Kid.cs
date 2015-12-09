@@ -381,7 +381,7 @@ public class Kid : System.Object
 		return hash;
 	}
 
-	private void _requestPhotoComplete( WWW p_www )
+	private void _requestPhotoComplete( HttpsWWW p_www )
 	{
 		if (p_www.error == null && p_www.texture.width != 8 && p_www.texture.height != 8)
 		{
@@ -404,7 +404,7 @@ public class Kid : System.Object
 
 	}
 
-	private void _getKidTimeLimitRequestComplete(WWW p_response)
+	private void _getKidTimeLimitRequestComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{

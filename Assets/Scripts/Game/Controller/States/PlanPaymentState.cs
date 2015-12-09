@@ -182,9 +182,9 @@ public class PlanPaymentState : GameState
 		}
 	}
 	
-	private void _onPaymentComplete(WWW p_response)
+	private void _onPaymentComplete(HttpsWWW p_response)
 	{
-		Server.init(ZoodlesConstants.getHost());
+		Server.init(ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;

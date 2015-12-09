@@ -420,7 +420,7 @@ public class OverviewBookState : GameState
 		m_bookDetailsCanvas.setOutPosition ();
 	}
 
-	private void getBookRequestComplete(WWW p_response)
+	private void getBookRequestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -790,9 +790,9 @@ public class OverviewBookState : GameState
 		}
 	}
 	
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
@@ -805,7 +805,7 @@ public class OverviewBookState : GameState
 		}
 	}
 
-	private void _requestBookListComplete(WWW p_response)
+	private void _requestBookListComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{

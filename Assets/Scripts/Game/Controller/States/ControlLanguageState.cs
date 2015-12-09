@@ -294,9 +294,9 @@ public class ControlLanguageState : GameState
 		}
 	}
 	
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
@@ -411,7 +411,7 @@ public class ControlLanguageState : GameState
 		m_isValueChanged = true;
 	}
 
-	private void _getLanguagesRequestComplete(WWW p_response)
+	private void _getLanguagesRequestComplete(HttpsWWW p_response)
 	{
 		m_promoteLanguagesCanvas.setLanguageData(MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList);
 		UIElement l_panel = m_promoteLanguagesCanvas.getView("panel");
@@ -473,9 +473,9 @@ public class ControlLanguageState : GameState
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;

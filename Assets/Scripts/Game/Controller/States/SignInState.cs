@@ -198,7 +198,7 @@ public class SignInState : GameState
 		#endif
 	}
 
-	private void onGetDetailsComplete(WWW p_response)
+	private void onGetDetailsComplete(HttpsWWW p_response)
 	{
 		if( null == p_response.error )
 		{
@@ -235,9 +235,9 @@ public class SignInState : GameState
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;
@@ -306,7 +306,7 @@ public class SignInState : GameState
 		m_signInButton.addClickCallback (toCreateChildrenScreen);
 	}
 
-//	private void getClientIdComplete(WWW p_response)
+//	private void getClientIdComplete(HttpsWWW p_response)
 //	{
 //		if(p_response.error == null)
 //		{
@@ -321,7 +321,7 @@ public class SignInState : GameState
 //			invokeDialog("Login Failed","Please retry your password.");
 //		}
 //	}
-	private void checkUsernameRequestComplete(WWW p_response)
+	private void checkUsernameRequestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -364,7 +364,7 @@ public class SignInState : GameState
 
 	}
 
-	private void loginRequestComplete(WWW p_response)
+	private void loginRequestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -419,7 +419,7 @@ public class SignInState : GameState
 
 	}
 
-	private void allRequestComplete(WWW p_response)
+	private void allRequestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{

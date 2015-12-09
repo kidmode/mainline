@@ -106,7 +106,7 @@ public class SignInCacheState : GameState
 		}
 	}
 
-	private void onGetKidsComplete(WWW p_response)
+	private void onGetKidsComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -177,7 +177,7 @@ public class SignInCacheState : GameState
 
 	}
 
-	private void checkError(WWW p_response)
+	private void checkError(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -194,7 +194,7 @@ public class SignInCacheState : GameState
 		}
 	}
 
-//	private void getclientIdComplete(WWW p_response)
+//	private void getclientIdComplete(HttpsWWW p_response)
 //	{
 //		if(p_response.error == null)
 //		{
@@ -233,7 +233,7 @@ public class SignInCacheState : GameState
 		m_exitButton.addClickCallback ( onContinueClick );
 	}
 
-	private void onGetDetailsComplete(WWW p_response)
+	private void onGetDetailsComplete(HttpsWWW p_response)
 	{
 		if( null == p_response.error )
 		{
@@ -269,9 +269,9 @@ public class SignInCacheState : GameState
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;
