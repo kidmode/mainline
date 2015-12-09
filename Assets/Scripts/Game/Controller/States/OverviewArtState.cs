@@ -83,19 +83,23 @@ public class OverviewArtState : GameState {
 
 		for(int l_i = 0; l_i < funActivityList.Count; l_i++)
 		{
-			UIButton l_element = l_canvasList[l_i] as UIButton;
-//			Drawing l_drawing = l_list[l_i];
-			
-			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
-			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
-			
-//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
-			
-			if( null != info.icon )
-			{
-				UIImage l_image = l_element.getView("artImage") as UIImage;
-				l_image.setTexture(info.icon);
 
+			if(l_i < l_canvasList.Count){
+
+				UIButton l_element = l_canvasList[l_i] as UIButton;
+	//			Drawing l_drawing = l_list[l_i];
+				
+				//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+				ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+				
+	//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+				
+				if( null != info.icon )
+				{
+					UIImage l_image = l_element.getView("artImage") as UIImage;
+					l_image.setTexture(info.icon);
+
+				}
 			}
 
 		}
