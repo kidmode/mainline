@@ -199,6 +199,8 @@ public class FunActivityCanvas : UICanvas
         DebugUtils.Assert(l_titleLabel != null);
 		UIImage l_plusImage = p_element.getView("plus") as UIImage;
 
+
+
 		if (!l_info.isNew())
 		{
 			l_titleLabel.active = false;

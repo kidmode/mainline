@@ -524,11 +524,37 @@ public class OverviewArtState : GameState {
 
 	private void onDrawingListDraw( UIElement p_element, System.Object p_data, int p_index )
 	{
+//		return;
+//		return;
+
+		//Kevin, some how the drawing icon at index 0 get changed some how .. . . .  so solving this this way for now
+		//Best to find the cause of this
+		//Even every index is return without drawing, the first thumbnail still get changed some how , some where . . .. . .
+		if(p_index == 0){
+
+			UIImage l_image = p_element.getView("artImage") as UIImage;
+			
+			ActivityInfo info = funActivityList[p_index] as ActivityInfo;
+
+			l_image.setTexture(info.drawing.largeIcon);
+			
+			if(info.icon != null){
+				l_image.setTexture(info.icon);
+			}else
+				info.forceRequestIcon();
+			
+			return;
+			
+		}
+
 		Drawing l_drawing = (Drawing)p_data;
 		if(null != l_drawing.largeIcon)
 		{
 			UIImage l_image = p_element.getView("artImage") as UIImage;
 			l_image.setTexture(l_drawing.largeIcon);
+		}else{
+
+
 		}
 	}
 
