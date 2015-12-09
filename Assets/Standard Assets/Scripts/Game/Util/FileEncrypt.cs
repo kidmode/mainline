@@ -94,7 +94,6 @@ public class FileEncrypt
 					FileAttributes fileAttr = File.GetAttributes(path);
 					File.SetAttributes(path, FileAttributes.Archive);
 					File.Delete(path);
-					File.Copy(path + ".temp", path+".temp2");
 					File.Move(path + ".temp", path);
 					File.SetAttributes(path, fileAttr);
 				}
