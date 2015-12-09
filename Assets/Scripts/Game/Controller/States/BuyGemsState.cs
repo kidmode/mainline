@@ -139,7 +139,7 @@ public class BuyGemsState : GameState
 			_invokeError(Localization.getString(Localization.TXT_STATE_20_ERROR), Localization.getString(Localization.TXT_STATE_20_FAIL_CONSUMED));
 	}
 	#endif
-	private void _onPurchaseRequestComplete(WWW p_response)
+	private void _onPurchaseRequestComplete(HttpsWWW p_response)
 	{
 		_Debug.log("result: " + p_response.text);
 
