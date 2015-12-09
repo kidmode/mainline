@@ -217,7 +217,7 @@ public class SetUpAccountState : GameState
 		}
 	}
 
-	private void finsihCheckEmail(WWW p_response)
+	private void finsihCheckEmail(HttpsWWW p_response)
 	{
 		m_emailCheckImage.setSprite(Resources.Load<Sprite>("GUI/2048/common/icon/icon_close_red"));
 		if(null == p_response.error)
@@ -523,7 +523,7 @@ public class SetUpAccountState : GameState
 			
 	}
 
-	private void createAccountComplete(WWW p_response)
+	private void createAccountComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{

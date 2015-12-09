@@ -77,7 +77,7 @@ public class PurchaseTest : MonoBehaviour
 		}
 	}
 
-	private void _onPurchaseRequestComplete(WWW p_response)
+	private void _onPurchaseRequestComplete(HttpsWWW p_response)
 	{
 		_Debug.log("Purchase Complete: " + p_response.text);
 	}

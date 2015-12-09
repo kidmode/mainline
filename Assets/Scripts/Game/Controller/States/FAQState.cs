@@ -111,9 +111,9 @@ public class FAQState : GameState
 		m_helpButton.addClickCallback (onHelpButtonClick);
 	}
 
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;

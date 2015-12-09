@@ -11,13 +11,13 @@ public class UploadHelper
 
 	//url for production
 	//	string url = "http://" + ZoodlesConstants.ZOODLES_PRODUCTION_HOST;
-	string url = ZoodlesConstants.getHost();
+	string url = ZoodlesConstants.getHttpsHost();
 
 	byte[] bs= new byte[0];
 
 	public UploadHelper(string url)  
 	{  
-		this.url = ZoodlesConstants.getHost() + url;
+		this.url = ZoodlesConstants.getHttpsHost() + url;
 	}
 
 	public byte[] Send()  

@@ -120,8 +120,10 @@ public class ZoodlesConstants
 	public const string SEND_PIN							= "/api/pin/send_forgot_pin";
 	public const string SEND_TELL_FRIEND_EMAIL				= "/api/send_emails/tell_friend";
 	public const string CHECK_USERNAME						= "/api/user/check_email";
+	//GCS Version uses it
 	public const string CLIENTCERTNAME						= "/6453d681f746c56f68123468c8313ffe1612553e";
-	public const string CLIENT_CERT							= "/httpskeystore.p12";
+	//httpskeystore.p12 sh1 hash -> 645594c334480764443c8bcc6ad3f9ce4c8d3315
+	public const string CLIENT_CERT							= "/645594c334480764443c8bcc6ad3f9ce4c8d3315";
 
 	
 	//////////////////////////////////////////////////////////////////////
@@ -147,6 +149,7 @@ public class ZoodlesConstants
 	public const string PARAM_BOOK_ID				        = "book_id";
 	public const string PARAM_KID_IDS						= "kid_ids";
 	public const string PARAM_PICTURE                       = "picture";
+	public const string PARAM_CONTENT_TYPE                  = "contentType";
 
 	public const string PARAM_FAMILY						= "family";
 	public const string PARAM_OS_VERSION					= "os_version";

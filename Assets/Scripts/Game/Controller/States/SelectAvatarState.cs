@@ -65,6 +65,13 @@ public class SelectAvatarState : GameState
 			else
 				p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 		}
+
+		//Image request
+		if(null != m_imageWWW && m_imageWWW.isDone)
+		{
+			loadImageComplete(m_imageWWW);
+			m_imageWWW = null;
+		}
 	}
 	
 	public override void exit( GameController p_gameController )
@@ -139,15 +146,24 @@ public class SelectAvatarState : GameState
 				l_url += "file://" + Application.dataPath + "/StreamingAssets/" + m_avatarImgPath + ".png";
 			}
 			
-			m_queue.add(new ImageRequest("childAvatar", l_url));
-			m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday, "childAvatar"));
-			m_queue.request(RequestType.SEQUENCE);
+//			m_queue.add(new ImageRequest("childAvatar", l_url));
+//			m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday, "childAvatar"));
+//			m_queue.request(RequestType.SEQUENCE);
+			m_imageWWW = new WWW(l_url);
 			m_selectAvatarCanvas.active = false;
 			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 2);
 			Dictionary<string,string> payload = new Dictionary<string,string>() { {"Avatar_png", l_url}};
 			SwrveComponent.Instance.SDK.NamedEvent("AddChild.end", payload);
 		}
 
+	}
+
+	private void loadImageComplete(WWW image)
+	{
+		byte[] l_bytes = image.bytes;
+		image.Dispose();
+		m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday,l_bytes));
+		m_queue.request();
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
@@ -193,4 +209,6 @@ public class SelectAvatarState : GameState
 	private bool 		gotoPrevious = false;
 
 	private RequestQueue m_queue;
+
+	private WWW 		m_imageWWW;
 }

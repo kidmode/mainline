@@ -282,7 +282,7 @@ public class CreateChildProfileState : GameState
 		}
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -556,7 +556,7 @@ public class CreateChildProfileState : GameState
 				}
 				
 				m_queue.add(new ImageRequest("childAvatar", l_url));
-				m_queue.add(new CreateChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text), m_birthday, "childAvatar"));
+//				m_queue.add(new CreateChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text), m_birthday, "childAvatar"));
 				m_queue.request(RequestType.SEQUENCE);
 				m_subState = SubState.LOADING;
 			}
@@ -584,17 +584,9 @@ public class CreateChildProfileState : GameState
 						l_url += "file://" + Application.dataPath + "/StreamingAssets/" + SessionHandler.getInstance().selectAvatar + ".png";
 					}
 
-					if (m_queue == null)
-						m_queue = new RequestQueue();
-					m_queue.add(new ImageRequest("newAvatar", l_url));
-					m_queue.add(new UpdatePhotoRequest("newAvatar", onUpdatePhotoComplete));
-					m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
-					m_queue.request(RequestType.SEQUENCE);
-					m_subState = SubState.LOADING;
+					m_gameController.game.StartCoroutine(loadImage(l_url));
 				}
 			}
-
-
 			//================
 			//Kev
 			// Added so the local data will remember the change
@@ -606,15 +598,25 @@ public class CreateChildProfileState : GameState
 //			foreach (Kid k in SessionHandler.getInstance ().kidList) {
 //				k.saveKidPhotoLocal();
 //			}
-
-
 			//End //=========
-
-
 		}
 	}
 
-	void onUpdatePhotoComplete(WWW www)
+	private IEnumerator loadImage(string l_url)
+	{
+		if (m_queue == null)
+			m_queue = new RequestQueue();
+		//m_queue.add(new ImageRequest("newAvatar", l_url));
+		WWW l_www = new WWW (l_url);
+		yield return l_www;
+		m_queue.add(new UpdatePhotoRequest("newAvatar",l_www.bytes, null ));
+		m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
+		m_queue.request(RequestType.SEQUENCE);
+		l_www.Dispose ();
+		m_subState = SubState.LOADING;
+	}
+
+	void onUpdatePhotoComplete(HttpsWWW p_response)
 	{
 		SessionHandler.getInstance().currentKid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
 		SessionHandler.getInstance().currentKid.saveKidPhotoLocal();

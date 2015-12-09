@@ -336,9 +336,9 @@ public class OverviewTimeSpentState : GameState {
 		}
 	}
 	
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
@@ -351,7 +351,7 @@ public class OverviewTimeSpentState : GameState {
 		}
 	}
 
-	private void _getTimeSpendRequestComplete(WWW p_response)
+	private void _getTimeSpendRequestComplete(HttpsWWW p_response)
 	{
 		m_timeSpendCanvas.setData(MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList);
 	}
@@ -374,9 +374,9 @@ public class OverviewTimeSpentState : GameState {
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;

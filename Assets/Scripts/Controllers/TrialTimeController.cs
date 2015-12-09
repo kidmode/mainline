@@ -64,7 +64,7 @@ public class TrialTimeController : MonoBehaviour {
 
 	}
 
-	private void onGetDetailsComplete(WWW p_response)
+	private void onGetDetailsComplete(HttpsWWW p_response)
 	{
 		if( null == p_response.error )
 		{
@@ -366,9 +366,9 @@ public class TrialTimeController : MonoBehaviour {
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init(ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;
@@ -424,7 +424,7 @@ public class TrialTimeController : MonoBehaviour {
 //		
 //	}
 	
-//	private void onGetDetailsComplete(WWW p_response)
+	//	private void onGetDetailsComplete(HttpsWWW p_response)
 //	{
 //		if( null == p_response.error )
 //		{

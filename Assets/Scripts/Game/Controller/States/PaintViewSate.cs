@@ -102,7 +102,7 @@ public class PaintViewSate : GameState
 		}
 	}
 
-	private void _requestIconComplete(WWW p_response)
+	private void _requestIconComplete(HttpsWWW p_response)
 	{
 		m_artImage = m_paintViewCanvas.getView ("artImage")	 as UIImage;
 		if( null == m_artImage )
@@ -207,7 +207,7 @@ public class PaintViewSate : GameState
 		m_confirmDialog.tweener.addPositionTrack( l_pointListIn, 0f );
 	}
 
-	private void onDeleteFinish (WWW p_response)
+	private void onDeleteFinish (HttpsWWW p_response)
 	{
 		if( null == p_response.error )
 		{

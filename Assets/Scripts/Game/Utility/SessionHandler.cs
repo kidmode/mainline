@@ -741,7 +741,7 @@ public class SessionHandler
 
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 
 		if (p_response.error != null) {
@@ -891,7 +891,7 @@ public class SessionHandler
 		m_drawingRequest.request(RequestType.RUSH);
 	}
 
-	private void _requestDrawingListComplete(WWW p_response)
+	private void _requestDrawingListComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -910,7 +910,7 @@ public class SessionHandler
 		}
 	}
 
-	public void saveNewDrawingCompleted(WWW p_response)
+	public void saveNewDrawingCompleted(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -926,7 +926,7 @@ public class SessionHandler
 		}
 	}
 
-	public void saveDrawingCompleted(WWW p_response)
+	public void saveDrawingCompleted(HttpsWWW p_response)
 	{
 
 		Debug.LogError("   saveDrawingCompleted  save drawing completed ");
@@ -1328,7 +1328,7 @@ public class SessionHandler
 	}
 	
 	// private
-	private void onRequestComplete(WWW p_response)
+	private void onRequestComplete(HttpsWWW p_response)
 	{
 		if (p_response.error != null)
 		{

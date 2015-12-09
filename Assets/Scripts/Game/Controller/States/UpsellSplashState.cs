@@ -147,9 +147,9 @@ public class UpsellSplashState : GameState
 		}
 	}
 
-	private void getViewPremiumComplete(WWW p_response)
+	private void getViewPremiumComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null != p_response.error)
 		{
 			_Debug.logError(p_response.error);
@@ -162,9 +162,9 @@ public class UpsellSplashState : GameState
 		}
 	}
 
-	private void getViewGemsComplete(WWW p_response)
+	private void getViewGemsComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null != p_response.error)
 		{
 			_Debug.logError(p_response.error);

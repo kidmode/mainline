@@ -59,7 +59,7 @@ public class CallServerState : GameState
 		}
 	}
 
-	private static void onCallReturn(WWW p_webCall)
+	private static void onCallReturn(HttpsWWW p_webCall)
 	{
 		if(null != p_webCall.error)
 		{
@@ -75,7 +75,7 @@ public class CallServerState : GameState
 		}
 	}
 
-	private static void onSignCallReturn(WWW p_webCall)
+	private static void onSignCallReturn(HttpsWWW p_webCall)
 	{
 		if(null != p_webCall.error)
 		{
@@ -97,7 +97,7 @@ public class CallServerState : GameState
 		m_gameController = null;
 		p_gameController.getUI().removeScreen( m_errorCanvas );
 		m_errorCanvas = null;
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 
 		if(null != m_webRequest)
 		{

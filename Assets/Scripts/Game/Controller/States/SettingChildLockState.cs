@@ -321,9 +321,9 @@ public class SettingChildLockState : GameState
 		}
 	}
 
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			if(checkPin())
@@ -339,9 +339,9 @@ public class SettingChildLockState : GameState
 		}
 	}
 
-	private void buyGemsRequestComplete(WWW p_response)
+	private void buyGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			if(checkPin())
@@ -631,9 +631,9 @@ public class SettingChildLockState : GameState
 		}
 	}
 
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			if(checkPin())

@@ -5,6 +5,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class Game : MonoBehaviour 
 {
@@ -257,8 +259,6 @@ public class Game : MonoBehaviour
 		}
 	}
 
-
-
 	public void onActivityRestart() {
 		KidMode.onActivityRestart ();
 	}
@@ -279,7 +279,6 @@ public class Game : MonoBehaviour
 	public void onTestingContentRefreshFinish(string contents) {;
 		KidMode.onTestingContentRefreshFinish(contents);
 	}
-	
 
 	public void Start()
 	{
@@ -298,35 +297,29 @@ public class Game : MonoBehaviour
 		Screen.autorotateToPortraitUpsideDown = false;
 		Screen.orientation = ScreenOrientation.AutoRotation;
 
+		//honda added: decrypt and encrypt keystore and PWD
+		if (!File.Exists (Application.persistentDataPath + "/data.dat"))
+		{
+			StartCoroutine(GetPwd());
+		}
+		else
+		{
+			getPwdStore();
+		}
+		
+		if (!File.Exists (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT))
+		{
+			StartCoroutine(GetCert());
+		}
+		else
+		{
+			getRealCer();
+			Server.setCer(new X509Certificate2 (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT, m_pwdStore.cerPwd));
+			setEncCer();
+		}
+		Debug.Log(SystemInfo.deviceUniqueIdentifier);
 
-
-//		switch (Input.deviceOrientation) 
-//		{
-//		case DeviceOrientation.FaceDown:
-//		case DeviceOrientation.FaceUp:
-//		case DeviceOrientation.Portrait:
-//		case DeviceOrientation.PortraitUpsideDown:
-//		case DeviceOrientation.Unknown:
-//		case DeviceOrientation.LandscapeLeft:
-//			// None landscape orientation, set it manually
-//			Screen.orientation = ScreenOrientation.LandscapeLeft;
-//			// Wait a bit
-//			//yield WaitForSeconds(0.1f);
-//			// Set back to autorotation, it should be alright by now
-//			Screen.orientation = ScreenOrientation.AutoRotation;
-//			break;
-//		case DeviceOrientation.LandscapeRight:
-//			Screen.orientation = ScreenOrientation.LandscapeRight;
-//			// Wait a bit
-//			//yield WaitForSeconds(0.1f);
-//			// Set back to autorotation, it should be alright by now
-//			Screen.orientation = ScreenOrientation.AutoRotation;
-//			break;    	    
-//		}
-
-	//	if( Application.platform == RuntimePlatform.Android )
-	//		_loadTestWebpage( "https://www.youtube.com/embed/G1UdkMDAdsU" );
-
+		//end
 	}
 
 	public void Awake () 
@@ -566,7 +559,7 @@ public class Game : MonoBehaviour
 		m_request.request ( RequestType.SEQUENCE );
 	}
 	
-	private void getClientIdComplete(WWW p_response)
+	private void getClientIdComplete(HttpsWWW p_response)
 	{
 		if(p_response.error == null)
 		{
@@ -601,7 +594,7 @@ public class Game : MonoBehaviour
 		}
 	}
 	
-	private void getCheckComplete(WWW p_response)
+	private void getCheckComplete(HttpsWWW p_response)
 	{
 		if(p_response.error == null)
 		{
@@ -725,8 +718,91 @@ public class Game : MonoBehaviour
 		_Debug.log("Facebook initialize completed.");
 	}
 
+	//honda added: encrypt or decrypt keystore and PWD
+	private IEnumerator GetCert ()
+	{
+		string l_url = string.Empty;
+		if (Application.platform == RuntimePlatform.Android)
+		{
+			l_url = "jar:file://"+Application.dataPath+"!/assets"+ZoodlesConstants.CLIENT_CERT;
+		}
+		else if (Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			l_url =Application.dataPath + "/Raw/" +ZoodlesConstants.CLIENT_CERT;
+		}
+		else
+		{
+			l_url = "file://" + Application.dataPath + "/StreamingAssets/"+ZoodlesConstants.CLIENT_CERT;
+		}
+		WWW download = new WWW (l_url);
+		yield return download;
+		if (download.error != null) {
+			Debug.Log ("Error downloading: " + download.error);
+		} else {
+			File.WriteAllBytes (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT , download.bytes);
+			//real
+			getRealCer();
+			Server.setCer(new X509Certificate2 (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT, m_pwdStore.cerPwd));
+			setEncCer();
+			//enc
+		}
+	}
+	
+	private IEnumerator GetPwd ()
+	{
+		string l_url = string.Empty;
+		if (Application.platform == RuntimePlatform.Android)
+		{
+			l_url = "jar:file://"+Application.dataPath+"!/assets/data.dat";
+		}
+		else if (Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			l_url =Application.dataPath + "/Raw/data.dat";
+		}
+		else
+		{
+			l_url = "file://" + Application.dataPath + "/StreamingAssets/data.dat";
+		}
+		WWW download = new WWW (l_url);
+		yield return download;
+		if (download.error != null) {
+			Debug.Log ("Error downloading: " + download.error);
+		} else {
+			File.WriteAllBytes (Application.persistentDataPath + "/data.dat" , download.bytes);
+			getPwdStore();
+		}
+	}
+
+	public void getPwdStore()
+	{
+		FileStream fs = new FileStream(Application.persistentDataPath + "/data.dat", FileMode.Open);
+		BinaryFormatter bf = new BinaryFormatter();
+		m_pwdStore = bf.Deserialize (fs) as PwdStore;
+		Debug.Log("PwdStore: " + m_pwdStore);
+		fs.Close ();
+	}
+
+	private void getRealCer()
+	{
+		FileEncrypt.DecryptFile (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT,m_pwdStore.encPwd,progress);
+	}
+	
+	private void setEncCer()
+	{
+		FileEncrypt.EncryptFile (Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT,m_pwdStore.encPwd,progress);
+	}
+	
+	public void progress(int max, int value)
+	{
+		_Debug.log (value + "/" + max);
+	}
+
+	private PwdStore m_pwdStore;
+	//end
+
 	private GameController m_gameController;
 	private User m_user;
 	private WWW m_www;
 	private bool m_delayedParentDashboard;
+
 }

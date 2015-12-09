@@ -13,7 +13,7 @@ public class secret : MonoBehaviour {
 
 	void Start () {
 
-		certName = ZoodlesConstants.CLIENT_CERT;//ZoodlesConstants.CLIENTCERTNAME;
+		certName = ZoodlesConstants.CLIENT_CERT;
 
 		m_cerPwd = GameObject.Find ("cerpwd").GetComponent<InputField>();
 		m_encpwd = GameObject.Find ("encpwd").GetComponent<InputField>();
