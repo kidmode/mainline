@@ -704,6 +704,7 @@ public class CreateChildRequest : RequestQueue.Request
 		m_params[ZoodlesConstants.PARAM_BIRTHDAY] = m_birthday;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_PICTURE] = m_bytes;//l_www.bytes;
+		m_params[ZoodlesConstants.PARAM_CONTENT_TYPE] = "png";
 		m_method = CallMethod.POST;
 	}
 
@@ -1099,6 +1100,7 @@ public class NewDrawingRequest : RequestQueue.Request
 		m_call = "/api/kids/" + SessionHandler.getInstance().currentKid.id + "/drawings";
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params["file"] = m_file;
+		m_params["contentType"] = "png";
 		m_method = CallMethod.POST;
 	}
 
@@ -1125,6 +1127,7 @@ public class SaveDrawingRequest : RequestQueue.Request
 		m_call = "/api/kids/" + SessionHandler.getInstance().currentKid.id + "/drawings/" + SessionHandler.getInstance().currentDrawing.id + "/update_drawing";
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params["file"] = m_file;
+		m_params ["contentType"] = "png";
 		m_method = CallMethod.POST;
 	}
 
