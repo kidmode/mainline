@@ -14,7 +14,7 @@ public enum CallMethod
 	NULL
 }
 
-public delegate void WebCallHandler( WWW p_webCall );
+//public delegate void WebCallHandler( WWW p_webCall );
 //honda added: for https
 public delegate void HttpsWebCallHandler( HttpsWWW p_webCall );
 public delegate void StreamBuildHandler( );
