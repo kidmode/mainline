@@ -995,27 +995,12 @@ public class SessionHandler
 	// Cynthia: vzw
 	public static void SaveKidList(String str) 
 	{
-		try {
-
+		try 
+		{
 			File.WriteAllText(KIDLIST_PATH, str);
-
-//			StreamWriter sw = File.CreateText (KIDLIST_PATH_TEMP);
-//			sw.Write (str);
-//			sw.Flush ();
-//			sw.Close ();
-//
-//			if (File.Exists(KIDLIST_PATH))
-//			{
-//				File.Replace (KIDLIST_PATH_TEMP, KIDLIST_PATH, KIDLIST_PATH_BACKUP); 
-//			}
-//			else
-//			{
-//				File.Move(KIDLIST_PATH_TEMP, KIDLIST_PATH);
-//			}
-
 		}
-		catch (Exception e) {
-
+		catch (Exception e) 
+		{
 			Debug.Log(e);
 		}
 	}
@@ -1062,11 +1047,12 @@ public class SessionHandler
 	public static int LoadCurrentKid() 
 	{
 		string str = null;
-		try {
-			
+		try 
+		{	
 			str = File.ReadAllText(KID_CURRENT);
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			Debug.Log(e);
 			return -1;
 		}
@@ -1075,12 +1061,12 @@ public class SessionHandler
 
 	public static void SaveCurrentKid(int kidId) 
 	{
-		try {
-			
+		try 
+		{	
 			File.WriteAllText(KID_CURRENT,  Convert.ToString(kidId));
 		}
-		catch (Exception e) {
-			
+		catch (Exception e) 
+		{	
 			Debug.Log(e);
 		}
 	}
@@ -1089,13 +1075,15 @@ public class SessionHandler
 	public static string LoadKidsTimeLeft() 
 	{
 		string str = null;
-		try {
-			
+		try 
+		{
 			str = File.ReadAllText(KIDS_TIMELEFT);
 		}
-		catch (Exception e) {
-			Debug.Log(e);
-			return e.ToString();
+		catch (Exception e) 
+		{
+			Debug.Log("not real error: " + e);
+			//if app can not find TimeLeft file, just return empty string
+			return "";
 		}
 		return str;	
 	}
