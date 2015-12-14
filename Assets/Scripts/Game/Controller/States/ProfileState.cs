@@ -303,7 +303,7 @@ public class ProfileState : GameState
 		}
 	}
 
-	private void sendTellFriendRequestComplete(WWW p_response)
+	private void sendTellFriendRequestComplete(HttpsWWW p_response)
 	{
 
 		m_toInput.text = "";

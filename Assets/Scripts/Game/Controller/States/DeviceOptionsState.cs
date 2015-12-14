@@ -461,7 +461,7 @@ public class DeviceOptionsState : GameState
 		m_leftMenuCanvas.showKids (addButtonClickCall);
 	}
 
-	private void updateDeviceRequestComplete(WWW p_response)
+	private void updateDeviceRequestComplete(HttpsWWW p_response)
 	{
 		if(!exitState)
 		{
@@ -472,9 +472,9 @@ public class DeviceOptionsState : GameState
 		}
 	}
 
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;

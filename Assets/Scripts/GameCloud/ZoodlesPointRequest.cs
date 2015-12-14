@@ -19,7 +19,7 @@ public class ZoodlesPointRequest : MonoBehaviour {
 		m_queue.request(RequestType.RUSH);
 	}
 
-	private void _requestComplete(WWW p_response)
+	private void _requestComplete(HttpsWWW p_response)
 	{
 		if (p_response.error != null) 
 		{

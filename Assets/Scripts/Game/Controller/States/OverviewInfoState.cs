@@ -244,7 +244,7 @@ public class OverviewInfoState : GameState {
 		}
 	}
 
-	private void onBuyAppComplete(WWW p_response)
+	private void onBuyAppComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -439,7 +439,7 @@ public class OverviewInfoState : GameState {
 		l_priceLabel.text = p_app.gems.ToString ();
 	}
 
-	private void iconRequestComplete(WWW p_response)
+	private void iconRequestComplete(HttpsWWW p_response)
 	{
 		if(null != p_response.error)
 		{
@@ -601,7 +601,7 @@ public class OverviewInfoState : GameState {
 			p_element.active = true;
 	}
 
-	private void getTopRecommendRequestComplete(WWW p_response)
+	private void getTopRecommendRequestComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error && !"null".Equals(p_response.text))
 		{
@@ -841,9 +841,9 @@ public class OverviewInfoState : GameState {
 		}
 	}
 	
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;

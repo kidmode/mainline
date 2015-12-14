@@ -25,7 +25,7 @@ public class GameController
 		m_uiManager = new UIManager( p_game );
 		m_uiManager.setScreenFactory( p_screenFactory );
 
-		string l_host = ZoodlesConstants.getHost();
+		string l_host = ZoodlesConstants.getHttpsHost();
 		Server.init( l_host );
 		//Create states table
 		m_states        = new Dictionary< int, GameState >();

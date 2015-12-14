@@ -366,9 +366,9 @@ public class SettingAppInfoState : GameState
 		}
 	}
 
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
@@ -419,7 +419,7 @@ public class SettingAppInfoState : GameState
 		}
 	}
 
-	private void showPlanDetails(WWW p_response)
+	private void showPlanDetails(HttpsWWW p_response)
 	{
 		m_gameController.getUI ().changeScreen (UIScreen.PLAN_DEATILS,true);
 		if(null == p_response.error)
@@ -506,14 +506,14 @@ public class SettingAppInfoState : GameState
 		m_requestQueue.request ();
 	}
 
-	private void cancelSubcriptionComplete(WWW p_response)
+	private void cancelSubcriptionComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
 			m_cancelSubscriptionCanvas.setOutPosition ();
 			m_thankCanvas.setOriginalPosition ();
 		}
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 	}
 
 	private void toCancelSubScreen(UIButton p_button)

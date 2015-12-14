@@ -83,7 +83,7 @@ public class WebContentCache : object
 		}
 	}
 
-	private void _requestWebContentComplete(WWW p_response)
+	private void _requestWebContentComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -107,7 +107,7 @@ public class WebContentCache : object
 		processFinishedRequests();
 	}
 
-	private void _requestBookListComplete(WWW p_response)
+	private void _requestBookListComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{

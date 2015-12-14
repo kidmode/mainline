@@ -60,7 +60,7 @@ public class ActivityInfo : object
 //		}
 	}
 
-	private void _requestIconComplete(WWW p_response)
+	private void _requestIconComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{

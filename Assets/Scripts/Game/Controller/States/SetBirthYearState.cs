@@ -152,7 +152,7 @@ public class SetBirthYearState : GameState
 		m_inputNum = string.Empty;
 	}
 
-	private void _setPinComplete(WWW p_response)
+	private void _setPinComplete(HttpsWWW p_response)
 	{
 		m_inputNum = "";
 		m_starLabel.text = "";

@@ -33,7 +33,7 @@ public class RESTGateway
 
     public static string buildUrl( string p_apiCall, string p_prefix = "" )
     {
-        string l_hostServer = ZoodlesConstants.getHost();
+        string l_hostServer = ZoodlesConstants.getHttpsHost();
 
         string url = p_prefix + l_hostServer + p_apiCall;
         return url;

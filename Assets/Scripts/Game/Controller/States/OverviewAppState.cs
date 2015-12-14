@@ -257,7 +257,7 @@ public class OverviewAppState : GameState
 		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 	}
 
-	private void _buyAppComplete(WWW p_response)
+	private void _buyAppComplete(HttpsWWW p_response)
 	{
 		if (null == p_response.error)
 		{
@@ -802,7 +802,7 @@ public class OverviewAppState : GameState
 		}
 	}
 
-	private void getAppListComplete(WWW p_response)
+	private void getAppListComplete(HttpsWWW p_response)
 	{
 		int l_dataCount = 0;
 		if(null == p_response.error)
@@ -976,7 +976,7 @@ public class OverviewAppState : GameState
 		firstLoadMoreAppList ();
 	}
 
-	private void firstGetAppListComplete(WWW p_response)
+	private void firstGetAppListComplete(HttpsWWW p_response)
 	{
 		if(null == p_response.error)
 		{
@@ -1069,9 +1069,9 @@ public class OverviewAppState : GameState
 		}
 	}
 
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;

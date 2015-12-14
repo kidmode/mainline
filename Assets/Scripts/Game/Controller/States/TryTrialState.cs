@@ -25,7 +25,7 @@ public class TryTrialState : GameState
 		}
 	}
 
-	private void _requestComplete( WWW p_www )
+	private void _requestComplete(HttpsWWW p_www)
 	{
 		if(null != p_www.error)
 		{

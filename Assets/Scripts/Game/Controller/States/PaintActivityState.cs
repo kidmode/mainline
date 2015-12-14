@@ -33,7 +33,7 @@ public class PaintActivityState : GameState
 		else
 		{
 			RequestQueue l_queue = new RequestQueue();
-			l_queue.add(new ImageRequest("texture", l_drawing.largeUrl, (WWW p_response)=>
+			l_queue.add(new ImageRequest("texture", l_drawing.largeUrl, (HttpsWWW p_response)=>
 			{
 				_setupCanvas(p_gameController, p_response.texture);
 			}));

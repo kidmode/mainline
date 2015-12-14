@@ -167,16 +167,22 @@ public class KidsProfileState : GameState
 			l_url += "file://" + Application.dataPath + "/StreamingAssets/" + SessionHandler.getInstance().selectAvatar + ".png";
 		}
 
+		m_gameController.game.StartCoroutine (loadImage(l_url));
+	}
+
+	private IEnumerator loadImage(string l_url)
+	{
 		RequestQueue l_queue = new RequestQueue();
-		l_queue.add(new ImageRequest("newAvatar", l_url));
-		l_queue.add(new UpdatePhotoRequest("newAvatar", onUpdateFinish ));
+		WWW l_www = new WWW (l_url);
+		yield return l_www;
+		l_queue.add(new UpdatePhotoRequest("newAvatar",l_www.bytes, onUpdateFinish ));
 		l_queue.request(RequestType.SEQUENCE);
-		
+		l_www.Dispose ();
 		moveOut( m_editPictureCanvas.getView( "mainPanel" ) );
 		moveIn( m_kidsProfileCanvas.getView( "messagePanel" ) );
 	}
 
-	private void onUpdateFinish(WWW p_response)
+	private void onUpdateFinish(HttpsWWW p_response)
 	{
 		Kid l_kid = SessionHandler.getInstance ().currentKid;
 		

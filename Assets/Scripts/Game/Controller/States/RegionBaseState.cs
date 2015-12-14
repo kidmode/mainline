@@ -128,7 +128,7 @@ public class WebViewInfo : System.Object
 			m_retriveHandler = p_handler;
 	}
 
-	private void _requestIconComplete(WWW p_response)
+	private void _requestIconComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -1046,9 +1046,9 @@ public class RegionBaseState : GameState
 		}
 	}
 
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 
@@ -1085,7 +1085,7 @@ public class RegionBaseState : GameState
 		
 	}
 	
-	private void onGetDetailsComplete(WWW p_response)
+	private void onGetDetailsComplete(HttpsWWW p_response)
 	{
 		if( null == p_response.error )
 		{
@@ -1530,7 +1530,7 @@ public class RegionBaseState : GameState
 		}
 	}
 
-	private void _requestDrawingListComplete(WWW p_response)
+	private void _requestDrawingListComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{

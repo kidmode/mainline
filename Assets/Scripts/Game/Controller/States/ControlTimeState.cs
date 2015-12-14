@@ -300,9 +300,9 @@ public class ControlTimeState : GameState
 		}
 	}
 	
-	private void viewGemsRequestComplete(WWW p_response)
+	private void viewGemsRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
@@ -416,7 +416,7 @@ public class ControlTimeState : GameState
 		m_isValueChanged = true;
 	}
 
-	private void _getTimeLimitRequestComplete(WWW p_response)
+	private void _getTimeLimitRequestComplete(HttpsWWW p_response)
 	{
 		Hashtable table = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 		m_timeLimitsCanvas.setTimeLimits(table);
@@ -490,7 +490,7 @@ public class ControlTimeState : GameState
 		m_requestQueue.request (RequestType.SEQUENCE);
 	}
 
-	private void _setTimeLimitRequestComplete(WWW p_response)
+	private void _setTimeLimitRequestComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
 		{
@@ -521,9 +521,9 @@ public class ControlTimeState : GameState
 		}
 	}
 	
-	private void viewPremiumRequestComplete(WWW p_response)
+	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
-		Server.init (ZoodlesConstants.getHost());
+		Server.init (ZoodlesConstants.getHttpsHost());
 		if(null == p_response.error)
 		{
 			SessionHandler.getInstance ().PremiumJson = p_response.text;
