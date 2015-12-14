@@ -220,9 +220,9 @@ public class ClientIdRequest : RequestQueue.Request
 
 	protected override void init()
 	{
-		//Server can't get 'screen_size' if I post this param and I don't konw why. So I send it on URL.
+//		//Server can't get 'screen_size' if I post this param and I don't konw why. So I send it on URL.
 		m_call = ZoodlesConstants.REST_CLIENT_ID_URL+"?"+ZoodlesConstants.PARAM_SIZE+"="+Math.Round(Math.Sqrt(Screen.width * Screen.width + Screen.height * Screen.height) / Screen.dpi,1);
-		m_params [ZoodlesConstants.PARAM_FLASH] = SessionHandler.getInstance().flashInstall;
+		m_params[ZoodlesConstants.PARAM_FLASH] = SessionHandler.getInstance().flashInstall;
 		Debug.Log(Application.platform);
 		if(Application.platform == RuntimePlatform.Android)
 		{
