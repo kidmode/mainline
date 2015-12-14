@@ -546,7 +546,11 @@ public class SessionHandler
 
 		//honda: clean kids local time left list when user does sign out
 		removeKidsTimeLeftWhenSignOut();
-		//need to clear token. if not, previous token info still exists after new Token(). 
+		//honda: delete KidList file to prevent create childern issue when creating a new account
+		SessionHandler.DeleteKidList();
+		//honda: clean current kid info
+		SessionHandler.DeleteCurrentKid();
+		//honda: need to clear token. if not, previous token info still exists after new Token(). 
 		m_token.clear();
 		m_token = new Token();
 		m_kid   = null;
@@ -1015,7 +1019,20 @@ public class SessionHandler
 			Debug.Log(e);
 		}
 	}
-	
+
+	public static void DeleteKidList()
+	{
+		try
+		{
+			if (File.Exists(KIDLIST_PATH))
+				File.Delete(KIDLIST_PATH);
+		}
+		catch (Exception e)
+		{
+			Debug.Log(e);
+		}
+	}
+
 	public static String LoadKidList() 
 	{
 		string str = null;
@@ -1027,6 +1044,19 @@ public class SessionHandler
 			Debug.Log(e);
 		}
 		return str;	
+	}
+
+	public static void DeleteCurrentKid()
+	{
+		try
+		{
+			if (File.Exists(KID_CURRENT))
+				File.Delete(KID_CURRENT);
+		}
+		catch (Exception e)
+		{
+			Debug.Log(e);
+		}
 	}
 
 	public static int LoadCurrentKid() 
@@ -1065,7 +1095,7 @@ public class SessionHandler
 		}
 		catch (Exception e) {
 			Debug.Log(e);
-			return "";
+			return e.ToString();
 		}
 		return str;	
 	}
