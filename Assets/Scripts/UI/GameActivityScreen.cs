@@ -31,7 +31,13 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public Image appNameImage;
 
-	public Image sponsorLogoImage;
+//	public Image sponsorLogoImage;
+
+	public Image featureClicked_AppIconImage;
+	
+	public Image featureClicked_AppNameImage;
+	
+//	public Image featureClicked_SponsorLogoImage;
 
 	void Awake(){
 
@@ -167,9 +173,20 @@ public class GameActivityScreen : MonoBehaviour {
 
 		appNameImage.sprite = features[currPageIndex].appNameTexture;
 		
-		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
+//		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
 
 	}
+
+
+	void showFeaturedDetails(){
+
+		featureClicked_AppIconImage.sprite = features[currPageIndex].appIconTexture;
+		
+		featureClicked_AppNameImage.sprite = features[currPageIndex].appNameTexture;
+
+
+	}
+
 
 }
 
@@ -183,6 +200,9 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public Sprite appNameTexture;
 
+	//Not being used right now
 	public Sprite sponsorLogoTexture;
+
+	public Texture2D[] showreelTextures;
 
 }
