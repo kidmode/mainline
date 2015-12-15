@@ -36,6 +36,10 @@ public class GameActivityScreen : MonoBehaviour {
 	public Image featureClicked_AppIconImage;
 	
 	public Image featureClicked_AppNameImage;
+
+	//=============================================
+	//Feature Reel
+	public FeaturedReel featuredReel;
 	
 //	public Image featureClicked_SponsorLogoImage;
 
@@ -203,6 +207,18 @@ public class GameActivityScreen : MonoBehaviour {
 	//Not being used right now
 	public Sprite sponsorLogoTexture;
 
-	public Texture2D[] showreelTextures;
+	public ShowReelData[] showReelDatas;
 
 }
+
+[Serializable]
+class ShowReelData{
+
+	public Texture2D textures;
+
+	public bool isVideo;
+
+}
+
+
+
