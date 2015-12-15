@@ -40,6 +40,8 @@ public class GameActivityScreen : MonoBehaviour {
 	//=============================================
 	//Feature Reel
 	public FeaturedReel featuredReel;
+
+	public GameObject featuredRealPanel;
 	
 //	public Image featureClicked_SponsorLogoImage;
 
@@ -56,10 +58,14 @@ public class GameActivityScreen : MonoBehaviour {
 
 		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
+//		featuredReel.gameObject.SetActive(true);
+
+		featuredRealPanel.SetActive(false);
+
 //		scrollRect.content
 
 		//For testing
-		featuredReel.startReel(features[0]);
+//		featuredReel.startReel(features[0]);
 	
 	}
 	
@@ -194,6 +200,31 @@ public class GameActivityScreen : MonoBehaviour {
 
 	}
 
+	public void onFeatureIconClicked(){
+
+//		featuredReel.gameObject.SetActive(tr
+		featuredRealPanel.gameObject.SetActive(true);
+
+		featuredReel.startReel(features[currPageIndex]);
+
+	}
+
+	public void onDownloadButtonClicked(){
+
+		featuredReel.removeElements();
+
+		featuredRealPanel.gameObject.SetActive(false);
+
+	}
+
+	public void onFeatureReelClose(){
+		
+		featuredReel.removeElements();
+		
+		featuredRealPanel.gameObject.SetActive(false);
+		
+	}
+
 
 }
 
@@ -217,7 +248,7 @@ public class GameActivityScreen : MonoBehaviour {
 [Serializable]
 public class ShowReelElementData{
 
-	public Texture2D texture;
+	public Sprite texture;
 
 	public bool isVideo;
 

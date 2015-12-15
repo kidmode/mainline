@@ -229,7 +229,9 @@ public class GameActivityCanvas : UICanvas
 				mask.enabled = true;
 
 				//Need to move the app icon info to the child of the 
-				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+//				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+
+				l_appName.gameObject.transform.SetParent(p_element.gameObject.transform, true);
 
 				l_PanelShadow.active = true;
 			}
@@ -266,8 +268,11 @@ public class GameActivityCanvas : UICanvas
 
 			//===================
 			//Need to move the app icon info to the child of the 
-			l_appImage.gameObject.transform.parent = p_element.gameObject.transform;// l_panel.gameObject.transform;
-			l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+//			l_appImage.gameObject.transform.parent = p_element.gameObject.transform;// l_panel.gameObject.transform;
+//			l_appName.gameObject.transform.parent = p_element.gameObject.transform;
+			l_appImage.gameObject.transform.SetParent(p_element.gameObject.transform, true);
+			l_appName.gameObject.transform.SetParent(p_element.gameObject.transform, true);
+
 
 			//Turn off the background image
 			l_backgroundImage.gameObject.SetActive(false);
