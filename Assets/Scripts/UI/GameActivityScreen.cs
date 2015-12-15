@@ -57,6 +57,9 @@ public class GameActivityScreen : MonoBehaviour {
 		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
 //		scrollRect.content
+
+		//For testing
+		featuredReel.startReel(features[0]);
 	
 	}
 	
@@ -196,7 +199,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 
 [Serializable]
- class FeatureData{
+ public class FeatureData{
 
 //	public string companyName;
 
@@ -207,14 +210,14 @@ public class GameActivityScreen : MonoBehaviour {
 	//Not being used right now
 	public Sprite sponsorLogoTexture;
 
-	public ShowReelData[] showReelDatas;
+	public ShowReelElementData[] ShowReelElementDatas;
 
 }
 
 [Serializable]
-class ShowReelData{
+public class ShowReelElementData{
 
-	public Texture2D textures;
+	public Texture2D texture;
 
 	public bool isVideo;
 

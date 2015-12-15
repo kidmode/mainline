@@ -18,4 +18,34 @@ public class FeaturedReel : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void startReel(FeatureData featureData){
+
+		for (int i = 0; i < featureData.ShowReelElementDatas.Length; i++) {
+
+			ShowReelElementData element = featureData.ShowReelElementDatas[i];
+
+			if(element.isVideo){
+
+				GameObject createdPrefab = GameObject.Instantiate(prefabVideoThumbnailItem) as GameObject;
+
+				createdPrefab.transform.parent = content.transform;
+
+				createdPrefab.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+			}else{
+
+				GameObject createdPrefab = GameObject.Instantiate(prefabImageItem) as GameObject;
+
+				createdPrefab.transform.parent = content.transform;
+
+				createdPrefab.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+			}
+
+		}
+
+	}
+
+
 }
