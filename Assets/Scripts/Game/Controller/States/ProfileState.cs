@@ -651,7 +651,7 @@ public class ProfileState : GameState
 
 			m_quitButton.gameObject.SetActive(false);
 
-			_setupWebview("http://www.zoodles.com/en-US/home/legal/terms");
+			_setupWebview("https://www.zoodles.com/en-US/home/legal/terms");
 
 		}
 	}
@@ -671,7 +671,7 @@ public class ProfileState : GameState
 
 			m_quitButton.gameObject.SetActive(false);
 
-			_setupWebview("http://www.zoodles.com/en-US/home/legal/privacy");
+			_setupWebview("https://www.zoodles.com/en-US/home/legal/privacy");
 		}
 	}
 
