@@ -31,7 +31,19 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public Image appNameImage;
 
-	public Image sponsorLogoImage;
+//	public Image sponsorLogoImage;
+
+	public Image featureClicked_AppIconImage;
+	
+	public Image featureClicked_AppNameImage;
+
+	//=============================================
+	//Feature Reel
+	public FeaturedReel featuredReel;
+
+	public GameObject featuredRealPanel;
+	
+//	public Image featureClicked_SponsorLogoImage;
 
 	void Awake(){
 
@@ -46,7 +58,14 @@ public class GameActivityScreen : MonoBehaviour {
 
 		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
+//		featuredReel.gameObject.SetActive(true);
+
+		featuredRealPanel.SetActive(false);
+
 //		scrollRect.content
+
+		//For testing
+//		featuredReel.startReel(features[0]);
 	
 	}
 	
@@ -167,15 +186,51 @@ public class GameActivityScreen : MonoBehaviour {
 
 		appNameImage.sprite = features[currPageIndex].appNameTexture;
 		
-		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
+//		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
 
 	}
+
+
+	void showFeaturedDetails(){
+
+		featureClicked_AppIconImage.sprite = features[currPageIndex].appIconTexture;
+		
+		featureClicked_AppNameImage.sprite = features[currPageIndex].appNameTexture;
+
+
+	}
+
+	public void onFeatureIconClicked(){
+
+//		featuredReel.gameObject.SetActive(tr
+		featuredRealPanel.gameObject.SetActive(true);
+
+		featuredReel.startReel(features[currPageIndex]);
+
+	}
+
+	public void onDownloadButtonClicked(){
+
+		featuredReel.removeElements();
+
+		featuredRealPanel.gameObject.SetActive(false);
+
+	}
+
+	public void onFeatureReelClose(){
+		
+		featuredReel.removeElements();
+		
+		featuredRealPanel.gameObject.SetActive(false);
+		
+	}
+
 
 }
 
 
 [Serializable]
- class FeatureData{
+ public class FeatureData{
 
 //	public string companyName;
 
@@ -183,6 +238,21 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public Sprite appNameTexture;
 
+	//Not being used right now
 	public Sprite sponsorLogoTexture;
 
+	public ShowReelElementData[] ShowReelElementDatas;
+
 }
+
+[Serializable]
+public class ShowReelElementData{
+
+	public Sprite texture;
+
+	public bool isVideo;
+
+}
+
+
+
