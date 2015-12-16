@@ -15,13 +15,32 @@ public class FeaturedReel : MonoBehaviour {
 	
 	public Image appNameImage;
 
+	//Private
+//	private RectTransform featurelRect;
+
 	// Use this for initialization
 	void Start () {
+
+//		featurelRect = gameObject.GetComponent<RectTransform>();
+//
+//		Debug.LogError("  featurelRect " + featurelRect.position);
+//
+//		Debug.LogError("  featurelRect offsetMax offsetMin " + featurelRect.offsetMax + "    " + featurelRect.offsetMin);
+//
+////		featurelRect.offsetMin
+//
+////		featurelRect.sizeDelta = new Vector2(200.0f, 200.0f);	
+//
+//		Debug.LogError("  featurelRect after width " + featurelRect.position);
+//
+//		Debug.LogError("  featurelRect offsetMax offsetMin " + featurelRect.offsetMax + "    " + featurelRect.offsetMin);
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+			
 	
 	}
 
