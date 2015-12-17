@@ -23,7 +23,8 @@ public class Game : MonoBehaviour
 
 	private static bool mAppIsLoad = false;
 
-
+	//Kevin
+	public static event Action OnVideoClosed;
 
 
 	//honda
@@ -266,6 +267,9 @@ public class Game : MonoBehaviour
 	public void closeYoutube() {
 		this.gameSwitcher (true);
 		WebViewState._clickBackBtn ();
+
+		if(OnVideoClosed != null)
+			OnVideoClosed();
 	}
 
 	public void OnLoadYoutubeComplete() {
