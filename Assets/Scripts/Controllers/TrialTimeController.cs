@@ -216,9 +216,9 @@ public class TrialTimeController : MonoBehaviour {
 
 	public void androidExit(){
 			
-		focusTestTxt = focusTestTxt + " paused ";
-		
-		debugTxt.text = focusTestTxt;
+//		focusTestTxt = focusTestTxt + " paused ";
+//		
+//		debugTxt.text = focusTestTxt;
 
 		checkState = CheckState.NOT_CHECKED;
 
