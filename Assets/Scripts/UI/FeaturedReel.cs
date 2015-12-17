@@ -2,38 +2,30 @@
 using UnityEngine.UI;
 using System.Collections;
 
+//=============================================================================
+//Author: Kevin
+//
+//Manages the Screenshots and videos when the featured icon is clicked.
+//
+//
+//=============================================================================
 
 public class FeaturedReel : MonoBehaviour {
 
+	//Prefab for the image Item
 	public GameObject prefabImageItem;
-
+	//Prefab for hte video Thumbnail item
 	public GameObject prefabVideoThumbnailItem;
-
+	//Content object that contains all the elements of the scroll view
 	public GameObject content;
 
+	//App Icon Image for the featured app
 	public Image appIconImage;
-	
+	//App name Image for the featured app
 	public Image appNameImage;
-
-	//Private
-//	private RectTransform featurelRect;
 
 	// Use this for initialization
 	void Start () {
-
-//		featurelRect = gameObject.GetComponent<RectTransform>();
-//
-//		Debug.LogError("  featurelRect " + featurelRect.position);
-//
-//		Debug.LogError("  featurelRect offsetMax offsetMin " + featurelRect.offsetMax + "    " + featurelRect.offsetMin);
-//
-////		featurelRect.offsetMin
-//
-////		featurelRect.sizeDelta = new Vector2(200.0f, 200.0f);	
-//
-//		Debug.LogError("  featurelRect after width " + featurelRect.position);
-//
-//		Debug.LogError("  featurelRect offsetMax offsetMin " + featurelRect.offsetMax + "    " + featurelRect.offsetMin);
 	
 	}
 	
@@ -44,6 +36,7 @@ public class FeaturedReel : MonoBehaviour {
 	
 	}
 
+	//Start placing elemtns to the scroll view
 	public void startReel(FeatureData featureData){
 
 		for (int i = 0; i < featureData.ShowReelElementDatas.Length; i++) {
@@ -89,6 +82,7 @@ public class FeaturedReel : MonoBehaviour {
 
 	}
 
+	//Clears all the child elements of the content Object
 	public void removeElements(){
 
 		LayoutElement[] layoutElements = content.GetComponentsInChildren<LayoutElement>();
