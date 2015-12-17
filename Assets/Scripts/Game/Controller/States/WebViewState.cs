@@ -24,7 +24,9 @@ public class WebViewState : GameState
 		string l_url = getURL();
 		
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
-		
+
+
+		Debug.LogWarning("  l_url " + l_url);
 		m_isLoaded = false;
 		
 		m_linkId = SessionHandler.getInstance().currentContent.id;

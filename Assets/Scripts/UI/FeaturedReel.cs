@@ -30,7 +30,15 @@ public class FeaturedReel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
 	
+	}
+
+	void OnDisable(){
+
+
+
 	}
 	
 	// Update is called once per frame
@@ -40,8 +48,19 @@ public class FeaturedReel : MonoBehaviour {
 	
 	}
 
+	public void OnVideoClosed(){
+
+		content.SetActive(true);
+
+	}
+
+
 	//Start placing elemtns to the scroll view
 	public void startReel(FeatureData featureData){
+
+		content.SetActive(true);
+
+		Game.OnVideoClosed += OnVideoClosed;
 
 		this.featureData = featureData;
 
@@ -113,8 +132,12 @@ public class FeaturedReel : MonoBehaviour {
 			AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
 			
 			jc.CallStatic("startPlayYoutube", featureData.ShowReelElementDatas[index].youtubeLink);
+
+			content.SetActive(false);
 			
 			#endif
+
+//			p_gameController.game.gameSwitcher (false);
 
 		}
 		
@@ -124,6 +147,8 @@ public class FeaturedReel : MonoBehaviour {
 
 	//Clears all the child elements of the content Object
 	public void removeElements(){
+
+		Game.OnVideoClosed -= OnVideoClosed;
 
 		LayoutElement[] layoutElements = content.GetComponentsInChildren<LayoutElement>();
 
