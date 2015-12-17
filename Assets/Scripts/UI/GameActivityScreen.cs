@@ -72,7 +72,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
-		featuredRealPanel.SetActive(false);
+//		featuredRealPanel.SetActive(false);
 
 		//For testing
 //		featuredReel.startReel(features[0]);

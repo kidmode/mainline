@@ -124,6 +124,8 @@ public class FeaturedReel : MonoBehaviour {
 
 		int index = int.Parse( button.gameObject.name.Substring(button.gameObject.name.Length - 1)) ;
 
+//		return;
+
 		if(featureData.ShowReelElementDatas[index].isVideo){
 
 
@@ -134,6 +136,8 @@ public class FeaturedReel : MonoBehaviour {
 			jc.CallStatic("startPlayYoutube", featureData.ShowReelElementDatas[index].youtubeLink);
 
 			content.SetActive(false);
+
+			removeElements();
 			
 			#endif
 
