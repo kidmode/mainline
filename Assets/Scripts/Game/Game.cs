@@ -319,6 +319,8 @@ public class Game : MonoBehaviour
 		}
 		Debug.Log(SystemInfo.deviceUniqueIdentifier);
 
+		Game.getCerPwd();
+
 		//end
 	}
 
@@ -383,7 +385,6 @@ public class Game : MonoBehaviour
         startLoading();
 
 		GAUtil.startSession("Login");
-
 	}
 
 
@@ -778,7 +779,9 @@ public class Game : MonoBehaviour
 		FileStream fs = new FileStream(Application.persistentDataPath + "/data.dat", FileMode.Open);
 		BinaryFormatter bf = new BinaryFormatter();
 		m_pwdStore = bf.Deserialize (fs) as PwdStore;
-		Debug.Log("PwdStore: " + m_pwdStore);
+		//for static pwd use
+		_pwdStore = m_pwdStore;
+//		Debug.Log("PwdStore: " + _pwdStore.cerPwd + " & " + _pwdStore.encPwd);
 		fs.Close ();
 	}
 
@@ -797,7 +800,32 @@ public class Game : MonoBehaviour
 		_Debug.log (value + "/" + max);
 	}
 
+	//for cathy
+	public static void decryptCer()
+	{
+		FileEncrypt.DecryptFile(Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT,_pwdStore.encPwd, (int max, int value) => {Debug.Log(value + "/" + max);});
+	}
+
+	public static void encrpytCer()
+	{
+		FileEncrypt.EncryptFile(Application.persistentDataPath + ZoodlesConstants.CLIENT_CERT,_pwdStore.encPwd, (int max, int value) => {Debug.Log(value + "/" + max);});
+	}
+
+	public static void getCerPwd()
+	{
+//		Debug.Log("print pwd: " + _pwdStore.cerPwd);
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("cerPwd", _pwdStore.cerPwd);
+
+		#endif
+	}
+	
+	//end
+
 	private PwdStore m_pwdStore;
+	private static PwdStore _pwdStore;
 	//end
 
 	private GameController m_gameController;
