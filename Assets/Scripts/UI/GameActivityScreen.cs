@@ -48,9 +48,13 @@ public class GameActivityScreen : MonoBehaviour {
 	public Image appNameImage;
 
 	//The same as "appIconImage" but is for the featured Reel
-	public Image featureClicked_AppIconImage;
-	
-	public Image featureClicked_AppNameImage;
+//	public Image featureClicked_AppIconImage;
+//	
+//	public Image featureClicked_AppNameImage;
+
+	public GameObject featuredRealPanel;
+
+	public FeaturedReel featuredReel;
 
 	//Was here but not used any more. Keep it here just in case Zoodles wants it back again.
 //	public Image featureClicked_SponsorLogoImage;
@@ -172,7 +176,6 @@ public class GameActivityScreen : MonoBehaviour {
 //			
 //		}
 
-
 		appIconImage.sprite = features[currPageIndex].appIconTexture;
 
 		appNameImage.sprite = features[currPageIndex].appNameTexture;
@@ -241,6 +244,10 @@ public class ShowReelElementData{
 	public Sprite texture;
 
 	public bool isVideo;
+
+	public string youtubeLink;
+
+	public string imageLink;
 
 }
 
