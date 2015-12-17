@@ -137,8 +137,6 @@ public class FeaturedReel : MonoBehaviour {
 			
 			#endif
 
-//			p_gameController.game.gameSwitcher (false);
-
 		}
 		
 	}
