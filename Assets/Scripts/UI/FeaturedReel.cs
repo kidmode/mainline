@@ -6,18 +6,22 @@ using System.Collections;
 //Author: Kevin
 //
 //Manages the Screenshots and videos when the featured icon is clicked.
+//
+//
 //=============================================================================
 
 public class FeaturedReel : MonoBehaviour {
 
+	//Prefab for the image Item
 	public GameObject prefabImageItem;
-
+	//Prefab for hte video Thumbnail item
 	public GameObject prefabVideoThumbnailItem;
-
+	//Content object that contains all the elements of the scroll view
 	public GameObject content;
 
+	//App Icon Image for the featured app
 	public Image appIconImage;
-	
+	//App name Image for the featured app
 	public Image appNameImage;
 
 	// Use this for initialization
@@ -32,6 +36,7 @@ public class FeaturedReel : MonoBehaviour {
 	
 	}
 
+	//Start placing elemtns to the scroll view
 	public void startReel(FeatureData featureData){
 
 		for (int i = 0; i < featureData.ShowReelElementDatas.Length; i++) {

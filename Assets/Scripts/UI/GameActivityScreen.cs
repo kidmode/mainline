@@ -3,46 +3,56 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: Dec 2015
+//Purpose: A screen script for the Game Activity screen. Different from Game Activity Canvas which is a GCS script
+//Manages Featured App and how it shows the Apps Scroll view and how it is shown
+//Uses ListSizeUpdator to update the app scroll view.
+//The app scroll view should contract or expand depending if there is any Featured app for the current page
+//Only 8 per page when there are features. Variable: itemCountPerPage
+//
+//
+//=============================================================================
+
 public class GameActivityScreen : MonoBehaviour {
 
+	//Instance of this Screen. There can be only one at a time
 	public static GameActivityScreen Instance;
 
+	//Features Data that are to be loaded into the script. Fill this out by script when getting the Featured app data
+	//From Server
 	[SerializeField]
 	private FeatureData[] features;
-	
+	//The Content object that contains all the elemnts ie games and apps
 	public Transform contentTrans;
-	
+	//Scroll Size for the 
 	public ScrollRect scrollRect;
-
+	//This is the position to check which page we are on. currPageIndex
 	public Transform scrollRectLeftPoint;
-
+	// Set The number of items per page when there are features
 	public int itemCountPerPage = 8;
-
+	//The updator script to update the List Size to expand or contract
 	private ListSizeUpdator gameListUpdator;
 
+	//Script that moves the Featured icon Left when the list is expanding or right when the list is contracting
 	[SerializeField]
 	private UIMoveLeftRight featureSpaceMoveLeftRight;
-
-
-
+	//The current Idex fo the page we are on. This calculated using the scrollRectLeftPoint and the elements
 	private int currPageIndex = 0;
 
+	//The app icon of the featured app
 	public Image appIconImage;
-
+	//The Image for the featured app name
 	public Image appNameImage;
 
-//	public Image sponsorLogoImage;
-
+	//The same as "appIconImage" but is for the featured Reel
 	public Image featureClicked_AppIconImage;
 	
 	public Image featureClicked_AppNameImage;
 
-	//=============================================
-	//Feature Reel
-	public FeaturedReel featuredReel;
-
-	public GameObject featuredRealPanel;
-	
+	//Was here but not used any more. Keep it here just in case Zoodles wants it back again.
 //	public Image featureClicked_SponsorLogoImage;
 
 	void Awake(){
@@ -58,11 +68,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 		gameListUpdator = gameObject.GetComponent<ListSizeUpdator>();
 
-//		featuredReel.gameObject.SetActive(true);
-
 		featuredRealPanel.SetActive(false);
-
-//		scrollRect.content
 
 		//For testing
 //		featuredReel.startReel(features[0]);
@@ -78,29 +84,18 @@ public class GameActivityScreen : MonoBehaviour {
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 
-//		Debug.Log(" buttons " + buttons.Length);
-
-
 	}
 
+	//When the scroll of the app and games have changed
+	//Then check how we show features
 	void onValueChanged(Vector2 scrolRectPos){
-		
-		//		Debug.Log("  scrolRectPos " + scrolRectPos);
-		
-//		currPos = scrolRectPos;
-//		
-//		updateChanges (scrolRectPos);
 
-
-//		Debug.Log(" buttons " + buttons.Length);
 		checkFeature();
 		
 	}
 
 
 	void checkFeature(){
-
-//		Debug.Log("  checkFeature ");
 
 		Button[] buttons = contentTrans.GetComponentsInChildren<Button>();
 		
@@ -125,10 +120,6 @@ public class GameActivityScreen : MonoBehaviour {
 						int currPage = (item.index + 1) / itemCountPerPage;
 						
 						changedPage = currPage;
-						
-						
-						
-						//					return;
 						
 					}else if(item.pointRightEnd.gameObject.transform.position.x > scrollRectLeftPoint.position.x){
 						
@@ -189,26 +180,18 @@ public class GameActivityScreen : MonoBehaviour {
 //		sponsorLogoImage.sprite = features[currPageIndex].sponsorLogoTexture;
 
 	}
+	
 
-
-	void showFeaturedDetails(){
-
-		featureClicked_AppIconImage.sprite = features[currPageIndex].appIconTexture;
-		
-		featureClicked_AppNameImage.sprite = features[currPageIndex].appNameTexture;
-
-
-	}
-
+	//When featured icon is clicked, Show the featured screen reel
 	public void onFeatureIconClicked(){
 
-//		featuredReel.gameObject.SetActive(tr
 		featuredRealPanel.gameObject.SetActive(true);
 
 		featuredReel.startReel(features[currPageIndex]);
 
 	}
 
+	//When download button is clicked
 	public void onDownloadButtonClicked(){
 
 		featuredReel.removeElements();
@@ -217,6 +200,7 @@ public class GameActivityScreen : MonoBehaviour {
 
 	}
 
+	//Featured reel closed
 	public void onFeatureReelClose(){
 		
 		featuredReel.removeElements();
@@ -229,6 +213,11 @@ public class GameActivityScreen : MonoBehaviour {
 }
 
 
+//======================================================================================================================
+//
+// Feature Data 
+//
+//======================================================================================================================
 [Serializable]
  public class FeatureData{
 
@@ -241,6 +230,7 @@ public class GameActivityScreen : MonoBehaviour {
 	//Not being used right now
 	public Sprite sponsorLogoTexture;
 
+	//The features reel data in an array
 	public ShowReelElementData[] ShowReelElementDatas;
 
 }
