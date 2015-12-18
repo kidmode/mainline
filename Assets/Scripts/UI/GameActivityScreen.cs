@@ -56,6 +56,8 @@ public class GameActivityScreen : MonoBehaviour {
 
 	public FeaturedReel featuredReel;
 
+
+
 	//Was here but not used any more. Keep it here just in case Zoodles wants it back again.
 //	public Image featureClicked_SponsorLogoImage;
 
