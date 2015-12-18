@@ -2,19 +2,30 @@
 using System.Collections;
 using System;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: Dec 2015
+//Purpose: 
+//Use the WWW to download data/ or anything from url
+//once it is done, event OnDownloadDone is called
+//and then we could get texture, data etc
+//
+//=============================================================================
+
 public class WWWDownloader : MonoBehaviour {
 
-	public Texture2D loadedTexture;
-
+	//the url for the www
 	public string downloadURL;
-
+	//the www object
 	public WWW www;
 
+	//Action event when the download is done 
 	public event Action OnDownloadDone;
 
 	public enum State{
-		START,
-		DONE
+		START,//STARTed downloading
+		DONE//Done downloading
 	}
 
 	public State state;
@@ -46,11 +57,7 @@ public class WWWDownloader : MonoBehaviour {
 
 		www = new WWW(downloadURL);
 
-//		Debug.Log(" start download ing ");
-
 		yield return www;
-
-//		Debug.Log(" www returned " + www.error);
 //		
 		if (www.error == null)
 		{

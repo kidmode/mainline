@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: NA
+//Purpose: The activity buttons in Jungle needs to srink or expand in size when the screen is narrow or wide
+//
+//=============================================================================
+
 public class ActivityPanelScreenUpdator : MonoBehaviour {
 
 	//Variables for the acitvity panel
@@ -13,7 +21,7 @@ public class ActivityPanelScreenUpdator : MonoBehaviour {
 
 	public Transform rightPanelLeftExtreme;
 
-
+	//The range for it to be in position
 	public float checkRange = 12.0f;
 
 	public enum State{
@@ -91,20 +99,7 @@ public class ActivityPanelScreenUpdator : MonoBehaviour {
 
 				gameObject.GetComponent<RectTransform>().localScale = newScale;
 
-//				RectTransformExtensions.SetSize();
-
-//				gameObject.transform.localScale = gameObject.transform.localScale * scale;
-
-//				gameObject.rec
-//
-//				state = State.OKAY;
-
-//				Debug.Log(" we are overlapping " + mainPanelLeftExtreme.position.x + "   "  + 
-//				          leftPanelRightExtreme.position.x + "   scale " + scale + "  GetSize " + RectTransformExtensions.GetSize(gameObject.GetComponent<RectTransform>()));
-
 			}else{
-
-//				Debug.Log(" we are okay " + mainPanelLeftExtreme.position.x);
 
 			}
 
