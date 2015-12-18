@@ -10,7 +10,7 @@ public class WWWDownloader : MonoBehaviour {
 
 	public WWW www;
 
-	public static event Action OnDownloadDone;
+	public event Action OnDownloadDone;
 
 	public enum State{
 		START,
@@ -22,13 +22,21 @@ public class WWWDownloader : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		StartCoroutine(DownloadImage(downloadURL));
+
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void startWWWDownload(string downloadURL){
+
+		this.downloadURL = downloadURL;
+
+		StartCoroutine(DownloadImage(downloadURL));
+
 	}
 
 	private IEnumerator DownloadImage(string downloadURL)

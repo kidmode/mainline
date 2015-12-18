@@ -28,6 +28,16 @@ public class FeaturedReel : MonoBehaviour {
 
 	private string featureButtonName = "FeatureThumb";
 
+
+	//==================================================================
+	//Featured Image when clicking the images
+	//==================================================================
+	public GameObject ShowFeaturedImagePanel;
+
+	public Image ShowFeaturedImageIcon;
+
+	public WWWDownloader ImageDownloader;
+
 	// Use this for initialization
 	void Start () {
 
@@ -104,7 +114,7 @@ public class FeaturedReel : MonoBehaviour {
 
 			createdPrefab.name = featureButtonName + "_" + i.ToString();
 
-			btnComp.onClick.AddListener ( () => featureReelCallBackTest(btnComp) ) ;
+			btnComp.onClick.AddListener ( () => featureReelCallBack(btnComp) ) ;
 
 //			btnComp.onClick.AddListener(featureReelCallBack);
 
@@ -117,10 +127,10 @@ public class FeaturedReel : MonoBehaviour {
 
 	}
 	
-	public void featureReelCallBackTest(Button button)
+	public void featureReelCallBack(Button button)
 	{
 		
-		Debug.Log("   featureReelCallBackTest " + button.gameObject.name.Substring(button.gameObject.name.Length - 1));
+		Debug.Log("   featureReelCallBack " + button.gameObject.name.Substring(button.gameObject.name.Length - 1));
 
 		int index = int.Parse( button.gameObject.name.Substring(button.gameObject.name.Length - 1)) ;
 
@@ -141,8 +151,35 @@ public class FeaturedReel : MonoBehaviour {
 			
 			#endif
 
+		}else{
+
+			ImageDownloader.OnDownloadDone += OnDownloadImageDone;
+
+			ImageDownloader.startWWWDownload( featureData.ShowReelElementDatas[index].imageLink);
+
+			KidMode.showProgressBar();
+
 		}
 		
+	}
+
+
+	private void OnDownloadImageDone(){
+
+		KidMode.dismissProgressBar();
+
+		ShowFeaturedImagePanel.gameObject.SetActive(true);
+
+		ShowFeaturedImageIcon.sprite =    Sprite.Create(ImageDownloader.www.texture, 
+		                                                new Rect(0, 0, ImageDownloader.www.texture.width, ImageDownloader.www.texture.height), 
+		                                                new Vector2(0.5f, 0.5f)) ;
+
+	}
+
+	public void closeFeatureImage(){
+
+		ShowFeaturedImagePanel.gameObject.SetActive(false);
+
 	}
 
 
