@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: NA
+//Purpose: 
+//Controls how google store added apps could be added to Kidmode automatically
+//
+//=============================================================================
+
 public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	public static GoogleInstallAutoAddController Instance;
@@ -48,19 +57,7 @@ public class GoogleInstallAutoAddController : MonoBehaviour {
 
 	}
 
-//	private void checkList (){
-//
-////		KidMode.getAllSystemApps();
-//		
-//		List<object> l_list = KidMode.getApps();
-//
-////		List<object> l_listSystemApps = 
-//
-//		Debug.Log(" *1111111111111111111111111  h  l_list " + l_list.Count);
-//
-////		Debug.Log(" *1111111111111111111111111 l_listSystemApps " + l_listSystemApps.Count);
-//
-//	}
+
 
 	private void autoAdd (){
 

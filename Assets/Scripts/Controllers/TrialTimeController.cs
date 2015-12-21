@@ -4,6 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: NA
+//Purpose: 
+//Not being used right now .. . .  I think . . . .
+//
+//=============================================================================
 
 public class TrialTimeController : MonoBehaviour {
 
