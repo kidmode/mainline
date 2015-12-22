@@ -2,8 +2,18 @@
 using System.Collections;
 using System.IO;
 
+//=============================================================================
+//Author: Kevin
+//
+//Date: NA
+//Purpose: 
+//Use this to remove Player prefs in Editor or write some other actions for easy testing
+//A panel will show or hide. There are buttons for the actions
+//
+//=============================================================================
 public class DebugController : MonoBehaviour {
 
+	//The panel to show the controls such as buttons and texts
 	public GameObject debugControlsPanel;
 
 	// Use this for initialization
