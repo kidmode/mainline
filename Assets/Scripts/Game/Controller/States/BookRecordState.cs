@@ -138,6 +138,21 @@ public class BookRecordState : GameState
 			m_sendButton.addClickCallback( onSendButtonClicked );
 			Debug.Log("finish upload :" + DateTime.Now);
 		}
+
+
+
+		if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + currentPage.id + ".wav"))
+		{
+
+			m_checkRecorded.gameObject.SetActive(true);
+
+		}else{
+
+			m_checkRecorded.gameObject.SetActive(false);
+
+		}
+
+
 	}
 	
 	public override void exit( GameController p_gameController )
@@ -284,6 +299,9 @@ public class BookRecordState : GameState
 							
 							m_request.add ( new UploadAudioRequest(l_slug, "0", l_bytes, onUploadFinished));
 						}
+
+						m_request.request (RequestType.RUSH);
+
 					}
 					catch(Exception)
 					{
@@ -309,6 +327,8 @@ public class BookRecordState : GameState
 	{
 		m_uploadedCount++;
 		m_setMessage = true;
+
+		Debug.Log("  p_response error " + p_response.error);
 	}
 
 	private void onAddButtonClicked( UIButton p_button )
@@ -586,11 +606,30 @@ public class BookRecordState : GameState
 
     private void onNextPage(UIButton p_button)
     {
+
+		if( m_isRecording )
+		{
+			
+			_onRecordingFinish();
+			_stopRecording();
+			
+		}
+
+
         _nextPage();
     }
 
     private void onPreviousPage(UIButton p_button)
 	{
+		
+		if( m_isRecording )
+		{
+			
+			_onRecordingFinish();
+			_stopRecording();
+			
+		}
+
         _previousPage();
     }
 #endregion
@@ -661,6 +700,11 @@ public class BookRecordState : GameState
 			m_currentClip = l_localAudio.GetAudioClip(false, false, AudioType.WAV);
 			l_localAudio.Dispose();
 			GC.Collect();
+
+
+
+		}else{
+
 		}
 
 		if( null == m_currentClip )
@@ -902,14 +946,20 @@ public class BookRecordState : GameState
 		m_exitMessageButton.addClickCallback( onExitMessageButtonClicked );
 		m_exitMessageButton.active = false;
 
+
+		m_checkRecorded = m_bookPageCanvas.getView("RecordedCheck") as UIImage;
+
 //		_loadPage(0);
     }
 
 
     private void _nextPage()
     {
+
         int l_nextPageIndex = pageIndex + 1;
         m_gameController.game.StartCoroutine( _loadPage( l_nextPageIndex ) );
+
+		
     }
 
     private void _previousPage()
@@ -1012,4 +1062,6 @@ public class BookRecordState : GameState
 
 	private bool 		m_setMessage = false;
 	private bool 		m_isFinished = false;
+
+	private UIImage m_checkRecorded;
 }
