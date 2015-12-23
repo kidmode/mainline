@@ -1048,6 +1048,25 @@ public class KidMode
 
 		return true;
 	}
+
+	public static void showCreditCardView(string url)
+	{
+		Debug.Log ("@@@@@@@@@@@@1" + url);
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		Debug.Log ("@@@@@@@@@@@@2" + url);
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("showCreditCardWebview", url);
+		#endif
+	}
+
+	public static void dismissCreditCardView()
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
+		jc.CallStatic("disableCreditCardWebview");
+		#endif
+	}
+
 	
 }
 

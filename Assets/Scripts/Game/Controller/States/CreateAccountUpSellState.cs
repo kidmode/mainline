@@ -17,11 +17,11 @@ public class CreateAccountUpSellState : GameState
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
-
 		m_queue.reset();
 		m_firstUse = string.Empty.Equals (SessionHandler.getInstance ().token.getSecret ());
 		if(m_firstUse)
 		{
+
 			_setupScreen(m_gameController.getUI());
 		}
 		else
@@ -32,8 +32,11 @@ public class CreateAccountUpSellState : GameState
 				m_queue.add(new GetPlanDetailsRequest(_getPlanDetailsComplete));
 				m_queue.request();
 			}
-			else
+			else {
 				_setupScreen(p_gameController.getUI());
+			}
+
+
 		}
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.GET_PREMIUM_UI");
 	}
@@ -150,47 +153,49 @@ public class CreateAccountUpSellState : GameState
 			l_info.active = false;
 		}
 
-		m_cardNumber = m_payConfirmCanvas.getView("cardNumber") as UIInputField;
-		m_cardNumber.listener.onSelect += _onCardNumberSelect;
-		m_cardNumber.listener.onDeselect += _onCardNumberDeselect;
-		m_cardMonth = m_payConfirmCanvas.getView("cardExpiredMonth") as UIInputField;
-		m_cardMonth.listener.onSelect += _onCardMonthSelect;
-		m_cardMonth.listener.onDeselect += _onCardMonthDeselect;
-		m_cardYear = m_payConfirmCanvas.getView("cardExpiredYear") as UIInputField;
-		m_cardYear.listener.onSelect += _onCardYearSelect;
-		m_cardYear.listener.onDeselect += _onCardYearDeselect;
-		m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH );
-		m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR );
+		KidMode.showCreditCardView ("https://staging.zoodles.com/payments/try_premium?client_id=886&token=8f2c548a6bc8872694ba6edffadce98125d452db");
 
-		m_startFreeTrial = m_payConfirmCanvas.getView("purchaseButton") as UIButton;
-		m_startFreeTrial.addClickCallback(startFreeTrial);
-
-		m_monthComBox = m_payConfirmCanvas.getView ("monthChcekbox") as UIComboBox;
-		m_yearComBox = m_payConfirmCanvas.getView ("yearChcekbox") as UIComboBox;
-
-		List<object> l_monthDate = new List<object> ();
-		List<object> l_yearDate = new List<object> ();
-		l_monthDate.Add (new ComboBoxData("01",1));
-		l_monthDate.Add (new ComboBoxData("02",2));
-		l_monthDate.Add (new ComboBoxData("03",3));
-		l_monthDate.Add (new ComboBoxData("04",4));
-		l_monthDate.Add (new ComboBoxData("05",5));
-		l_monthDate.Add (new ComboBoxData("06",6));
-		l_monthDate.Add (new ComboBoxData("07",7));
-		l_monthDate.Add (new ComboBoxData("08",8));
-		l_monthDate.Add (new ComboBoxData("09",9));
-		l_monthDate.Add (new ComboBoxData("10",10));
-		l_monthDate.Add (new ComboBoxData("11",11));
-		l_monthDate.Add (new ComboBoxData("12",12));
-		m_monthComBox.setSwipeListDate (l_monthDate);
-		int l_nowYear = System.DateTime.Now.Year;
-		int l_year = 0;
-		for (int l_i=0; l_i<8; l_i++) 
-		{
-			l_year = l_nowYear + l_i;
-			l_yearDate.Add(new ComboBoxData(l_year.ToString(),l_year));
-		}
-		m_yearComBox.setSwipeListDate (l_yearDate);
+//		m_cardNumber = m_payConfirmCanvas.getView("cardNumber") as UIInputField;
+//		m_cardNumber.listener.onSelect += _onCardNumberSelect;
+//		m_cardNumber.listener.onDeselect += _onCardNumberDeselect;
+//		m_cardMonth = m_payConfirmCanvas.getView("cardExpiredMonth") as UIInputField;
+//		m_cardMonth.listener.onSelect += _onCardMonthSelect;
+//		m_cardMonth.listener.onDeselect += _onCardMonthDeselect;
+//		m_cardYear = m_payConfirmCanvas.getView("cardExpiredYear") as UIInputField;
+//		m_cardYear.listener.onSelect += _onCardYearSelect;
+//		m_cardYear.listener.onDeselect += _onCardYearDeselect;
+//		m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH );
+//		m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR );
+//
+//		m_startFreeTrial = m_payConfirmCanvas.getView("purchaseButton") as UIButton;
+//		m_startFreeTrial.addClickCallback(startFreeTrial);
+//
+//		m_monthComBox = m_payConfirmCanvas.getView ("monthChcekbox") as UIComboBox;
+//		m_yearComBox = m_payConfirmCanvas.getView ("yearChcekbox") as UIComboBox;
+//
+//		List<object> l_monthDate = new List<object> ();
+//		List<object> l_yearDate = new List<object> ();
+//		l_monthDate.Add (new ComboBoxData("01",1));
+//		l_monthDate.Add (new ComboBoxData("02",2));
+//		l_monthDate.Add (new ComboBoxData("03",3));
+//		l_monthDate.Add (new ComboBoxData("04",4));
+//		l_monthDate.Add (new ComboBoxData("05",5));
+//		l_monthDate.Add (new ComboBoxData("06",6));
+//		l_monthDate.Add (new ComboBoxData("07",7));
+//		l_monthDate.Add (new ComboBoxData("08",8));
+//		l_monthDate.Add (new ComboBoxData("09",9));
+//		l_monthDate.Add (new ComboBoxData("10",10));
+//		l_monthDate.Add (new ComboBoxData("11",11));
+//		l_monthDate.Add (new ComboBoxData("12",12));
+//		m_monthComBox.setSwipeListDate (l_monthDate);
+//		int l_nowYear = System.DateTime.Now.Year;
+//		int l_year = 0;
+//		for (int l_i=0; l_i<8; l_i++) 
+//		{
+//			l_year = l_nowYear + l_i;
+//			l_yearDate.Add(new ComboBoxData(l_year.ToString(),l_year));
+//		}
+//		m_yearComBox.setSwipeListDate (l_yearDate);
 	}
 
 	private Hashtable _getPlanDetailByName(ArrayList p_plans, string p_planName)
@@ -220,7 +225,9 @@ public class CreateAccountUpSellState : GameState
 
 	private void goBack(UIButton p_button)
 	{
+		KidMode.dismissCreditCardView();
 		m_subState = SubState.GO_REFUSE;
+
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.BACK_FROM_PREMIUM_UI");
 	}
 
