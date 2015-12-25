@@ -45,7 +45,7 @@ public class BookRecordState : GameState
 		m_isRunning = false;
 		m_length = 0;
 		m_runningTime = 0;
-		m_recordedCount = getRecordedCount();
+//		m_recordedCount = getRecordedCount();
 //		m_recordedCount = 0;
 		m_uploadedCount = 0;
 		m_isFinished = false;
@@ -111,7 +111,7 @@ public class BookRecordState : GameState
 		if( m_setMessage )
 		{
 			m_messageTitleLabel.text = Localization.getString(Localization.TXT_STATE_44_RESULT);
-			m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_PROGRESS) + m_uploadedCount + "/" + m_recordedCount;
+			m_messageContentLabel.text = Localization.getString(Localization.TXT_STATE_44_PROGRESS) + m_uploadedCount + "/" + getRecordedCount();
 			
 			m_setMessage = false;
 		}
