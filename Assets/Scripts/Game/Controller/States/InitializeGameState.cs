@@ -77,6 +77,7 @@ public class InitializeGameState : GameState
 				{
 					p_gameController.changeState(ZoodleState.SET_UP_ACCOUNT);
 				}
+
 			}
 
 		}

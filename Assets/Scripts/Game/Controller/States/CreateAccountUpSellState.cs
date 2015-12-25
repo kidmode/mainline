@@ -153,7 +153,10 @@ public class CreateAccountUpSellState : GameState
 			l_info.active = false;
 		}
 
-		KidMode.showCreditCardView ("https://staging.zoodles.com/payments/try_premium?client_id=886&token=8f2c548a6bc8872694ba6edffadce98125d452db");
+//		KidMode.showCreditCardView ("https://staging.zoodles.com/payments/try_premium?client_id=886&token=8f2c548a6bc8872694ba6edffadce98125d452db");
+
+		KidMode.showCreditCardView ("https://staging.zoodles.com/payments/try_premium?client_id=" + SessionHandler.getInstance().clientId +
+		                            "&token=" + SessionHandler.getInstance().token.getSecret());
 
 //		m_cardNumber = m_payConfirmCanvas.getView("cardNumber") as UIInputField;
 //		m_cardNumber.listener.onSelect += _onCardNumberSelect;

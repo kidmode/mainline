@@ -311,6 +311,9 @@ public class ClientIdRequest : RequestQueue.Request
 //		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "HTC";
 //		m_params [ZoodlesConstants.PARAM_MODEL] = "M8";
 		//end
+
+//		m_params [ZoodlesConstants.PARAM_MANUFACTURER] = "SAMSUNG sdfsdf";
+//		m_params [ZoodlesConstants.PARAM_MODEL] = "NOTE5WTFWTF FS FDSD F";
 		#endif
 
 		m_method = CallMethod.POST;
