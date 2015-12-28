@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.IO;
 
@@ -13,8 +14,18 @@ using System.IO;
 //=============================================================================
 public class DebugController : MonoBehaviour {
 
+	public Text txtStatus;
+
 	//The panel to show the controls such as buttons and texts
 	public GameObject debugControlsPanel;
+
+	public static DebugController Instance;
+
+	void Awake(){
+
+		Instance = this;
+
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +36,7 @@ public class DebugController : MonoBehaviour {
 
 		if(debugControlsPanel != null){
 
-			debugControlsPanel.SetActive(false);
+//			debugControlsPanel.SetActive(false);
 
 
 		}
@@ -52,6 +63,10 @@ public class DebugController : MonoBehaviour {
 	}
 
 
+	public void showStatus(string statusText){
 
+		txtStatus.text = statusText;
+
+	}
 
 }

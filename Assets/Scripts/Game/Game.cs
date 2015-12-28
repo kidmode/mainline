@@ -26,6 +26,9 @@ public class Game : MonoBehaviour
 	//Kevin
 	public static event Action OnVideoClosed;
 
+	public static event Action OnPaymentSuccess;
+
+
 
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
@@ -825,7 +828,24 @@ public class Game : MonoBehaviour
 
 		#endif
 	}
-	
+
+
+	public void onPaymentSuccess(string test){
+
+		if(OnPaymentSuccess != null)
+			OnPaymentSuccess();
+
+		DebugController.Instance.showStatus("Success " );
+		//
+
+	}
+
+	public void onPaymentError(string test){
+		
+		DebugController.Instance.showStatus("Error " );
+		//
+		
+	}
 	//end
 
 	private PwdStore m_pwdStore;

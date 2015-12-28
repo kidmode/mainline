@@ -38,6 +38,10 @@ public class CreateAccountUpSellState : GameState
 
 
 		}
+
+		//Set events
+		Game.OnPaymentSuccess += OnGameScriptPaymentSuccess;
+
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.GET_PREMIUM_UI");
 	}
 	
@@ -113,6 +117,9 @@ public class CreateAccountUpSellState : GameState
 	{
 		p_gameController.getUI().removeScreenImmediately(UIScreen.LOADING_SPINNER_ELEPHANT);
 		p_gameController.getUI().removeScreenImmediately(m_payConfirmCanvas);
+
+		//remove event call backs
+		Game.OnPaymentSuccess -= OnGameScriptPaymentSuccess;
 
 		base.exit(p_gameController);
 	}
@@ -280,6 +287,25 @@ public class CreateAccountUpSellState : GameState
 			SwrveComponent.Instance.SDK.NamedEvent("FreeTrialPaymentFalure");
 			setErrorMessage(m_gameController, Localization.getString(Localization.TXT_STATE_39_INVAILD), Localization.getString(Localization.TXT_STATE_39_CREDIT));
 		}
+	}
+
+	private void OnGameScriptPaymentSuccess(){
+
+		SessionHandler.getInstance ().token.setTry(true);
+		SessionHandler.getInstance ().token.setCurrent(true);
+		SessionHandler.getInstance ().token.setPremium(false);
+
+		KidMode.dismissCreditCardView();
+		
+		//Payment done and First started Trial account
+		//Now sets local playerprefs
+		TrialTimeController.Instance.firstStartTrialTime();
+		
+		
+		
+		m_subState = SubState.GO_CONGRATS;
+		SwrveComponent.Instance.SDK.NamedEvent("FreeTrialPaymentSucess");
+
 	}
 
 	private void _getPlanDetailsComplete(HttpsWWW p_response)

@@ -1956,7 +1956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1058566955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1968,6 +1968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e29bf6488374605819c54c8ed37429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  txtStatus: {fileID: 2019171641}
   debugControlsPanel: {fileID: 1058566954}
 --- !u!114 &1058566956
 MonoBehaviour:
@@ -2245,9 +2246,9 @@ RectTransform:
   - {fileID: 2019171640}
   m_Father: {fileID: 1058566959}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 184, y: 173}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 104.400002, y: -34.3999939}
   m_SizeDelta: {x: 160, y: 31}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1267598211
