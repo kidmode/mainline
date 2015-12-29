@@ -36,7 +36,7 @@ public class DebugController : MonoBehaviour {
 
 		if(debugControlsPanel != null){
 
-//			debugControlsPanel.SetActive(false);
+			debugControlsPanel.SetActive(false);
 
 
 		}
