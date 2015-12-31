@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -176,7 +178,12 @@ public class GameActivityCanvas : UICanvas
 				l_appImage.active = false;
 				l_appName.gameObject.transform.parent = p_element.gameObject.transform;
 				l_appName.active = true;
-				l_appName.text = l_game.webViewData.webData.name;
+
+
+			
+
+
+				l_appName.text =  l_game.webViewData.webData.name;
 				l_numberLabel.active = false;
 				return;
 			}
@@ -210,7 +217,62 @@ public class GameActivityCanvas : UICanvas
 				}
 
 				l_appName.active = true;
-				l_appName.text = StringManipulator.getShortenOneLineAppName( l_game.webViewData.webData.name );
+
+
+				//Check for Chinese Characters    ===== = = = == = = = = = = = ==
+				string[] splitString = l_game.webViewData.webData.name.Split(';');
+
+
+				if(splitString.Length > 2 && l_game.webViewData.webData.name.Length > 8){
+
+					for (int i = 0; i < splitString.Length; i++) {
+						
+						//				splitString[i] = "\\u" + splitString[i].Substring(3);
+						
+						splitString[i] = splitString[i].Replace("&#x", "\\u");
+						
+					}
+
+					string displayName ="";
+
+
+					Debug.LogError(" splitString   coutn ===== = == = = = = = " + splitString.Length);
+
+					for (int i = 0; i < splitString.Length; i++) {
+
+						Debug.LogError(" splitString  index " + i );
+						
+						string currentString = splitString[i];
+
+						if(currentString.Length > 3){
+
+							Debug.LogError(" splitString  1" );
+							
+							int p = int.Parse(currentString.Substring(2), System.Globalization.NumberStyles.HexNumber);
+
+							Debug.LogError(" splitString  2 "  );
+							
+		//					splitString[i] = ((char)p).ToString();
+
+							displayName = displayName + ((char)p).ToString();
+
+							Debug.LogError(" splitString  3 "  );
+
+						}
+						
+					}
+
+
+	//				Debug.LogError(" splitString  OKAY "  );
+					//==== = = = === = = = = == = = = = =  = == = =  ==
+
+					l_appName.text = displayName;
+
+				}else{
+
+					l_appName.text = l_game.webViewData.webData.name;
+
+				}
 
 				if( l_info.icon == null )
 				{
@@ -282,6 +344,22 @@ public class GameActivityCanvas : UICanvas
 			l_panel.active = false;
 		}
 	}
+
+
+
+//	private string BytesToString(byte[] Bytes)
+//	{
+//		MemoryStream MS = new MemoryStream(Bytes);
+//		StreamReader SR = new StreamReader(MS);
+//		string S = SR.ReadToEnd();
+//		SR.Close();
+//		return S;
+//	}
+//	
+//	private string ToUnicode(string S)
+//	{
+//		return BytesToString(new UnicodeEncoding().GetBytes(S));
+//	}
 
 	private void _setupList()
 	{
