@@ -59,65 +59,111 @@ public class BuildPlayer : MonoBehaviour
 	#endregion
 	
 	#region BuildFunctions
-
-	//=============================================
-	//build Function
-	//Branch string will be used for naming of the build
-	//keystoreName will be used to get the actual keystore
-	//keystorePass: password for the keystore
-	//keyAlias: alias used
-	//keyAliasPass: password for the alias
-	//buildOptions: options for the build pipeline
-	//=============================================
+	
 	private static void  build(string branch, string keystoreName, string keystorePass, string keyAlias, string keyAliasPass, BuildOptions buildOptions )
-     {
- 		//=============================================
- 		//=============================================
- 		//Player settings
- 		//=============================================
- 		
-//         PlayerSettings.productName = nodeChineseName.InnerText;//"Slots in Time";
-// 		
-//         PlayerSettings.bundleIdentifier = bundleID;
-// 		
-//         PlayerSettings.bundleVersion = Config.version;
-//         PlayerSettings.Android.bundleVersionCode = Config.versionCode;
-// 		
-
+	{
+		//=============================================
+		//=============================================
+		//Player settings
+		//=============================================
+		
+		//         PlayerSettings.productName = nodeChineseName.InnerText;//"Slots in Time";
+		// 		
+		//         PlayerSettings.bundleIdentifier = bundleID;
+		// 		
+		//         PlayerSettings.bundleVersion = Config.version;
+		//         PlayerSettings.Android.bundleVersionCode = Config.versionCode;
+		// 		
+		
 		//Setup Keystore and passwords
-
+		
 		PlayerSettings.Android.keystoreName = keystoreName + ".keystore";
 		PlayerSettings.Android.keystorePass = keystorePass;
 		
 		PlayerSettings.Android.keyaliasName = keyAlias;
 		PlayerSettings.Android.keyaliasPass = keyAliasPass;
-
-
+		
+		
 		//Start prompt for build path
 		String path = EditorUtility.SaveFolderPanel("Choose Location of Built Game", "", "");
-
+		
 		Debug.Log("  path " + path);
-
+		
 		if(path == ""){
-
+			
 			Debug.Log(" no path");
 			return;
-
+			
 		}
-
+		
+		
+		//======================================== ========== ========================================
+		//Get Environment Info
+		//======================================== ========== ========================================
+		string buildSettingEnvironmentString = "";
+		
+		TextAsset l_asset = Resources.Load( "Data/environment" ) as TextAsset;
+		string l_text = (l_asset).text;			
+		Resources.UnloadAsset(l_asset);
+		Hashtable l_config = MiniJSON.MiniJSON.jsonDecode(l_text) as Hashtable;
+		string l_active;
+		
+		
+		l_active = l_config[GCS.Environment.KEY_ACTIVE_ENVIRONMENT] as string;
+		
+		if(l_active == "gcs_prod" ){
+			
+			buildSettingEnvironmentString = "prod";
+			
+		}else if(l_active == "gcs_staging" ){
+			
+			buildSettingEnvironmentString = "staging";
+			
+		}
+		
+		Debug.Log("  l_active environemnt " + l_active);
+		
+		
+		
+		//======================================== ========== ========================================
+		
+		
+		//======================================== ========== ========================================
+		//Get more Build Settings
+		//======================================== ========== ========================================
+		//		PlayerSettings.Android.bundleVersionCode
+		
+		//		PlayerSettin
+		
+		//======================================== ========== ========================================
+		
+		
+		//"yyyy_MM_dd_HH_mm"
+		
+		
+		
 		//Set the file name of the build
-		string targetFileName = "KidMode" + "_"  + branch + "_" + System.DateTime.Now.ToString( "yyyyMMddHHmm" ) + ".apk";
-
+		string targetFileName = "KidMode" + "_" + System.DateTime.Now.ToString( "mm_HH_dd_MM_yyyy" ) + "_" + 
+			buildSettingEnvironmentString + "_u467_v" + PlayerSettings.bundleVersion + "(" +
+				PlayerSettings.Android.bundleVersionCode + ")" + "_" + branch + ".apk";
+		
+		
+		
+		Debug.Log("  targetFileName " + targetFileName);
+		
+//		return;
+		
+		
 		//Get the string array of enabled build scenes
 		string[] scenesArray = getEnabledBuildScenes();
-
+		
 		Debug.Log("  scenesArray " + scenesArray[0]);
-
-
+		
+		
 		//Start Building the player
 		BuildPipeline.BuildPlayer( scenesArray , path + "/" + targetFileName , BuildTarget.Android , buildOptions );
-
-     }
+		
+	}
 
 	//Get all the scenes that are enabled in the build settings
 	private static string[] getEnabledBuildScenes(){
