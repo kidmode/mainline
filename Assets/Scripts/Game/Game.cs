@@ -454,6 +454,8 @@ public class Game : MonoBehaviour
 			m_gameController.update(l_time);
 			SoundManager.getInstance().updateSystemSound();
 		}
+	
+
 
 	}
 	

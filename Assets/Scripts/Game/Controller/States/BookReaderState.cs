@@ -56,6 +56,8 @@ public class BookReaderState : GameState {
 		l_queue.request(RequestType.RUSH);
 
 		GAUtil.logScreen("BookReaderScreen");
+
+		Debug.Log("  getRecordedCount " + getRecordedCount());
 	}
 	
 	public override void update( GameController p_gameController, int p_time )
@@ -432,6 +434,24 @@ public class BookReaderState : GameState {
 		m_recordToggle.active 	= false;
 		m_playToggle.active 	= false;
 		m_stopToggle.active 	= false;
+
+
+		//Check is the book recorded
+
+		if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + currentPage.id + ".wav"))
+		{
+
+			m_playToggle.active 	= true;
+			m_stopToggle.active 	= true;
+
+			m_playToggle.addValueChangedCallback(onPlayClicked);
+
+			m_stopToggle.addValueChangedCallback(onStopClicked);
+
+		}
+
+
+
 		
 		m_statusLabel = m_bookReaderCanvas.getView("statusLabel") as UILabel;
 		
@@ -471,6 +491,46 @@ public class BookReaderState : GameState {
 
 		if (m_audioSource != null)
 			m_audioSource.pitch = 1.0f;
+	}
+
+
+	private void onPlayClicked(UIToggle p_toggle, bool p_isOn )
+	{
+		if(p_isOn)
+		{			
+
+			_stopPageAudio();
+
+			m_gameController.game.StartCoroutine( _playPageAudio( pageIndex ) );
+		}
+	}
+
+	private void onStopClicked(UIToggle p_toggle, bool p_isOn)
+	{
+		if(p_isOn)
+		{
+			_stopPageAudio();
+
+		}
+	}
+
+	private int getRecordedCount(){
+		
+		int recordedCount = 0;
+		
+		for( int i = 0; i < m_book.pageList.Count; i++ )
+		{
+			if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav"))
+			{
+				
+				recordedCount++;
+				
+			}
+			
+		}
+		
+		return recordedCount;
+		
 	}
 
 	private Book        m_book;
