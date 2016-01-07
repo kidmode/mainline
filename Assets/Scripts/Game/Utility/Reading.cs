@@ -62,6 +62,10 @@ public class Reading : System.Object
         foreach (Hashtable t in p_tempPageList)
         {
             ReadingPage l_page = new ReadingPage(t);
+
+			Debug.LogError("  l_page " + l_page.playbackUrl);
+
+
             pageList.Add( l_page );
         }
     }

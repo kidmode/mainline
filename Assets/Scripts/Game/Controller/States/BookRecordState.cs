@@ -293,6 +293,10 @@ public class BookRecordState : GameState
 //
 //							l_upload.SendAsync(_onUploadComplete);
 
+							int bookID =m_book.id;
+
+
+
 							FileStream fs = new FileStream(Application.persistentDataPath + "//" + m_book.id + "//" + m_book.pageList[i].id + ".wav", FileMode.Open);
 							byte[] l_bytes = new byte[fs.Length];
 							fs.Read(l_bytes,0,(int)fs.Length);

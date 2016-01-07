@@ -21,6 +21,8 @@ public class OverviewReadingState : GameState
 		
 		_setupScreen( p_gameController );
 		_setupElment();
+
+		loadBookList();
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -988,6 +990,15 @@ public class OverviewReadingState : GameState
 			foreach (object o in l_data)
 			{
 				BookReading l_bookReading = new BookReading(o as Hashtable);
+
+
+				Reading read = new Reading(o as Hashtable);
+
+				Debug.LogError("   ++++++   read.bookId " + read.bookId);
+
+				Debug.LogError("   ++++++   read.created " + read.createdAt);
+
+
 				
 				bool l_isAudio = true;
 				
