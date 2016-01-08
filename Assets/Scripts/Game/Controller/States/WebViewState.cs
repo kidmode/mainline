@@ -42,9 +42,17 @@ public class WebViewState : GameState
 
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		
+		string youtubeId = "";
+		
+		if(SessionHandler.getInstance().currentContent.youtubeId != null)
+			youtubeId = SessionHandler.getInstance().currentContent.youtubeId;
+		
+		string datas = l_url + "," + youtubeId;
+		
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");
 		
-		jc.CallStatic("startPlayYoutube", l_url);
+		jc.CallStatic("startPlayYoutube", datas);
+
 
 		#endif
 
