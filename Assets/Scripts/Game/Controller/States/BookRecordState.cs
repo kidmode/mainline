@@ -301,7 +301,7 @@ public class BookRecordState : GameState
 							byte[] l_bytes = new byte[fs.Length];
 							fs.Read(l_bytes,0,(int)fs.Length);
 							
-							m_request.add ( new UploadAudioRequest(l_slug, "0", l_bytes, onUploadFinished));
+							m_request.add ( new UploadAudioRequest(l_slug, "10", l_bytes, onUploadFinished));
 						}
 
 						m_request.request (RequestType.RUSH);

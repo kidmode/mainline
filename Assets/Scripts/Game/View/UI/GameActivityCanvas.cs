@@ -311,9 +311,19 @@ public class GameActivityCanvas : UICanvas
 			RectTransform l_transform = l_appName.gameObject.GetComponent<RectTransform>();
 //			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
 //			l_transform.localScale = new Vector3(l_scale, l_scale, 1);
-			
+
+
+//			Debug.LogError("   =sdfsa df=sdf asdf sd fds f dsf sd f sdf sd fsd f  " + l_info.appIcon);
+
+
+
 			if( l_info.appIcon == null )
 			{
+
+				Debug.LogError(" appIcon = null");
+
+				l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
+
 				l_appImage.setTexture( m_emptyTexture );
 				l_rawImage.active = false;
 			}

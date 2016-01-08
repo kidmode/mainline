@@ -22,7 +22,7 @@ public class OverviewReadingState : GameState
 		_setupScreen( p_gameController );
 		_setupElment();
 
-		loadBookList();
+//		loadBookList();
 	}
 	
 	public override void update (GameController p_gameController, int p_time)

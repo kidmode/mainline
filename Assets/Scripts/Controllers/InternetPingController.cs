@@ -66,11 +66,11 @@ public class InternetPingController : MonoBehaviour {
 		WWW l_www = new WWW (l_url);
 		yield return l_www;
 
-		Debug.LogError(" l_www " + l_www.error);
+//		Debug.LogError(" l_www " + l_www.error);
 
 		if(l_www.error == null){
 
-			stateURL = StateURL.OKAY;
+
 
 			if(tempPrevState == StateURL.NOTREACHABLE && stateURL != StateURL.OKAY){
 
@@ -81,6 +81,8 @@ public class InternetPingController : MonoBehaviour {
 				}
 
 			}
+
+			stateURL = StateURL.OKAY;
 
 		}else{
 

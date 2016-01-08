@@ -9,7 +9,7 @@ public class ImageCache : Object
 	{
 		if (null == p_file)
 			return null;
-		Debug.Log ("@@@@@@@@@@@ Application.persistentDataPath = " + Application.persistentDataPath);
+//		Debug.Log ("@@@@@@@@@@@ Application.persistentDataPath = " + Application.persistentDataPath);
 		string file = ImageCache.getCacheImagePath(p_file);
 		if (file == null)
 			return null;

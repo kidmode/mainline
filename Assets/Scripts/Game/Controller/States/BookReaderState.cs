@@ -290,6 +290,16 @@ public class BookReaderState : GameState {
 		_loadCurrentPageContent();
 		m_canSetImage = true;
 		_setPageContent ();
+
+		//Check is the book recorded
+		
+//		string playURL = RecordingDownloadController.Instance.getPlaybackURL(m_book.id, pageIndex, currentPage.id);
+//		
+//		
+//		RequestQueue newRequestQ = new RequestQueue ();
+//		newRequestQ.add ( new AudioRequest(playURL, m_book.id, currentPage.id) );
+//		newRequestQ.request (RequestType.RUSH);
+
 	}
 
 	private void setInputEnable( bool p_enable )
@@ -436,7 +446,7 @@ public class BookReaderState : GameState {
 		m_stopToggle.active 	= false;
 
 
-		//Check is the book recorded
+
 
 		if(File.Exists(Application.persistentDataPath + "//" + m_book.id + "//" + currentPage.id + ".wav"))
 		{
@@ -447,6 +457,10 @@ public class BookReaderState : GameState {
 			m_playToggle.addValueChangedCallback(onPlayClicked);
 
 			m_stopToggle.addValueChangedCallback(onStopClicked);
+
+		}else{
+
+
 
 		}
 

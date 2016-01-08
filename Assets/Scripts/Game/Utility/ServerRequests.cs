@@ -1059,6 +1059,50 @@ public class BookListRequest : RequestQueue.Request
 	private bool m_topRequest = false;
 }
 
+
+public class GetBookReadingRequest : RequestQueue.Request
+{
+
+	private int bookID; 
+	public GetBookReadingRequest( int bookID, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+//		m_topRequest = p_topRequest;
+
+		this.bookID = bookID;
+	}
+	
+	protected override void init()
+	{
+		//		m_call = ZoodlesConstants.REST_BOOKS_URL + "/books_for_kid"; 
+
+		m_call = "/api/kids/" + SessionHandler.getInstance().currentKid.id + "/readings/show_book_reading";
+
+		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
+		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+
+		m_params[ZoodlesConstants.PARAM_BOOK_ID] = bookID;
+		
+
+		m_method = CallMethod.GET;
+
+		handler += _requestComplete;
+
+	}
+
+
+	private void _requestComplete(HttpsWWW p_response)
+	{
+
+		if(p_response.error == null){
+
+		}
+
+	}
+
+
+//	private bool m_topRequest = false;
+}
+
 // Drawing list request
 public class DrawingListRequest : RequestQueue.Request
 {
@@ -1852,6 +1896,8 @@ public class CreateReadingsRequest : RequestQueue.Request
 		m_method = CallMethod.POST;
 	}
 }
+
+
 
 public class GetReadingsRequest : RequestQueue.Request
 {

@@ -179,6 +179,8 @@ public class RegionAppCanvas: UICanvas
 
 		if(isInCurrentDrawGroup(p_index)){
 
+//			Debug.LogError("  ****** ** * * * ** * * * ** * * * *** * * * ** * * * * * * *    Is in current draw group ");
+
 			l_appName.gameObject.SetActive(true);
 			l_rawImage.gameObject.SetActive(true);
 			l_appImage.gameObject.SetActive(true);
@@ -214,10 +216,15 @@ public class RegionAppCanvas: UICanvas
 			float l_scale = Mathf.Min(l_transform.sizeDelta.x / l_textSize.x, 1.0f);
 			l_transform.localScale = new Vector3(l_scale, l_scale, 1);
 
+//
+//			Debug.LogError("  ****** ** * * * ** * * * ** * * * *** * * * ** * * * * * * *    l_info.appIcon " + l_info.appIcon);
+//
+//
+//			l_info.appIcon = ImageCache.getCacheImage(l_info.appName + ".png");
 
 			if( l_info.appIcon == null )
 			{
-				l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
+//				l_info.appIcon = ImageCache.getCacheImage(l_info.packageName + ".png");
 				if(l_info.appIcon == null)
 					l_appImage.setTexture( m_emptyTexture );
 				else {

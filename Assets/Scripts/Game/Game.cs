@@ -265,6 +265,9 @@ public class Game : MonoBehaviour
 
 	public void onActivityRestart() {
 		KidMode.onActivityRestart ();
+
+//		KidMode.getAllSystemApps();
+		//
 	}
 
 	public void closeYoutube() {
