@@ -160,7 +160,7 @@ public class SettingChildLockState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
-		//Kevin
+		//Kevin  ==== pin ux chagne
 		m_currentPinDisplay = m_childLockCanvas.getView("txtChildCodeDisplay") as UILabel;
 
 		m_saveNewPinButton = m_childLockCanvas.getView("saveButton") as UIButton; 
@@ -168,6 +168,34 @@ public class SettingChildLockState : GameState
 		InputFieldNewChildCode = m_childLockCanvas.getView("InputFieldNewChildCode") as UIInputField;
 
 		m_saveNewPinButton.addClickCallback (onSaveButtonClicked);
+
+
+		m_childLockChangeOKay = m_childLockCanvas.getView("dialogChildLockChangeOK") as UIImage;
+
+		m_childLockChangeOKay.active = false;
+
+		m_childLockChangeError = m_childLockCanvas.getView("dialogChildLockChangeError") as UIImage;
+
+		m_childLockChangeError.active = false;
+
+
+
+		m_childLockChangeHelp = m_childLockCanvas.getView("dialogChildLockChangeHelp") as UIImage;
+
+		UILabel dialogChildLockChangeHelpTitleLabel = m_childLockCanvas.getView("dialogChildLockChangeHelpTitle") as UILabel;
+
+		dialogChildLockChangeHelpTitleLabel.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+		
+		UILabel dialogChildLockChangeHelpTxt1Label = m_childLockCanvas.getView("dialogChildLockChangeHelpTxt1") as UILabel;
+		
+		dialogChildLockChangeHelpTxt1Label.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+
+//		UIButton dialogChildLockChangeHelpCloseMark = m_childLockCanvas.getView("dialogChildLockChangeHelpCloseMark") as UIButton;
+//
+//		dialogChildLockChangeHelpCloseMark.addClickCallback(closeHelpDialog);
+
+		m_childLockChangeHelp.active = false;
+
 
 		//honda 
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
@@ -595,11 +623,8 @@ public class SettingChildLockState : GameState
 
 		if( InputFieldNewChildCode.text.Length != 4)
 		{
-			m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,true);
-			UILabel l_text = m_childLockHelpCanvas.getView ("dialogContent").getView("Text") as UILabel;
-			l_text.text = Localization.getString(Localization.TXT_STATE_31_PIN);
-			m_childLockHelpCanvas.setOriginalPosition ();
-			m_closeButton.addClickCallback (closeHelpDialog);
+			m_childLockChangeHelp.active = true;
+
 			return ;
 		}
 
@@ -638,11 +663,28 @@ public class SettingChildLockState : GameState
 	private void saveNewChildLockComplete(HttpsWWW p_response)
 	{
 
-		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		if(p_response.error == null){
 
-		m_settingCache.verifyBirth = false;
+			m_currentPinDisplay.text = m_settingCache.childLockPassword;
 
-		SessionHandler.getInstance().resetSetting ();
+			InputFieldNewChildCode.text = "";
+
+			m_childLockChangeOKay.active = true;
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_settingCache.verifyBirth = false;
+
+			SessionHandler.getInstance().resetSetting ();
+
+		}else{
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_childLockChangeError.active = true;
+
+		}
+
+
 
 	}
 
@@ -798,5 +840,9 @@ public class SettingChildLockState : GameState
 	private UILabel 	m_currentPinDisplay;
 	private UIButton 	m_saveNewPinButton;
 	private UIInputField InputFieldNewChildCode;
+
+	private UIImage 	m_childLockChangeOKay;
+	private UIImage 	m_childLockChangeError;
+	private UIImage 	m_childLockChangeHelp; // when telling the user we only accept 4 pins
 
 }
