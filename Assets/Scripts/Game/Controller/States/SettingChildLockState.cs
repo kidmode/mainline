@@ -182,13 +182,13 @@ public class SettingChildLockState : GameState
 
 		m_childLockChangeHelp = m_childLockCanvas.getView("dialogChildLockChangeHelp") as UIImage;
 
-		UILabel dialogChildLockChangeHelpTitleLabel = m_childLockCanvas.getView("dialogChildLockChangeHelpTitle") as UILabel;
-
-		dialogChildLockChangeHelpTitleLabel.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
-		
-		UILabel dialogChildLockChangeHelpTxt1Label = m_childLockCanvas.getView("dialogChildLockChangeHelpTxt1") as UILabel;
-		
-		dialogChildLockChangeHelpTxt1Label.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+//		UILabel dialogChildLockChangeHelpTitleLabel = m_childLockCanvas.getView("dialogChildLockChangeHelpTitle") as UILabel;
+//
+//		dialogChildLockChangeHelpTitleLabel.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+//		
+//		UILabel dialogChildLockChangeHelpTxt1Label = m_childLockCanvas.getView("dialogChildLockChangeHelpTxt1") as UILabel;
+//		
+//		dialogChildLockChangeHelpTxt1Label.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
 
 //		UIButton dialogChildLockChangeHelpCloseMark = m_childLockCanvas.getView("dialogChildLockChangeHelpCloseMark") as UIButton;
 //
