@@ -94,6 +94,8 @@ public class SettingChildLockState : GameState
 
 	public void updateSetting()
 	{
+
+//		return;
 		//update childLock
 		m_requestQueue.reset ();
 		if(m_settingCache.childLockSwitch && !m_settingCache.verifyBirth)
@@ -158,8 +160,14 @@ public class SettingChildLockState : GameState
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
-
+		//Kevin
 		m_currentPinDisplay = m_childLockCanvas.getView("txtChildCodeDisplay") as UILabel;
+
+		m_saveNewPinButton = m_childLockCanvas.getView("saveButton") as UIButton; 
+
+		InputFieldNewChildCode = m_childLockCanvas.getView("InputFieldNewChildCode") as UIInputField;
+
+		m_saveNewPinButton.addClickCallback (onSaveButtonClicked);
 
 		//honda 
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
@@ -282,6 +290,9 @@ public class SettingChildLockState : GameState
 
 	private bool checkPin()
 	{
+
+		return true;
+
 		if(SessionHandler.getInstance().settingCache.childLockSwitch && !SessionHandler.getInstance().settingCache.verifyBirth && m_pinInputField.text.Length != 4)
 		{
 			m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,true);
@@ -578,6 +589,63 @@ public class SettingChildLockState : GameState
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 	}
 
+
+	private void onSaveButtonClicked(UIButton p_button){
+
+
+		if( InputFieldNewChildCode.text.Length != 4)
+		{
+			m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,true);
+			UILabel l_text = m_childLockHelpCanvas.getView ("dialogContent").getView("Text") as UILabel;
+			l_text.text = Localization.getString(Localization.TXT_STATE_31_PIN);
+			m_childLockHelpCanvas.setOriginalPosition ();
+			m_closeButton.addClickCallback (closeHelpDialog);
+			return ;
+		}
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 6);
+
+		//update childLock
+		m_requestQueue.reset ();
+
+		m_settingCache.childLockPassword = InputFieldNewChildCode.text;
+
+		m_requestQueue.add(new EnableLockRequest(m_settingCache.childLockPassword, saveNewChildLockComplete));
+		m_requestQueue.add(new UpdateSettingRequest("true"));
+
+		m_requestQueue.request (RequestType.SEQUENCE);
+
+		//SessionHandler.getInstance().resetSetting ();
+
+		//update notifucation
+//		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
+//		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum));
+//		m_requestQueue.request (RequestType.SEQUENCE);
+//		//update device option
+//		SessionHandler.getInstance().resetSetting ();
+//		Debug.Log("SettingChildLock set volume data from setting cache to setting cache");
+//		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
+//		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
+//		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;
+//		PlayerPrefs.SetInt ("master_volume",SessionHandler.getInstance ().masterVolum);
+//		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
+//		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
+//		PlayerPrefs.Save ();
+
+
+	}
+
+	private void saveNewChildLockComplete(HttpsWWW p_response)
+	{
+
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		m_settingCache.verifyBirth = false;
+
+		SessionHandler.getInstance().resetSetting ();
+
+	}
+
 	private void onCloseMenu(UIButton p_button)
 	{
 		if(canMoveLeftMenu)
@@ -725,5 +793,10 @@ public class SettingChildLockState : GameState
 
 	private UIToggle 	m_lockSwitchButton;
 	private bool 		canMoveLeftMenu = true;
+
+	//New UX changes for pin
 	private UILabel 	m_currentPinDisplay;
+	private UIButton 	m_saveNewPinButton;
+	private UIInputField InputFieldNewChildCode;
+
 }
