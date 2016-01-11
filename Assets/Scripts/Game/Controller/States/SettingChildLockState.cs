@@ -138,6 +138,9 @@ public class SettingChildLockState : GameState
 	//---------------- Private Implementation ----------------------
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
 		m_cancelLockConfirmCanvas = p_uiManager.createScreen( UIScreen.CANCEL_CHILD_LOCK, true, 6 ) as CancelLockConfirmCanvas;
 		m_childLockHelpCanvas =  p_uiManager.createScreen( UIScreen.CHILD_LOCK_HELP, true, 5 ) as ChildLockHelpCanvas;
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
@@ -154,6 +157,9 @@ public class SettingChildLockState : GameState
 		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
+
+
+		m_currentPinDisplay = m_childLockCanvas.getView("txtChildCodeDisplay") as UILabel;
 
 		//honda 
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
@@ -201,8 +207,12 @@ public class SettingChildLockState : GameState
 			else
 			{
 				m_verifyBirth.isOn = false;
-				if(null != m_settingCache.childLockPassword && !string.Empty.Equals(m_settingCache.childLockPassword))
-					m_pinInputField.text = m_settingCache.childLockPassword;
+				if(null != m_settingCache.childLockPassword && !string.Empty.Equals(m_settingCache.childLockPassword)){
+
+					m_currentPinDisplay.text = m_settingCache.childLockPassword;
+//					m_pinInputField.text = m_settingCache.childLockPassword;
+
+				}
 			}
 		}
 		else
@@ -218,13 +228,20 @@ public class SettingChildLockState : GameState
 			
 			if(SessionHandler.getInstance().verifyBirth)
 			{
+
+				m_currentPinDisplay.text = SessionHandler.getInstance().pin.ToString();
+
 				m_verifyBirth.isOn = true;
 			}
 			else
 			{
 				m_verifyBirth.isOn = false;
-				if(!string.Empty.Equals(SessionHandler.getInstance().childLockPassword))
-					m_pinInputField.text = SessionHandler.getInstance().childLockPassword;
+				if(!string.Empty.Equals(SessionHandler.getInstance().childLockPassword)){
+
+					m_currentPinDisplay.text = SessionHandler.getInstance().childLockPassword;
+//					m_pinInputField.text = SessionHandler.getInstance().childLockPassword;
+
+				}
 			}
 		}
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
@@ -708,4 +725,5 @@ public class SettingChildLockState : GameState
 
 	private UIToggle 	m_lockSwitchButton;
 	private bool 		canMoveLeftMenu = true;
+	private UILabel 	m_currentPinDisplay;
 }
