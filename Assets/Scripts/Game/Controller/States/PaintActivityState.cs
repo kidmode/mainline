@@ -18,11 +18,13 @@ public class PaintActivityState : GameState
 		{
 			UIElement l_area = m_activityCanvas.getView("PaintingArea");
 			RectTransform l_transform = (RectTransform)l_area.transform;
-			Texture2D l_texture = new Texture2D((int)l_transform.rect.width, (int)l_transform.rect.height, TextureFormat.ARGB32, false, true);
+			int width = (int)l_transform.rect.width % 2 == 0 ? (int)l_transform.rect.width : (int)l_transform.rect.width + 1;
+			int height = (int)l_transform.rect.height % 2 == 0 ? (int)l_transform.rect.height : (int)l_transform.rect.height + 1;
+			Texture2D l_texture = new Texture2D(width, height, TextureFormat.ARGB32, false, true);
 			Color[] l_pixels = l_texture.GetPixels();//Get all pixels
 			int l_numPixels = l_pixels.Length;
 			Color l_white = Color.white;
-			for (int i = 0; i < l_numPixels; ++i)
+			for (int i = 0; i < l_numPixels; i++)
 			{
 				l_pixels[i] = l_white;
 			}
