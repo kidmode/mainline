@@ -94,6 +94,8 @@ public class SettingChildLockState : GameState
 
 	public void updateSetting()
 	{
+
+//		return;
 		//update childLock
 		m_requestQueue.reset ();
 		if(m_settingCache.childLockSwitch && !m_settingCache.verifyBirth)
@@ -138,6 +140,9 @@ public class SettingChildLockState : GameState
 	//---------------- Private Implementation ----------------------
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
 		m_cancelLockConfirmCanvas = p_uiManager.createScreen( UIScreen.CANCEL_CHILD_LOCK, true, 6 ) as CancelLockConfirmCanvas;
 		m_childLockHelpCanvas =  p_uiManager.createScreen( UIScreen.CHILD_LOCK_HELP, true, 5 ) as ChildLockHelpCanvas;
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
@@ -154,6 +159,43 @@ public class SettingChildLockState : GameState
 		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
+
+		//Kevin  ==== pin ux chagne
+		m_currentPinDisplay = m_childLockCanvas.getView("txtChildCodeDisplay") as UILabel;
+
+		m_saveNewPinButton = m_childLockCanvas.getView("saveButton") as UIButton; 
+
+		InputFieldNewChildCode = m_childLockCanvas.getView("InputFieldNewChildCode") as UIInputField;
+
+		m_saveNewPinButton.addClickCallback (onSaveButtonClicked);
+
+
+		m_childLockChangeOKay = m_childLockCanvas.getView("dialogChildLockChangeOK") as UIImage;
+
+		m_childLockChangeOKay.active = false;
+
+		m_childLockChangeError = m_childLockCanvas.getView("dialogChildLockChangeError") as UIImage;
+
+		m_childLockChangeError.active = false;
+
+
+
+		m_childLockChangeHelp = m_childLockCanvas.getView("dialogChildLockChangeHelp") as UIImage;
+
+//		UILabel dialogChildLockChangeHelpTitleLabel = m_childLockCanvas.getView("dialogChildLockChangeHelpTitle") as UILabel;
+//
+//		dialogChildLockChangeHelpTitleLabel.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+//		
+//		UILabel dialogChildLockChangeHelpTxt1Label = m_childLockCanvas.getView("dialogChildLockChangeHelpTxt1") as UILabel;
+//		
+//		dialogChildLockChangeHelpTxt1Label.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
+
+//		UIButton dialogChildLockChangeHelpCloseMark = m_childLockCanvas.getView("dialogChildLockChangeHelpCloseMark") as UIButton;
+//
+//		dialogChildLockChangeHelpCloseMark.addClickCallback(closeHelpDialog);
+
+		m_childLockChangeHelp.active = false;
+
 
 		//honda 
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
@@ -201,8 +243,12 @@ public class SettingChildLockState : GameState
 			else
 			{
 				m_verifyBirth.isOn = false;
-				if(null != m_settingCache.childLockPassword && !string.Empty.Equals(m_settingCache.childLockPassword))
-					m_pinInputField.text = m_settingCache.childLockPassword;
+				if(null != m_settingCache.childLockPassword && !string.Empty.Equals(m_settingCache.childLockPassword)){
+
+					m_currentPinDisplay.text = m_settingCache.childLockPassword;
+//					m_pinInputField.text = m_settingCache.childLockPassword;
+
+				}
 			}
 		}
 		else
@@ -218,13 +264,20 @@ public class SettingChildLockState : GameState
 			
 			if(SessionHandler.getInstance().verifyBirth)
 			{
+
+				m_currentPinDisplay.text = SessionHandler.getInstance().pin.ToString();
+
 				m_verifyBirth.isOn = true;
 			}
 			else
 			{
 				m_verifyBirth.isOn = false;
-				if(!string.Empty.Equals(SessionHandler.getInstance().childLockPassword))
-					m_pinInputField.text = SessionHandler.getInstance().childLockPassword;
+				if(!string.Empty.Equals(SessionHandler.getInstance().childLockPassword)){
+
+					m_currentPinDisplay.text = SessionHandler.getInstance().childLockPassword;
+//					m_pinInputField.text = SessionHandler.getInstance().childLockPassword;
+
+				}
 			}
 		}
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
@@ -265,6 +318,9 @@ public class SettingChildLockState : GameState
 
 	private bool checkPin()
 	{
+
+		return true;
+
 		if(SessionHandler.getInstance().settingCache.childLockSwitch && !SessionHandler.getInstance().settingCache.verifyBirth && m_pinInputField.text.Length != 4)
 		{
 			m_gameController.getUI ().changeScreen (UIScreen.CHILD_LOCK_HELP,true);
@@ -561,6 +617,77 @@ public class SettingChildLockState : GameState
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 	}
 
+
+	private void onSaveButtonClicked(UIButton p_button){
+
+
+		if( InputFieldNewChildCode.text.Length != 4)
+		{
+			m_childLockChangeHelp.active = true;
+
+			return ;
+		}
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 6);
+
+		//update childLock
+		m_requestQueue.reset ();
+
+		m_settingCache.childLockPassword = InputFieldNewChildCode.text;
+
+		m_requestQueue.add(new EnableLockRequest(m_settingCache.childLockPassword, saveNewChildLockComplete));
+		m_requestQueue.add(new UpdateSettingRequest("true"));
+
+		m_requestQueue.request (RequestType.SEQUENCE);
+
+		//SessionHandler.getInstance().resetSetting ();
+
+		//update notifucation
+//		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
+//		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum));
+//		m_requestQueue.request (RequestType.SEQUENCE);
+//		//update device option
+//		SessionHandler.getInstance().resetSetting ();
+//		Debug.Log("SettingChildLock set volume data from setting cache to setting cache");
+//		SoundManager.getInstance ().effectVolume = (float) SessionHandler.getInstance ().effectsVolum / 100;
+//		SoundManager.getInstance ().musicVolume = (float) SessionHandler.getInstance ().musicVolum / 100;
+//		SoundManager.getInstance ().masterVolume = (float) SessionHandler.getInstance ().masterVolum / 100;
+//		PlayerPrefs.SetInt ("master_volume",SessionHandler.getInstance ().masterVolum);
+//		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
+//		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
+//		PlayerPrefs.Save ();
+
+
+	}
+
+	private void saveNewChildLockComplete(HttpsWWW p_response)
+	{
+
+		if(p_response.error == null){
+
+			m_currentPinDisplay.text = m_settingCache.childLockPassword;
+
+			InputFieldNewChildCode.text = "";
+
+			m_childLockChangeOKay.active = true;
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_settingCache.verifyBirth = false;
+
+			SessionHandler.getInstance().resetSetting ();
+
+		}else{
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_childLockChangeError.active = true;
+
+		}
+
+
+
+	}
+
 	private void onCloseMenu(UIButton p_button)
 	{
 		if(canMoveLeftMenu)
@@ -708,4 +835,14 @@ public class SettingChildLockState : GameState
 
 	private UIToggle 	m_lockSwitchButton;
 	private bool 		canMoveLeftMenu = true;
+
+	//New UX changes for pin
+	private UILabel 	m_currentPinDisplay;
+	private UIButton 	m_saveNewPinButton;
+	private UIInputField InputFieldNewChildCode;
+
+	private UIImage 	m_childLockChangeOKay;
+	private UIImage 	m_childLockChangeError;
+	private UIImage 	m_childLockChangeHelp; // when telling the user we only accept 4 pins
+
 }
