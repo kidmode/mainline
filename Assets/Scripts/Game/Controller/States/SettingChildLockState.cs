@@ -318,7 +318,7 @@ public class SettingChildLockState : GameState
 
 	private bool checkPin()
 	{
-
+		//Since we are not using the GCS code, return true always
 		return true;
 
 		if(SessionHandler.getInstance().settingCache.childLockSwitch && !SessionHandler.getInstance().settingCache.verifyBirth && m_pinInputField.text.Length != 4)

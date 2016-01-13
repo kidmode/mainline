@@ -62,6 +62,20 @@ public class BuildPlayer : MonoBehaviour
 	
 	private static void  build(string branch, string keystoreName, string keystorePass, string keyAlias, string keyAliasPass, BuildOptions buildOptions )
 	{
+
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//Bundle Code
+		string newBundleCodeWriteString = "public static class CurrentBundleVersion{public static readonly string version = \"" + 
+			PlayerSettings.bundleVersion + "(" + PlayerSettings.Android.bundleVersionCode + ")\";}";
+		
+		StreamWriter writer = new StreamWriter(Application.dataPath  + "/Standard Assets/Scripts/Config/CurrentBundleVersion.cs"); 
+		
+		writer.WriteLine(newBundleCodeWriteString);
+		
+		writer.Close();
+		
+		AssetDatabase.Refresh();
+
 		//=============================================
 		//=============================================
 		//Player settings
