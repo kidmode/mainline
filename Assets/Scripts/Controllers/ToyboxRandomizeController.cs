@@ -13,7 +13,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 	private ArrayList gameSortedList;
 
-	private ArrayList videoShowedRecordList;
+	private ArrayList videoShownRecordList;
 	
 	private ArrayList gameShowedRecordList;
 
@@ -32,13 +32,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		startList(videoSortedList);
 
-		startList(gameSortedList);
-
-		startList(videoShowedRecordList);
-
-		startList(gameShowedRecordList);
 	
 	}
 	
@@ -55,7 +49,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 	public void restartAllRecordList(){
 
-		videoShowedRecordList = getRecordList( WebContent.VIDEO_TYPE);
+		videoShownRecordList = getRecordList( WebContent.VIDEO_TYPE);
 
 	}
 
@@ -181,8 +175,10 @@ public class ToyboxRandomizeController : MonoBehaviour {
 		//Get max returned list
 		int maxListCount = 30;
 		if(SessionHandler.getInstance().token.isPremium()){
-			maxListCount = 20;
+			maxListCount = 50;
 		}
+
+		maxListCount = 10;
 
 		ArrayList videoAllList = getListofContentType(WebContent.VIDEO_TYPE);
 
@@ -194,13 +190,32 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 		}else{//Start sorting
 
-			ArrayList sortedRecordList = getSortedRecordList(videoShowedRecordList);
+			ArrayList sortedRecordList = getSortedRecordList(videoShownRecordList);
+
+
+			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
+
+			string debugString = "";
+
+			for (int i = 0; i < videoShownRecordList.Count; i++) {
+				
+				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
+				
+				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
+				
+			}
+
+			writer.WriteLine(debugString);
+			writer.Close();
+
 
 			while(returnList.Count < maxListCount){
 
 				ArrayList lowestShownCountGroup = getLowestShownCountGroup(sortedRecordList);
 
 				ShownToyboxRecord randomShownRecord = lowestShownCountGroup[Random.Range(0, lowestShownCountGroup.Count)] as ShownToyboxRecord;
+
+				randomShownRecord.shownCount++;
 
 				returnList.Add(randomShownRecord.content);
 
@@ -209,13 +224,6 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			}
 
 			Debug.LogError("  videoAllList  sdf sad f sadf asdf s sortedRecordList.Count " + sortedRecordList.Count);
-
-			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
-
-			string debugString = "";
-
-			writer.WriteLine(debugString);
-			writer.Close();
 
 		}
 
