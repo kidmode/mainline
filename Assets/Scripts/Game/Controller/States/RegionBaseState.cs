@@ -307,6 +307,7 @@ public class RegionBaseState : GameState
 		if( canSetWebContent )
 		{
 
+			ToyboxRandomizeController.Instance.getVideoList();
 
 			Debug.Log("~DebugMode~ canSetWebContent");
 			canSetWebContent = false;
@@ -2714,7 +2715,31 @@ public class AnimationTrigger
 				m_playing = false;
 			}
 		}
-	}
+
+
+//		//====== Testing gaeme list randomization
+//		if (SessionHandler.getInstance().webContentList != null)
+//		{
+//			foreach (object o in SessionHandler.getInstance().webContentList)
+//			{
+//				WebContent l_content = o as WebContent;
+//				
+//				if (l_content.category == WebContent.VIDEO_TYPE)
+//				{
+//
+//					Debug.LogError(" - - - -- - - - - - -  VIDEO_TYPE " + l_content.id);
+//
+//				}else if (l_content.category == WebContent.GAME_TYPE)
+//				{
+//
+//					Debug.LogError("  - -- - - - - - - - - GAME_TYPE "  + l_content.id);
+//					
+//				}
+//
+//			}
+//
+//		}
+				}
 	
 	private void _init()
 	{

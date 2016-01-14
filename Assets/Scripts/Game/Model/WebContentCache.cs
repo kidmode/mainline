@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class WebContentCache : object
 {
@@ -85,6 +86,17 @@ public class WebContentCache : object
 
 	private void _requestWebContentComplete(HttpsWWW p_response)
 	{
+
+//		StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/DownloadedWebContentRequest.txt"); // Does this work?
+//		writer.WriteLine(p_response.text);
+//		writer.Close();
+//
+//		Debug.LogError("   &&*& & & & & &* *& * &* *& & *& *& &*& *& N   _requestWebContentComplete " );
+//
+//		Debug.LogError(p_response.text);
+
+
+
 		if (p_response.error == null)
 		{
 			List<object> l_contentList = new List<object> ();
@@ -92,7 +104,16 @@ public class WebContentCache : object
 			Debug.Log("WebContent: " + p_response.text);
 			foreach (object o in l_data)
 			{
-				l_contentList.Add(new WebContent(o as Hashtable));
+
+				WebContent newWebContent = new WebContent(o as Hashtable);
+
+				if(newWebContent.category == WebContent.VIDEO_TYPE){
+					Debug.LogError("  0 0 00 0 0 0 0 0 0 0 0 0 0 it is Web content ");
+				}else if(newWebContent.category == WebContent.GAME_TYPE){
+					Debug.LogError("  0 0 00 0 0 0 0 0 0 0 0 0 0 it is game ");
+				}
+
+				l_contentList.Add(newWebContent);
 			}
 			m_sessionHandler.webContentList = l_contentList;
 			isFinishedLoadingWebContent = true;
@@ -105,6 +126,9 @@ public class WebContentCache : object
 
 		isDoneWithWebcontentLoading = true;
 		processFinishedRequests();
+
+		ToyboxRandomizeController.Instance.restartAllRecordList();
+
 	}
 
 	private void _requestBookListComplete(HttpsWWW p_response)

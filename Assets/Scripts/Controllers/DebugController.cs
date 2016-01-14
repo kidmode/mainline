@@ -71,4 +71,11 @@ public class DebugController : MonoBehaviour {
 
 	}
 
+	public void loadVideoList(){
+
+		ToyboxRandomizeController.Instance.getVideoList();
+
+	}
+
+
 }
