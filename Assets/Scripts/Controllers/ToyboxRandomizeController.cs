@@ -193,20 +193,20 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			ArrayList sortedRecordList = getSortedRecordList(videoShownRecordList);
 
 
-			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
-
-			string debugString = "";
-
-			for (int i = 0; i < videoShownRecordList.Count; i++) {
-				
-				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
-				
-				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
-				
-			}
-
-			writer.WriteLine(debugString);
-			writer.Close();
+//			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
+//
+//			string debugString = "";
+//
+//			for (int i = 0; i < videoShownRecordList.Count; i++) {
+//				
+//				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
+//				
+//				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
+//				
+//			}
+//
+//			writer.WriteLine(debugString);
+//			writer.Close();
 
 
 			while(returnList.Count < maxListCount){

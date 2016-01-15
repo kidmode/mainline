@@ -27,7 +27,18 @@ public class BuildPlayer : MonoBehaviour
 	[MenuItem( "Build/Android/MAINLINE_RELEASE" )]
 	public static void Build_MAINLINE_RELEASE()
 	{
+
+//		Texture2D icon = ImageCache.getCacheImage
+//		Texture2D[] icons = new Texture2D[]{icon, icon, icon, icon};
+
+
 		
+//		if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
+//			PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, icons);
+
+
+//		return;
+
 		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
 		
 		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
@@ -73,6 +84,26 @@ public class BuildPlayer : MonoBehaviour
 		writer.WriteLine(newBundleCodeWriteString);
 		
 		writer.Close();
+
+
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//Set Icons for build
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		Texture2D icon192 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_192.png");
+		Texture2D icon144 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_144.png");
+		Texture2D icon96 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_96.png");
+		Texture2D icon72 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_72.png");
+		Texture2D icon48 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_48.png");
+		Texture2D icon36 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_36.png");
+		
+		Texture2D[] icons = new Texture2D[]{icon192, icon144, icon96, icon72, icon48, icon36};
+		
+		PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, icons);
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 		
 		AssetDatabase.Refresh();
 
@@ -97,7 +128,8 @@ public class BuildPlayer : MonoBehaviour
 		PlayerSettings.Android.keyaliasName = keyAlias;
 		PlayerSettings.Android.keyaliasPass = keyAliasPass;
 		
-		
+
+		//PlayerSettings.SetIconsForTargetGroup
 		//Start prompt for build path
 		String path = EditorUtility.SaveFolderPanel("Choose Location of Built Game", "", "");
 		
@@ -177,6 +209,17 @@ public class BuildPlayer : MonoBehaviour
 		//Start Building the player
 		BuildPipeline.BuildPlayer( scenesArray , path + "/" + targetFileName , BuildTarget.Android , buildOptions );
 		
+	}
+
+	private static Texture2D getTextureAtLocation(string texturePath){
+
+		
+		byte[] bytes = File.ReadAllBytes(texturePath); 
+		
+		Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+		texture.LoadImage(bytes);
+		return texture;
+
 	}
 
 	//Get all the scenes that are enabled in the build settings
