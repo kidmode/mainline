@@ -303,10 +303,11 @@ public class SettingChildLockState : GameState
 		m_closeTurnOnConfirmButton.addClickCallback (closeTurnOnConfirmButton);
 
 		m_upsellPanel = m_childLockCanvas.getView ("upsellPanel") as UIElement;
-		if (SessionHandler.getInstance ().token.isPremium () || SessionHandler.getInstance ().token.isCurrent ())
-			m_upsellPanel.active = false;
-		else
-			m_upsellPanel.active = true;
+//		if (SessionHandler.getInstance ().token.isPremium () || SessionHandler.getInstance ().token.isCurrent ())
+//			m_upsellPanel.active = false;
+//		else
+//			m_upsellPanel.active = true;
+		m_upsellPanel.active = false;
 
 	}
 
