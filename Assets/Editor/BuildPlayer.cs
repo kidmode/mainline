@@ -189,7 +189,7 @@ public class BuildPlayer : MonoBehaviour
 		
 		
 		//Set the file name of the build
-		string targetFileName = "KidMode" + "_" + System.DateTime.Now.ToString( "mm_HH_dd_MM_yyyy" ) + "_" + 
+		string targetFileName = "KidMode" + "_" + System.DateTime.Now.ToString( "MM_dd_yyyy_mm_HH" ) + "_" + 
 			buildSettingEnvironmentString + "_u467_v" + PlayerSettings.bundleVersion + "(" +
 				PlayerSettings.Android.bundleVersionCode + ")" + "_" + branch + ".apk";
 		

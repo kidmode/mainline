@@ -15,7 +15,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 	private ArrayList videoShownRecordList;
 	
-	private ArrayList gameShowedRecordList;
+	private ArrayList gameShownRecordList;
 
 	public static ToyboxRandomizeController Instance;
 
@@ -50,6 +50,8 @@ public class ToyboxRandomizeController : MonoBehaviour {
 	public void restartAllRecordList(){
 
 		videoShownRecordList = getRecordList( WebContent.VIDEO_TYPE);
+
+		gameShownRecordList = getRecordList(WebContent.GAME_TYPE);
 
 	}
 

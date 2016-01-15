@@ -227,6 +227,8 @@ public class RegionBaseState : GameState
 	{
 		base.enter(p_gameController);
 
+		ToyboxRandomizeController.Instance.restartAllRecordList();
+
 		m_gameController = p_gameController;
 		
 		m_regionState 	= RegionState.Left;
