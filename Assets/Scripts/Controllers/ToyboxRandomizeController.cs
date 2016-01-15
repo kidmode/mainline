@@ -180,7 +180,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			maxListCount = 50;
 		}
 
-		maxListCount = 10;
+//		maxListCount = 10;
 
 		ArrayList videoAllList = getListofContentType(WebContent.VIDEO_TYPE);
 
@@ -225,13 +225,13 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 			}
 
-			Debug.LogError("  videoAllList  sdf sad f sadf asdf s sortedRecordList.Count " + sortedRecordList.Count);
+//			Debug.LogError("  videoAllList  sdf sad f sadf asdf s sortedRecordList.Count " + sortedRecordList.Count);
 
 		}
 
 
 		//=== = = = == = = = = = = == = == = = = = == = = = = == == 
-		Debug.LogError("  videoAllList  sdf sad f sadf asdf sad f VIdeo only " + videoAllList.Count);
+//		Debug.LogError("  videoAllList  sdf sad f sadf asdf sad f VIdeo only " + videoAllList.Count);
 
 		//------
 
@@ -243,6 +243,87 @@ public class ToyboxRandomizeController : MonoBehaviour {
 		return list;
 
 	}
+
+	//Get video sorted List
+	public List<WebContent> getGamesList(){
+
+		Debug.LogError(" -- - - - - -- - - - - - - -  getGamesList  -- - - - - -- - - - - - - - ");
+
+		//Get max returned list
+		int maxListCount = 30;
+		if(SessionHandler.getInstance().token.isPremium()){
+			maxListCount = 50;
+		}
+		
+//		maxListCount = 10;
+		
+		ArrayList gameAllList = getListofContentType(WebContent.GAME_TYPE);
+		
+		ArrayList returnList = new ArrayList();
+
+		Debug.LogError(" -- - - - - -- - - - - - - -  gameAllList " + gameAllList.Count);
+		
+		if(gameAllList.Count <= maxListCount){
+			
+			returnList = gameAllList;
+			
+		}else{//Start sorting
+			
+			ArrayList sortedRecordList = getSortedRecordList(gameShownRecordList);
+
+			Debug.LogError(" -- - - - - -- - - - - - - -  sortedRecordList " + sortedRecordList.Count);
+			
+			
+			//			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
+			//
+			//			string debugString = "";
+			//
+			//			for (int i = 0; i < videoShownRecordList.Count; i++) {
+			//				
+			//				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
+			//				
+			//				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
+			//				
+			//			}
+			//
+			//			writer.WriteLine(debugString);
+			//			writer.Close();
+			
+			
+			while(returnList.Count < maxListCount){
+				
+				ArrayList lowestShownCountGroup = getLowestShownCountGroup(sortedRecordList);
+				
+				ShownToyboxRecord randomShownRecord = lowestShownCountGroup[Random.Range(0, lowestShownCountGroup.Count)] as ShownToyboxRecord;
+				
+				randomShownRecord.shownCount++;
+				
+				returnList.Add(randomShownRecord.content);
+				
+				sortedRecordList.Remove(randomShownRecord);
+				
+			}
+			
+			Debug.LogError("  videoAllList  sdf sad f sadf asdf s sortedRecordList.Count " + sortedRecordList.Count);
+			
+		}
+		
+		
+		//=== = = = == = = = = = = == = == = = = = == = = = = == == 
+		Debug.LogError("  videoAllList  sdf sad f sadf asdf sad f VIdeo only " + gameAllList.Count);
+		
+		//------
+		
+		List<WebContent> list = new List<WebContent>(returnList.Count);
+		foreach (WebContent instance in returnList)
+		{
+			list.Add(instance);
+		}
+		return list;
+		
+	}
+
+
 
 }
 

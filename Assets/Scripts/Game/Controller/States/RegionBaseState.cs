@@ -1643,6 +1643,47 @@ public class RegionBaseState : GameState
 				//						m_videoFeatured = l_info;
 			}
 		}
+
+
+
+		//
+
+		m_gameViewList.Clear();
+		
+		List<WebContent> gameList = ToyboxRandomizeController.Instance.getGamesList();
+		
+		int l_gameCount = 0;
+
+		foreach (object o in gameList)
+		{
+
+			WebContent l_content = o as WebContent;
+
+			 if (l_content.category == WebContent.GAME_TYPE)
+			{
+				if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+					continue;
+				
+				string l_url = l_content.url;
+				
+				//					string contentName = getLocalContentNmae(l_content);
+				//					Texture2D texture = ImageCache.getCacheImage(contentName);
+				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+				
+				GameInfo l_game = new GameInfo(l_info);
+				
+				if (l_content.favorite)
+					m_gameFavoritesList.Add(l_game);
+				
+				
+				m_gameViewList.Add(l_game);
+				
+				//honda: comment out because we remove feature toy box
+				//					if (l_content.recommend)
+				//						m_gameFeatured = l_info;
+			}
+		}
+
 	}
 
 	// Sean: vzw
@@ -2166,6 +2207,41 @@ public class RegionBaseState : GameState
 		}
 
 
+		m_gameViewList.Clear();
+		
+		List<WebContent> gameList = ToyboxRandomizeController.Instance.getGamesList();
+		
+		foreach (object o in gameList)
+		{
+			
+			WebContent l_content = o as WebContent;
+			
+			if (l_content.category == WebContent.GAME_TYPE)
+			{
+				if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+					continue;
+				
+				string l_url = l_content.url;
+				
+				//					string contentName = getLocalContentNmae(l_content);
+				//					Texture2D texture = ImageCache.getCacheImage(contentName);
+				WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+				
+				GameInfo l_game = new GameInfo(l_info);
+				
+				if (l_content.favorite)
+					m_gameFavoritesList.Add(l_game);
+				
+				
+				m_gameViewList.Add(l_game);
+				
+				//honda: comment out because we remove feature toy box
+				//					if (l_content.recommend)
+				//						m_gameFeatured = l_info;
+			}
+		}
+
+
 
 
 		if (p_contentList != null)
@@ -2197,22 +2273,22 @@ public class RegionBaseState : GameState
 				}
 				else if (l_content.category == WebContent.GAME_TYPE)
 				{
-					if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
-						continue;
-					
-					string l_url = l_content.url;
-
-//					string contentName = getLocalContentNmae(l_content);
-//					Texture2D texture = ImageCache.getCacheImage(contentName);
-					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
-
-					GameInfo l_game = new GameInfo(l_info);
-
-					if (l_content.favorite)
-						m_gameFavoritesList.Add(l_game);
-
-
-					m_gameViewList.Add(l_game);
+//					if (l_gameCount++ >= ZoodlesConstants.MAX_GAME_CONTENT)
+//						continue;
+//					
+//					string l_url = l_content.url;
+//
+////					string contentName = getLocalContentNmae(l_content);
+////					Texture2D texture = ImageCache.getCacheImage(contentName);
+//					WebViewInfo l_info = new WebViewInfo(null, l_content, l_url);
+//
+//					GameInfo l_game = new GameInfo(l_info);
+//
+//					if (l_content.favorite)
+//						m_gameFavoritesList.Add(l_game);
+//
+//
+//					m_gameViewList.Add(l_game);
 
 					//honda: comment out because we remove feature toy box
 //					if (l_content.recommend)

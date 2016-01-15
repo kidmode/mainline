@@ -107,6 +107,8 @@ public class BuildPlayer : MonoBehaviour
 		
 		AssetDatabase.Refresh();
 
+//		return;
+
 		//=============================================
 		//=============================================
 		//Player settings
