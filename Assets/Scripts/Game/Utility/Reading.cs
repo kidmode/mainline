@@ -63,7 +63,7 @@ public class Reading : System.Object
         {
             ReadingPage l_page = new ReadingPage(t);
 
-			Debug.LogError("  l_page " + l_page.playbackUrl);
+//			Debug.LogError("  l_page " + l_page.playbackUrl);
 
 
             pageList.Add( l_page );

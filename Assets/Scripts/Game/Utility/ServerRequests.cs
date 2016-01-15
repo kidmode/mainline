@@ -959,7 +959,11 @@ public class UploadAudioRequest : RequestQueue.Request
 public class WebContentRequest : RequestQueue.Request
 {
 	public WebContentRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
-	{}
+	{
+
+//		p_handler+=_requestComplete;
+
+	}
 
 	protected override void init()
 	{
@@ -973,6 +977,14 @@ public class WebContentRequest : RequestQueue.Request
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
 		m_method = CallMethod.GET;
+	}
+
+
+	private void _requestComplete(HttpsWWW p_response)
+	{
+
+
+		
 	}
 }
 
