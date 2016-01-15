@@ -77,5 +77,20 @@ public class DebugController : MonoBehaviour {
 
 	}
 
+	public void fogotPassword(){
 
+		RequestQueue request = new RequestQueue();
+
+		request.add(new GetForGotPasswordRequest(forgotComplete));
+
+		request.request(RequestType.RUSH);
+
+	}
+
+	private void forgotComplete(HttpsWWW p_response)
+	{
+		if(p_response.error == null){
+			
+		}
+	}
 }

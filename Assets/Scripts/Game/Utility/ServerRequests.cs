@@ -2494,3 +2494,34 @@ public class GetBookByIdRequest : RequestQueue.Request
 	
 	private int m_bookId;
 }
+
+
+public class GetForGotPasswordRequest : RequestQueue.Request
+{
+	public GetForGotPasswordRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+
+		p_handler += _requestComplete;
+
+	}
+	
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.REST_FORGOT_PASSWORD;
+		m_params [ZoodlesConstants.PARAM_EMAIL] = SessionHandler.getInstance().username;
+
+		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+
+		m_method = CallMethod.POST;
+
+	}
+
+	private void _requestComplete(HttpsWWW p_response)
+	{
+		if(p_response.error == null){
+
+		}
+	}
+	
+	private int m_bookId;
+}
