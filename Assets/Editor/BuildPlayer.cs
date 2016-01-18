@@ -22,12 +22,29 @@ public class BuildPlayer : MonoBehaviour
 
 
 	#region Android MAIN_LINE
-	
-	
-	[MenuItem( "Build/Android/MAINLINE_RELEASE" )]
-	public static void Build_MAINLINE_RELEASE()
+
+	[MenuItem( "Build/Android/MAINLINE_RELEASE_STAGING" )]
+	public static void Build_MAINLINE_RELEASE_STAGING()
 	{
 
+		writeServerEnvironment(SERVER_STAGING);
+
+		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
+		
+		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+
+//		writeServerEnvironment();
+
+		return;
+
+	}
+	
+	
+	[MenuItem( "Build/Android/MAINLINE_RELEASE_PRODUCTION" )]
+	public static void Build_MAINLINE_RELEASE_PRODUCTION()
+	{
+
+		writeServerEnvironment(SERVER_PRODUCTION);
 //		Texture2D icon = ImageCache.getCacheImage
 //		Texture2D[] icons = new Texture2D[]{icon, icon, icon, icon};
 
@@ -37,7 +54,7 @@ public class BuildPlayer : MonoBehaviour
 //			PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, icons);
 
 
-//		return;
+
 
 		BuildOptions androidBuildOptions = BuildOptions.ShowBuiltPlayer;
 		
@@ -243,5 +260,94 @@ public class BuildPlayer : MonoBehaviour
 
 	}
 
+
+	public const int SERVER_DEV = 1;
+
+	public const int SERVER_STAGING = 2;
+
+	public const int SERVER_PRODUCTION = 3;
+
+	public const int SERVER_LOCAL = 4;
+
+
+
+	private static void writeServerEnvironment(int serverType){
+
+		string serverTypeString = "";
+
+		if(serverType == SERVER_DEV){
+
+			serverTypeString = "gcs_dev";
+
+		}else if(serverType == SERVER_STAGING){
+
+			serverTypeString = "gcs_staging";
+			
+		}else if(serverType == SERVER_PRODUCTION){
+
+			serverTypeString = "gcs_prod";
+			
+		}else if(serverType == SERVER_LOCAL){
+
+			serverTypeString = "gcs_local";
+			
+		}
+
+		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//Bundle Code
+		string newEnvironmentCode = "{\n" + 
+			"\t\"active_environment\":\"" + serverTypeString + "\",\n" +
+				"\t\"server_version\": 1,\n" +
+				"\t\"encrypted\":\"0\",\n\n" +
+
+				"\t\"gcs_dev\":\n" +
+				"\t{\n" +
+				"\t\t\"game_server_host\":\"http://dev.zoodles.com\",\n" +
+				"\t\t\"game_server_secure_host\":\"https://dev.zoodles.com\",\n" +
+				"\t\t\"game_static_host\":\"http://dev.zoodles.com\",\n" +
+				"\t\t\"game_platform_host\":\"http://dev.zoodles.com\"\n" +
+				"\t},\n\n" +
+				"\t\"gcs_staging\":\n" +
+				"\t{\n" +
+				"\t\t\"game_server_host\":\"http://staging.zoodles.com\",\n" +
+				"\t\t\"game_server_secure_host\":\"https://staging.zoodles.com\",\n" +
+				"\t\t\"game_static_host\":\"http://staging.zoodles.com\",\n" +
+				"\t\t\"game_platform_host\":\"http://staging.zoodles.com\"\n" +
+				"\t},\n\n" +
+				"\t\"gcs_prod\":\n" +
+				"\t{\n" +
+				"\t\t\"game_server_host\":\"http://www.zoodles.com\",\n" +
+				"\t\t\"game_server_secure_host\":\"https://www.zoodles.com\",\n" +
+				"\t\t\"game_static_host\":\"http://www.zoodles.com\",\n" +
+				"\t\t\"game_platform_host\":\"http://www.zoodles.com\"\n" +
+				"\t},\n\n" +
+				"\t\"gcs_local\":\n" +
+				"\t{\n" +
+				"\t\t\"game_server_host\":\"http://192.168.206.7\",\n" +
+				"\t\t\"game_server_secure_host\":\"https://192.168.206.7\",\n" +
+				"\t\t\"game_static_host\":\"http://192.168.206.7\",\n" +
+				"\t\t\"game_platform_host\":\"http://192.168.206.7\"\n" +
+				"\t}\n" +
+				"}";
+
+		StreamWriter writer = new StreamWriter(Application.dataPath  + "/Resources/Data/environment.txt"); 
+		
+		writer.WriteLine(newEnvironmentCode);
+
+
+		//Kevin
+		//Could do the following but. . .. . . no line breaks and formats so hard to edit so don't use for now
+//		TextAsset l_asset = Resources.Load( "Data/environment" ) as TextAsset;
+//		string l_text = (l_asset).text;			
+//		Resources.UnloadAsset(l_asset);
+//		Hashtable l_config = MiniJSON.MiniJSON.jsonDecode(l_text) as Hashtable;
+//
+//		writer.WriteLine(MiniJSON.MiniJSON.jsonEncode(l_config));
+
+		
+		writer.Close();
+
+
+	}
 	#endregion
 }
