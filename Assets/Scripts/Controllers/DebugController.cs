@@ -21,6 +21,8 @@ public class DebugController : MonoBehaviour {
 
 	public static DebugController Instance;
 
+	public bool showPanelOnAndroid = false;
+
 	void Awake(){
 
 		Instance = this;
@@ -32,16 +34,20 @@ public class DebugController : MonoBehaviour {
 
 		//debugControlsPanel
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+		if(!showPanelOnAndroid){
 
-		if(debugControlsPanel != null){
+	#if UNITY_ANDROID && !UNITY_EDITOR
 
-			debugControlsPanel.SetActive(false);
+			if(debugControlsPanel != null){
 
+				debugControlsPanel.SetActive(false);
+
+
+			}
+
+	#endif
 
 		}
-
-#endif
 
 
 	
@@ -81,7 +87,7 @@ public class DebugController : MonoBehaviour {
 
 		RequestQueue request = new RequestQueue();
 
-		request.add(new GetForGotPasswordRequest(forgotComplete));
+		request.add(new GetForGotPasswordRequest("uncagedgaming@gmail.com", forgotComplete));
 
 		request.request(RequestType.RUSH);
 
@@ -89,6 +95,9 @@ public class DebugController : MonoBehaviour {
 
 	private void forgotComplete(HttpsWWW p_response)
 	{
+
+		showStatus(p_response.text);
+
 		if(p_response.error == null){
 			
 		}

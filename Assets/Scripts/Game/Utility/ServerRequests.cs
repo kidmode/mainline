@@ -2498,17 +2498,22 @@ public class GetBookByIdRequest : RequestQueue.Request
 
 public class GetForGotPasswordRequest : RequestQueue.Request
 {
-	public GetForGotPasswordRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+
+	public string userName;
+
+	public GetForGotPasswordRequest(string userName, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 
 		p_handler += _requestComplete;
+
+		this.userName = userName;
 
 	}
 	
 	protected override void init()
 	{
 		m_call = ZoodlesConstants.REST_FORGOT_PASSWORD;
-		m_params [ZoodlesConstants.PARAM_EMAIL] = SessionHandler.getInstance().username;
+		m_params [ZoodlesConstants.PARAM_EMAIL] = userName;// SessionHandler.getInstance().username;
 
 		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 

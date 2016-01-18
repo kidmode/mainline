@@ -2090,6 +2090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   txtStatus: {fileID: 2019171641}
   debugControlsPanel: {fileID: 1058566954}
+  showPanelOnAndroid: 0
 --- !u!114 &1058566956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2206,6 +2207,54 @@ MonoBehaviour:
   stateHomeLauncher: 0
   stateKidMode: 1
   defaultLauncherChecked: 0
+--- !u!1 &1092136476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100042, guid: 1c4b900e732ac2144864f98744ec85ef, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1092136477}
+  - 114: {fileID: 1092136478}
+  m_Layer: 5
+  m_Name: SignInScreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1092136477
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 1c4b900e732ac2144864f98744ec85ef, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1092136476}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+--- !u!114 &1092136478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11479310, guid: 1c4b900e732ac2144864f98744ec85ef,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1092136476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d35e3c3116f43338699ce93ea64b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SignInCanvas: {fileID: 0}
+  emailText: {fileID: 0}
+  DialogEmailNotMatch: {fileID: 0}
+  DialogEmailNotMatchTitle: {fileID: 0}
+  DialogEmailNotMatchMessage: {fileID: 0}
+  DialogPasswordRecovered: {fileID: 0}
+  DialogPasswordRecoveredTitle: {fileID: 0}
+  DialogPasswordRecoveredMessage: {fileID: 0}
 --- !u!1001 &1101269329
 Prefab:
   m_ObjectHideFlags: 0
