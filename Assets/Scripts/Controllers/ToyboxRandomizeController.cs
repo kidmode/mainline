@@ -53,6 +53,8 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 		gameShownRecordList = getRecordList(WebContent.GAME_TYPE);
 
+//		debug_WriteInfo();
+
 	}
 
 
@@ -171,6 +173,28 @@ public class ToyboxRandomizeController : MonoBehaviour {
 		
 	}
 
+	//From a record list get a list of with record count
+	ArrayList getLowestShownCountGroup(ArrayList recordList, int matchingCount){
+		
+		ArrayList returnList = new ArrayList();
+		
+		for (int i = 0; i < recordList.Count; i++) {
+			
+			ShownToyboxRecord record= recordList[i] as ShownToyboxRecord;
+			
+			if(record.shownCount == matchingCount){
+				
+				returnList.Add(record);
+				
+			}
+			
+		}
+		
+		return returnList;
+		
+	}
+
+
 
 	//Get video sorted List
 	public List<WebContent> getVideoList(){
@@ -180,7 +204,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			maxListCount = 50;
 		}
 
-//		maxListCount = 10;
+//		maxListCount = 46;
 
 		ArrayList videoAllList = getListofContentType(WebContent.VIDEO_TYPE);
 
@@ -188,40 +212,97 @@ public class ToyboxRandomizeController : MonoBehaviour {
 
 		if(videoAllList.Count <= maxListCount){
 
-			returnList = videoAllList;
+//			returnList = videoAllList;
 
+			while(videoAllList.Count > 0){
+				
+				WebContent content = videoAllList[Random.Range(0, videoAllList.Count)] as WebContent;
+				
+				returnList.Add(content);
+				
+				videoAllList.Remove(content);
+				
+			}
+
+//			returnList = videoAllList;
 		}else{//Start sorting
 
 			ArrayList sortedRecordList = getSortedRecordList(videoShownRecordList);
 
-
-//			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
-//
-//			string debugString = "";
-//
-//			for (int i = 0; i < videoShownRecordList.Count; i++) {
-//				
-//				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
-//				
-//				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
-//				
-//			}
-//
-//			writer.WriteLine(debugString);
-//			writer.Close();
+			debug_WriteInfo();
 
 
 			while(returnList.Count < maxListCount){
 
 				ArrayList lowestShownCountGroup = getLowestShownCountGroup(sortedRecordList);
 
-				ShownToyboxRecord randomShownRecord = lowestShownCountGroup[Random.Range(0, lowestShownCountGroup.Count)] as ShownToyboxRecord;
+				//========
+				//Check to make sure there is no repeats
+				//is the lowest count group is less than 6 and the totall count is around the same as max count
+				//The lowest group will always show up and therefore doesn't seem to be rotating
+				//see if we could get the rest of the group and add those to the lowest count group if this occurs
+				int lowRepeateCount = 6;
 
-				randomShownRecord.shownCount++;
+				if(lowestShownCountGroup.Count <= lowRepeateCount){ //
 
-				returnList.Add(randomShownRecord.content);
+					if(sortedRecordList.Count > lowRepeateCount * 2){
 
-				sortedRecordList.Remove(randomShownRecord);
+						int lowestShowCount = 0;
+
+						//remove all the lowest count from the sorted group
+						for (int i = 0; i < lowestShownCountGroup.Count; i++) {
+
+							ShownToyboxRecord shownRecord = lowestShownCountGroup[i] as ShownToyboxRecord;
+
+							lowestShowCount = shownRecord.shownCount;
+
+							
+						}
+
+
+						ArrayList secondLowestShownCountGroup = getLowestShownCountGroup(sortedRecordList, lowestShowCount);
+
+						for (int i = 0; i < secondLowestShownCountGroup.Count; i++) {
+
+							ShownToyboxRecord shownRecord = lowestShownCountGroup[i] as ShownToyboxRecord;
+
+							lowestShownCountGroup.Add(shownRecord);
+
+						}
+
+					}
+				}
+
+
+				while(lowestShownCountGroup.Count > 0){
+
+					ShownToyboxRecord randomShownRecord = lowestShownCountGroup[Random.Range(0, lowestShownCountGroup.Count)] as ShownToyboxRecord;
+
+					if(!returnList.Contains(randomShownRecord.content)){
+
+						randomShownRecord.shownCount++;
+						
+						returnList.Add(randomShownRecord.content);
+
+					}
+
+
+
+					lowestShownCountGroup.Remove(randomShownRecord);
+
+					if(sortedRecordList.Contains(randomShownRecord))
+						sortedRecordList.Remove(randomShownRecord);
+
+
+					if(returnList.Count == maxListCount){
+						
+						break;
+						
+					}
+
+
+
+				}
 
 			}
 
@@ -255,7 +336,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			maxListCount = 50;
 		}
 		
-//		maxListCount = 10;
+//		maxListCount = 210;
 		
 		ArrayList gameAllList = getListofContentType(WebContent.GAME_TYPE);
 		
@@ -264,8 +345,20 @@ public class ToyboxRandomizeController : MonoBehaviour {
 		Debug.LogError(" -- - - - - -- - - - - - - -  gameAllList " + gameAllList.Count);
 		
 		if(gameAllList.Count <= maxListCount){
+
+			while(gameAllList.Count > 0){
+				
+//				ArrayList lowestShownCountGroup = getLowestShownCountGroup(sortedRecordList);
+				
+				WebContent content = gameAllList[Random.Range(0, gameAllList.Count)] as WebContent;
+				
+				returnList.Add(content);
+				
+				gameAllList.Remove(content);
+				
+			}
 			
-			returnList = gameAllList;
+//			returnList = gameAllList;
 			
 		}else{//Start sorting
 			
@@ -274,20 +367,7 @@ public class ToyboxRandomizeController : MonoBehaviour {
 			Debug.LogError(" -- - - - - -- - - - - - - -  sortedRecordList " + sortedRecordList.Count);
 			
 			
-			//			StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
-			//
-			//			string debugString = "";
-			//
-			//			for (int i = 0; i < videoShownRecordList.Count; i++) {
-			//				
-			//				ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
-			//				
-			//				debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
-			//				
-			//			}
-			//
-			//			writer.WriteLine(debugString);
-			//			writer.Close();
+//			debug_WriteInfo();
 			
 			
 			while(returnList.Count < maxListCount){
@@ -324,8 +404,32 @@ public class ToyboxRandomizeController : MonoBehaviour {
 	}
 
 
+	private void debug_WriteInfo(){
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		return;
+		
+		#endif
+
+		StreamWriter writer = new StreamWriter(Application.dataPath + "/Resources/_Debug/sortingAppList.txt"); // Does this work?
+		
+		string debugString = "";
+		
+		for (int i = 0; i < videoShownRecordList.Count; i++) {
+			
+			ShownToyboxRecord record = videoShownRecordList[i] as ShownToyboxRecord;
+			
+			debugString = debugString + "\n   id: " + record.content.id + "    " + record.shownCount; 
+			
+		}
+		
+		writer.WriteLine(debugString);
+		writer.Close();
+
+	}
 
 }
+
 
 public class ShownToyboxRecord{
 

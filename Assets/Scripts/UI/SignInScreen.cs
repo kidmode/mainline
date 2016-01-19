@@ -11,6 +11,8 @@ public class SignInScreen : MonoBehaviour {
 
 	public Text emailText;
 
+	public InputField emailInput;
+
 	private GameController m_gameController;
 
 	public GameObject DialogEmailNotMatch;
@@ -102,8 +104,10 @@ public class SignInScreen : MonoBehaviour {
 			//create loading screen
 
 			RequestQueue request = new RequestQueue();
+
+			string l_email = emailInput.text.Trim();
 			
-			request.add(new GetForGotPasswordRequest("uncagedgaming@gmail.com", forgotComplete));
+			request.add(new GetForGotPasswordRequest(l_email, forgotComplete));
 			
 			request.request(RequestType.RUSH);
 
@@ -150,8 +154,15 @@ public class SignInScreen : MonoBehaviour {
 	/// <returns><c>true</c>, if passes was emailed, <c>false</c> otherwise.</returns>
 	private bool emailPasses()
 	{
-		string l_email = emailText.text;
-		return IsMatch(ZoodlesConstants.EMAIL_REGULAR_STRING,l_email);
+		string l_email = emailInput.text.Trim();
+
+		int posAt = l_email.IndexOf("@");
+
+		string checkDotString = l_email.Substring(l_email.Length - 4, 4);
+
+		Debug.Log(" posAt " + posAt +"    checkDotString " + checkDotString);
+
+		return IsMatch(ZoodlesConstants.EMAIL_REGULAR_STRING,l_email.Trim());
 	}
 
 	private bool IsMatch(string p_pattern, string p_input)
@@ -174,6 +185,10 @@ public class SignInScreen : MonoBehaviour {
 
 			DialogPasswordRecovered.SetActive(true);
 			
+		}else{
+
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 10);
+
 		}
 	}
 
