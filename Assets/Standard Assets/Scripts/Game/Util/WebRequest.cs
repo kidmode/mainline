@@ -122,7 +122,7 @@ public class WebRequest : object
 				m_callback( "done", m_www );
 				Server.removeCall( this );
 			}
-			if( m_time > m_timeout )
+			if( m_time > m_timeout && m_status != (int)WebRequestStatus.Timeout && !m_www.isDone)
 			{
 				m_status = (int)WebRequestStatus.Timeout;
 				/**********************************************************/
@@ -131,19 +131,10 @@ public class WebRequest : object
 				//show exit & wifi button popup no internet message
 				if (requestName.Equals("ClientIdRequest") || 
 				    requestName.Equals("CheckFreePremiumRequest") ||
-				    
 				    requestName.Equals("SignInCacheRequest"))
 				{
 					Debug.Log("ClientIdAndPremiumRequests: WebRequest " + requestName + " timeout");
 //					m_www.Dispose();
-//					if (m_www == null)
-//					{
-//						Debug.Log("ClientIdAndPremiumRequests: WebRequest timeout destroyed");
-//					}
-//					else
-//					{
-//						Debug.Log("ClientIdAndPremiumRequests: WebRequest timeout not destroyed");
-//					}
 					if (m_callback != null)
 					{
 						m_callback("time out1", null);

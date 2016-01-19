@@ -171,6 +171,7 @@ public class SelectAvatarState : GameState
 	private void serverRequestTimeout()
 	{
 		gotoPrevious = true;
+		m_queue.reset();
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )

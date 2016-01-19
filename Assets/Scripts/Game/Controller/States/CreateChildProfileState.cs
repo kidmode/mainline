@@ -53,7 +53,7 @@ public class CreateChildProfileState : GameState
 			break;
 		case SubState.LOADING:
 			if(p_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT) == null)
-				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 1);
+				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 10);
 			m_createChildCanvas = null;
 			m_subState = SubState.NONE;
 			break;
@@ -292,11 +292,15 @@ public class CreateChildProfileState : GameState
 
 	private void _requestComplete(HttpsWWW p_response)
 	{
-//		if (p_response == null)
-//		{
-//			Debug.Log("Delete child request timeout");
-//			return;
-//		}
+		if (p_response == null)
+		{
+			Debug.Log("Delete child request timeout");
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+			m_subState = SubState.GO_OVERVIEWINFO;	
+			m_gameController.game.showNoInternetScreen2();
+			return;
+		}
 
 		if(null == p_response.error)
 		{
@@ -332,6 +336,7 @@ public class CreateChildProfileState : GameState
 
 	private void serverRequestTimeout()
 	{
+		m_queue.reset();
 		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		m_subState = SubState.GO_OVERVIEWINFO;	
 	}
@@ -656,8 +661,12 @@ public class CreateChildProfileState : GameState
 		//m_queue.add(new ImageRequest("newAvatar", l_url));
 		WWW l_www = new WWW (l_url);
 		yield return l_www;
-		m_queue.add(new UpdatePhotoRequest("newAvatar",l_www.bytes, null ));
-		m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
+		UpdatePhotoRequest updatePhotoRequest = new UpdatePhotoRequest("newAvatar",l_www.bytes, null);
+		updatePhotoRequest.timeoutHandler = serverRequestTimeout;
+		m_queue.add(updatePhotoRequest);
+		EditChildRequest editChildRequest = new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday, editChildComplete);
+		editChildRequest.timeoutHandler = serverRequestTimeout;
+		m_queue.add(editChildRequest);
 		m_queue.request(RequestType.SEQUENCE);
 		l_www.Dispose ();
 		m_subState = SubState.LOADING;
