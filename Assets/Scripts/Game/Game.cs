@@ -359,7 +359,7 @@ public class Game : MonoBehaviour
 //		File.Delete( Application.persistentDataPath + "/kidList_temp.txt");
 //
 //		File.Delete( Application.persistentDataPath + "/kidList_backup.txt");
-
+//
 //		DirectoryInfo dataDir = new DirectoryInfo(Application.persistentDataPath);
 //		dataDir.Delete(true);
 		#endif
@@ -709,8 +709,19 @@ public class Game : MonoBehaviour
 		return true;
 	}
 
+	public void showNoInternetScreen()
+	{
+		UICanvas error_message = m_gameController.getUI().findScreen(UIScreen.NO_INTERNET);
+		if (error_message == null)
+			m_gameController.getUI().createScreen(UIScreen.NO_INTERNET, false, 15);
+	}
 
-	
+	public void showNoInternetScreen2()
+	{
+		UICanvas error_message = m_gameController.getUI().findScreen(UIScreen.ERROR_MESSAGE);
+		if (error_message == null)
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 20);
+	}
 	//end
 
 	#if SHOW_STATS

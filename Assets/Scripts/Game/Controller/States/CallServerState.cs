@@ -50,16 +50,16 @@ public class CallServerState : GameState
 			for (int l_i = 0; l_i <m_callCount; l_i++)
 			{
 				SingleCall l_call = l_calls[l_i];
-				m_webRequests.Add( Server.request (l_call.callPath,l_call.callData,l_call.callMethod,onSignCallReturn));
+				m_webRequests.Add( Server.request ("", l_call.callPath,l_call.callData,l_call.callMethod,onSignCallReturn));
 			}
 		}
 		else if(!("".Equals(m_session.url)))
 		{
-			m_webRequest = Server.request (m_session.url,m_session.parameter,m_session.callMethod,onCallReturn);
+			m_webRequest = Server.request ("", m_session.url,m_session.parameter,m_session.callMethod,onCallReturn);
 		}
 	}
 
-	private static void onCallReturn(HttpsWWW p_webCall)
+	private static void onCallReturn(string status, HttpsWWW p_webCall)
 	{
 		if(null != p_webCall.error)
 		{
@@ -75,7 +75,7 @@ public class CallServerState : GameState
 		}
 	}
 
-	private static void onSignCallReturn(HttpsWWW p_webCall)
+	private static void onSignCallReturn(string status, HttpsWWW p_webCall)
 	{
 		if(null != p_webCall.error)
 		{

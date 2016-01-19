@@ -16,7 +16,7 @@ public enum CallMethod
 
 //public delegate void WebCallHandler( WWW p_webCall );
 //honda added: for https
-public delegate void HttpsWebCallHandler( HttpsWWW p_webCall );
+public delegate void HttpsWebCallHandler( string status, HttpsWWW p_webCall );
 public delegate void StreamBuildHandler( );
 //end
 public class Server : object 
@@ -39,11 +39,11 @@ public class Server : object
         get { return m_instance.m_url; }
         set { m_instance.m_url = WWW.EscapeURL(value); }
     }
-
-    public static WebRequest request(string p_call, Hashtable p_postData,  CallMethod p_callMethod, HttpsWebCallHandler p_callback )
+	
+	public static WebRequest request(string requestName, string p_call, Hashtable p_postData,  CallMethod p_callMethod, HttpsWebCallHandler p_callback )
 	{
-        WebRequest l_webRequest = new WebRequest( m_instance, p_call, p_postData, p_callMethod, p_callback );
-        m_instance.addCall( l_webRequest );
+		WebRequest l_webRequest = new WebRequest(requestName, m_instance, p_call, p_postData, p_callMethod, p_callback );
+		m_instance.addCall( l_webRequest );
 		
 		return l_webRequest;
 	}

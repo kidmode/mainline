@@ -295,12 +295,19 @@ public class ProfileState : GameState
 		else
 		{
 			m_requestQueue.reset ();
-			m_requestQueue.add (new SendTellFriendRequest(l_from,l_to,l_option,sendTellFriendRequestComplete));
+			SendTellFriendRequest sendTellFriendRequest = new SendTellFriendRequest(l_from,l_to,l_option,sendTellFriendRequestComplete);
+			sendTellFriendRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(sendTellFriendRequest);
 			m_requestQueue.request();
 			m_dialog.active = false;
 			m_confirmDialog.active = true;
 			m_closeConfirmButton.active = false;
 		}
+	}
+
+	private void serverRequestTimeout()
+	{
+		m_confirmContentText.text = Localization.getString(Localization.ERROR_MESSAGE_ERROR_TEXT);
 	}
 
 	private void sendTellFriendRequestComplete(HttpsWWW p_response)

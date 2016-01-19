@@ -12,7 +12,7 @@ public class TryTrialState : GameState
 		m_response = null;
 		Hashtable l_params = new Hashtable();
 		l_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
-		Server.request( ZoodlesConstants.REST_TRY_TRIAL, l_params, CallMethod.POST, _requestComplete ); 
+		Server.request("",  ZoodlesConstants.REST_TRY_TRIAL, l_params, CallMethod.POST, _requestComplete ); 
 	}
 
 	public override void update( GameController p_gameController, int p_time )
@@ -25,7 +25,7 @@ public class TryTrialState : GameState
 		}
 	}
 
-	private void _requestComplete(HttpsWWW p_www)
+	private void _requestComplete(string status, HttpsWWW p_www)
 	{
 		if(null != p_www.error)
 		{

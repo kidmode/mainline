@@ -636,7 +636,9 @@ public class SettingChildLockState : GameState
 
 		m_settingCache.childLockPassword = InputFieldNewChildCode.text;
 
-		m_requestQueue.add(new EnableLockRequest(m_settingCache.childLockPassword, saveNewChildLockComplete));
+		EnableLockRequest enableLockRequest = new EnableLockRequest(m_settingCache.childLockPassword, saveNewChildLockComplete);
+		enableLockRequest.timeoutHandler = serverRequestTimeout;
+		m_requestQueue.add(enableLockRequest);
 		m_requestQueue.add(new UpdateSettingRequest("true"));
 
 		m_requestQueue.request (RequestType.SEQUENCE);
@@ -657,10 +659,15 @@ public class SettingChildLockState : GameState
 //		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
 //		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
 //		PlayerPrefs.Save ();
-
-
 	}
 
+	private void serverRequestTimeout()
+	{
+		m_requestQueue.reset();
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_childLockChangeError.active = true;
+	}
+	
 	private void saveNewChildLockComplete(HttpsWWW p_response)
 	{
 

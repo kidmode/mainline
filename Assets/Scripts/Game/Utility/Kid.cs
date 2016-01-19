@@ -37,7 +37,7 @@ public class Kid : System.Object
 			{
 				kid_photo = Resources.Load("GUI/2048/common/avatars/icon_avatar_gen") as Texture2D;
 				if( photo != null )
-					Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+					Server.request("",  photo, null, CallMethod.GET, _requestPhotoComplete );
 			}
 		}
 	}
@@ -381,7 +381,7 @@ public class Kid : System.Object
 		return hash;
 	}
 
-	private void _requestPhotoComplete( HttpsWWW p_www )
+	private void _requestPhotoComplete(string status, HttpsWWW p_www)
 	{
 		if (p_www.error == null && p_www.texture.width != 8 && p_www.texture.height != 8)
 		{
@@ -400,7 +400,7 @@ public class Kid : System.Object
 
 	public void requestPhotoAndSaveLocal(){
 
-		Server.request( photo, null, CallMethod.GET, _requestPhotoComplete );
+		Server.request("", photo, null, CallMethod.GET, _requestPhotoComplete);
 
 	}
 
