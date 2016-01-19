@@ -866,11 +866,11 @@ public class CreateChildRequest : RequestQueue.Request
 
 	private void _requestComplete(HttpsWWW p_response)
 	{
-//		if (p_response == null)
-//		{
-//			Debug.Log("CreateChildRequest _requestComplete timeout");
-//			return;
-//		}
+		if (p_response == null)
+		{
+			Debug.Log("CreateChildRequest _requestComplete timeout");
+			return;
+		}
 
 		if (p_response.error == null)
 		{

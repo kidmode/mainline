@@ -609,7 +609,8 @@ public class Game : MonoBehaviour
 	
 	private void getCheckComplete(HttpsWWW p_response)
 	{
-		if(p_response.error == null)
+
+		if (p_response != null && p_response.error == null)
 		{
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
 			l_data = (l_data["jsonResponse"] as Hashtable)["response"] as Hashtable;
