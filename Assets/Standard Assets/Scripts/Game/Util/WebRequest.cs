@@ -31,16 +31,18 @@ public class WebRequest : object
 
 	private int m_retryLimit = 10;
 //	private int m_retries = 0;
-	private float m_timeout = 60.0f;
+	//unit: 5000ms(5s)
+	private float m_timeout = 5000;
 	
 	private int m_status = (int)WebRequestStatus.InProgress;
 	private bool m_isDestroyed;
 
     private CallMethod m_callMethod;
+	private string requestName;
 
-
-    public WebRequest(Server p_server, string p_call, Hashtable p_postData, CallMethod p_callMethod, HttpsWebCallHandler p_callback )
+	public WebRequest(string rname, Server p_server, string p_call, Hashtable p_postData, CallMethod p_callMethod, HttpsWebCallHandler p_callback )
 	{
+		requestName 	= rname;
 		m_server        = p_server;
 		m_call          = p_call;
 		m_callback      = p_callback;
@@ -117,13 +119,67 @@ public class WebRequest : object
 					#endif
 					m_status = (int)WebRequestStatus.Finished;
 				}
-				m_callback( m_www );
+				m_callback( "done", m_www );
 				Server.removeCall( this );
+			}
+			if( m_time > m_timeout )
+			{
+				m_status = (int)WebRequestStatus.Timeout;
+				/**********************************************************/
+				//important: remember to add requestName on api method
+				/**********************************************************/
+				//show exit & wifi button popup no internet message
+				if (requestName.Equals("ClientIdRequest") || 
+				    requestName.Equals("CheckFreePremiumRequest") ||
+				    
+				    requestName.Equals("SignInCacheRequest"))
+				{
+					Debug.Log("ClientIdAndPremiumRequests: WebRequest " + requestName + " timeout");
+//					m_www.Dispose();
+//					if (m_www == null)
+//					{
+//						Debug.Log("ClientIdAndPremiumRequests: WebRequest timeout destroyed");
+//					}
+//					else
+//					{
+//						Debug.Log("ClientIdAndPremiumRequests: WebRequest timeout not destroyed");
+//					}
+					if (m_callback != null)
+					{
+						m_callback("time out1", null);
+						Server.removeCall(this);
+					}
+				}
+				//show no internet message
+				else if (requestName.Equals("WebContentRequest") ||
+				         requestName.Equals("SendPinRequest") || 
+				         requestName.Equals("CheckAccountRequest") || 
+				         requestName.Equals("UpdatePhotoRequest") || 
+				         requestName.Equals("DeleteChildRequest") || 
+				         requestName.Equals("EditChildRequest") ||
+				         requestName.Equals("CreateChildRequest"))
+				{
+					Debug.Log("ClientIdAndPremiumRequests: WebRequest " + requestName + " timeout");
+					if (m_callback != null)
+					{
+						m_callback("time out2", null);
+						Server.removeCall(this);
+					}
+				}
+				//no popup message, api needs to handle it
+				else if (requestName.Equals("EnableLockRequest") ||  
+				         requestName.Equals("UpdateSettingRequest") ||
+				         requestName.Equals("SendTellFriendRequest"))
+				{
+					Debug.Log("ClientIdAndPremiumRequests: WebRequest " + requestName + " timeout");
+					m_callback("time out3", null);
+					Server.removeCall(this);
+				}
 			}
 		}
 		
-		if( m_time > m_timeout )
-			m_status = (int)WebRequestStatus.Timeout;
+//		if( m_time > m_timeout )
+//			m_status = (int)WebRequestStatus.Timeout;
 	}	
 	
 	public int status

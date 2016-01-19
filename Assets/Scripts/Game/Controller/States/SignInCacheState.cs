@@ -17,21 +17,21 @@ public class SignInCacheState : GameState
 			//	SessionHandler.getInstance ().clientId = 600;
 			m_queue = new RequestQueue();
 			//		m_queue.add(new ClientIdRequest(getclientIdComplete));
-			m_queue.add(new GetUserSettingRequest(checkError));
+			m_queue.add(new GetUserSettingRequest("SignInCacheRequest", checkError));
 			//TODO: need to fix this
 			LocalSetting l_setting = LocalSetting.find("ServerSetting");
 			if (!l_setting.hasKey(ZoodlesConstants.ZPS_LEVEL))
-				m_queue.add(new GetLevelsInfoRequest(checkError));
+				m_queue.add(new GetLevelsInfoRequest("SignInCacheRequest", checkError));
 			if (!l_setting.hasKey(ZoodlesConstants.EXPERIENCE_POINTS))
-				m_queue.add(new GetExperiencePointsInfoRequest(checkError));
+				m_queue.add(new GetExperiencePointsInfoRequest("SignInCacheRequest", checkError));
 			if (!l_setting.hasKey(ZoodlesConstants.CATEGORIES))
-				m_queue.add(new GetCategoriesInfoRequest(checkError));
+				m_queue.add(new GetCategoriesInfoRequest("SignInCacheRequest", checkError));
 			if (!l_setting.hasKey(ZoodlesConstants.TAGS))
-				m_queue.add(new GetTagsInfoRequest(checkError));
+				m_queue.add(new GetTagsInfoRequest("SignInCacheRequest", checkError));
 			if (!l_setting.hasKey(ZoodlesConstants.SUBJECTS))
-				m_queue.add(new GetSubjectsInfoRequest(checkError));
+				m_queue.add(new GetSubjectsInfoRequest("SignInCacheRequest", checkError));
 			
-			m_queue.add(new GetKidListRequest(onGetKidsComplete));
+			m_queue.add(new GetKidListRequest("SignInCacheRequest", onGetKidsComplete));
 			m_queue.request(RequestType.SEQUENCE);
 			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		}
@@ -179,18 +179,32 @@ public class SignInCacheState : GameState
 
 	private void checkError(HttpsWWW p_response)
 	{
-		if(null != p_response.error)
+		if (p_response == null)
 		{
-			if (SessionHandler.getInstance().token.isExist()) //cynthia
-			{
-				m_loginSuccess = true;
-			}
-			else
-			{
-				m_queue.reset();
-				SessionHandler.getInstance().SignInFail = true;
-				m_toSignInState = true;
-			}
+			Debug.Log("ClientIdAndPremiumRequests: checkError timeout");
+			setLoginStatus();
+		}
+		else if(p_response.error != null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: checkError error " + p_response.error);
+			setLoginStatus();
+		}
+	}
+
+	private void setLoginStatus()
+	{
+		if (SessionHandler.getInstance().token.isExist()) //cynthia
+		{
+			Debug.Log("ClientIdAndPremiumRequests: setLoginStatus token exists");
+			m_loginSuccess = true;
+			m_queue.reset();
+		}
+		else
+		{
+			Debug.Log("ClientIdAndPremiumRequests: setLoginStatus no token");
+			m_queue.reset();
+			SessionHandler.getInstance().SignInFail = true;
+			m_toSignInState = true;
 		}
 	}
 

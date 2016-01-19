@@ -517,8 +517,24 @@ public class SignInState : GameState
 			m_queue = new RequestQueue();
 		m_queue.reset ();
 //		m_queue.add(new ClientIdRequest(getClientIdComplete));
-		m_queue.add(new CheckAccountRequest(m_account.text.Trim(),checkUsernameRequestComplete));
+		CheckAccountRequest checkAccountRequest = new CheckAccountRequest(m_account.text.Trim(),checkUsernameRequestComplete);
+		checkAccountRequest.timeoutHandler = serverRequestTimeout;
+		m_queue.add(checkAccountRequest);
 		m_queue.request(RequestType.SEQUENCE);
+	}
+
+	private void serverRequestTimeout()
+	{
+		m_signInButton.addClickCallback(toCreateChildrenScreen);
+		
+		UIManager l_ui = m_controller.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen (UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		if(splashCanvas != null)
+			splashCanvas.gameObject.SetActive(false);
+		
+		m_signInCanvas.active = true;
+		m_controller.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_subState = SubState.NONE;
 	}
 	
 	private UILabel		m_title;

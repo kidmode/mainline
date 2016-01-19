@@ -16,6 +16,7 @@ public enum RequestType
 public class RequestQueue
 {
 	public delegate void RequestHandler(HttpsWWW p_response);
+	public delegate void RequestTimeoutHandler();
 
 	public class Request
 	{
@@ -30,7 +31,7 @@ public class RequestQueue
 			init();
 			
 //			m_params["version"] = "v2";
-			m_request = Server.request(m_call, m_params, m_method, _requestComplete);
+			m_request = Server.request(requestName ,m_call, m_params, m_method, _requestComplete);
 
 		}
 
@@ -38,6 +39,12 @@ public class RequestQueue
 		{
 			get { return m_handler; }
 			set { m_handler = value; }
+		}
+
+		public RequestTimeoutHandler timeoutHandler
+		{
+			get { return m_timeoutHandler; }
+			set { m_timeoutHandler = value; }
 		}
 
 		protected virtual void init()
@@ -48,8 +55,61 @@ public class RequestQueue
 			get { return m_context; }
 		}
 
-		private void _requestComplete(HttpsWWW p_response)
+		private void _requestComplete(string status, HttpsWWW p_response)
 		{
+			if (status.Contains("time out"))
+			{
+				if (m_timeoutHandler != null)
+				{
+					try
+					{
+						m_timeoutHandler();
+					}
+					finally
+					{
+						m_timeoutHandler = null;
+					}
+				}
+
+				Debug.Log("ClientIdAndPremiumRequests: WebRequest "+ requestName + " " + status + " callback");
+				GameObject gameLogic = GameObject.FindWithTag("GameController");
+				Game game = gameLogic.GetComponent<Game>();
+				
+				if (status.EndsWith("1"))
+				{
+					game.showNoInternetScreen();
+				}
+				else if (status.EndsWith("2"))
+				{
+					game.showNoInternetScreen2();
+				}
+				else if (status.EndsWith("3"))
+				{
+					//do nothing ~ api needs to handle popup message
+				}
+				else
+				{
+					game.showNoInternetScreen();
+				}
+				KidMode.dismissProgressBar();
+				
+
+				
+				if (m_handler != null)
+				{
+					try
+					{
+						m_handler(null);
+					}
+					finally
+					{
+						m_handler = null;
+					}
+				}
+				return;
+			}
+			
+			m_timeoutHandler = null;
 			if (m_handler != null)
 			{
 				try
@@ -84,6 +144,8 @@ public class RequestQueue
 		private RequestHandler m_handler = null;
 		internal RequestQueue m_context = null;
 		private WebRequest m_request = null;
+		private RequestTimeoutHandler m_timeoutHandler = null;
+		protected string requestName = "";
 	}
 
 	public RequestQueue()
@@ -220,6 +282,7 @@ public class ClientIdRequest : RequestQueue.Request
 
 	protected override void init()
 	{
+		requestName = "ClientIdRequest";
 //		//Server can't get 'screen_size' if I post this param and I don't konw why. So I send it on URL.
 		m_call = ZoodlesConstants.REST_CLIENT_ID_URL+"?"+ZoodlesConstants.PARAM_SIZE+"="+Math.Round(Math.Sqrt(Screen.width * Screen.width + Screen.height * Screen.height) / Screen.dpi,1);
 		m_params[ZoodlesConstants.PARAM_FLASH] = SessionHandler.getInstance().flashInstall;
@@ -380,6 +443,11 @@ public class GetKidListRequest : RequestQueue.Request
 	{
 	}
 
+	public GetKidListRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
+	}
+
 	protected override void init()
 	{
 		m_call = ZoodlesConstants.REST_KIDS_URL;
@@ -414,6 +482,12 @@ public class GetUserSettingRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 
+	public GetUserSettingRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
+		handler += _requestComplete;
+	}
+
 	protected override void init()
 	{
 		m_call = "/api/user_settings/show_settings";
@@ -423,6 +497,12 @@ public class GetUserSettingRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetUserSettingRequest timeout");
+			return;
+		}
+
 		if(null == p_response.error)
 		{
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
@@ -494,6 +574,12 @@ public class GetLevelsInfoRequest : RequestQueue.Request
 		handler += _requestComplete;
 	}
 
+	public GetLevelsInfoRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
+		handler += _requestComplete;
+	}
+
 	protected override void init()
 	{
 		m_call = "/api/configuration/get_level_zps_info";
@@ -503,6 +589,12 @@ public class GetLevelsInfoRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetLevelsInfoRequest timeout");
+			return;
+		}
+
 		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.ZPS_LEVEL, p_response.text);
 	}
 }
@@ -512,6 +604,12 @@ public class GetExperiencePointsInfoRequest : RequestQueue.Request
 {
 	public GetExperiencePointsInfoRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
+		handler += _requestComplete;
+	}
+
+	public GetExperiencePointsInfoRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
 		handler += _requestComplete;
 	}
 	
@@ -524,7 +622,16 @@ public class GetExperiencePointsInfoRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.EXPERIENCE_POINTS, p_response.text);
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetExperiencePointsInfoRequest timeout");
+			return;
+		}
+
+		if (p_response.error == null)
+		{
+			LocalSetting.find("ServerSetting").setString(ZoodlesConstants.EXPERIENCE_POINTS, p_response.text);
+		}
 	}
 }
 
@@ -533,6 +640,12 @@ public class GetCategoriesInfoRequest : RequestQueue.Request
 {
 	public GetCategoriesInfoRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
+		handler += _requestComplete;
+	}
+
+	public GetCategoriesInfoRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
 		handler += _requestComplete;
 	}
 	
@@ -545,7 +658,16 @@ public class GetCategoriesInfoRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.CATEGORIES, p_response.text);
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetCategoriesInfoRequest timeout");
+			return;
+		}
+		
+		if (p_response.error == null)
+		{
+			LocalSetting.find("ServerSetting").setString(ZoodlesConstants.CATEGORIES, p_response.text);
+		}
 	}
 }
 
@@ -554,6 +676,12 @@ public class GetTagsInfoRequest : RequestQueue.Request
 {
 	public GetTagsInfoRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
+		handler += _requestComplete;
+	}
+
+	public GetTagsInfoRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
 		handler += _requestComplete;
 	}
 	
@@ -566,7 +694,16 @@ public class GetTagsInfoRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.TAGS, p_response.text);
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetTagsInfoRequest timeout");
+			return;
+		}
+		
+		if (p_response.error == null)
+		{
+			LocalSetting.find("ServerSetting").setString(ZoodlesConstants.TAGS, p_response.text);
+		}
 	}
 }
 
@@ -575,6 +712,12 @@ public class GetSubjectsInfoRequest : RequestQueue.Request
 {
 	public GetSubjectsInfoRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
+		handler += _requestComplete;
+	}
+
+	public GetSubjectsInfoRequest(string name, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		requestName = name;
 		handler += _requestComplete;
 	}
 	
@@ -587,7 +730,16 @@ public class GetSubjectsInfoRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		LocalSetting.find("ServerSetting").setString(ZoodlesConstants.SUBJECTS, p_response.text);
+		if (p_response == null)
+		{
+			Debug.Log("ClientIdAndPremiumRequests: GetSubjectsInfoRequest timeout");
+			return;
+		}
+		
+		if (p_response.error == null)
+		{
+			LocalSetting.find("ServerSetting").setString(ZoodlesConstants.SUBJECTS, p_response.text);
+		}
 	}
 }
 
@@ -701,6 +853,7 @@ public class CreateChildRequest : RequestQueue.Request
 
 	protected override void init()
 	{
+		requestName = "CreateChildRequest";
 		m_call = "/api/kids";
 //		WWW l_www = context.getVariable(m_imageVariable) as WWW;
 		m_params[ZoodlesConstants.PARAM_NAME] = m_name;
@@ -713,34 +866,42 @@ public class CreateChildRequest : RequestQueue.Request
 
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-		Kid l_kid = new Kid(l_data);
-		if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
-			SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
-		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-		//honda
-		l_kid.saveKidPhotoLocal();
-		//honda: request time limits info
-		l_kid.requestTimeLimits();
-		//end
+//		if (p_response == null)
+//		{
+//			Debug.Log("CreateChildRequest _requestComplete timeout");
+//			return;
+//		}
 
-		if (null == SessionHandler.getInstance ().kidList)
-			SessionHandler.getInstance ().kidList = new List<Kid> ();
+		if (p_response.error == null)
+		{
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			Kid l_kid = new Kid(l_data);
+			if(null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
+				SessionHandler.getInstance().selectAvatar = "icon_avatar_gen";
+			l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+			//honda
+			l_kid.saveKidPhotoLocal();
+			//honda: request time limits info
+			l_kid.requestTimeLimits();
+			//end
 
-		SessionHandler.getInstance().inputedChildName = string.Empty;
-		SessionHandler.getInstance().inputedbirthday = string.Empty;
-		SessionHandler.getInstance().selectAvatar = null;
-		SessionHandler.getInstance().kidList.Add(l_kid);
-		SessionHandler.getInstance().getSingleKidApplist(l_kid);
+			if (null == SessionHandler.getInstance ().kidList)
+				SessionHandler.getInstance ().kidList = new List<Kid>();
 
-		//cynthia
-		ArrayList l_list = new ArrayList();
-		foreach (Kid k in SessionHandler.getInstance().kidList) {
-			l_list.Add(k.toHashTable());
+			SessionHandler.getInstance().inputedChildName = string.Empty;
+			SessionHandler.getInstance().inputedbirthday = string.Empty;
+			SessionHandler.getInstance().selectAvatar = null;
+			SessionHandler.getInstance().kidList.Add(l_kid);
+			SessionHandler.getInstance().getSingleKidApplist(l_kid);
+
+			//cynthia
+			ArrayList l_list = new ArrayList();
+			foreach (Kid k in SessionHandler.getInstance().kidList) {
+				l_list.Add(k.toHashTable());
+			}
+			String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+			SessionHandler.SaveKidList(encodedString);
 		}
-		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
-		SessionHandler.SaveKidList(encodedString);
-
 	}
 	
 	private string m_name;
@@ -959,14 +1120,11 @@ public class UploadAudioRequest : RequestQueue.Request
 public class WebContentRequest : RequestQueue.Request
 {
 	public WebContentRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
-	{
-
-//		p_handler+=_requestComplete;
-
-	}
+	{}
 
 	protected override void init()
 	{
+		requestName = "WebContentRequest";
 		Debug.Log ("spinner: " + SessionHandler.getInstance ().currentKid.id);
 		m_call = "/api/kids" + ZoodlesConstants.SLASH + SessionHandler.getInstance().currentKid.id + ZoodlesConstants.REST_LINKS_LIST_URL_SUFFIX;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
@@ -977,14 +1135,6 @@ public class WebContentRequest : RequestQueue.Request
 		m_params["locale"] = l_locale.Replace ("_","-");
 		#endif
 		m_method = CallMethod.GET;
-	}
-
-
-	private void _requestComplete(HttpsWWW p_response)
-	{
-
-
-		
 	}
 }
 
@@ -1071,22 +1221,17 @@ public class BookListRequest : RequestQueue.Request
 	private bool m_topRequest = false;
 }
 
-
 public class GetBookReadingRequest : RequestQueue.Request
 {
-
 	private int bookID; 
+
 	public GetBookReadingRequest( int bookID, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
-//		m_topRequest = p_topRequest;
-
 		this.bookID = bookID;
 	}
 	
 	protected override void init()
 	{
-		//		m_call = ZoodlesConstants.REST_BOOKS_URL + "/books_for_kid"; 
-
 		m_call = "/api/kids/" + SessionHandler.getInstance().currentKid.id + "/readings/show_book_reading";
 
 		m_params[ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
@@ -1096,23 +1241,7 @@ public class GetBookReadingRequest : RequestQueue.Request
 		
 
 		m_method = CallMethod.GET;
-
-		handler += _requestComplete;
-
 	}
-
-
-	private void _requestComplete(HttpsWWW p_response)
-	{
-
-		if(p_response.error == null){
-
-		}
-
-	}
-
-
-//	private bool m_topRequest = false;
 }
 
 // Drawing list request
@@ -1137,6 +1266,7 @@ public class DeleteChildRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "DeleteChildRequest";
 		m_call = ZoodlesConstants.DELETE_CHILD;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.PARAM_KID_ID] = SessionHandler.getInstance().currentKid.id;
@@ -1832,6 +1962,7 @@ public class UpdatePhotoRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "UpdatePhotoRequest";
 		m_call = "/api/kids/update_photo";
 //		WWW l_www = context.getVariable(m_imageVariable) as WWW;
 		m_params[ZoodlesConstants.PARAM_KID_ID] = SessionHandler.getInstance ().currentKid.id;
@@ -1981,11 +2112,11 @@ public class EnableLockRequest : RequestQueue.Request
 	public EnableLockRequest(string p_lockPin,RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_lockPin = p_lockPin;
-		
 	}
 	
 	protected override void init()
 	{
+		requestName = "EnableLockRequest";
 		m_call = ZoodlesConstants.REST_ENABLE_LOCK;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		if(null != m_lockPin)
@@ -1999,14 +2130,14 @@ public class EnableLockRequest : RequestQueue.Request
 //Update Setting Request
 public class UpdateSettingRequest : RequestQueue.Request
 {
-	public UpdateSettingRequest(string p_childLock,RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	public UpdateSettingRequest(string p_childLock, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
 	{
 		m_childLock = p_childLock;
-		
 	}
 	
 	protected override void init()
 	{
+		requestName = "UpdateSettingRequest";
 		m_call = ZoodlesConstants.REST_UPDATE_SETTING;
 		m_params[ZoodlesConstants.CHILD_LOCK] = m_childLock;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
@@ -2094,6 +2225,7 @@ public class SendPinRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "SendPinRequest";
 		m_call = ZoodlesConstants.SEND_PIN;
 		m_params[ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
 		m_method = CallMethod.POST;
@@ -2160,6 +2292,7 @@ public class EditChildRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "EditChildRequest";
 		m_params[ZoodlesConstants.ID] = SessionHandler.getInstance ().currentKid.id;
 		m_params[ZoodlesConstants.PARAM_NAME] = m_name;
 		m_params[ZoodlesConstants.PARAM_BIRTHDAY] = m_birthday;
@@ -2169,68 +2302,77 @@ public class EditChildRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
-		string l_string = "";
-		
-		l_string = UnicodeDecoder.Unicode(p_response.text);
-		l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-		l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
-
-		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
-		Kid l_kid = new Kid(l_data);
-		if (null == SessionHandler.getInstance ().selectAvatar || string.Empty.Equals (SessionHandler.getInstance ().selectAvatar))
-			l_kid.kid_photo = SessionHandler.getInstance().currentKid.kid_photo;
-		else
-			l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-		List<Kid> l_list = SessionHandler.getInstance ().kidList;
-		if (null != l_list)
+		if (p_response == null)
 		{
-			int l_count = l_list.Count;
-			for(int l_i = 0; l_i < l_count; l_i++)
+			Debug.Log("EditChildRequest _requestComplete timeout");
+			return;
+		}
+
+		if(p_response.error == null)
+		{
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Kid l_kid = new Kid(l_data);
+			if (null == SessionHandler.getInstance ().selectAvatar || string.Empty.Equals (SessionHandler.getInstance ().selectAvatar))
+				l_kid.kid_photo = SessionHandler.getInstance().currentKid.kid_photo;
+			else
+				l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+			List<Kid> l_list = SessionHandler.getInstance ().kidList;
+			if (null != l_list)
 			{
-				Kid l_currentKid = l_list[l_i] as Kid;
-				if(l_currentKid.id == l_kid.id)
+				int l_count = l_list.Count;
+				for(int l_i = 0; l_i < l_count; l_i++)
 				{
-					SessionHandler.getInstance().kidList[l_i].wholeName = l_kid.wholeName;
-					SessionHandler.getInstance().kidList[l_i].name = l_kid.name;
-					SessionHandler.getInstance().kidList[l_i].birthday = l_kid.birthday;
-					SessionHandler.getInstance().kidList[l_i].kid_photo = l_kid.kid_photo;
-					SessionHandler.getInstance().kidList[l_i].saveKidPhotoLocal();
-					string birthday = l_kid.birthday;
-					
-					int l_age = 0;
-					DateTime l_date = DateTime.Parse (birthday);
-					l_age = DateTime.Now.Year - l_date.Year;
-					DateTime l_now = DateTime.Now;
-					
-					if( l_now.Month < l_date.Month )
+					Kid l_currentKid = l_list[l_i] as Kid;
+					if(l_currentKid.id == l_kid.id)
 					{
-						l_age--;
+						SessionHandler.getInstance().kidList[l_i].wholeName = l_kid.wholeName;
+						SessionHandler.getInstance().kidList[l_i].name = l_kid.name;
+						SessionHandler.getInstance().kidList[l_i].birthday = l_kid.birthday;
+						SessionHandler.getInstance().kidList[l_i].kid_photo = l_kid.kid_photo;
+						SessionHandler.getInstance().kidList[l_i].saveKidPhotoLocal();
+						string birthday = l_kid.birthday;
+						
+						int l_age = 0;
+						DateTime l_date = DateTime.Parse (birthday);
+						l_age = DateTime.Now.Year - l_date.Year;
+						DateTime l_now = DateTime.Now;
+						
+						if( l_now.Month < l_date.Month )
+						{
+							l_age--;
+						}
+						else if( l_now.Month == l_date.Month && l_now.Day < l_date.Day )
+						{
+							l_age--;
+						}
+						SessionHandler.getInstance().kidList[l_i].age = l_age;
+						
+						SessionHandler.getInstance ().currentKid = SessionHandler.getInstance().kidList[l_i];
+						SessionHandler.getInstance ().getSingleKidApplist (SessionHandler.getInstance ().currentKid);
+						break;
 					}
-					else if( l_now.Month == l_date.Month && l_now.Day < l_date.Day )
-					{
-						l_age--;
-					}
-					SessionHandler.getInstance().kidList[l_i].age = l_age;
-					
-					SessionHandler.getInstance ().currentKid = SessionHandler.getInstance().kidList[l_i];
-					SessionHandler.getInstance ().getSingleKidApplist (SessionHandler.getInstance ().currentKid);
-					break;
 				}
 			}
-		}
 
-		//honda: save latest kid rogile to local
-		ArrayList arraylist = new ArrayList();
-		foreach (Kid k in SessionHandler.getInstance().kidList) {
-			arraylist.Add(k.toHashTable());
+			//honda: save latest kid rogile to local
+			ArrayList arraylist = new ArrayList();
+			foreach (Kid k in SessionHandler.getInstance().kidList) {
+				arraylist.Add(k.toHashTable());
+			}
+			String encodedString = MiniJSON.MiniJSON.jsonEncode(arraylist);
+			SessionHandler.SaveKidList(encodedString);
+			//end
+		
+			SessionHandler.getInstance ().inputedChildName = string.Empty;
+			SessionHandler.getInstance ().inputedbirthday = string.Empty;
+			SessionHandler.getInstance ().selectAvatar = null;
 		}
-		String encodedString = MiniJSON.MiniJSON.jsonEncode(arraylist);
-		SessionHandler.SaveKidList(encodedString);
-		//end
-	
-		SessionHandler.getInstance ().inputedChildName = string.Empty;
-		SessionHandler.getInstance ().inputedbirthday = string.Empty;
-		SessionHandler.getInstance ().selectAvatar = null;
 	}
 
 	private string m_name;
@@ -2263,6 +2405,7 @@ public class SendTellFriendRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "SendTellFriendRequest";
 		m_call = ZoodlesConstants.SEND_TELL_FRIEND_EMAIL;
 		m_params[ZoodlesConstants.PARAM_TOKEN]      = SessionHandler.getInstance().token.getSecret();
 		m_params[ZoodlesConstants.FROM] 	        = m_from;
@@ -2427,6 +2570,7 @@ public class CheckFreePremiumRequest : RequestQueue.Request
 	
 	protected override void init()
 	{
+		requestName = "CheckFreePremiumRequest";
 		m_call = "/api/clients/check_free_premium";
 		m_params [ZoodlesConstants.PARAM_CLIENT_ID] = SessionHandler.getInstance().clientId;
 		m_method = CallMethod.GET;
@@ -2472,6 +2616,7 @@ public class CheckAccountRequest : RequestQueue.Request
 
 	protected override void init()
 	{
+		requestName = "CheckAccountRequest";
 		m_call = ZoodlesConstants.CHECK_USERNAME;
 		m_params [ZoodlesConstants.PARAM_EMAIL] = m_username;
 	}

@@ -42,6 +42,7 @@ public class LoadingEntranceState : GameState
 		if (m_counterToNextScreen >= 1000) 
 		{
 			p_gameController.changeState( ZoodleState.MAP );
+			SwrveComponent.Instance.SDK.NamedEvent("LoadingEntranceCompleted");
 
 			const float COMPLETE_TIME = 0.5f;
 

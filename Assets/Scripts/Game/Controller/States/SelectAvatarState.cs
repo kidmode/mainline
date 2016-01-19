@@ -162,8 +162,15 @@ public class SelectAvatarState : GameState
 	{
 		byte[] l_bytes = image.bytes;
 		image.Dispose();
-		m_queue.add(new CreateChildRequest( SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday,l_bytes));
+		CreateChildRequest createChildRequest = new CreateChildRequest(SessionHandler.getInstance().inputedChildName, SessionHandler.getInstance().inputedbirthday,l_bytes);
+		createChildRequest.timeoutHandler = serverRequestTimeout;
+		m_queue.add(createChildRequest);
 		m_queue.request();
+	}
+
+	private void serverRequestTimeout()
+	{
+		gotoPrevious = true;
 	}
 
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )

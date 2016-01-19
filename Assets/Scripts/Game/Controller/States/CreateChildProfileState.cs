@@ -16,6 +16,7 @@ public class CreateChildProfileState : GameState
 		GO_PREVIOUS,
 		GO_PROFILE,
 		GO_PROFILE_VIEW,
+		GO_OVERVIEWINFO
 	}
 
 	public override void enter(GameController p_gameController)
@@ -51,8 +52,13 @@ public class CreateChildProfileState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
-			p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 1);
+			if(p_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT) == null)
+				p_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 1);
 			m_createChildCanvas = null;
+			m_subState = SubState.NONE;
+			break;
+		case SubState.GO_OVERVIEWINFO:
+			p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			m_subState = SubState.NONE;
 			break;
 		}
@@ -275,7 +281,9 @@ public class CreateChildProfileState : GameState
 				else
 				{
 					m_queue.reset();
-					m_queue.add(new DeleteChildRequest(_requestComplete));
+					DeleteChildRequest deleteChildRequest = new DeleteChildRequest(_requestComplete);
+					deleteChildRequest.timeoutHandler = serverRequestTimeout;
+					m_queue.add(deleteChildRequest);
 					m_queue.request();
 				}
 			}
@@ -284,6 +292,12 @@ public class CreateChildProfileState : GameState
 
 	private void _requestComplete(HttpsWWW p_response)
 	{
+//		if (p_response == null)
+//		{
+//			Debug.Log("Delete child request timeout");
+//			return;
+//		}
+
 		if(null == p_response.error)
 		{
 			//SessionHandler.getInstance ().kidList.Remove(SessionHandler.getInstance ().currentKid);
@@ -314,6 +328,12 @@ public class CreateChildProfileState : GameState
 			m_loadingLabel.text = Localization.getString(Localization.TXT_STATE_13_DELETE_FAIL);
 			m_closeDialogButton.active = true;
 		}
+	}
+
+	private void serverRequestTimeout()
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_subState = SubState.GO_OVERVIEWINFO;	
 	}
 
 	private void toBackOverview(UIButton p_button)
@@ -564,7 +584,9 @@ public class CreateChildProfileState : GameState
 			{
 				if (null == SessionHandler.getInstance().selectAvatar || string.Empty.Equals(SessionHandler.getInstance().selectAvatar))
 				{
-					m_queue.add(new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday));
+					EditChildRequest editChildRequest = new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday, editChildComplete);
+					editChildRequest.timeoutHandler = serverRequestTimeout;
+					m_queue.add(editChildRequest);
 					m_queue.request(RequestType.SEQUENCE);
 					m_subState = SubState.LOADING;
 				}
@@ -600,6 +622,31 @@ public class CreateChildProfileState : GameState
 //			}
 			//End //=========
 		}
+	}
+
+	private void editChildComplete(HttpsWWW p_response)
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		if (p_response == null)
+		{
+			Debug.Log("editChildComplete timeout");
+		}
+		else if(p_response.error != null)
+		{
+			UICanvas noInternetCanvas = m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+			if (error != null)
+				error.onClick += quitNoInternetButtonClicked;
+		}
+	}
+
+	private void quitNoInternetButtonClicked()
+	{	
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+		if (error != null)
+			error.onClick -= quitNoInternetButtonClicked;
+		m_subState = SubState.GO_OVERVIEWINFO;
 	}
 
 	private IEnumerator loadImage(string l_url)

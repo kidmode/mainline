@@ -175,15 +175,32 @@ public class BirthYearState : GameState
 			m_closeDialog.addClickCallback (closeDialog);
 			m_closeDialogButton.addClickCallback (closeDialog);
 			m_requestQueue.reset ();
-			m_requestQueue.add (new SendPinRequest(sendPinRequestComplete));
+			SendPinRequest sendPinRequest = new SendPinRequest(sendPinRequestComplete);
+			sendPinRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(sendPinRequest);
 			m_requestQueue.request();
 		}
 	}
 
 	private void sendPinRequestComplete(HttpsWWW p_response)
 	{
-		m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
-		m_dialogCanvas.setOriginalPosition ();
+		if(p_response.error == null)
+		{
+			m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
+			m_dialogCanvas.setOriginalPosition();
+		}
+		else
+		{
+			m_forgotButton.addClickCallback(showDialog);
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+		}
+	}
+
+	private void serverRequestTimeout()
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_birthCanvas.active = true;
+		m_forgotButton.addClickCallback(showDialog);
 	}
 	
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )

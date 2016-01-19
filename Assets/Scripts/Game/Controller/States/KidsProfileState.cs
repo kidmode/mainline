@@ -175,7 +175,9 @@ public class KidsProfileState : GameState
 		RequestQueue l_queue = new RequestQueue();
 		WWW l_www = new WWW (l_url);
 		yield return l_www;
-		l_queue.add(new UpdatePhotoRequest("newAvatar",l_www.bytes, onUpdateFinish ));
+		UpdatePhotoRequest updatePhotoRequest = new UpdatePhotoRequest("newAvatar",l_www.bytes, onUpdateFinish);
+		updatePhotoRequest.timeoutHandler = serverRequestTimeout;
+		l_queue.add(updatePhotoRequest);
 		l_queue.request(RequestType.SEQUENCE);
 		l_www.Dispose ();
 		moveOut( m_editPictureCanvas.getView( "mainPanel" ) );
@@ -184,31 +186,57 @@ public class KidsProfileState : GameState
 
 	private void onUpdateFinish(HttpsWWW p_response)
 	{
-		Kid l_kid = SessionHandler.getInstance ().currentKid;
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		
-		l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
-		//honda: save new avatar to local
-		l_kid.saveKidPhotoLocal();
-
-		foreach( Kid l_kidData in SessionHandler.getInstance().kidList )
+		if(p_response.error == null)
 		{
-			if( l_kidData.id == l_kid.id )
+			Kid l_kid = SessionHandler.getInstance ().currentKid;
+			
+			l_kid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
+			//honda: save new avatar to local
+			l_kid.saveKidPhotoLocal();
+
+			foreach( Kid l_kidData in SessionHandler.getInstance().kidList )
 			{
-				l_kidData.kid_photo = l_kid.kid_photo;
+				if( l_kidData.id == l_kid.id )
+				{
+					l_kidData.kid_photo = l_kid.kid_photo;
+				}
 			}
+
+			SessionHandler.getInstance ().currentKid = l_kid;
+			
+			if(null != m_avatarImage)
+				m_avatarImage.setTexture ( l_kid.kid_photo );
+			SessionHandler.getInstance ().selectAvatar = null;
+			
+			moveOut( m_kidsProfileCanvas.getView( "messagePanel" ) );
+			moveIn( m_profileActivityCanvas.getView( "panel" ) );
+			moveIn( m_kidsProfileCanvas.getView( "mainPanel" ) );
+
+			m_saveButton.addClickCallback( onSaveClick );
 		}
+		else
+		{
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+			if (error != null)
+				error.onClick += quitNoInternetButtonClicked;
+		}
+	}
 
-		SessionHandler.getInstance ().currentKid = l_kid;
-		
-		if(null != m_avatarImage)
-			m_avatarImage.setTexture ( l_kid.kid_photo );
-		SessionHandler.getInstance ().selectAvatar = null;
-		
-		moveOut( m_kidsProfileCanvas.getView( "messagePanel" ) );
-		moveIn( m_profileActivityCanvas.getView( "panel" ) );
-		moveIn( m_kidsProfileCanvas.getView( "mainPanel" ) );
+	private void serverRequestTimeout()
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_gotoBack = true;
+	}
 
-		m_saveButton.addClickCallback( onSaveClick );
+	private void quitNoInternetButtonClicked()
+	{	
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+		if (error != null)
+			error.onClick -= quitNoInternetButtonClicked;
+		m_gotoBack = true;
 	}
 
 	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVar )
