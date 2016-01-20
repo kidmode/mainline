@@ -72,7 +72,8 @@ public class BuildPlayer : MonoBehaviour
 		
 	}
 	
-	
+
+	//Note this is not for debug MODE which is another branch
 	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PLAY" )]
 	public static void Build_MAINLINE_DEV_DEBUG_PLAY()
 	{

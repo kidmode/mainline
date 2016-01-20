@@ -540,12 +540,16 @@ public class CreateChildProfileState : GameState
 	private void toCreateProfile(UIButton p_button)
 	{
 		//cynthia
-		if (!checkInternet()) 
-		{
-			return;
-		}
+//		if (!checkInternet()) 
+//		{
+//			return;
+//		}
 
 		//cynthia
+
+
+		m_queue = new RequestQueue();
+
 		p_button.removeClickCallback(toCreateProfile);
 		int l_count = null != SessionHandler.getInstance ().kidList?SessionHandler.getInstance ().kidList.Count:0;
 		
@@ -582,7 +586,7 @@ public class CreateChildProfileState : GameState
 				
 				m_queue.add(new ImageRequest("childAvatar", l_url));
 //				m_queue.add(new CreateChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text), m_birthday, "childAvatar"));
-				m_queue.request(RequestType.SEQUENCE);
+				m_queue.request(RequestType.RUSH);
 				m_subState = SubState.LOADING;
 			}
 			else
