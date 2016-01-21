@@ -292,6 +292,8 @@ public class CreateChildProfileState : GameState
 
 	private void _requestComplete(HttpsWWW p_response)
 	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 		if (p_response == null)
 		{
 			Debug.Log("Delete child request timeout");
