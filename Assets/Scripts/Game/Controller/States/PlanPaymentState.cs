@@ -30,6 +30,17 @@ public class PlanPaymentState : GameState
 		
 		m_backButton = m_paymentCanvas.getView("exitButton") as UIButton;
 		m_backButton.addClickCallback(_goBack);
+
+//		string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
+//		string l_returnJson = SessionHandler.getInstance().PremiumJson;
+//		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+//		ArrayList l_planList = l_data["plan_info"] as ArrayList;
+//		Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
+
+
+//		KidMode.showCreditCardView (GCS.Environment.getSecureHost() + "/payments/premium?client_id=" + SessionHandler.getInstance().clientId +
+//		                            "&token=" + SessionHandler.getInstance().token.getSecret() +
+//		                            "&plan_id=" + l_plan["id"].ToString());
 		
 		m_purchaseButton = m_paymentCanvas.getView("purchaseButton") as UIButton;
 		m_purchaseButton.addClickCallback(_goPaymentConfirm);
