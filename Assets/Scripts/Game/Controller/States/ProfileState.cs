@@ -12,6 +12,7 @@ public class ProfileState : GameState
 	
 	//--------------------Public Interface -----------------------
 	
+
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
@@ -75,6 +76,7 @@ public class ProfileState : GameState
 	public override void update(GameController p_gameController,  int p_time)
 	{
 		base.update(p_gameController, p_time);
+
 		
 		if (Input.anyKeyDown && m_isIntro)
 			m_profileScreen.tweener.stop(true);
@@ -105,6 +107,7 @@ public class ProfileState : GameState
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
 			m_gotoDashBoard = false;
 		}
+
 	}
 	
 	public override void exit(GameController p_gameController)
@@ -682,12 +685,14 @@ public class ProfileState : GameState
 		}
 	}
 
+	UIButton l_confirm;
+
 	private void _setupWebview(string p_url)
 	{
 		UICanvas l_screen = m_uiManager.createScreen(UIScreen.LEGAL_CONTENT, false, 5);
 		m_uiManager.changeScreen(l_screen, true);
 
-		UIButton l_confirm = l_screen.getView("quitButton") as UIButton;
+		l_confirm = l_screen.getView("quitButton") as UIButton;
 		l_confirm.addClickCallback(_onConfirmButtonClick);
 		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
 		l_webView.insets = new UniWebViewEdgeInsets((int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor), (int)(70.0f * l_screen.scaleFactor), (int)(120.0f * l_screen.scaleFactor));
@@ -695,6 +700,8 @@ public class ProfileState : GameState
 		l_webView.OnWebViewShouldClose += _onShouldCloseView;
 		l_webView.Load(p_url);
 		l_webView.Show();
+		Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		game.mOnCloseWebviewDialog += _closeWebview;
 	}
 
 	private void _closeWebview()
@@ -725,7 +732,6 @@ public class ProfileState : GameState
 
 	private void _onConfirmButtonClick(UIButton p_button)
 	{
-
 		m_quitButton.gameObject.SetActive(true);
 
 		_closeWebview();

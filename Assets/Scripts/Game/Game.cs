@@ -33,6 +33,10 @@ public class Game : MonoBehaviour
 	//honda
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
+
+	//Cathy for close webview dialog
+	public delegate void onCloseWebviewDialog();
+	public event onCloseWebviewDialog mOnCloseWebviewDialog; 
 	
 	private RequestQueue m_request;
 	private bool isClientIdCompleted;
@@ -66,8 +70,13 @@ public class Game : MonoBehaviour
 	}
 
 	void OnApplicationPause(bool pauseStatus) {
-		if (pauseStatus)
+		if (pauseStatus) {
+			if(mOnCloseWebviewDialog != null) {
+				mOnCloseWebviewDialog();
+				mOnCloseWebviewDialog = null;
+			}
 			KidMode.onActivityStop ();
+		}
 		else {
 			KidMode.setFullScreenDelay();
 			KidMode.onActivityRestart ();
