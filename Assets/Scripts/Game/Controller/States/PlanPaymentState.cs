@@ -12,12 +12,18 @@ public class PlanPaymentState : GameState
 		base.enter(p_gameController);
 		SwrveComponent.Instance.SDK.NamedEvent("ViewCreditCardPage");
 		_setupScreen(p_gameController.getUI());
+
+		//Set events
+		Game.OnPaymentSuccess += OnGameScriptPaymentSuccess;
 	}
 	
 	public override void exit(GameController p_gameController)
 	{
 		p_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		p_gameController.getUI().removeScreen(m_paymentCanvas);
+
+		//remove event call backs
+		Game.OnPaymentSuccess -= OnGameScriptPaymentSuccess;
 
 		base.exit(p_gameController);
 	}
@@ -31,16 +37,16 @@ public class PlanPaymentState : GameState
 		m_backButton = m_paymentCanvas.getView("exitButton") as UIButton;
 		m_backButton.addClickCallback(_goBack);
 
-//		string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
-//		string l_returnJson = SessionHandler.getInstance().PremiumJson;
-//		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
-//		ArrayList l_planList = l_data["plan_info"] as ArrayList;
-//		Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
+		string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
+		string l_returnJson = SessionHandler.getInstance().PremiumJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+		ArrayList l_planList = l_data["plan_info"] as ArrayList;
+		Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
 
 
-//		KidMode.showCreditCardView (GCS.Environment.getSecureHost() + "/payments/premium?client_id=" + SessionHandler.getInstance().clientId +
-//		                            "&token=" + SessionHandler.getInstance().token.getSecret() +
-//		                            "&plan_id=" + l_plan["id"].ToString());
+		KidMode.showCreditCardView (GCS.Environment.getSecureHost() + "/payments/premium?client_id=" + SessionHandler.getInstance().clientId +
+		                            "&token=" + SessionHandler.getInstance().token.getSecret() +
+		                            "&plan_id=" + l_plan["id"].ToString());
 		
 		m_purchaseButton = m_paymentCanvas.getView("purchaseButton") as UIButton;
 		m_purchaseButton.addClickCallback(_goPaymentConfirm);
@@ -54,58 +60,58 @@ public class PlanPaymentState : GameState
 		m_bestDealImg = m_paymentCanvas.getView("recommendImage") as UIImage;
 		m_bestDealImg.active = false;
 
-		string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
-		string l_returnJson = SessionHandler.getInstance().PremiumJson;
-		ArrayList l_planList = new ArrayList ();
-		
-		if (l_returnJson.Length > 0)
-		{
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
-			if (l_data.ContainsKey("plan_info"))
-				l_planList = l_data["plan_info"] as ArrayList;
-		}
-		
+//		string l_purchaseObject = SessionHandler.getInstance().purchaseObject;
+//		string l_returnJson = SessionHandler.getInstance().PremiumJson;
+//		ArrayList l_planList = new ArrayList ();
+//		
+//		if (l_returnJson.Length > 0)
+//		{
+//			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+//			if (l_data.ContainsKey("plan_info"))
+//				l_planList = l_data["plan_info"] as ArrayList;
+//		}
+//		
 		_fillPremiunDate(_getPlanDetailByName(l_planList, l_purchaseObject));
-
-		m_cardNumber = m_paymentCanvas.getView("cardNumber") as UIInputField;
-		m_cardNumber.listener.onSelect += _onCardNumberSelect;
-		m_cardNumber.listener.onDeselect += _onCardNumberDeselect;
-		m_cardMonth = m_paymentCanvas.getView("cardExpiredMonth") as UIInputField;
-		m_cardMonth.listener.onSelect += _onCardMonthSelect;
-		m_cardMonth.listener.onDeselect += _onCardMonthDeselect;
-		m_cardYear = m_paymentCanvas.getView("cardExpiredYear") as UIInputField;
-		m_cardYear.listener.onSelect += _onCardYearSelect;
-		m_cardYear.listener.onDeselect += _onCardYearDeselect;
-		
-		m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH );
-		m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR );
-
-		m_monthComBox = m_paymentCanvas.getView ("monthChcekbox") as UIComboBox;
-		m_yearComBox = m_paymentCanvas.getView ("yearChcekbox") as UIComboBox;
-		
-		List<object> l_monthDate = new List<object> ();
-		List<object> l_yearDate = new List<object> ();
-		l_monthDate.Add (new ComboBoxData("01",1));
-		l_monthDate.Add (new ComboBoxData("02",2));
-		l_monthDate.Add (new ComboBoxData("03",3));
-		l_monthDate.Add (new ComboBoxData("04",4));
-		l_monthDate.Add (new ComboBoxData("05",5));
-		l_monthDate.Add (new ComboBoxData("06",6));
-		l_monthDate.Add (new ComboBoxData("07",7));
-		l_monthDate.Add (new ComboBoxData("08",8));
-		l_monthDate.Add (new ComboBoxData("09",9));
-		l_monthDate.Add (new ComboBoxData("10",10));
-		l_monthDate.Add (new ComboBoxData("11",11));
-		l_monthDate.Add (new ComboBoxData("12",12));
-		m_monthComBox.setSwipeListDate (l_monthDate);
-		int l_nowYear = System.DateTime.Now.Year;
-		int l_year = 0;
-		for (int l_i=0; l_i<8; l_i++) 
-		{
-			l_year = l_nowYear + l_i;
-			l_yearDate.Add(new ComboBoxData(l_year.ToString(),l_year));
-		}
-		m_yearComBox.setSwipeListDate (l_yearDate);
+//
+//		m_cardNumber = m_paymentCanvas.getView("cardNumber") as UIInputField;
+//		m_cardNumber.listener.onSelect += _onCardNumberSelect;
+//		m_cardNumber.listener.onDeselect += _onCardNumberDeselect;
+//		m_cardMonth = m_paymentCanvas.getView("cardExpiredMonth") as UIInputField;
+//		m_cardMonth.listener.onSelect += _onCardMonthSelect;
+//		m_cardMonth.listener.onDeselect += _onCardMonthDeselect;
+//		m_cardYear = m_paymentCanvas.getView("cardExpiredYear") as UIInputField;
+//		m_cardYear.listener.onSelect += _onCardYearSelect;
+//		m_cardYear.listener.onDeselect += _onCardYearDeselect;
+//		
+//		m_cardMonth.text = Localization.getString( Localization.TXT_23_LABEL_MONTH );
+//		m_cardYear.text = Localization.getString( Localization.TXT_23_LABEL_YEAR );
+//
+//		m_monthComBox = m_paymentCanvas.getView ("monthChcekbox") as UIComboBox;
+//		m_yearComBox = m_paymentCanvas.getView ("yearChcekbox") as UIComboBox;
+//		
+//		List<object> l_monthDate = new List<object> ();
+//		List<object> l_yearDate = new List<object> ();
+//		l_monthDate.Add (new ComboBoxData("01",1));
+//		l_monthDate.Add (new ComboBoxData("02",2));
+//		l_monthDate.Add (new ComboBoxData("03",3));
+//		l_monthDate.Add (new ComboBoxData("04",4));
+//		l_monthDate.Add (new ComboBoxData("05",5));
+//		l_monthDate.Add (new ComboBoxData("06",6));
+//		l_monthDate.Add (new ComboBoxData("07",7));
+//		l_monthDate.Add (new ComboBoxData("08",8));
+//		l_monthDate.Add (new ComboBoxData("09",9));
+//		l_monthDate.Add (new ComboBoxData("10",10));
+//		l_monthDate.Add (new ComboBoxData("11",11));
+//		l_monthDate.Add (new ComboBoxData("12",12));
+//		m_monthComBox.setSwipeListDate (l_monthDate);
+//		int l_nowYear = System.DateTime.Now.Year;
+//		int l_year = 0;
+//		for (int l_i=0; l_i<8; l_i++) 
+//		{
+//			l_year = l_nowYear + l_i;
+//			l_yearDate.Add(new ComboBoxData(l_year.ToString(),l_year));
+//		}
+//		m_yearComBox.setSwipeListDate (l_yearDate);
 	}
 
 	private Hashtable _getPlanDetailByName(ArrayList p_plans, string p_planName)
@@ -154,6 +160,7 @@ public class PlanPaymentState : GameState
 	{
 		SwrveComponent.Instance.SDK.NamedEvent("BackFromPayment");
 		m_gameController.changeState(ZoodleState.VIEW_PREMIUM);
+		KidMode.dismissCreditCardView();
 	}
 	
 	private void _goPaymentConfirm(UIButton p_button)
@@ -190,6 +197,30 @@ public class PlanPaymentState : GameState
 				l_queue.add(new PaymentRequest(l_plan["id"].ToString(), l_cardType, m_cardNumber.text, m_monthComBox.currentData.entryValue.ToString(), m_yearComBox.currentData.entryValue.ToString(), _onPaymentComplete));
 				l_queue.request(RequestType.RUSH);
 			}
+		}
+	}
+
+	private void OnGameScriptPaymentSuccess(){
+
+		SessionHandler.getInstance ().token.setTry(true);
+		SessionHandler.getInstance ().token.setCurrent(true);
+		SessionHandler.getInstance ().token.setPremium(true);
+
+		
+		KidMode.dismissCreditCardView();
+		
+		//Payment done and First started Trial account
+		//Now sets local playerprefs
+		TrialTimeController.Instance.firstStartTrialTime();
+		
+		m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+
+		if(SessionHandler.getInstance ().token.isTried())
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("FreeTrialToPremium");
+		} else
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("PremiumWithoutTrial");
 		}
 	}
 	
