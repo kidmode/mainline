@@ -1051,9 +1051,7 @@ public class KidMode
 
 	public static void showCreditCardView(string url)
 	{
-		Debug.Log ("@@@@@@@@@@@@1" + url);
 		#if UNITY_ANDROID && !UNITY_EDITOR
-		Debug.Log ("@@@@@@@@@@@@2" + url);
 		AndroidJavaClass jc = new AndroidJavaClass("com.onevcat.uniwebview.AndroidPlugin");	
 		jc.CallStatic("showCreditCardWebview", url);
 		#endif
