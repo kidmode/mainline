@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PDMenuBarScript : MonoBehaviour {
 
@@ -12,7 +13,21 @@ public class PDMenuBarScript : MonoBehaviour {
 	[SerializeField]
 	public GameObject[] secondTierBar;
 
+	public GameObject childPrototype;
+	public GameObject childernList;
+	public GridLayoutGroup gridLayout;
+
+	public GameObject secondTier;
+	public GameObject childSelector;
+
+	public Image currentKidImage;
+	public Text currentkidText;
+
 	private Game game;
+	private Color normalColor = new Color32(0, 126, 255, 255);
+	private Color pressedColor = new Color32(247, 147 ,30, 255);
+	private int currentToogle = 0;
+
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +55,9 @@ public class PDMenuBarScript : MonoBehaviour {
 				}
 			}
 		}
+ 
+		setCurrentKidOnFirstMenuBar();
+		addChildern();
 	}
 	
 	// Update is called once per frame
@@ -210,7 +228,112 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
-	private Color normalColor = new Color32(0, 126, 255, 255);
-	private Color pressedColor = new Color32(247, 147 ,30, 255);
-	private int currentToogle = 0;
+	private void addChildern()
+	{
+		List<Kid> kidList = SessionHandler.getInstance().kidList;
+		if (kidList != null)
+		{
+		 	foreach (Kid item in kidList)
+			{
+				Kid kid = item;
+				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
+				//change text
+				Text text = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
+				text.text = kid.name;
+				//add button listener
+				Button button = child.GetComponent<Button>();
+				button.onClick.AddListener(() => kidSelected(kid));
+				//change image
+				Image image = child.transform.FindChild("IconBG/Icon").gameObject.GetComponent<Image>();
+				image.sprite = createSprite(kid.kid_photo);
+				//added to childernList
+				child.transform.localScale = menuBarCanvas.transform.localScale;
+				child.transform.parent = gridLayout.transform;
+//				child.SetActive(true);
+			}
+
+			//add child icon
+			{
+				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
+				//change text
+				Text text = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
+				text.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
+				//add button listener
+				Button button = child.GetComponent<Button>();
+				button.onClick.AddListener(() => kidSelected(null));
+				//change image
+				GameObject icon = child.transform.FindChild("IconBG/Icon").gameObject;
+				Image image = icon.GetComponent<Image>();
+				Texture2D texture = Resources.Load("GUI/2048/common/icon/icon_profile_add") as Texture2D;
+				image.sprite = createSprite(texture);
+				icon.transform.localScale = Vector3.one * .5f;
+				//added to childernList
+				child.transform.localScale = menuBarCanvas.transform.localScale;
+				child.transform.parent = gridLayout.transform;
+			}
+
+			setContentWidth();
+		}
+		else
+		{
+
+		}
+	}
+
+	public void setContentWidth()
+	{
+		float scrollContentWidth = (gridLayout.transform.childCount * gridLayout.cellSize.x) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.x);
+		RectTransform rt = (RectTransform)childernList.transform;
+		rt.sizeDelta = new Vector2(scrollContentWidth, rt.sizeDelta.y);
+	}
+
+	private void kidSelected(Kid kid)
+	{
+		if (kid != null)
+		{
+			SessionHandler.getInstance().currentKid = kid;
+			//change state to overview info
+			currentToogle = 0;
+			onButtonClicked(getSteteByNumber(currentToogle));
+			changeSecondTierButtonColor();
+
+			childSelector.SetActive(false);
+			secondTier.SetActive(true);
+			setCurrentKidOnFirstMenuBar();
+		}
+		else
+		{
+
+		}
+	}
+
+	private Sprite createSprite(Texture2D p_texture)
+	{
+		Sprite l_sprite = Sprite.Create(p_texture, 
+		                                new Rect(0, 0, p_texture.width, p_texture.height), 
+		                                new Vector2(0, 0));
+		return l_sprite;
+	}
+
+	public void onChildSelectorClicked()
+	{
+		if (childSelector.activeInHierarchy)
+		{
+			childSelector.SetActive(false);
+			secondTier.SetActive(true);
+		}
+		else
+		{
+			childSelector.SetActive(true);
+			secondTier.SetActive(false);
+		}
+	}
+
+	public void setCurrentKidOnFirstMenuBar()
+	{
+		Kid kid = SessionHandler.getInstance().currentKid;
+		currentkidText.text = kid.name;
+		kid.requestPhoto();
+		currentKidImage.sprite = createSprite(kid.kid_photo);
+	}
 }
