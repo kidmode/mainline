@@ -102,4 +102,49 @@ public class DebugController : MonoBehaviour {
 			
 		}
 	}
+
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
+	public void getFeaturedContent(){
+		
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new GetFeatureContentsRequest(getFeaturedContentComplete));
+		
+		request.request(RequestType.RUSH);
+		
+	}
+
+	private void getFeaturedContentComplete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
+	public void getLockPin(){
+		
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new GetLockPinRequest("uncagedgaming@gmail.com", getLockPinCompelete));
+		
+		request.request(RequestType.RUSH);
+		
+	}
+	
+	private void getLockPinCompelete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
+
+
 }
