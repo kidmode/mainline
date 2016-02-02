@@ -22,25 +22,29 @@ public class PDMenuBarScript : MonoBehaviour {
 
 	public Image currentKidImage;
 	public Text currentkidText;
+	public GameObject currentkidArrowDown;
+	public GameObject currentkidArrowUp;
 
 	private Game game;
 	private Color normalColor = new Color32(0, 126, 255, 255);
 	private Color pressedColor = new Color32(247, 147 ,30, 255);
 	private int currentToogle = 0;
-
+	private List<Texture2D> childButtonImages = new List<Texture2D>();
+	private int textLengthLimit = 8;
 
 	// Use this for initialization
-	void Start () {
-
+	void Start () 
+	{
 		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		game.pdMenuBar = this;
 
 		menuBarCanvas.renderMode = RenderMode.ScreenSpaceCamera;
 		menuBarCanvas.worldCamera = Camera.main;
 		menuBarCanvas.sortingOrder = 10;
 
-		//default page on parent dashboard
+		//show selected button of default page on parent dashboard
 		changeSecondTierButtonColor();
-
+		//set button listener on second tier menu bar
 		foreach (GameObject panel in secondTierBar)
 		{
 			foreach (Transform t in panel.transform)
@@ -56,8 +60,14 @@ public class PDMenuBarScript : MonoBehaviour {
 			}
 		}
  
+		Texture2D texture1 = Resources.Load("GUI/2048/common/buttons/bt_circle_up") as Texture2D;
+		Texture2D texture2 = Resources.Load("GUI/2048/common/buttons/bt_circle_down") as Texture2D;
+		childButtonImages.Add(texture1);
+		childButtonImages.Add(texture2);
+		//show current kid info on first tier menu bar
 		setCurrentKidOnFirstMenuBar();
-		addChildern();
+		//add childern for child selector
+		addAllChildern();
 	}
 	
 	// Update is called once per frame
@@ -65,6 +75,7 @@ public class PDMenuBarScript : MonoBehaviour {
 	
 	}
 
+	//when pressing button on first tier menu bar
 	public void onToogleChanged(bool isOn)
 	{
 		if (isOn)
@@ -94,23 +105,27 @@ public class PDMenuBarScript : MonoBehaviour {
 				count++;
 			}
 			currentToogle = number;
+			//change state to new page
 			onButtonClicked(getSteteByNumber(number));
+			//change first button color(defalut button) on second tier menu bar
 			changeSecondTierButtonColor();
 		}
 	}
 
+	//return to profile switch 
 	public void onBackButtonClicked()
 	{
 		game.gameController.changeState(ZoodleState.PROFILE_SELECTION);
-
-		GameObject.Destroy(menuBarObject);
+		removePDMenuBar();
 	}
 
+	//change state to new page
 	public void onButtonClicked(int stateType)
 	{
 		game.gameController.changeState(stateType);
 	}
 
+	//get state id by button name 
 	private int getStateTypeByName(string name)
 	{	
 		int type = ZoodleState.OVERVIEW_INFO;
@@ -162,6 +177,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		return type;
 	}
 
+	//get state id by pressed button on first tier menu bar
 	private int getSteteByNumber(int number)
 	{
 		if (number == 0)
@@ -174,6 +190,7 @@ public class PDMenuBarScript : MonoBehaviour {
 			return ZoodleState.SETTING_STATE;
 	}
 
+	//change button normal, highlighted, pressed color
 	private void buttonColorChange(Button button, bool isFocused)
 	{
 		if (isFocused)
@@ -190,6 +207,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
+	//when pressed button on second tier menu bar, change selected button color  
 	private void changeSecondTierButtonColor(string name)
 	{
 		GameObject panel = secondTierBar[currentToogle];
@@ -208,6 +226,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
+	//change first button color(defalut button) on second tier menu bar
 	private void changeSecondTierButtonColor()
 	{
 		GameObject panel = secondTierBar[currentToogle];
@@ -228,7 +247,8 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
-	private void addChildern()
+	//add childern for child selector
+	private void addAllChildern()
 	{
 		List<Kid> kidList = SessionHandler.getInstance().kidList;
 		if (kidList != null)
@@ -238,8 +258,14 @@ public class PDMenuBarScript : MonoBehaviour {
 				Kid kid = item;
 				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
 				//change text
-				Text text = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
-				text.text = kid.name;
+				Text text1 = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
+				int textLengthLimit = 8;
+				if (kid.name.Length > textLengthLimit)
+					text1.text = kid.name.Substring(0, textLengthLimit) + "...";
+				else
+					text1.text = kid.name;
+				Text text2 = child.transform.FindChild("HiddenName").gameObject.GetComponent<Text>();
+				text2.text = kid.name;
 				//add button listener
 				Button button = child.GetComponent<Button>();
 				button.onClick.AddListener(() => kidSelected(kid));
@@ -256,12 +282,23 @@ public class PDMenuBarScript : MonoBehaviour {
 			{
 				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
 				//change text
-				Text text = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
-				text.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
+				Text text1 = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
+				text1.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
+				Text text2 = child.transform.FindChild("HiddenName").gameObject.GetComponent<Text>();
+				text2.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
 				//add button listener
 				Button button = child.GetComponent<Button>();
 				button.onClick.AddListener(() => kidSelected(null));
-				//change image
+				//change icon bg image
+				Image iconBG = child.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
+				Texture2D bgTexture = Resources.Load("GUI/2048/parent_dashboard/pd_icon_addchild1") as Texture2D;
+				iconBG.sprite = createSprite(bgTexture);
+				Texture2D pressedBGTexture = Resources.Load("GUI/2048/parent_dashboard/pd_icon_addchild2") as Texture2D;
+				SpriteState spriteState = new SpriteState();
+				spriteState.pressedSprite = createSprite(pressedBGTexture);
+				button.spriteState = spriteState;
+				iconBG.transform.localScale = Vector3.one * .75f;
+				//change icon image
 				GameObject icon = child.transform.FindChild("IconBG/Icon").gameObject;
 				Image image = icon.GetComponent<Image>();
 				Texture2D texture = Resources.Load("GUI/2048/common/icon/icon_profile_add") as Texture2D;
@@ -280,6 +317,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
+	//set content width for child selector 
 	public void setContentWidth()
 	{
 		float scrollContentWidth = (gridLayout.transform.childCount * gridLayout.cellSize.x) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.x);
@@ -287,6 +325,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		rt.sizeDelta = new Vector2(scrollContentWidth, rt.sizeDelta.y);
 	}
 
+	//this pressed button listener for selected child on child selector
 	private void kidSelected(Kid kid)
 	{
 		if (kid != null)
@@ -303,10 +342,17 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 		else
 		{
+			SessionHandler.getInstance().CreateChild = true;
+			game.gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(game.gameController.stateName));
+			onButtonClicked(ZoodleState.CREATE_CHILD_NEW);
 
+			childSelector.SetActive(false);
+			secondTier.SetActive(true);
+			setPDMenuBarVisible(false, false);
 		}
 	}
 
+	//create image sprite from image texture
 	private Sprite createSprite(Texture2D p_texture)
 	{
 		Sprite l_sprite = Sprite.Create(p_texture, 
@@ -315,25 +361,125 @@ public class PDMenuBarScript : MonoBehaviour {
 		return l_sprite;
 	}
 
+	//this is button delegate for pressing current kid info button
 	public void onChildSelectorClicked()
 	{
 		if (childSelector.activeInHierarchy)
 		{
 			childSelector.SetActive(false);
 			secondTier.SetActive(true);
+			currentkidArrowDown.SetActive(true);
+			currentkidArrowUp.SetActive(false);
 		}
 		else
 		{
+			changeChildSelectorSelectedImage();
 			childSelector.SetActive(true);
 			secondTier.SetActive(false);
+			currentkidArrowDown.SetActive(false);
+			currentkidArrowUp.SetActive(true);
 		}
 	}
 
+	//set current kid info on first tier menu bar
 	public void setCurrentKidOnFirstMenuBar()
 	{
 		Kid kid = SessionHandler.getInstance().currentKid;
 		currentkidText.text = kid.name;
+		if (kid.name.Length > textLengthLimit)
+			currentkidText.text = kid.name.Substring(0, textLengthLimit) + "...";
+		else
+			currentkidText.text = kid.name;
 		kid.requestPhoto();
 		currentKidImage.sprite = createSprite(kid.kid_photo);
+		currentkidArrowDown.SetActive(true);
+		currentkidArrowUp.SetActive(false);
+	}
+
+	//change button normal image
+	private void buttonImageChange(GameObject button, bool isFocused)
+	{
+		if (isFocused)
+		{
+			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
+			image.sprite = createSprite(childButtonImages[1]);
+		}
+		else
+		{
+			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
+			image.sprite = createSprite(childButtonImages[0]);
+		}
+	}
+
+	//set selcted child selecte image for child selector 
+	public void changeChildSelectorSelectedImage()
+	{
+		string addchildtext = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
+		foreach (Transform t in childernList.transform)
+		{
+			if (t.gameObject.name.Contains("ChildPrototype"))
+			{
+				Text text = t.transform.FindChild("HiddenName").gameObject.GetComponent<Text>();
+				if (!text.text.Equals(addchildtext))
+				{
+					bool isFocused = false;
+					if (SessionHandler.getInstance().currentKid.name.Equals(text.text))
+					{
+						isFocused = true;
+					}
+					GameObject button = t.gameObject;
+					buttonImageChange(button, isFocused);
+				}
+			}
+		}
+	}
+
+	//this is button delegate for tablet setting button
+	public void onSettingbuttonClicked()
+	{
+		game.gameController.getUI().createScreen(UIScreen.TABLET_SETTINGS, false, 11);
+	}
+
+	public void setPDMenuBarVisible(bool visible, bool isChildUpdated = false)
+	{
+		if (visible)
+		{
+			menuBarCanvas.sortingOrder = 10;
+			setCurrentKidOnFirstMenuBar();
+			if (isChildUpdated)
+				updateChildern();
+		}
+		else
+		{
+			menuBarCanvas.sortingOrder = 0;
+		}
+
+		menuBarObject.SetActive(visible);
+	}
+
+	private void updateChildern()
+	{
+		removeAllChildern();
+		addAllChildern();
+	}
+
+	private void removeAllChildern()
+	{
+		int count = gridLayout.transform.childCount;
+		for (int i = count - 1; i >= 0; i--)
+		{
+			GameObject child = gridLayout.transform.GetChild(i).gameObject;
+#if UNITY_EDITOR
+			DestroyImmediate(child);
+#else
+			Destroy(child);
+#endif
+		}
+	}
+
+	public void removePDMenuBar()
+	{
+		game.pdMenuBar = null;
+		GameObject.Destroy(menuBarObject);
 	}
 }

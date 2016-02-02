@@ -193,6 +193,7 @@ public class OverviewInfoState : GameState {
 			SessionHandler.getInstance ().selectAvatar = string.Empty;
 			SessionHandler.getInstance ().CreateChild = false;
 			m_gameController.changeState (ZoodleState.CREATE_CHILD);
+			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 	}
 

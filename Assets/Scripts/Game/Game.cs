@@ -34,6 +34,8 @@ public class Game : MonoBehaviour
 	public delegate void onRequestCompletedEvent(bool isCOmpleted);
 	public event onRequestCompletedEvent onRequestCompleted;
 
+	public PDMenuBarScript pdMenuBar;
+
 	//Cathy for close webview dialog
 	public delegate void onCloseWebviewDialog();
 	public event onCloseWebviewDialog mOnCloseWebviewDialog; 
@@ -862,17 +864,25 @@ public class Game : MonoBehaviour
 			OnPaymentSuccess();
 
 		DebugController.Instance.showStatus("Success " );
-		//
-
 	}
 
 	public void onPaymentError(string test){
 		
 		DebugController.Instance.showStatus("Error " );
-		//
-		
 	}
 	//end
+
+	public void setPDMenuBarVisible(bool visible, bool isChildUpdated)
+	{
+		if (pdMenuBar != null)
+			pdMenuBar.setPDMenuBarVisible(visible, isChildUpdated);
+	}
+
+	public void removePDMenuBar()
+	{
+		if (pdMenuBar != null)
+			pdMenuBar.removePDMenuBar();
+	}
 
 	private PwdStore m_pwdStore;
 	private static PwdStore _pwdStore;

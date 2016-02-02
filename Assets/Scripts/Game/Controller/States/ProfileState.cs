@@ -96,7 +96,7 @@ public class ProfileState : GameState
 
 			SessionHandler.getInstance().CreateChild = true;
 			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
-			p_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
+			m_gameController.changeState(ZoodleState.CREATE_CHILD_NEW);
 			m_profileScreen.tweener.addAlphaTrack(1.0f, 0.0f, 0.3f, onFadeFinish);
 			m_gotoCREATE_CHILD_NEW = false;
 		}

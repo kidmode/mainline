@@ -51,7 +51,8 @@ public class SelectAvatarState : GameState
 		{
 			if(SessionHandler.getInstance().CreateChild)
 			{
-				p_gameController.changeState(ZoodleState.PROFILE_VIEW);
+				m_gameController.changeState(ZoodleState.PROFILE_VIEW);
+				m_gameController.game.removePDMenuBar();
 				if(SessionHandler.getInstance().kidList.Count == 1)
 				{
 					SessionHandler.getInstance().getAllKidApplist();
@@ -61,9 +62,13 @@ public class SelectAvatarState : GameState
 					}
 					SessionHandler.getInstance().getBooklist();
 				}
+				SessionHandler.getInstance().CreateChild = false;
 			}
 			else
-				p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			{
+				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+				m_gameController.game.setPDMenuBarVisible(true, true);
+			}
 		}
 
 		//Image request
