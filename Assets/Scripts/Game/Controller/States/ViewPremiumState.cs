@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class ViewPremiumState : GameState 
 {
 	//Public variables
-	
+
+	private UIManager m_uiManager;
 	
 	//Standard state flow	
 	public override void enter( GameController p_gameController )
@@ -15,8 +16,12 @@ public class ViewPremiumState : GameState
 		SwrveComponent.Instance.SDK.NamedEvent("ViewPremiumPlan");
 
 		m_game = p_gameController.game;
+		m_uiManager = p_gameController.getUI ();
 
 		_setupScreen( p_gameController.getUI() );
+
+		//Set events
+		Game.OnPaymentSuccess += OnGameScriptPaymentSuccess;
 
 	}
 	
@@ -33,6 +38,10 @@ public class ViewPremiumState : GameState
 		{
 			p_gameController.getUI().removeScreen( m_backScreen );
 		}
+
+		//remove event call backs
+		Game.OnPaymentSuccess -= OnGameScriptPaymentSuccess;
+
 	}
 
 	//---------------- Private Implementation ----------------------
@@ -55,7 +64,7 @@ public class ViewPremiumState : GameState
 
 		
 		string l_returnJson = SessionHandler.getInstance ().PremiumJson;
-		Debug.Log("@@@ Json: " + l_returnJson);
+
 		Hashtable l_data = null;
 
 		if(l_returnJson.Length > 0)
@@ -134,18 +143,134 @@ public class ViewPremiumState : GameState
 	{
 		SwrveComponent.Instance.SDK.NamedEvent("GotoMonthlyPurchase");
 
+//		SessionHandler.getInstance ().purchaseObject = "Monthly";
+//		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
+
 		SessionHandler.getInstance ().purchaseObject = "Monthly";
-		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
+		string l_purchaseObject = "Monthly";
+		string l_returnJson = SessionHandler.getInstance().PremiumJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+		ArrayList l_planList = l_data["plan_info"] as ArrayList;
+		Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
+		
+		
+		_setupWebview (GCS.Environment.getSecureHost() + "/payments/premium?client_id=" + SessionHandler.getInstance().clientId +
+		                            "&token=" + SessionHandler.getInstance().token.getSecret() +
+		                            "&plan_id=" + l_plan["id"].ToString());
+	}
+
+	private void OnGameScriptPaymentSuccess(){
+		
+		SessionHandler.getInstance ().token.setTry(true);
+		SessionHandler.getInstance ().token.setCurrent(true);
+		SessionHandler.getInstance ().token.setPremium(true);
+		
+		_closeWebview ();
+		
+		//Payment done and First started Trial account
+		//Now sets local playerprefs
+		TrialTimeController.Instance.firstStartTrialTime();
+		
+		if(SessionHandler.getInstance ().token.isTried())
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("FreeTrialToPremium");
+		} else
+		{
+			SwrveComponent.Instance.SDK.NamedEvent("PremiumWithoutTrial");
+		}
+
+		m_gameController.changeState(ZoodleState.PAY_CONFIRM);
+	}
+
+	private void _setupWebview(string p_url)
+	{
+		UICanvas l_screen = m_uiManager.createScreen(UIScreen.CREDIT_CARD_WEBVIEW, false, 5);
+		m_uiManager.changeScreen(l_screen, true);
+		UIButton l_confirm = l_screen.getView("quitButton") as UIButton;
+		l_confirm.addClickCallback(_onConfirmButtonClick);
+		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
+		l_webView.insets = new UniWebViewEdgeInsets((int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor));
+		l_webView.OnReceivedKeyCode += _onBackKeyCode;
+		l_webView.OnWebViewShouldClose += _onShouldCloseView;
+		l_webView.OnLoadComplete += loadComplete;
+		l_webView.SetShowSpinnerWhenLoading(true);
+		l_webView.Load(p_url);
+	}
+
+	private void _onConfirmButtonClick(UIButton p_button)
+	{
+		
+		_closeWebview();
+	}
+
+
+	private void _onBackKeyCode(UniWebView p_view, int p_keyCode)
+	{
+		_closeWebview();
+	}
+	
+	private bool _onShouldCloseView(UniWebView p_webView)
+	{
+		_closeWebview();
+		return true;
+	}
+
+	private void quitNoInternetButtonClicked()
+	{
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+		if (error != null)
+			error.onClick -= quitNoInternetButtonClicked;
+	}
+
+
+	private void loadComplete(UniWebView webView, bool success, string errorMessage)
+	{
+		if (!success)
+		{
+			Debug.Log("Uniwebview load failed error message: " + errorMessage);
+			_closeWebview();
+			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 15);
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+			if (error != null)
+				error.onClick += quitNoInternetButtonClicked;
+		}
+		else
+		{
+			webView.Show();
+		}
 	}
 
 	private void gotoYearlyPurchase( UIButton p_button )
 	{
 		SwrveComponent.Instance.SDK.NamedEvent("gotoYearlyPurchase");
 
+//		SessionHandler.getInstance ().purchaseObject = "Annual";
+//		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
+
 		SessionHandler.getInstance ().purchaseObject = "Annual";
-		m_game.gameController.changeState (ZoodleState.PLAN_PAYMENT);
+		string l_purchaseObject = "Annual";
+		string l_returnJson = SessionHandler.getInstance().PremiumJson;
+		Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(l_returnJson) as Hashtable;
+		ArrayList l_planList = l_data["plan_info"] as ArrayList;
+		Hashtable l_plan = _getPlanDetailByName(l_planList, l_purchaseObject);
+		
+		
+		_setupWebview (GCS.Environment.getSecureHost() + "/payments/premium?client_id=" + SessionHandler.getInstance().clientId +
+		               "&token=" + SessionHandler.getInstance().token.getSecret() +
+		               "&plan_id=" + l_plan["id"].ToString());
 	}
 
+	private void _closeWebview()
+	{
+		UICanvas l_screen = m_uiManager.findScreen(UIScreen.CREDIT_CARD_WEBVIEW);
+		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
+		l_webView.Hide();
+		l_webView.CleanCache();
+		l_webView.OnReceivedKeyCode -= _onBackKeyCode;
+		l_webView.OnWebViewShouldClose -= _onShouldCloseView;
+		l_webView.OnLoadComplete -= loadComplete;
+		m_uiManager.removeScreenImmediately(l_screen);
+	}
 
 	//Private variables
 	
