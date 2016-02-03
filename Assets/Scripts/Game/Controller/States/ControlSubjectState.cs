@@ -463,7 +463,7 @@ public class ControlSubjectState : GameState
 	private LeftMenuCanvas 	m_leftMenuCanvas;
 	private UISwipeList 	m_childrenList;
 
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UIButton 		m_leftButton;
 	private UIButton 		m_rightButton;
 

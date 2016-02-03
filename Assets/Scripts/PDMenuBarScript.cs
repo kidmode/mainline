@@ -150,7 +150,8 @@ public class PDMenuBarScript : MonoBehaviour {
 			type = ZoodleState.CONTROL_APP;
 			break;
 		case "Books":
-			type = ZoodleState.OVERVIEW_READING;
+//			type = ZoodleState.OVERVIEW_READING;
+			type = ZoodleState.OVERVIEW_BOOK;
 			break;
 		case "ContentSubjects":
 			type = ZoodleState.CONTROL_SUBJECT;

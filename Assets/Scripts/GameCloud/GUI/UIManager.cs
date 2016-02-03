@@ -58,6 +58,13 @@ public class UIManager
 
 	public UICanvas createScreen( int p_newScreen, bool hasTransition = false, int p_layerNumber = 0 )
 	{
+
+		if(p_newScreen == 55){
+
+			int test = 1;
+
+		}
+
 		DebugUtils.Assert( m_screenDirectoryMap.ContainsKey( p_newScreen ) );
 		GameObject l_screenObj = _createUIScreen( m_screenDirectoryMap[ p_newScreen ] );
 

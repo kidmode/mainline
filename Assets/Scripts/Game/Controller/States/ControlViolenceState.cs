@@ -30,7 +30,7 @@ public class ControlViolenceState : GameState
 		
 		base.exit (p_gameController);
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
@@ -44,7 +44,7 @@ public class ControlViolenceState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 		m_leftMenuCanvas 			= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 ) 				as LeftMenuCanvas;
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) 	as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) 	as DashBoardControllerCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -69,13 +69,13 @@ public class ControlViolenceState : GameState
 		
 		int l_listCount = 4;
 
-		m_dashboardControllerCanvas.setupDotList (l_listCount);
-		m_dashboardControllerCanvas.setCurrentIndex (3);
-
-		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-		m_rightButton.enabled = false;
-		m_leftButton.	addClickCallback( onLeftButtonClick );
+//		m_dashboardControllerCanvas.setupDotList (l_listCount);
+//		m_dashboardControllerCanvas.setCurrentIndex (3);
+//
+//		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
+//		m_rightButton.enabled = false;
+//		m_leftButton.	addClickCallback( onLeftButtonClick );
 		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_violenceFiltersCanvas.getView ("mainPanel");
@@ -473,7 +473,7 @@ public class ControlViolenceState : GameState
 	private LeftMenuCanvas 	m_leftMenuCanvas;
 	private UISwipeList 	m_childrenList;
 	
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UIButton 		m_leftButton;
 	private UIButton 		m_rightButton;
 
