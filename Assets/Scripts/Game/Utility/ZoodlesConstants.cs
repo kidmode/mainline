@@ -129,7 +129,7 @@ public class ZoodlesConstants
 
 	public const string REST_GET_FEATURED_CONTENTS_EVENTS	= "api/feature_contents/track";
 
-	public const string REST_GET_LOCK_PIN	= "api/pin/send_forgot_lock_pin";
+	public const string REST_GET_LOCK_PIN	= "/api/pin/send_forgot_lock_pin";
 
 	///
 	//////////////////////////////////////////////////////////////////////
