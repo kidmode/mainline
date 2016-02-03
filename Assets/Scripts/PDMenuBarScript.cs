@@ -35,8 +35,8 @@ public class PDMenuBarScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-//		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-//		game.pdMenuBar = this;
+		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		game.pdMenuBar = this;
 
 		menuBarCanvas.renderMode = RenderMode.ScreenSpaceCamera;
 		menuBarCanvas.worldCamera = Camera.main;
@@ -69,8 +69,8 @@ public class PDMenuBarScript : MonoBehaviour {
 		//add childern for child selector
 		addAllChildern();
 
-		DebugController.Instance.setChildernContentPanelVisible(true);
-		DebugController.Instance.childernContent = childernList.transform.parent.gameObject;
+//		DebugController.Instance.setChildernContentPanelVisible(true);
+//		DebugController.Instance.childernContent = childernList.transform.parent.gameObject;
 
 	}
 	
