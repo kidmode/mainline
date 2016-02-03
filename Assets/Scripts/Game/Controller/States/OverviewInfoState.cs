@@ -62,7 +62,7 @@ public class OverviewInfoState : GameState {
 	{
 		base.exit (p_gameController);
 		m_requestQueue.dispose ();
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_INFO );
@@ -80,7 +80,7 @@ public class OverviewInfoState : GameState {
 
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 3 )  as LeftMenuCanvas;
 		
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
 
 		m_dashboardInfoCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_INFO, true, 1 );
 
@@ -89,11 +89,11 @@ public class OverviewInfoState : GameState {
 
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.enabled = false;
-		
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
+//		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
+//		m_leftButton.enabled = false;
+//		
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
+//		m_rightButton.addClickCallback( onRightButtonClick );
 
 		m_exitAppDetailsButton = m_appDetailsCanvas.getView( "exitButton" ) as UIButton;
 		m_exitAppDetailsButton.addClickCallback( onExitAppDetailsButtonClick );
@@ -101,8 +101,8 @@ public class OverviewInfoState : GameState {
 		m_editProfileButton = m_dashboardInfoCanvas.getView ("editProfileButton") as UIButton;
 		m_editProfileButton.addClickCallback (editProfile);
 
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 0 );
+//		m_dashboardControllerCanvas.setupDotList( 6 );
+//		m_dashboardControllerCanvas.setCurrentIndex( 0 );
 
 		UIElement l_newPanel = m_dashboardInfoCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -860,7 +860,7 @@ public class OverviewInfoState : GameState {
 	private UIManager m_uiManager;
 	private App m_app;
 
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UICanvas m_dashboardInfoCanvas;
 	private UICanvas m_dashboardCommonCanvas;
 	private UICanvas m_appDetailsCanvas;
