@@ -35,8 +35,8 @@ public class PDMenuBarScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
-		game.pdMenuBar = this;
+//		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+//		game.pdMenuBar = this;
 
 		menuBarCanvas.renderMode = RenderMode.ScreenSpaceCamera;
 		menuBarCanvas.worldCamera = Camera.main;
@@ -68,6 +68,10 @@ public class PDMenuBarScript : MonoBehaviour {
 		setCurrentKidOnFirstMenuBar();
 		//add childern for child selector
 		addAllChildern();
+
+		DebugController.Instance.setChildernContentPanelVisible(true);
+		DebugController.Instance.childernContent = childernList.transform.parent.gameObject;
+
 	}
 	
 	// Update is called once per frame
@@ -109,6 +113,8 @@ public class PDMenuBarScript : MonoBehaviour {
 			onButtonClicked(getSteteByNumber(number));
 			//change first button color(defalut button) on second tier menu bar
 			changeSecondTierButtonColor();
+			//hide child selector if needed
+			setChildSelectorVisible(false);
 		}
 	}
 
@@ -307,6 +313,7 @@ public class PDMenuBarScript : MonoBehaviour {
 				//added to childernList
 				child.transform.localScale = menuBarCanvas.transform.localScale;
 				child.transform.parent = gridLayout.transform;
+				child.SetActive(true);
 			}
 
 			setContentWidth();
@@ -323,6 +330,10 @@ public class PDMenuBarScript : MonoBehaviour {
 		float scrollContentWidth = (gridLayout.transform.childCount * gridLayout.cellSize.x) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.x);
 		RectTransform rt = (RectTransform)childernList.transform;
 		rt.sizeDelta = new Vector2(scrollContentWidth, rt.sizeDelta.y);
+
+		Debug.Log("######################## ChildCount: " + gridLayout.transform.childCount);
+
+//		((RectTransform)menuBarObject.transform).localScale = Vector3.one * .5f;
 	}
 
 	//this pressed button listener for selected child on child selector
@@ -336,8 +347,7 @@ public class PDMenuBarScript : MonoBehaviour {
 			onButtonClicked(getSteteByNumber(currentToogle));
 			changeSecondTierButtonColor();
 
-			childSelector.SetActive(false);
-			secondTier.SetActive(true);
+			setChildSelectorVisible(false);
 			setCurrentKidOnFirstMenuBar();
 		}
 		else
@@ -346,10 +356,17 @@ public class PDMenuBarScript : MonoBehaviour {
 			game.gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(game.gameController.stateName));
 			onButtonClicked(ZoodleState.CREATE_CHILD_NEW);
 
-			childSelector.SetActive(false);
-			secondTier.SetActive(true);
+			setChildSelectorVisible(false);
 			setPDMenuBarVisible(false, false);
 		}
+	}
+
+	private void setChildSelectorVisible(bool visible)
+	{
+		childSelector.SetActive(visible);
+		secondTier.SetActive(!visible);
+		currentkidArrowDown.SetActive(!visible);
+		currentkidArrowUp.SetActive(visible);
 	}
 
 	//create image sprite from image texture
@@ -366,18 +383,16 @@ public class PDMenuBarScript : MonoBehaviour {
 	{
 		if (childSelector.activeInHierarchy)
 		{
-			childSelector.SetActive(false);
-			secondTier.SetActive(true);
-			currentkidArrowDown.SetActive(true);
-			currentkidArrowUp.SetActive(false);
+			setChildSelectorVisible(false);
+//			currentkidArrowDown.SetActive(true);
+//			currentkidArrowUp.SetActive(false);
 		}
 		else
 		{
 			changeChildSelectorSelectedImage();
-			childSelector.SetActive(true);
-			secondTier.SetActive(false);
-			currentkidArrowDown.SetActive(false);
-			currentkidArrowUp.SetActive(true);
+			setChildSelectorVisible(true);
+//			currentkidArrowDown.SetActive(false);
+//			currentkidArrowUp.SetActive(true);
 		}
 	}
 

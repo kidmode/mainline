@@ -23,6 +23,9 @@ public class DebugController : MonoBehaviour {
 
 	public bool showPanelOnAndroid = false;
 
+	public GameObject childernContent;
+	public GameObject childernContentPanel;
+
 	void Awake(){
 
 		Instance = this;
@@ -101,5 +104,30 @@ public class DebugController : MonoBehaviour {
 		if(p_response.error == null){
 			
 		}
+	}
+
+	public void moveLeft()
+	{
+		childernContent.transform.localPosition += new Vector3(-100, 0, 0);
+	}
+
+	public void moveRight()
+	{
+		childernContent.transform.localPosition += new Vector3(100, 0, 0);
+	}
+
+	public void moveUp()
+	{
+		childernContent.transform.localPosition += new Vector3(0, 100, 0);
+	}
+
+	public void moveDown()
+	{
+		childernContent.transform.localPosition += new Vector3(0, -100, 0);
+	}
+
+	public void setChildernContentPanelVisible(bool visible)
+	{
+		childernContentPanel.SetActive(visible);
 	}
 }
