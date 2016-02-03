@@ -106,9 +106,9 @@ public class OverviewInfoState : GameState {
 
 		UIElement l_newPanel = m_dashboardInfoCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+//		l_pointListIn.Add( l_newPanel.transform.localPosition );
+//		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
+//		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 		
 		List<Vector3> l_pointListTop = new List<Vector3>();
