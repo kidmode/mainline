@@ -130,7 +130,7 @@ public class DebugController : MonoBehaviour {
 		
 		RequestQueue request = new RequestQueue();
 		
-		request.add(new GetLockPinRequest("uncagedgaming@gmail.com", getLockPinCompelete));
+		request.add(new GetLockPinRequest(SessionHandler.getInstance().username, getLockPinCompelete));
 		
 		request.request(RequestType.RUSH);
 		
