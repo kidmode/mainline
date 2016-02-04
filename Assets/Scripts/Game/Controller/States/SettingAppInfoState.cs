@@ -153,8 +153,8 @@ public class SettingAppInfoState : GameState
 
 		m_closeSendFeedBackButton = m_sentFeedBackCanvas.getView("closeMark") as UIButton;
 		m_closeSendFeedBackButton.addClickCallback (onCloseSendBack);
-		m_rightButton = m_appInfoCanvas.getView ("rightButton") as UIButton;
-		m_rightButton.addClickCallback (goToChildLock);
+//		m_rightButton = m_appInfoCanvas.getView ("rightButton") as UIButton;
+//		m_rightButton.addClickCallback (goToChildLock);
 
 		m_deviceButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
 		m_deviceButton.addClickCallback (toDeviceScreen);
@@ -648,7 +648,7 @@ public class SettingAppInfoState : GameState
 	private UIButton  	m_closeSignOutButton;
 	private UIButton  	m_sendFeedBackButton;
 	private UIButton  	m_closeSendFeedBackButton;
-	private UIButton    m_rightButton;
+//	private UIButton    m_rightButton;
 	private UIButton    m_deviceButton;
 	private UIButton    m_faqButton;
 	private UIButton 	m_tryPremiumButton;

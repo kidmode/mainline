@@ -94,8 +94,8 @@ public class DeviceOptionsState : GameState
 		m_musicVolumeSlider.addValueChangedCallback (onMusicVolumeValueChanged);
 		m_masterVolumeSlider.addValueChangedCallback (onMasterVolumeValueChanged);
 		m_effectsVolumeSlider.addValueChangedCallback (onEffectVolumeValueChanged);
-		m_leftButton = m_deviceOptionCanvas.getView ("leftButton") as UIButton;
-		m_leftButton.addClickCallback (toNotificationScreen);
+//		m_leftButton = m_deviceOptionCanvas.getView ("leftButton") as UIButton;
+//		m_leftButton.addClickCallback (toNotificationScreen);
 		m_noticeLabel = m_lodaing.getView ("noticeText") as UILabel;
 		m_closeButton = m_lodaing.getView ("closeButton") as UIButton;
 		m_closeButton.active = false;
@@ -528,7 +528,7 @@ public class DeviceOptionsState : GameState
 	//end
 	private UIButton	m_closeLeftMenuButton;
 	private UIButton    m_childModeButton;
-	private UIButton    m_leftButton;
+//	private UIButton    m_leftButton;
 	private int 		m_volume;
 	private UIToggle	m_allowCallButton;
 	private UIToggle	m_tipButton;

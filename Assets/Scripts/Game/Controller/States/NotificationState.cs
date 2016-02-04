@@ -113,8 +113,8 @@ public class NotificationState : GameState
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
-		m_rightButton = m_notificationCanvas.getView ("rightButton") as UIButton;
-		m_rightButton.addClickCallback (toDeviceOptions);
+//		m_rightButton = m_notificationCanvas.getView ("rightButton") as UIButton;
+//		m_rightButton.addClickCallback (toDeviceOptions);
 
 		m_weeklyAppsNotificationButton = m_notificationCanvas.getView ("WeeklyAppsNotification") as UIToggle;
 		m_smartSelectNotificationButton = m_notificationCanvas.getView ("smartSelectNotification") as UIToggle;
@@ -479,7 +479,7 @@ public class NotificationState : GameState
 	private UIButton	m_settingButton;
 	//end
 	private UIButton	m_closeLeftMenuButton;
-	private UIButton    m_rightButton;
+//	private UIButton    m_rightButton;
 	private UIButton    m_childModeButton;
 	private UISwipeList m_childrenList;
 	private UIButton    m_generalButton;
