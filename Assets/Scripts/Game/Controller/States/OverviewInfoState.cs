@@ -7,6 +7,11 @@ public class OverviewInfoState : GameState {
 	public override void enter (GameController p_gameController)
 	{
 		base.enter (p_gameController);
+
+		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+
+		game.setPDMenuBarVisible(true, false);
+
 		canMoveLeftMenu = true;
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue ();
@@ -281,8 +286,13 @@ public class OverviewInfoState : GameState {
 			Book l_book = new Book(l_jsonResponse);
 			SessionHandler.getInstance().currentBook = l_book;
 			
-			m_gameController.connectState(ZoodleState.BOOK_ACTIVITY, ZoodleState.OVERVIEW_BOOK);
+			m_gameController.connectState(ZoodleState.BOOK_ACTIVITY, ZoodleState.OVERVIEW_INFO);
+
 			m_gameController.changeState(ZoodleState.BOOK_ACTIVITY);
+
+			game.setPDMenuBarVisible(false, false);
+
+
 		}
 
 		m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
@@ -1134,5 +1144,7 @@ public class OverviewInfoState : GameState {
 	private Book	 			      m_wantedBook;
 	//Buy button for the book
 	private UIButton 			      m_clickedBuyButton;
+	//Used to call Game script functions
+	private Game game;
 	
 }
