@@ -70,6 +70,7 @@ public class DebugController : MonoBehaviour {
 
 	}
 
+	//=================== = = == = = == = = == = == = = == = == = = = = =
 
 	public void showStatus(string statusText){
 
@@ -82,6 +83,8 @@ public class DebugController : MonoBehaviour {
 		ToyboxRandomizeController.Instance.getVideoList();
 
 	}
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
 
 	public void fogotPassword(){
 
@@ -146,5 +149,25 @@ public class DebugController : MonoBehaviour {
 		}
 	}
 
+	// == = = == = = = = == = = = =
+	public void getMainPin(){ //SendPinRequest
+
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new SendPinRequest(getMainPinComplete));
+		
+		request.request(RequestType.RUSH);
+
+	}
+
+	private void getMainPinComplete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
 
 }
