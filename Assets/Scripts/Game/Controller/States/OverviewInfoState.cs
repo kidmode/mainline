@@ -7,6 +7,11 @@ public class OverviewInfoState : GameState {
 	public override void enter (GameController p_gameController)
 	{
 		base.enter (p_gameController);
+
+		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+
+		game.setPDMenuBarVisible(true, false);
+
 		canMoveLeftMenu = true;
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue ();
@@ -62,7 +67,7 @@ public class OverviewInfoState : GameState {
 	{
 		base.exit (p_gameController);
 		m_requestQueue.dispose ();
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_INFO );
@@ -80,7 +85,7 @@ public class OverviewInfoState : GameState {
 
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 3 )  as LeftMenuCanvas;
 		
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
 
 		m_dashboardInfoCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_INFO, true, 1 );
 
@@ -89,11 +94,11 @@ public class OverviewInfoState : GameState {
 
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.enabled = false;
-		
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
+//		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
+//		m_leftButton.enabled = false;
+//		
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
+//		m_rightButton.addClickCallback( onRightButtonClick );
 
 		m_exitAppDetailsButton = m_appDetailsCanvas.getView( "exitButton" ) as UIButton;
 		m_exitAppDetailsButton.addClickCallback( onExitAppDetailsButtonClick );
@@ -101,14 +106,14 @@ public class OverviewInfoState : GameState {
 		m_editProfileButton = m_dashboardInfoCanvas.getView ("editProfileButton") as UIButton;
 		m_editProfileButton.addClickCallback (editProfile);
 
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 0 );
+//		m_dashboardControllerCanvas.setupDotList( 6 );
+//		m_dashboardControllerCanvas.setCurrentIndex( 0 );
 
 		UIElement l_newPanel = m_dashboardInfoCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+//		l_pointListIn.Add( l_newPanel.transform.localPosition );
+//		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
+//		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 		
 		List<Vector3> l_pointListTop = new List<Vector3>();
@@ -182,6 +187,236 @@ public class OverviewInfoState : GameState {
 			}
 		}
 
+
+		//===== == = = == =
+		//Set up recommended books
+		//
+
+		//Get the list
+		List<Book> l_list = SessionHandler.getInstance().bookList;
+
+		if(l_list == null){
+
+			m_requestQueue.reset ();
+			m_requestQueue.add(new GetBookRequest("false",_requestBookListComplete));
+			m_requestQueue.request();
+
+		}else if(l_list.Count > 0){
+
+			//
+			drawRecommendedBookInfo();
+
+
+		}
+
+	}
+
+	private void drawRecommendedBookInfo(){
+
+		List<Book> l_list = SessionHandler.getInstance().bookList;
+
+		UIElement l_element = m_dashboardInfoCanvas.getView ("bookOne") as UIElement;
+		
+		curretRecommendedBookIndex = Random.Range(0, l_list.Count);
+		
+		Book l_book = l_list[curretRecommendedBookIndex];
+		
+		_setupSignleBook(l_element,l_book);
+		UIButton l_buyButton = l_element.getView ("buyBookButton") as UIButton;
+		l_buyButton.addClickCallback(onClickBuyBookButton);
+		UIButton l_openBook = l_element as UIButton;
+		l_openBook.addClickCallback(onOpenBookClick);
+		if(null == l_book.icon)
+			downLoadBookIcon( l_book, l_element );
+		else
+		{
+			UIImage l_image = l_element.getView("bookImage") as UIImage;
+			l_image.setTexture(l_book.icon);
+		}
+		l_element.active = true;
+
+	}
+
+
+	private void onOpenBookClick(UIButton p_button)
+	{
+		Book l_book = new Book();
+		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
+
+		l_book = l_bookList[curretRecommendedBookIndex];
+
+		if (null == l_book)
+			return;
+		else
+		{
+			if(l_book.owned)
+			{
+//				showLoadingDialog();
+
+				m_uiManager.createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+				m_requestQueue.reset();
+				m_requestQueue.add(new GetBookByIdRequest(l_book.id,getBookRequestComplete));
+				m_requestQueue.request();
+			}
+			else
+			{
+//				m_uiManager.changeScreen(UIScreen.BOOK_LIST,false);
+//				m_bookDetailsCanvas.setOriginalPosition();
+//				m_bookDetailsCanvas.setAuthor(l_book.author);
+//				m_bookDetailsCanvas.setBookName(l_book.title);
+//				m_bookDetailsCanvas.setIllustrator(l_book.illustrator);
+//				m_bookDetailsCanvas.setBookIcon(l_book.icon);
+//				UIButton l_closeButton = m_bookDetailsCanvas.getView("closeMark") as UIButton;
+//				l_closeButton.addClickCallback(closeBookDetails);
+			}
+		}
+	}
+
+	private void getBookRequestComplete(HttpsWWW p_response)
+	{
+		if(null == p_response.error)
+		{
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			Book l_book = new Book(l_jsonResponse);
+			SessionHandler.getInstance().currentBook = l_book;
+			
+			m_gameController.connectState(ZoodleState.BOOK_ACTIVITY, ZoodleState.OVERVIEW_INFO);
+
+			m_gameController.changeState(ZoodleState.BOOK_ACTIVITY);
+
+			game.setPDMenuBarVisible(false, false);
+
+
+		}
+
+		m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+	}
+
+	//Once the requset book list is complete, update it in the SessionHandler
+	//Then draw the reocmmmend book item
+	private void _requestBookListComplete(HttpsWWW p_response)
+	{
+		if(null == p_response.error)
+		{
+			string l_string = "";
+			
+			l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					Hashtable l_bookData = l_response["response"] as Hashtable;
+					ArrayList l_own = l_bookData["owned"] as ArrayList;
+					ArrayList l_unown = l_bookData["unowned"] as ArrayList;
+					int l_dataCount = l_own.Count;
+					List<Book> l_list = new List<Book> ();
+					for(int l_i = 0; l_i < l_dataCount; l_i++)
+					{
+						Hashtable l_table = l_own[l_i] as Hashtable;
+						Book l_book = new Book(l_table);
+						l_list.Add(l_book);
+					}
+					l_dataCount = l_unown.Count;
+					for(int l_i = 0; l_i < l_dataCount; l_i++)
+					{
+						Hashtable l_table = l_unown[l_i] as Hashtable;
+						Book l_book = new Book(l_table);
+						l_list.Add(l_book);
+					}
+					SessionHandler.getInstance ().bookList = l_list;
+
+					drawRecommendedBookInfo();
+				}
+			}
+			//SessionHandler.getInstance ().getBookIcon();
+		}
+	}
+
+	private void onClickBuyBookButton(UIButton p_button)
+	{
+		m_wantedBook = null;
+		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
+
+		//
+		m_wantedBook = l_bookList[curretRecommendedBookIndex];
+
+		m_clickedBuyButton = p_button;
+		confirmBuyBook (m_wantedBook);
+	}
+
+
+	private void downLoadBookIcon( Book p_book, UIElement p_element )
+	{
+
+		m_requestQueue.reset ();
+
+		m_requestQueue.add (new BookIconRequest( p_book, p_element ));
+
+		m_requestQueue.request();
+
+	}
+
+	public void confirmBuyBook(Book p_book)
+	{
+//		if(bookListOpen)
+//			m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
+		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
+		m_costArea.active = true;
+		m_needMoreArea.active = false;
+		
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
+		l_pointListIn.Add( l_newPanel.transform.localPosition );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
+		
+		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
+		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
+		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
+		l_notice1label2.text = p_book.title;
+		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
+		l_priceLabel.text = p_book.gems.ToString();
+	}
+
+
+	private void _setupSignleBook(UIElement p_element, Book p_book)
+	{
+		UILabel l_bookName = p_element.getView ("bookNameText") as UILabel;
+		l_bookName.text = p_book.title;
+		UILabel l_gemsPrice = p_element.getView ("priceText") as UILabel;
+		l_gemsPrice.text = p_book.gems.ToString();
+		
+		UIImage l_lockImage = p_element.getView ("lockImage") as UIImage;
+		UIButton l_buyButton = p_element.getView ("buyBookButton") as UIButton;
+		UILabel l_unlockLabel = p_element.getView ("unlockText") as UILabel;
+		
+		Token l_token = SessionHandler.getInstance ().token;
+		
+		if( l_token.isPremium() || l_token.isCurrent() || p_book.gems == 0 || p_book.owned)
+		{
+			l_lockImage.active = false;
+			l_buyButton.active = false;
+			l_unlockLabel.text = Localization.getString (Localization.TXT_69_LABEL_UNLOCKED);
+		}
+		else
+		{
+			l_lockImage.active = true;
+			l_buyButton.active = true;
+			l_unlockLabel.text = Localization.getString (Localization.TXT_69_LABEL_UNLOCK);
+		}
 	}
 
 	private void editProfile(UIButton p_button)
@@ -860,7 +1095,7 @@ public class OverviewInfoState : GameState {
 	private UIManager m_uiManager;
 	private App m_app;
 
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UICanvas m_dashboardInfoCanvas;
 	private UICanvas m_dashboardCommonCanvas;
 	private UICanvas m_appDetailsCanvas;
@@ -900,4 +1135,16 @@ public class OverviewInfoState : GameState {
 
 	private bool 		canMoveLeftMenu;
 	private bool 		canLoadTopRecommandApp;
+
+
+	//Kevin
+	//Added index for current recommended book
+	private int curretRecommendedBookIndex;
+	//Current book that is recommended and clicked
+	private Book	 			      m_wantedBook;
+	//Buy button for the book
+	private UIButton 			      m_clickedBuyButton;
+	//Used to call Game script functions
+	private Game game;
+	
 }

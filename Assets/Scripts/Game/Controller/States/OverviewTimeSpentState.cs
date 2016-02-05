@@ -26,7 +26,7 @@ public class OverviewTimeSpentState : GameState {
 
 		m_requestQueue.dispose ();
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.TIME_SPEND );
@@ -40,7 +40,7 @@ public class OverviewTimeSpentState : GameState {
 	{
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 )  as LeftMenuCanvas;;
 		
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) as DashBoardControllerCanvas;
 
 //		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 //		{
@@ -61,14 +61,14 @@ public class OverviewTimeSpentState : GameState {
 	
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
-		
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
-
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 1 );
+//		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
+//		m_leftButton.addClickCallback( onLeftButtonClick );
+//		
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
+//		m_rightButton.addClickCallback( onRightButtonClick );
+//
+//		m_dashboardControllerCanvas.setupDotList( 6 );
+//		m_dashboardControllerCanvas.setCurrentIndex( 1 );
 		
 		UIElement l_newPanel = m_timeSpendCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -391,7 +391,7 @@ public class OverviewTimeSpentState : GameState {
 	
 	private UIManager m_uiManager;
 
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private TimeSpendCanvas m_timeSpendCanvas;
 	private UICanvas m_dashboardCommonCanvas;
 	private LeftMenuCanvas m_leftMenuCanvas;

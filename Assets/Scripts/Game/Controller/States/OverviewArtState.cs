@@ -122,7 +122,7 @@ public class OverviewArtState : GameState {
 	{
 		base.exit (p_gameController);
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
@@ -169,7 +169,7 @@ public class OverviewArtState : GameState {
 
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 3 )  as LeftMenuCanvas;;
 		
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
 
 		m_artGalleryCanvas 	= m_uiManager.createScreen( UIScreen.ART_GALLERY, true, 1 );
 		
@@ -178,17 +178,17 @@ public class OverviewArtState : GameState {
 	
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
-
-		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
-
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
-
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 5 );
+//		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
+//		m_leftButton.addClickCallback( onLeftButtonClick );
+//
+//		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
+//		m_helpButton.addClickCallback (onHelpButtonClick);
+//
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
+//		m_rightButton.addClickCallback( onRightButtonClick );
+//
+//		m_dashboardControllerCanvas.setupDotList( 6 );
+//		m_dashboardControllerCanvas.setCurrentIndex( 5 );
 		
 		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -755,7 +755,7 @@ public class OverviewArtState : GameState {
 	}
 
 	private UIManager m_uiManager;
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
+//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UICanvas m_artGalleryCanvas;
 	private UICanvas m_artListCanvas;
 	private UICanvas m_dashboardCommonCanvas;

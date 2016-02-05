@@ -204,8 +204,8 @@ public class SettingChildLockState : GameState
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
-		m_leftButton = m_childLockCanvas.getView ("leftButton") as UIButton;
-		m_leftButton.addClickCallback (toAppInfoPage);
+//		m_leftButton = m_childLockCanvas.getView ("leftButton") as UIButton;
+//		m_leftButton.addClickCallback (toAppInfoPage);
 
 		m_verifyBirth = m_childLockCanvas.getView ("verifyBirthButton") as UIToggle;
 		m_verifyBirth.isOn = m_settingCache.active?m_settingCache.verifyBirth:SessionHandler.getInstance().verifyBirth;
@@ -825,7 +825,7 @@ public class SettingChildLockState : GameState
 	private UIButton	m_settingButton;
 	//end
 	private UIButton	m_closeLeftMenuButton;
-	private UIButton    m_leftButton;
+//	private UIButton    m_leftButton;
 	private UIToggle    m_verifyBirth;
 	private UIButton    m_deviceButton;
 	private UIButton	m_faqButton;

@@ -40,7 +40,7 @@ public class OverviewReadingState : GameState
 		m_uiManager.removeScreen( UIScreen.BOOK_LIST );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_READING );
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
+//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
@@ -56,7 +56,7 @@ public class OverviewReadingState : GameState
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
+//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
 		m_recordAReadingCanvas	= m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
 		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -84,14 +84,14 @@ public class OverviewReadingState : GameState
 		m_helpButton = m_recordAReadingCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
-		
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
-		
-		m_dashboardControllerCanvas.setupDotList( 7 );
-		m_dashboardControllerCanvas.setCurrentIndex( 5 );
+//		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
+//		m_leftButton.addClickCallback( onLeftButtonClick );
+//		
+//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
+//		m_rightButton.addClickCallback( onRightButtonClick );
+//		
+//		m_dashboardControllerCanvas.setupDotList( 7 );
+//		m_dashboardControllerCanvas.setCurrentIndex( 5 );
 		m_gemCountLabelInBook = m_recordAReadingCanvas.getView ("gemCountText") as UILabel;
 		m_moreBookButton = m_recordAReadingCanvas.getView( "bookListButton" ) as UIButton;
 		m_memberButton = m_recordAReadingCanvas.getView( "memberButton" ) as UIButton;
