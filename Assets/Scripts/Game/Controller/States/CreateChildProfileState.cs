@@ -40,15 +40,15 @@ public class CreateChildProfileState : GameState
 		switch (m_subState)
 		{
 		case SubState.GO_PREVIOUS:
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE:
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE_VIEW:
-			p_gameController.changeState(ZoodleState.PROFILE_VIEW);
+			m_gameController.changeState(ZoodleState.PROFILE_VIEW);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
@@ -58,7 +58,7 @@ public class CreateChildProfileState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_OVERVIEWINFO:
-			p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			m_gameController.game.setPDMenuBarVisible(true, false);
 			m_subState = SubState.NONE;
 			break;
@@ -70,8 +70,9 @@ public class CreateChildProfileState : GameState
 				m_subState = SubState.GO_PROFILE_VIEW;
 			else
 			{
-				p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-				m_gameController.game.setPDMenuBarVisible(true, true);
+				m_gameController.game.updateChildSelectorAndCurrentKidInfo();
+				m_gameController.game.setPDMenuBarVisible(true, false);
+				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			}
 		}
 

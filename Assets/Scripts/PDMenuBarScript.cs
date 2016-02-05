@@ -80,7 +80,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		//show current kid info on first tier menu bar
 		setCurrentKidOnFirstMenuBar();
 		//add childern for child selector
-		addAllChildern();
+		addAllChildren();
 	}
 	
 	// Update is called once per frame
@@ -264,8 +264,8 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
-	//add childern for child selector
-	private void addAllChildern()
+	//add children for child selector
+	private void addAllChildren()
 	{
 		List<Kid> kidList = SessionHandler.getInstance().kidList;
 		if (kidList != null)
@@ -413,8 +413,10 @@ public class PDMenuBarScript : MonoBehaviour {
 			currentkidText.text = kid.name.Substring(0, textLengthLimit) + "...";
 		else
 			currentkidText.text = kid.name;
-		kid.requestPhoto();
+//		kid.requestPhoto();
 		currentKidImage.sprite = createSprite(kid.kid_photo);
+		currentKidImage.gameObject.SetActive(false);
+		currentKidImage.gameObject.SetActive(true);
 		currentkidArrowDown.SetActive(true);
 		currentkidArrowUp.SetActive(false);
 	}
@@ -478,9 +480,9 @@ public class PDMenuBarScript : MonoBehaviour {
 		if (visible)
 		{
 			menuBarCanvas.sortingOrder = 10;
-			setCurrentKidOnFirstMenuBar();
-			if (isChildUpdated)
-				updateChildern();
+//			setCurrentKidOnFirstMenuBar();
+//			if (isChildUpdated)
+//				updateChildren();
 		}
 		else
 		{
@@ -490,23 +492,29 @@ public class PDMenuBarScript : MonoBehaviour {
 		menuBarObject.SetActive(visible);
 	}
 
-	private void updateChildern()
+	public void updateChildSelectorAndCurrentKidInfo()
 	{
-		removeAllChildern();
-		addAllChildern();
+		updateChildren();
+		setCurrentKidOnFirstMenuBar();
 	}
 
-	private void removeAllChildern()
+	private void updateChildren()
+	{
+		removeAllChildren();
+		addAllChildren();
+	}
+
+	private void removeAllChildren()
 	{
 		int count = gridLayout.transform.childCount;
 		for (int i = count - 1; i >= 0; i--)
 		{
 			GameObject child = gridLayout.transform.GetChild(i).gameObject;
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			DestroyImmediate(child);
-#else
-			Destroy(child);
-#endif
+//#else
+//			Destroy(child);
+//#endif
 		}
 	}
 
