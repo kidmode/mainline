@@ -15,7 +15,8 @@ public class PDMenuBarScript : MonoBehaviour {
 	[SerializeField]
 	public GameObject[] secondTierBar;
 
-	public GameObject childPrototype;
+	public GameObject childPrototypeToggle;
+	public GameObject childPrototypeButton;
 	public GameObject childernList;
 	public GridLayoutGroup gridLayout;
 
@@ -272,7 +273,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		 	foreach (Kid item in kidList)
 			{
 				Kid kid = item;
-				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
+				GameObject child = GameObject.Instantiate(childPrototypeToggle) as GameObject;
 				//change text
 				Text text1 = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
 				int textLengthLimit = 8;
@@ -282,15 +283,13 @@ public class PDMenuBarScript : MonoBehaviour {
 					text1.text = kid.name;
 				Text text2 = child.transform.FindChild("HiddenName").gameObject.GetComponent<Text>();
 				text2.text = kid.name;
-				//add button listener
-				Button button = child.GetComponent<Button>();
-				button.onClick.AddListener(() => cancelChildSelectorSelectedImage());
-				button.onClick.AddListener(() => kidSelected(kid));
+				//add toggle listener
+				Toggle toggle = child.GetComponent<Toggle>();
+				toggle.onValueChanged.AddListener((on) => kidSelected(kid, on));
+				toggle.group = childernList.GetComponent<ToggleGroup>();
 				//change image
-				Image image = child.transform.FindChild("IconBG/Icon").gameObject.GetComponent<Image>();
+				Image image = child.transform.FindChild("Icon").gameObject.GetComponent<Image>();
 				image.sprite = createSprite(kid.kid_photo);
-				Image image2 = child.transform.FindChild("IconBG2/Icon").gameObject.GetComponent<Image>();
-				image2.sprite = createSprite(kid.kid_photo);
 				//added to childernList
 				child.transform.localScale = menuBarCanvas.transform.localScale;
 				child.transform.parent = gridLayout.transform;
@@ -299,7 +298,7 @@ public class PDMenuBarScript : MonoBehaviour {
 
 			//add child icon
 			{
-				GameObject child = GameObject.Instantiate(childPrototype) as GameObject;
+				GameObject child = GameObject.Instantiate(childPrototypeButton) as GameObject;
 				//change text
 				Text text1 = child.transform.FindChild("Name").gameObject.GetComponent<Text>();
 				text1.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
@@ -307,7 +306,7 @@ public class PDMenuBarScript : MonoBehaviour {
 				text2.text = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
 				//add button listener
 				Button button = child.GetComponent<Button>();
-				button.onClick.AddListener(() => kidSelected(null));
+				button.onClick.AddListener(() => kidSelected(null, false));
 				//change icon bg image
 				Image iconBG = child.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
 				Texture2D bgTexture = Resources.Load("GUI/2048/parent_dashboard/pd_icon_addchild1") as Texture2D;
@@ -318,7 +317,7 @@ public class PDMenuBarScript : MonoBehaviour {
 				button.spriteState = spriteState;
 				iconBG.transform.localScale = Vector3.one * .75f;
 				//change icon image
-				GameObject icon = child.transform.FindChild("IconBG/Icon").gameObject;
+				GameObject icon = child.transform.FindChild("Icon").gameObject;
 				Image image = icon.GetComponent<Image>();
 				Texture2D texture = Resources.Load("GUI/2048/common/icon/icon_profile_add") as Texture2D;
 				image.sprite = createSprite(texture);
@@ -350,9 +349,9 @@ public class PDMenuBarScript : MonoBehaviour {
 	}
 
 	//this pressed button listener for selected child on child selector
-	private void kidSelected(Kid kid)
+	private void kidSelected(Kid kid, bool isON)
 	{
-		if (kid != null)
+		if (kid != null && isON)
 		{
 			SessionHandler.getInstance().currentKid = kid;
 			//change state to overview info
@@ -360,17 +359,18 @@ public class PDMenuBarScript : MonoBehaviour {
 			changeSecondTierButtonColor();
 			onButtonClicked(getSteteByNumber(currentToogle));
 
-			setChildSelectorVisible(false);
 			setCurrentKidOnFirstMenuBar();
+			Invoke("hideChildSeletor", .3f);
+//			setChildSelectorVisible(false);
 		}
-		else
+		else if (kid == null)
 		{
 			SessionHandler.getInstance().CreateChild = true;
 			game.gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(game.gameController.stateName));
 			onButtonClicked(ZoodleState.CREATE_CHILD_NEW);
 
-			setChildSelectorVisible(false);
 			setPDMenuBarVisible(false, false);
+			setChildSelectorVisible(false);
 		}
 	}
 
@@ -397,16 +397,12 @@ public class PDMenuBarScript : MonoBehaviour {
 		if (childSelector.activeInHierarchy)
 		{
 			setChildSelectorVisible(false);
-//			currentkidArrowDown.SetActive(true);
-//			currentkidArrowUp.SetActive(false);
 		}
 		else
 		{
 			setChildSelectorCurrentKidPosition();
 			changeChildSelectorSelectedImage();
 			setChildSelectorVisible(true);
-//			currentkidArrowDown.SetActive(false);
-//			currentkidArrowUp.SetActive(true);
 		}
 	}
 
@@ -451,26 +447,24 @@ public class PDMenuBarScript : MonoBehaviour {
 		{
 			if (t.gameObject.name.Contains("ChildPrototype"))
 			{
+				Toggle toggle = t.gameObject.GetComponent<Toggle>();
 				Text text = t.transform.FindChild("HiddenName").gameObject.GetComponent<Text>();
 				if (!text.text.Equals(addchildtext))
 				{
-					bool isFocused = false;
 					if (SessionHandler.getInstance().currentKid.name.Equals(text.text))
-					{
-						isFocused = true;
-					}
-					GameObject button = t.gameObject;
-					buttonImageChange(button, isFocused);
+						toggle.isOn = true;
+					else
+						toggle.isOn = false;
 				}
 			}
 		}
 	}
 
-	public void cancelChildSelectorSelectedImage()
-	{
-		GameObject button = childernList.transform.GetChild(currentKidIndex).gameObject;
-		buttonImageChange(button, false);
-	}
+//	public void cancelChildSelectorSelectedImage()
+//	{
+//		GameObject button = childernList.transform.GetChild(currentKidIndex).gameObject;
+//		buttonImageChange(button, false);
+//	}
 
 	//this is button delegate for tablet setting button
 	public void onSettingbuttonClicked()

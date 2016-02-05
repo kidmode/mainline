@@ -163,6 +163,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22443290}
   - 114: {fileID: 11459996}
+  - 114: {fileID: 11499592}
   m_Layer: 5
   m_Name: ChildernList
   m_TagString: Untagged
@@ -4069,7 +4070,8 @@ MonoBehaviour:
   - {fileID: 195258}
   - {fileID: 195230}
   - {fileID: 195288}
-  childPrototype: {fileID: 132778, guid: 4f22988af56464fda93b8f399e4deca8, type: 2}
+  childPrototypeToggle: {fileID: 129978, guid: 29cf416f6981c4baa81a1ae1bbd209f9, type: 2}
+  childPrototypeButton: {fileID: 132778, guid: 618196214bf7f457793127bb8be0fbc9, type: 2}
   childernList: {fileID: 143290}
   gridLayout: {fileID: 11459996}
   secondTier: {fileID: 195312}
@@ -4121,6 +4123,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11499592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 143290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1184210157, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!222 &22208350
 CanvasRenderer:
   m_ObjectHideFlags: 1
