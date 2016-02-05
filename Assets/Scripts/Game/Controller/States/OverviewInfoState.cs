@@ -12,7 +12,7 @@ public class OverviewInfoState : GameState {
 
 		game.setPDMenuBarVisible(true, false);
 
-		canMoveLeftMenu = true;
+//		canMoveLeftMenu = true;
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue ();
 		UICanvas l_backScreen = m_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
@@ -124,8 +124,6 @@ public class OverviewInfoState : GameState {
 		m_topRecommendAppArea = m_dashboardInfoCanvas.getView ("app") as UIButton;
 		m_topRecommendAppArea.addClickCallback (showAppDetail);
 
-		//m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-//		m_statChartButton.addClickCallback (goToStarChart);
 
 		if (null == m_app)
 		{
@@ -849,25 +847,6 @@ public class OverviewInfoState : GameState {
 		m_gameController.changeState (ZoodleState.CHILD_LOCK_STATE);
 	}
 
-	
-
-	
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-	
-
-	
-
-	
-
-	
-//	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
-//	{
-//		m_showProfileButton.addClickCallback (toShowAllChilren);
-//	}
-
 
 	
 	private void toBuyGemsScreen(UIButton p_button)
@@ -940,30 +919,15 @@ public class OverviewInfoState : GameState {
 	private UIButton m_cancelBuyButton;
 	private UIButton m_confirmBuyButton;
 
-	private UIButton m_leftButton;
-	private UIButton m_rightButton;
-	private UIButton m_leftSideMenuButton;
-	private UIButton m_showProfileButton;
-	private UIButton m_closeLeftMenuButton;
-	private UIButton m_childModeButton;
-	private UIButton m_settingButton;
-	private UIButton m_tryPremiumButton;
-	private UIButton m_buyGemsButtonOnLeftMenu;
 	private UIButton m_exitAppDetailsButton;
 
-	private UIButton m_appsButton;
-	private UIButton m_overviewButton;
-	private UIButton m_controlsButton;
-	private UIButton m_statChartButton;
 	private UIButton m_editProfileButton;
-	
-	private UISwipeList m_childrenList;
-	private UIElement 	m_menu;
+
 	private UIButton	m_topRecommendAppArea;
 	private RequestQueue m_requestQueue;
 	private RequestQueue m_getTopRecommendAppRequestQueue;
 
-	private bool 		canMoveLeftMenu;
+//	private bool 		canMoveLeftMenu;
 	private bool 		canLoadTopRecommandApp;
 
 
