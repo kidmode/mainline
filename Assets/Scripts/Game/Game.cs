@@ -709,7 +709,10 @@ public class Game : MonoBehaviour
 	public bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable
-		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected())
+		    || KidMode.isAirplaneModeOn() || !KidMode.isWifiConnected() || 
+		    InternetPingController.Instance.stateURL == InternetPingController.StateURL.NOTREACHABLE ||
+		    (InternetPingController.Instance.stateURL == InternetPingController.StateURL.CHECKING &&
+		 InternetPingController.Instance.prevState == InternetPingController.StateURL.NOTREACHABLE))
 		{
 			Game game = GameObject.FindWithTag("GameController").GetComponent<Game>();
 			game.gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);

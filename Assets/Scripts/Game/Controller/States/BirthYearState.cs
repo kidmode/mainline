@@ -139,7 +139,7 @@ public class BirthYearState : GameState
 
 		m_forgotButton = m_birthCanvas.getView("forgotButtonArea").getView("forgotButton") as UIButton;
 		m_forgotButton.active = false;
-		m_forgotButton.addClickCallback (showDialog);
+		m_forgotButton.addClickCallback (startGetParentGateLockRequest);
 		m_starLabel = m_birthCanvas.getView("panel").getView ("birthArea").getView ("starText") as UILabel;
 		m_noticeText = m_birthCanvas.getView ("noticeText") as UILabel;
 		ArrayList l_numBtnArray = m_birthCanvas.getView ("panel").getView ("numBoard").getViewsByTag ("numBtn");
@@ -161,11 +161,32 @@ public class BirthYearState : GameState
 	private void closeDialog(UIButton p_button)
 	{
 		m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,false);
-		m_forgotButton.addClickCallback (showDialog);
+		m_forgotButton.addClickCallback (startGetParentGateLockRequest);
 		m_closeDialog.removeAllCallbacks ();
 		m_closeDialogButton.removeAllCallbacks ();
 		m_dialogCanvas.setOutPosition ();
+
+
 	}
+
+	//Kev
+	private void startGetParentGateLockRequest(UIButton button){
+
+		if (m_gameController.game.checkInternet()) 
+		{
+
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 10);
+
+			m_requestQueue.reset ();
+			GetLockPinRequest getLockPinRequest = new GetLockPinRequest(SessionHandler.getInstance().username, sendPinRequestComplete);//new SendPinRequest(sendPinRequestComplete);
+			getLockPinRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(getLockPinRequest);
+			m_requestQueue.request();
+
+		}
+
+	}
+	//End
 
 	private void showDialog(UIButton p_button)
 	{
@@ -174,33 +195,71 @@ public class BirthYearState : GameState
 			m_forgotButton.removeAllCallbacks ();
 			m_closeDialog.addClickCallback (closeDialog);
 			m_closeDialogButton.addClickCallback (closeDialog);
-			m_requestQueue.reset ();
-			SendPinRequest sendPinRequest = new SendPinRequest(sendPinRequestComplete);
-			sendPinRequest.timeoutHandler = serverRequestTimeout;
-			m_requestQueue.add(sendPinRequest);
-			m_requestQueue.request();
+
+//			m_requestQueue.reset ();
+//			SendPinRequest sendPinRequest = new SendPinRequest(sendPinRequestComplete);
+//			sendPinRequest.timeoutHandler = serverRequestTimeout;
+//			m_requestQueue.add(sendPinRequest);
+//			m_requestQueue.request();
+
 		}
 	}
 
 	private void sendPinRequestComplete(HttpsWWW p_response)
 	{
-		if(p_response.error == null)
+
+		Hashtable table = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+
+		bool hasError = (bool)table[ "error" ];
+
+		if(!hasError)
 		{
-			m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
+//			m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
 			m_dialogCanvas.setOriginalPosition();
+
+			//Kev
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			showDialog(null);
 		}
 		else
 		{
-			m_forgotButton.addClickCallback(showDialog);
-			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+
+			m_requestQueue.reset ();
+			SendPinRequest forgotMainPinRequest = new SendPinRequest(forgotMainPinComplete);//new SendPinRequest(sendPinRequestComplete);
+			forgotMainPinRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(forgotMainPinRequest);
+			m_requestQueue.request();
+			
 		}
+	}
+	
+	
+	private void forgotMainPinComplete(HttpsWWW p_response)
+	{
+		
+		if(p_response.error == null){
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_dialogCanvas.setOriginalPosition();
+			
+			showDialog(null);
+			
+		}else{
+
+			m_forgotButton.addClickCallback(startGetParentGateLockRequest);
+			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
+
+		}
+		
 	}
 
 	private void serverRequestTimeout()
 	{
 		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 		m_birthCanvas.active = true;
-		m_forgotButton.addClickCallback(showDialog);
+		m_forgotButton.addClickCallback(startGetParentGateLockRequest);
 	}
 	
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )

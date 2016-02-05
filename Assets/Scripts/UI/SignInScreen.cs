@@ -154,6 +154,13 @@ public class SignInScreen : MonoBehaviour {
 	/// <returns><c>true</c>, if passes was emailed, <c>false</c> otherwise.</returns>
 	private bool emailPasses()
 	{
+
+		if(emailInput.text == "" || emailInput.text == " "){
+
+			return false;
+
+		}
+
 		string l_email = emailInput.text.Trim();
 
 		int posAt = l_email.IndexOf("@");

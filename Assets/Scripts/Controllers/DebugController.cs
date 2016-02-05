@@ -70,6 +70,7 @@ public class DebugController : MonoBehaviour {
 
 	}
 
+	//=================== = = == = = == = = == = == = = == = == = = = = =
 
 	public void showStatus(string statusText){
 
@@ -82,6 +83,8 @@ public class DebugController : MonoBehaviour {
 		ToyboxRandomizeController.Instance.getVideoList();
 
 	}
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
 
 	public void fogotPassword(){
 
@@ -102,4 +105,69 @@ public class DebugController : MonoBehaviour {
 			
 		}
 	}
+
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
+	public void getFeaturedContent(){
+		
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new GetFeatureContentsRequest(getFeaturedContentComplete));
+		
+		request.request(RequestType.RUSH);
+		
+	}
+
+	private void getFeaturedContentComplete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
+
+	//=================== = = == = = == = = == = == = = == = == = = = = =
+	public void getLockPin(){
+		
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new GetLockPinRequest(SessionHandler.getInstance().username, getLockPinCompelete));
+		
+		request.request(RequestType.RUSH);
+		
+	}
+	
+	private void getLockPinCompelete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
+
+	// == = = == = = = = == = = = =
+	public void getMainPin(){ //SendPinRequest
+
+		RequestQueue request = new RequestQueue();
+		
+		request.add(new SendPinRequest(getMainPinComplete));
+		
+		request.request(RequestType.RUSH);
+
+	}
+
+	private void getMainPinComplete(HttpsWWW p_response)
+	{
+		
+		showStatus(p_response.text);
+		
+		if(p_response.error == null){
+			
+		}
+	}
+
 }

@@ -136,6 +136,9 @@ public class UIScreen
 	public const int PARENT_BIRTH_CHECK     = 1207;
 	//honda: Debug Mode
 	public const int ADD_ITEMS_MANUALLY     = 1208;
+
+	//Cathy : Credit Card Webview
+	public const int CREDIT_CARD_WEBVIEW    = 1209;
 }
 
 
@@ -281,7 +284,8 @@ public class ZoodlesScreenFactory : IScreenFactory
 		//honda: debug mode
 		m_directoryMap.Add( UIScreen.ADD_ITEMS_MANUALLY, 		SCREEN_DIRECTORY + "AddItemManuallyPopup" );
 
-
+		//honda: debug mode
+		m_directoryMap.Add( UIScreen.CREDIT_CARD_WEBVIEW, 		SCREEN_DIRECTORY + "CreditcardWebScreen" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -422,6 +426,9 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 			//honda: debug mode
 			case UIScreen.ADD_ITEMS_MANUALLY:		return new UICanvas()			as UICanvas;
+
+			// Cathy: credit card webview
+			case UIScreen.CREDIT_CARD_WEBVIEW:		return new UICanvas()			as UICanvas;
 
 		}
 		return new UICanvas();

@@ -13,10 +13,14 @@ public class CreateAccountUpSellState : GameState
 		GO_CONGRATS
 	}
 
+	private UIManager m_uiManager;
+
 	//Standard state flow	
 	public override void enter(GameController p_gameController)
 	{
 		base.enter(p_gameController);
+
+		m_uiManager = p_gameController.getUI ();
 		m_queue.reset();
 		m_firstUse = string.Empty.Equals (SessionHandler.getInstance ().token.getSecret ());
 		if(m_firstUse)
@@ -133,6 +137,10 @@ public class CreateAccountUpSellState : GameState
 		m_backButton = m_payConfirmCanvas.getView("backButton") as UIButton;
 		m_backButton.addClickCallback(goBack);
 
+		m_startFreeTrial = m_payConfirmCanvas.getView("purchaseButton") as UIButton;
+		m_startFreeTrial.addClickCallback(startFreeTrial);
+
+
 		m_thanksButton = m_payConfirmCanvas.getView ( "thanksButton" ) as UIButton;
 		m_thanksButton.addClickCallback ( onThanksClick );
 		if( m_firstUse )
@@ -162,8 +170,6 @@ public class CreateAccountUpSellState : GameState
 
 //		KidMode.showCreditCardView ("https://staging.zoodles.com/payments/try_premium?client_id=886&token=8f2c548a6bc8872694ba6edffadce98125d452db");
 
-		KidMode.showCreditCardView (GCS.Environment.getSecureHost() + "/payments/try_premium?client_id=" + SessionHandler.getInstance().clientId +
-		                            "&token=" + SessionHandler.getInstance().token.getSecret());
 
 //		m_cardNumber = m_payConfirmCanvas.getView("cardNumber") as UIInputField;
 //		m_cardNumber.listener.onSelect += _onCardNumberSelect;
@@ -235,7 +241,6 @@ public class CreateAccountUpSellState : GameState
 
 	private void goBack(UIButton p_button)
 	{
-		KidMode.dismissCreditCardView();
 		m_subState = SubState.GO_REFUSE;
 
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.BACK_FROM_PREMIUM_UI");
@@ -243,8 +248,80 @@ public class CreateAccountUpSellState : GameState
 
 	private void startFreeTrial(UIButton p_button)
 	{
-		m_subState = SubState.GO_TRIAL;
+//		m_subState = SubState.GO_TRIAL;
+
+		_setupWebview(GCS.Environment.getSecureHost() + "/payments/try_premium?client_id=" + SessionHandler.getInstance().clientId +
+		              "&token=" + SessionHandler.getInstance().token.getSecret());
+
 		SwrveComponent.Instance.SDK.NamedEvent("SignUp.START_TRIAL");
+	}
+
+	private void _setupWebview(string p_url)
+	{
+		UICanvas l_screen = m_uiManager.createScreen(UIScreen.CREDIT_CARD_WEBVIEW, false, 5);
+		m_uiManager.changeScreen(l_screen, true);
+		UIButton l_confirm = l_screen.getView("quitButton") as UIButton;
+		l_confirm.addClickCallback(_onConfirmButtonClick);
+		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
+		l_webView.insets = new UniWebViewEdgeInsets((int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor), (int)(110.0f * l_screen.scaleFactor));
+		l_webView.OnReceivedKeyCode += _onBackKeyCode;
+		l_webView.OnWebViewShouldClose += _onShouldCloseView;
+		l_webView.OnLoadComplete += loadComplete;
+		l_webView.SetShowSpinnerWhenLoading(true);
+		l_webView.Load(p_url);
+	}
+	private void _onConfirmButtonClick(UIButton p_button)
+	{
+		
+		_closeWebview();
+	}
+
+
+	private void loadComplete(UniWebView webView, bool success, string errorMessage)
+	{
+		if (!success)
+		{
+			Debug.Log("Uniwebview load failed error message: " + errorMessage);
+			_closeWebview();
+			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 15);
+			ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+			if (error != null)
+				error.onClick += quitNoInternetButtonClicked;
+		}
+		else
+		{
+			webView.Show();
+		}
+	}
+
+	private void quitNoInternetButtonClicked()
+	{
+		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
+		if (error != null)
+			error.onClick -= quitNoInternetButtonClicked;
+	}
+
+	private void _onBackKeyCode(UniWebView p_view, int p_keyCode)
+	{
+		_closeWebview();
+	}
+	
+	private bool _onShouldCloseView(UniWebView p_webView)
+	{
+		_closeWebview();
+		return true;
+	}
+
+	private void _closeWebview()
+	{
+		UICanvas l_screen = m_uiManager.findScreen(UIScreen.CREDIT_CARD_WEBVIEW);
+		UniWebView l_webView = l_screen.gameObject.GetComponentInChildren<UniWebView>();
+		l_webView.Hide();
+		l_webView.CleanCache();
+		l_webView.OnReceivedKeyCode -= _onBackKeyCode;
+		l_webView.OnWebViewShouldClose -= _onShouldCloseView;
+		l_webView.OnLoadComplete -= loadComplete;
+		m_uiManager.removeScreenImmediately(l_screen);
 	}
 
 	private void _onPaymentComplete(HttpsWWW p_response)
@@ -295,7 +372,7 @@ public class CreateAccountUpSellState : GameState
 		SessionHandler.getInstance ().token.setCurrent(true);
 		SessionHandler.getInstance ().token.setPremium(false);
 
-		KidMode.dismissCreditCardView();
+		_closeWebview();
 		
 		//Payment done and First started Trial account
 		//Now sets local playerprefs
