@@ -285,6 +285,8 @@ public class PDMenuBarScript : MonoBehaviour {
 				text2.text = kid.name;
 				//add toggle listener
 				Toggle toggle = child.GetComponent<Toggle>();
+				if (kid.name == SessionHandler.getInstance().currentKid.name)
+					toggle.isOn = true;
 				toggle.onValueChanged.AddListener((on) => kidSelected(kid, on));
 				toggle.group = childernList.GetComponent<ToggleGroup>();
 				//change image
@@ -342,10 +344,6 @@ public class PDMenuBarScript : MonoBehaviour {
 		float scrollContentWidth = (gridLayout.transform.childCount * gridLayout.cellSize.x) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.x);
 		RectTransform rt = (RectTransform)childernList.transform;
 		rt.sizeDelta = new Vector2(scrollContentWidth, rt.sizeDelta.y);
-
-		Debug.Log("######################## ChildCount: " + gridLayout.transform.childCount);
-
-//		((RectTransform)menuBarObject.transform).localScale = Vector3.one * .5f;
 	}
 
 	//this pressed button listener for selected child on child selector
@@ -474,7 +472,7 @@ public class PDMenuBarScript : MonoBehaviour {
 
 	public void setPDMenuBarVisible(bool visible, bool isChildUpdated = false)
 	{
-		if (visible == menuBarObject.activeInHierarchy)
+		if (visible == menuBarObject.activeInHierarchy && !isChildUpdated)
 			return;
 
 		if (visible)

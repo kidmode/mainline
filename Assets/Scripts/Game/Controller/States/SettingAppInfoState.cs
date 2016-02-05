@@ -51,7 +51,7 @@ public class SettingAppInfoState : GameState
 		m_commonDialogCanvas =  p_uiManager.createScreen (UIScreen.COMMON_DIALOG, true, 11) as CommonDialogCanvas;
 		m_cancelSubscriptionCanvas = p_uiManager.createScreen (UIScreen.CANCEL_SUB, true, 10) as CancelSubscriptionCanvas;
 		m_thankCanvas =  p_uiManager.createScreen (UIScreen.THANK, true, 7) as ThankCanvas;
-		m_signOutConfirmCanvas =  p_uiManager.createScreen (UIScreen.SIGN_OUT, true, 8) as SignOutConfirmCanvas;
+		m_signOutConfirmCanvas =  p_uiManager.createScreen (UIScreen.SIGN_OUT, true, 12) as SignOutConfirmCanvas;
 		m_sentFeedBackCanvas = p_uiManager.createScreen (UIScreen.SENT_FEED_BACK, true, 9) as SentFeedBackCanvas;
 	
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
@@ -488,6 +488,7 @@ public class SettingAppInfoState : GameState
 
 	private void onConfirmSignOut(UIButton p_button)
 	{
+		m_gameController.game.removePDMenuBar();
 		m_session.clearUserData (true);
 		LocalSetting.find ("User").delete ();
 		m_gameController.changeState (ZoodleState.ZOODLES_ANIMATION);
