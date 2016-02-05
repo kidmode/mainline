@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class PDMenuBarScript : MonoBehaviour {
 
@@ -19,6 +21,7 @@ public class PDMenuBarScript : MonoBehaviour {
 
 	public GameObject secondTier;
 	public GameObject childSelector;
+	public ScrollRect childSelectorSrollRect;
 
 	public Image currentKidImage;
 	public Text currentkidText;
@@ -31,6 +34,9 @@ public class PDMenuBarScript : MonoBehaviour {
 	private int currentToogle = 0;
 	private List<Texture2D> childButtonImages = new List<Texture2D>();
 	private int textLengthLimit = 8;
+	private int currentKidIndex = 0;
+
+	public delegate void ButtonEventDelegate(UnityEngine.EventSystems.BaseEventData baseEvent);
 
 	// Use this for initialization
 	void Start () 
@@ -54,12 +60,18 @@ public class PDMenuBarScript : MonoBehaviour {
 					Button button = t.gameObject.GetComponent<Button>() as Button;
 					int stateType = getStateTypeByName(t.gameObject.name);
 					string buttoName = t.gameObject.name;
-					button.onClick.AddListener(() => onButtonClicked(stateType));
+					Debug.Log("buttonName: " + buttoName);
+
+//					addButtonEventTrigger(t.gameObject, EventTriggerType.PointerDown, pointerDownEvent);
+//					addButtonEventTrigger(t.gameObject, EventTriggerType.PointerUp, pointerUpEvent);
+
 					button.onClick.AddListener(() => changeSecondTierButtonColor(buttoName));
+					button.onClick.AddListener(() => onButtonClicked(stateType));
+
 				}
 			}
 		}
- 
+
 		Texture2D texture1 = Resources.Load("GUI/2048/common/buttons/bt_circle_up") as Texture2D;
 		Texture2D texture2 = Resources.Load("GUI/2048/common/buttons/bt_circle_down") as Texture2D;
 		childButtonImages.Add(texture1);
@@ -68,10 +80,6 @@ public class PDMenuBarScript : MonoBehaviour {
 		setCurrentKidOnFirstMenuBar();
 		//add childern for child selector
 		addAllChildern();
-
-//		DebugController.Instance.setChildernContentPanelVisible(true);
-//		DebugController.Instance.childernContent = childernList.transform.parent.gameObject;
-
 	}
 	
 	// Update is called once per frame
@@ -128,6 +136,7 @@ public class PDMenuBarScript : MonoBehaviour {
 	//change state to new page
 	public void onButtonClicked(int stateType)
 	{
+		Debug.Log(stateType + " Button clicked");
 		game.gameController.changeState(stateType);
 	}
 
@@ -274,14 +283,17 @@ public class PDMenuBarScript : MonoBehaviour {
 				text2.text = kid.name;
 				//add button listener
 				Button button = child.GetComponent<Button>();
+				button.onClick.AddListener(() => cancelChildSelectorSelectedImage());
 				button.onClick.AddListener(() => kidSelected(kid));
 				//change image
 				Image image = child.transform.FindChild("IconBG/Icon").gameObject.GetComponent<Image>();
 				image.sprite = createSprite(kid.kid_photo);
+				Image image2 = child.transform.FindChild("IconBG2/Icon").gameObject.GetComponent<Image>();
+				image2.sprite = createSprite(kid.kid_photo);
 				//added to childernList
 				child.transform.localScale = menuBarCanvas.transform.localScale;
 				child.transform.parent = gridLayout.transform;
-//				child.SetActive(true);
+				child.SetActive(true);
 			}
 
 			//add child icon
@@ -344,8 +356,8 @@ public class PDMenuBarScript : MonoBehaviour {
 			SessionHandler.getInstance().currentKid = kid;
 			//change state to overview info
 			currentToogle = 0;
-			onButtonClicked(getSteteByNumber(currentToogle));
 			changeSecondTierButtonColor();
+			onButtonClicked(getSteteByNumber(currentToogle));
 
 			setChildSelectorVisible(false);
 			setCurrentKidOnFirstMenuBar();
@@ -389,6 +401,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 		else
 		{
+			setChildSelectorCurrentKidPosition();
 			changeChildSelectorSelectedImage();
 			setChildSelectorVisible(true);
 //			currentkidArrowDown.SetActive(false);
@@ -414,19 +427,22 @@ public class PDMenuBarScript : MonoBehaviour {
 	//change button normal image
 	private void buttonImageChange(GameObject button, bool isFocused)
 	{
+		GameObject iconBG2 = button.transform.FindChild("IconBG2").gameObject;
 		if (isFocused)
 		{
-			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
-			image.sprite = createSprite(childButtonImages[1]);
+			iconBG2.SetActive(true);
+//			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
+//			image.sprite = createSprite(childButtonImages[1]);
 		}
 		else
 		{
-			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
-			image.sprite = createSprite(childButtonImages[0]);
+			iconBG2.SetActive(false);
+//			Image image = button.transform.FindChild("IconBG").gameObject.GetComponent<Image>();
+//			image.sprite = createSprite(childButtonImages[0]);
 		}
 	}
 
-	//set selcted child selecte image for child selector 
+	//set selcted child selectd image for child selector 
 	public void changeChildSelectorSelectedImage()
 	{
 		string addchildtext = Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD);
@@ -449,6 +465,12 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
+	public void cancelChildSelectorSelectedImage()
+	{
+		GameObject button = childernList.transform.GetChild(currentKidIndex).gameObject;
+		buttonImageChange(button, false);
+	}
+
 	//this is button delegate for tablet setting button
 	public void onSettingbuttonClicked()
 	{
@@ -457,6 +479,9 @@ public class PDMenuBarScript : MonoBehaviour {
 
 	public void setPDMenuBarVisible(bool visible, bool isChildUpdated = false)
 	{
+		if (visible == menuBarObject.activeInHierarchy)
+			return;
+
 		if (visible)
 		{
 			menuBarCanvas.sortingOrder = 10;
@@ -496,5 +521,73 @@ public class PDMenuBarScript : MonoBehaviour {
 	{
 		game.pdMenuBar = null;
 		GameObject.Destroy(menuBarObject);
+	}
+
+	public void pointerDownEvent(UnityEngine.EventSystems.BaseEventData baseEvent) 
+	{
+		Debug.Log(baseEvent.selectedObject.name + " triggered an pointer down event!");
+	}
+
+	public void pointerUpEvent(UnityEngine.EventSystems.BaseEventData baseEvent) 
+	{
+		Debug.Log(baseEvent.selectedObject.name + " triggered an pointer up event!");
+	}
+
+	public void addButtonEventTrigger(GameObject button, EventTriggerType eventTriggerType, ButtonEventDelegate eventDelegate)
+	{
+
+		EventTrigger eventTrigger = button.gameObject.GetComponent<EventTrigger>();
+
+		if (eventTrigger == null)
+		{
+			Debug.Log("can not find event trigger component for button " + button.name);
+			return;
+		}
+		//Create a new entry. This entry will describe the kind of event we're looking for
+		// and how to respond to it
+		EventTrigger.Entry entry = new EventTrigger.Entry();
+		//This event will respond to a drop event
+		entry.eventID = eventTriggerType;
+		//Create a new trigger to hold our callback methods
+		entry.callback = new EventTrigger.TriggerEvent();
+		//Create a new UnityAction, it contains our DropEventMethod delegate to respond to events
+		UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(eventDelegate);
+		//Add our callback to the listeners
+		entry.callback.AddListener(callback);
+		//Add the EventTrigger entry to the event trigger component
+		eventTrigger.delegates.Add(entry);
+	}
+
+	public void hideChildSeletor()
+	{
+		setChildSelectorVisible(false);
+	}
+
+	private int findCurrentKidIndex()
+	{
+		int index = 0;
+		foreach (Kid kid in SessionHandler.getInstance().kidList)
+		{
+			if (kid.name == SessionHandler.getInstance().currentKid.name)
+			{
+				break;
+			}
+			index++;
+		}
+
+		if (index == SessionHandler.getInstance().kidList.Count)
+		{
+			index = 0;
+		}
+
+		return index;
+	}
+
+	private void setChildSelectorCurrentKidPosition()
+	{
+		currentKidIndex = findCurrentKidIndex();
+		int totalItems = childernList.transform.childCount;
+
+		childSelectorSrollRect.horizontalNormalizedPosition = (float)currentKidIndex/(float)totalItems;
 	}
 }
