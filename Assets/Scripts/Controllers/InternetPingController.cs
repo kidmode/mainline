@@ -26,6 +26,8 @@ public class InternetPingController : MonoBehaviour {
 
 	void Awake(){
 
+		prevState = StateURL.OKAY;
+
 		Instance = this;
 
 	}
