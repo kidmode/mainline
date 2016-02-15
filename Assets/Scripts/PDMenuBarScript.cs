@@ -80,7 +80,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		//show current kid info on first tier menu bar
 		setCurrentKidOnFirstMenuBar();
 		//add childern for child selector
-		addAllChildern();
+		addAllChildren();
 	}
 	
 	// Update is called once per frame
@@ -264,8 +264,8 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 	}
 
-	//add childern for child selector
-	private void addAllChildern()
+	//add children for child selector
+	private void addAllChildren()
 	{
 		List<Kid> kidList = SessionHandler.getInstance().kidList;
 		if (kidList != null)
@@ -285,6 +285,8 @@ public class PDMenuBarScript : MonoBehaviour {
 				text2.text = kid.name;
 				//add toggle listener
 				Toggle toggle = child.GetComponent<Toggle>();
+				if (kid.name == SessionHandler.getInstance().currentKid.name)
+					toggle.isOn = true;
 				toggle.onValueChanged.AddListener((on) => kidSelected(kid, on));
 				toggle.group = childernList.GetComponent<ToggleGroup>();
 				//change image
@@ -342,10 +344,6 @@ public class PDMenuBarScript : MonoBehaviour {
 		float scrollContentWidth = (gridLayout.transform.childCount * gridLayout.cellSize.x) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.x);
 		RectTransform rt = (RectTransform)childernList.transform;
 		rt.sizeDelta = new Vector2(scrollContentWidth, rt.sizeDelta.y);
-
-		Debug.Log("######################## ChildCount: " + gridLayout.transform.childCount);
-
-//		((RectTransform)menuBarObject.transform).localScale = Vector3.one * .5f;
 	}
 
 	//this pressed button listener for selected child on child selector
@@ -415,8 +413,10 @@ public class PDMenuBarScript : MonoBehaviour {
 			currentkidText.text = kid.name.Substring(0, textLengthLimit) + "...";
 		else
 			currentkidText.text = kid.name;
-		kid.requestPhoto();
+//		kid.requestPhoto();
 		currentKidImage.sprite = createSprite(kid.kid_photo);
+		currentKidImage.gameObject.SetActive(false);
+		currentKidImage.gameObject.SetActive(true);
 		currentkidArrowDown.SetActive(true);
 		currentkidArrowUp.SetActive(false);
 	}
@@ -474,15 +474,15 @@ public class PDMenuBarScript : MonoBehaviour {
 
 	public void setPDMenuBarVisible(bool visible, bool isChildUpdated = false)
 	{
-		if (visible == menuBarObject.activeInHierarchy)
+		if (visible == menuBarObject.activeInHierarchy && !isChildUpdated)
 			return;
 
 		if (visible)
 		{
 			menuBarCanvas.sortingOrder = 10;
-			setCurrentKidOnFirstMenuBar();
-			if (isChildUpdated)
-				updateChildern();
+//			setCurrentKidOnFirstMenuBar();
+//			if (isChildUpdated)
+//				updateChildren();
 		}
 		else
 		{
@@ -492,23 +492,29 @@ public class PDMenuBarScript : MonoBehaviour {
 		menuBarObject.SetActive(visible);
 	}
 
-	private void updateChildern()
+	public void updateChildSelectorAndCurrentKidInfo()
 	{
-		removeAllChildern();
-		addAllChildern();
+		updateChildren();
+		setCurrentKidOnFirstMenuBar();
 	}
 
-	private void removeAllChildern()
+	private void updateChildren()
+	{
+		removeAllChildren();
+		addAllChildren();
+	}
+
+	private void removeAllChildren()
 	{
 		int count = gridLayout.transform.childCount;
 		for (int i = count - 1; i >= 0; i--)
 		{
 			GameObject child = gridLayout.transform.GetChild(i).gameObject;
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			DestroyImmediate(child);
-#else
-			Destroy(child);
-#endif
+//#else
+//			Destroy(child);
+//#endif
 		}
 	}
 

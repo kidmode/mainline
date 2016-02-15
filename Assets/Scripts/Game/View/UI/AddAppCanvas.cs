@@ -76,6 +76,14 @@ public class AddAppCanvas : UICanvas
 		{
 			m_dataList.Add(l_app);
 		}
+		#elif UNITY_EDITOR
+		m_dataList = new List<object> ();
+		for (int i = 1; i <= 6; i++)
+		{
+			AppInfo app = new AppInfo();
+			app.appName = "TestApp" + i.ToString();
+			m_dataList.Add(app);
+		}
 		#endif
 	}
 
@@ -117,9 +125,9 @@ public class AddAppCanvas : UICanvas
 
 	private void SetupLocalizition()
 	{
-		UILabel l_top = getView ("titleImage").getView("titleText") as UILabel;
-		
-		l_top.text = Localization.getString (Localization.TXT_74_LABEL_TITLE);
+//		UILabel l_top = getView ("titleImage").getView("titleText") as UILabel;
+//		
+//		l_top.text = Localization.getString (Localization.TXT_74_LABEL_TITLE);
 	}
 
 	private Texture2D m_btnBgIcon;

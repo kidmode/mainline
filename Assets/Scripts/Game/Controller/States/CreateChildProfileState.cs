@@ -40,15 +40,15 @@ public class CreateChildProfileState : GameState
 		switch (m_subState)
 		{
 		case SubState.GO_PREVIOUS:
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE:
-			p_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+			m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE_VIEW:
-			p_gameController.changeState(ZoodleState.PROFILE_VIEW);
+			m_gameController.changeState(ZoodleState.PROFILE_VIEW);
 			m_subState = SubState.NONE;
 			break;
 		case SubState.LOADING:
@@ -58,7 +58,7 @@ public class CreateChildProfileState : GameState
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_OVERVIEWINFO:
-			p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
+			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			m_gameController.game.setPDMenuBarVisible(true, false);
 			m_subState = SubState.NONE;
 			break;
@@ -70,8 +70,9 @@ public class CreateChildProfileState : GameState
 				m_subState = SubState.GO_PROFILE_VIEW;
 			else
 			{
-				p_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-				m_gameController.game.setPDMenuBarVisible(true, true);
+				m_gameController.game.updateChildSelectorAndCurrentKidInfo();
+				m_gameController.game.setPDMenuBarVisible(true, false);
+				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			}
 		}
 
@@ -619,7 +620,7 @@ public class CreateChildProfileState : GameState
 					}
 					else
 					{
-						l_url += "file://" + Application.dataPath + "/StreamingAssets/" + SessionHandler.getInstance().selectAvatar + ".png";
+						l_url += "file:///" + Application.dataPath + "/StreamingAssets/" + SessionHandler.getInstance().selectAvatar + ".png";
 					}
 
 					m_gameController.game.StartCoroutine(loadImage(l_url));
@@ -672,7 +673,7 @@ public class CreateChildProfileState : GameState
 		//m_queue.add(new ImageRequest("newAvatar", l_url));
 		WWW l_www = new WWW (l_url);
 		yield return l_www;
-		UpdatePhotoRequest updatePhotoRequest = new UpdatePhotoRequest("newAvatar",l_www.bytes, null);
+		UpdatePhotoRequest updatePhotoRequest = new UpdatePhotoRequest("newAvatar",l_www.bytes, onUpdatePhotoComplete);
 		updatePhotoRequest.timeoutHandler = serverRequestTimeout;
 		m_queue.add(updatePhotoRequest);
 		EditChildRequest editChildRequest = new EditChildRequest(combineChildName(m_childFirstName.text,m_childLastName.text),m_birthday, editChildComplete);
@@ -685,6 +686,22 @@ public class CreateChildProfileState : GameState
 
 	void onUpdatePhotoComplete(HttpsWWW p_response)
 	{
+		if (p_response == null)
+		{
+			Debug.Log("UpdatePhotoRequest onUpdatePhotoComplete time out");
+			return;
+		}
+
+		if (p_response.error == null)
+		{
+			Debug.Log("UpdatePhotoRequest onUpdatePhotoComplete successful: " + p_response.text);
+		}
+		else
+		{
+			Debug.Log("UpdatePhotoRequest onUpdatePhotoComplete error: " + p_response.error);
+		}
+
+
 		SessionHandler.getInstance().currentKid.kid_photo = Resources.Load("GUI/2048/common/avatars/" + SessionHandler.getInstance().selectAvatar) as Texture2D;
 		SessionHandler.getInstance().currentKid.saveKidPhotoLocal();
 	}

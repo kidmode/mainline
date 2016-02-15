@@ -66,8 +66,9 @@ public class SelectAvatarState : GameState
 			}
 			else
 			{
+				m_gameController.game.updateChildSelectorAndCurrentKidInfo();
+				m_gameController.game.setPDMenuBarVisible(true, false);
 				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-				m_gameController.game.setPDMenuBarVisible(true, true);
 			}
 		}
 

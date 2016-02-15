@@ -67,7 +67,7 @@ public class HttpsWWW : object
 	{
 		m_url = p_url;
 		m_request = (HttpWebRequest)System.Net.WebRequest.Create (p_url);
-		m_request.Timeout = 45000;
+		m_request.Timeout = 15000;
 		ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback (ValidateServerCertificate);
 		m_request.AuthenticationLevel = AuthenticationLevel.MutualAuthRequested;
 

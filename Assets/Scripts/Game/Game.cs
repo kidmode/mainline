@@ -884,6 +884,12 @@ public class Game : MonoBehaviour
 			pdMenuBar.removePDMenuBar();
 	}
 
+	public void updateChildSelectorAndCurrentKidInfo()
+	{
+		if (pdMenuBar != null)
+			pdMenuBar.updateChildSelectorAndCurrentKidInfo();
+	}
+
 	private PwdStore m_pwdStore;
 	private static PwdStore _pwdStore;
 	//end
