@@ -13,6 +13,7 @@ public class OverviewBookState : GameState
 	//--------------------Public Interface -----------------------
 	public override void enter (GameController p_gameController)
 	{
+
 		base.enter (p_gameController);
 
 		m_uiManager = m_gameController.getUI();
@@ -20,6 +21,7 @@ public class OverviewBookState : GameState
 
 		_setupScreen( p_gameController );
 		_setupElment();
+
 	}
 
 	public override void update (GameController p_gameController, int p_time)
@@ -42,9 +44,7 @@ public class OverviewBookState : GameState
 		base.exit (p_gameController);
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
 		m_uiManager.removeScreen( UIScreen.BOOK_LIST );
-//		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.RECOMMENDED_BOOK );
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 	}
@@ -59,8 +59,6 @@ public class OverviewBookState : GameState
 		m_bookDetailsCanvas.setUIManager (p_gameController.getUI());
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
-//		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
 		m_recommendedBookCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_BOOK, true, 2 );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_recommendedBookCanvas.getView ("mainPanel");

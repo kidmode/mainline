@@ -68,8 +68,6 @@ public class OverviewInfoState : GameState {
 	{
 		base.exit (p_gameController);
 		m_requestQueue.dispose ();
-//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
-//		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_INFO );
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
 		m_uiManager.removeScreen( UIScreen.APP_DETAILS );
@@ -82,10 +80,6 @@ public class OverviewInfoState : GameState {
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 
 		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
-
-//		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 3 )  as LeftMenuCanvas;
-		
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 2 ) as DashBoardControllerCanvas;
 
 		m_dashboardInfoCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_INFO, true, 1 );
 
@@ -904,7 +898,6 @@ public class OverviewInfoState : GameState {
 	private UIManager m_uiManager;
 	private App m_app;
 
-//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UICanvas m_dashboardInfoCanvas;
 	private UICanvas m_appDetailsCanvas;
 	private UICanvas	m_confirmDialogCanvas;

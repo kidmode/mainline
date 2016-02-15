@@ -86,7 +86,6 @@ public class SettingChildLockState : GameState
 			updateSetting ();
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_childLockCanvas );
-		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_childLockHelpCanvas );
 		p_gameController.getUI().removeScreen( m_cancelLockConfirmCanvas );
 	}
@@ -144,7 +143,6 @@ public class SettingChildLockState : GameState
 
 		m_cancelLockConfirmCanvas = p_uiManager.createScreen( UIScreen.CANCEL_CHILD_LOCK, true, 6 ) as CancelLockConfirmCanvas;
 		m_childLockHelpCanvas =  p_uiManager.createScreen( UIScreen.CHILD_LOCK_HELP, true, 5 ) as ChildLockHelpCanvas;
-		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_childLockCanvas = p_uiManager.createScreen( UIScreen.CHILD_LOCK_SCREEN, true, 2 );
 
 
@@ -152,9 +150,6 @@ public class SettingChildLockState : GameState
 
 		m_pinInputField = m_childLockCanvas.getView ("pinInputField").gameObject.GetComponent<InputField> ();
 		m_pinInputField.onValueChange.AddListener (pinValueChange);
-		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
-		m_showProfileButton.addClickCallback (toShowAllChilren);
 
 		//Kevin  ==== pin ux chagne
 		m_currentPinDisplay = m_childLockCanvas.getView("txtChildCodeDisplay") as UILabel;
@@ -192,13 +187,6 @@ public class SettingChildLockState : GameState
 
 		m_childLockChangeHelp.active = false;
 
-
-		//honda 
-		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
-		m_settingButton.addClickCallback(onCloseMenu);
-		//end
-		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
-		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
 //		m_leftButton = m_childLockCanvas.getView ("leftButton") as UIButton;
 //		m_leftButton.addClickCallback (toAppInfoPage);
@@ -264,13 +252,7 @@ public class SettingChildLockState : GameState
 				}
 			}
 		}
-		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
-		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
 
-		m_tryPremiumButton = m_leftMenuCanvas.getView ("premiumButton") as UIButton;
-		m_buyGemsButton = m_leftMenuCanvas.getView ("buyGemsButton") as UIButton;
-		m_tryPremiumButton.addClickCallback (toPremiumScreen);
-		m_buyGemsButton.addClickCallback (toBuyGemsScreen);
 		m_closeButton = m_childLockHelpCanvas.getView ("closeMark") as UIButton;
 		m_closeButton.addClickCallback (closeHelpDialogButton);
 		m_premiumPurchaseButton = m_childLockCanvas.getView ("kidModeButton") as UIButton;
@@ -425,31 +407,7 @@ public class SettingChildLockState : GameState
 		m_childLockHelpCanvas.setOutPosition ();
 	}
 
-	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
-	{
-		if (checkInternet() == false)
-			return;
 
-		Kid l_kid = p_data as Kid;
-		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
-		{
-			if(checkPin())
-			{
-				SessionHandler.getInstance().CreateChild = true;
-				m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
-				m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
-			}
-		}
-		else
-		{
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			if(checkPin())
-			{
-				SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
-				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-			}
-		}
-	}
 
 	private void onOffLock( UIToggle p_toggle, bool p_value )
 	{
@@ -512,11 +470,6 @@ public class SettingChildLockState : GameState
 		{
 			p_button.addClickCallback (toAppInfoPage);
 		}
-	}
-
-	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		m_showProfileButton.addClickCallback (toShowAllChilren);
 	}
 
 
@@ -597,93 +550,7 @@ public class SettingChildLockState : GameState
 
 	}
 
-	private void onCloseMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu)
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,false);
-			Vector3 l_position = m_menu.transform.localPosition;
-			
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (-200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, onCloseMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-	
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-	
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 
-	private void toShowAllChilren(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_leftMenuCanvas.showKids (addButtonClickCall);
-	}
-
-	private void toPremiumScreen(UIButton p_button)
-	{
-		if(checkPin())
-		{
-			if (LocalSetting.find("User").getBool("UserTry",true))
-			{
-				if(!SessionHandler.getInstance().token.isCurrent())
-				{
-					m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
-					m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
-				}
-			}
-			else
-			{
-				m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-				m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
-			}
-		}
-	}
-	
-	private void toBuyGemsScreen(UIButton p_button)
-	{
-		if(string.Empty.Equals(SessionHandler.getInstance().GemsJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new ViewGemsRequest(viewGemsRequestComplete));
-			m_requestQueue.request ();
-		}
-		else
-		{
-			if(checkPin())
-			{
-				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-				m_gameController.changeState (ZoodleState.BUY_GEMS);
-			}
-		}
-	}
-
-	private void viewGemsRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(p_response.error == null)
-		{
-			if(checkPin())
-			{
-				SessionHandler.getInstance ().GemsJson = p_response.text;
-				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-				m_gameController.changeState (ZoodleState.BUY_GEMS);
-			}
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
 
 	private bool checkInternet()
 	{
@@ -713,32 +580,23 @@ public class SettingChildLockState : GameState
 	private UICanvas    m_childLockCanvas;
 	private CancelLockConfirmCanvas	m_cancelLockConfirmCanvas;
 	private ChildLockHelpCanvas m_childLockHelpCanvas;
-	private LeftMenuCanvas	m_leftMenuCanvas;
-	private UIButton 	m_showProfileButton;
 	private UIButton	m_helpButton;
 	private UIButton	m_closeButton;
-	private UIElement 	m_menu;
 	private UIElement	m_upsellPanel;
 	private InputField  m_pinInputField;
-	//honda
-	private UIButton	m_settingButton;
-	//end
-	private UIButton	m_closeLeftMenuButton;
+
 //	private UIButton    m_leftButton;
 	private UIToggle    m_verifyBirth;
 	private UIButton	m_cancelTurnOffButton;
 	private UIButton	m_turnOffButton;
 	private UIButton	m_closeTurnOnConfirmButton;
-	private UISwipeList m_childrenList;
-	private UIButton 	m_tryPremiumButton;
-	private UIButton 	m_buyGemsButton;
+
 	private UIButton 	m_premiumPurchaseButton;
 	private UIButton 	m_buyNowButton;
 	private RequestQueue m_requestQueue;
 	private SettingCache m_settingCache;
 
 	private UIToggle 	m_lockSwitchButton;
-	private bool 		canMoveLeftMenu = true;
 
 	//New UX changes for pin
 	private UILabel 	m_currentPinDisplay;
