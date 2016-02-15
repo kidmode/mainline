@@ -33,7 +33,6 @@ public class DashBoardStarChartState : GameState
 		{
 			m_uiManager.removeScreen( UIScreen.UPGRADE );
 		}
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.STAR_CHART );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
@@ -48,7 +47,6 @@ public class DashBoardStarChartState : GameState
 		m_commonDialog			.setUIManager (p_gameController.getUI());
 		m_leftMenuCanvas 		= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 2 ) as LeftMenuCanvas;
 		m_starChartCanvas 		= m_uiManager.createScreen( UIScreen.STAR_CHART, false, 1 ) as StarChartCanvas;
-		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 
 		m_helpButton 			= m_starChartCanvas.getView ("helpButton") as UIButton;
 		m_tryPremiumButton 		= m_leftMenuCanvas.getView ("premiumButton") as UIButton;
@@ -198,33 +196,18 @@ public class DashBoardStarChartState : GameState
 		m_starChartCanvas		.active = false;
 
 		List<Vector3> l_pointListTop = new List<Vector3>();
-		UIElement l_topPanel = m_dashboardCommonCanvas.getView ("topPanel") as UIElement;
-		l_pointListTop.Add( l_topPanel.transform.localPosition + new Vector3( 0, 100, 0 ));
-		l_pointListTop.Add( l_topPanel.transform.localPosition );
-		l_topPanel.tweener.addPositionTrack( l_pointListTop, 0.5f );
 
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
+
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 		
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 		
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
 		m_settingButton.addClickCallback (toSettingScreen);
-		
-		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_overviewButton.addClickCallback (goToOverview);
-		
-		m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_statChartButton.enabled = false;
-		
-		m_controlsButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_controlsButton.addClickCallback (goToControls);
+
 
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
@@ -312,15 +295,6 @@ public class DashBoardStarChartState : GameState
 		}
 	}
 
-	private void goToControls( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.CONTROL_APP);
-	}
-
-	private void goToOverview( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
-	}
 	
 	private void goToChildLock(UIButton p_button)
 	{
@@ -348,43 +322,7 @@ public class DashBoardStarChartState : GameState
 		}
 	}
 	
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
-	
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu)
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
 
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 
 	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
 	{
@@ -603,7 +541,6 @@ public class DashBoardStarChartState : GameState
 
 	private UIManager m_uiManager;
 
-	private UICanvas m_dashboardCommonCanvas;
 	private StarChartCanvas m_starChartCanvas;
 	private LeftMenuCanvas m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
@@ -611,14 +548,9 @@ public class DashBoardStarChartState : GameState
 
 	private UISwipeList m_childrenList;
 	//top bar part
-	private UIButton	m_leftSideMenuButton;
 	private UIButton 	m_showProfileButton;
 	private UIButton	m_closeLeftMenuButton;
-	private UIButton    m_childModeButton;
 	private UIButton    m_settingButton;
-	private UIButton 	m_overviewButton;
-	private UIButton	m_controlsButton;
-	private UIButton	m_statChartButton;
 	private UIButton 	m_helpButton;
 
 	private UIElement 	m_menu;

@@ -34,8 +34,6 @@ public class ControlAppState : GameState
 		
 		base.exit (p_gameController);
 		
-//		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_COMMON );
-//		m_uiManager.removeScreenImmediately( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
 		
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
@@ -48,7 +46,6 @@ public class ControlAppState : GameState
 	{
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
-//		m_leftMenuCanvas 			= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 ) 				as LeftMenuCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -58,7 +55,6 @@ public class ControlAppState : GameState
 		}
 
 		m_addAppCanvas 				= m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) 				as AddAppCanvas;
-//		m_dashboardCommonCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{

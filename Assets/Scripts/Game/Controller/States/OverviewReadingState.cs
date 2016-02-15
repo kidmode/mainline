@@ -40,7 +40,6 @@ public class OverviewReadingState : GameState
 		m_uiManager.removeScreen( UIScreen.BOOK_LIST );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_READING );
-//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
@@ -56,7 +55,6 @@ public class OverviewReadingState : GameState
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
 		m_recordAReadingCanvas	= m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
 		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 		List<Vector3> l_pointListIn = new List<Vector3>();

@@ -27,7 +27,6 @@ public class OverviewProgressState : GameState {
 
 		m_requestQueue.dispose ();
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARDL_PROGRESS );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
