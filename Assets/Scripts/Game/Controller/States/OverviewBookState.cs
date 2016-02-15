@@ -59,7 +59,6 @@ public class OverviewBookState : GameState
 		m_bookDetailsCanvas.setUIManager (p_gameController.getUI());
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
-//		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
 		m_recommendedBookCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_BOOK, true, 2 );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_recommendedBookCanvas.getView ("mainPanel");

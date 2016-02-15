@@ -61,7 +61,6 @@ public class OverviewAppState : GameState
 		m_uiManager.removeScreen(UIScreen.CONFIRM_DIALOG);
 		m_uiManager.removeScreen(UIScreen.APP_DETAILS);
 		m_uiManager.removeScreen(UIScreen.APP_LIST);
-		m_uiManager.removeScreen(UIScreen.LEFT_MENU);
 		m_uiManager.removeScreen(UIScreen.RECOMMENDED_APP);
 		m_uiManager.removeScreen(UIScreen.COMMON_DIALOG);
 	}
@@ -87,7 +86,6 @@ public class OverviewAppState : GameState
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
 		m_appListCanvas 	= m_uiManager.createScreen( UIScreen.APP_LIST, false, 12 );
-		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
 		m_recommendedAppCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_APP, true, 2 );
 		m_prototype = m_appListCanvas.getView ("Prototype");
 		m_prototype.active = false;
@@ -121,25 +119,7 @@ public class OverviewAppState : GameState
 		m_exitAppDetailsButton = m_appDetailsCanvas.getView( "exitButton" ) as UIButton;
 		m_exitAppDetailsButton.addClickCallback( onExitAppDetailsButtonClick );
 		m_appList = m_appListCanvas.getView ("appSwipeList") as UISwipeList;
-		
-		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-		
-		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 
-		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
-		m_settingButton.addClickCallback (toSettingScreen);
-		
-		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
-		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
-
-		m_tryPremiumButton = m_leftMenuCanvas.getView ("premiumButton") as UIButton;
-		m_buyGemsButton = m_leftMenuCanvas.getView ("buyGemsButton") as UIButton;
-		m_buyGemsButtonOnConfirm = m_confirmDialogCanvas.getView ("buyGemsButton") as UIButton;
-		m_tryPremiumButton.addClickCallback (toPremiumScreen);
-		m_buyGemsButton.addClickCallback (toBuyGemsScreen);
-		m_buyGemsButtonOnConfirm.addClickCallback (toBuyGemsScreen);
 
 		m_appCountLabel = m_appListCanvas.getView ("appCountText") as UILabel;
 
@@ -324,30 +304,7 @@ public class OverviewAppState : GameState
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
 		l_priceLabel.text = p_app.gems.ToString ();
 	}
-
-	private void toShowAllChilren(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_leftMenuCanvas.showKids (addButtonClickCall);
-	}
-
-	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-	}
-
-
-
-
-
-	private void toSettingScreen(UIButton p_button)
-	{
-		if (checkInternet())
-		{
-			p_button.removeClickCallback (toSettingScreen);
-			m_gameController.changeState (ZoodleState.SETTING_STATE);
-		}
-	}
+	
 
 	private bool checkInternet()
 	{
@@ -372,35 +329,7 @@ public class OverviewAppState : GameState
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
-	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
-	{
-		if (checkInternet() == false)
-			return;
 
-		Kid l_kid = p_data as Kid;
-		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
-		{
-			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
-		}
-		else
-		{
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
-			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-		}
-	}
-
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-	
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 
 
 	
@@ -914,29 +843,6 @@ public class OverviewAppState : GameState
 		}
 	}
 
-	private void toPremiumScreen(UIButton p_button)
-	{
-		if (LocalSetting.find("User").getBool("UserTry",true))
-		{
-			if(!SessionHandler.getInstance().token.isCurrent())
-			{
-				m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
-				m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
-			}
-		}
-		else
-		{
-			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
-		}
-	}
-
-	private void toBuyGemsScreen(UIButton p_button)
-	{
-		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
-		gotoGetGems ();
-	}
-
 	private void gotoGetGems()
 	{	
 		string l_returnJson = SessionHandler.getInstance ().GemsJson;
@@ -984,7 +890,6 @@ public class OverviewAppState : GameState
 	}
 
 	
-	private LeftMenuCanvas 			  m_leftMenuCanvas;
 	private CommonDialogCanvas 		  m_commonDialog;
 	private UICanvas				  m_recommendedAppCanvas;
 	private UICanvas				  m_appDetailsCanvas;
@@ -1001,14 +906,12 @@ public class OverviewAppState : GameState
 	private UIElement				  m_prototype;
 	private bool 					  isLoadApp = false;
 	private App 					  m_detailsApp;
-	private UIElement 				  m_menu;
 	private bool 					  canMoveLeftMenu = true;
 	private bool 					  appListOpen = false;
 	private UILabel					  m_appCountLabel;
 	private bool					  m_isLoaded = false;
 
 	private UIElement  				  m_costArea;
-	private UIButton 			      m_buyGemsButton;
 	private UIButton 			      m_buyGemsButtonOnConfirm;
 	private UIElement 				  m_needMoreArea;
 	private UIButton 				  m_exitConfirmDialogButton;
@@ -1018,12 +921,7 @@ public class OverviewAppState : GameState
 	private int 					  m_currentPage;
 	private List<object> 			  m_currentAppList;
 
-	private UIButton    			  m_showProfileButton;
-	private UIButton 				  m_closeLeftMenuButton;
 	private UIButton 				  m_childModeButton;
-	private UIButton 				  m_settingButton;
-	private UISwipeList				  m_childrenList;
-	private UIButton 				  m_tryPremiumButton;
 
 	private UIButton				  m_buyAppButton;
 

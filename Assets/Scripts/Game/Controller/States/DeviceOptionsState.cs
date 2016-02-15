@@ -38,7 +38,6 @@ public class DeviceOptionsState : GameState
 			updateSetting ();
 		}
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_deviceOptionCanvas );
 		p_gameController.getUI().removeScreen( m_commonDialog );
 	}
@@ -49,24 +48,13 @@ public class DeviceOptionsState : GameState
 	{
 		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 5 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_uiManager);
-		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_deviceOptionCanvas = p_uiManager.createScreen( UIScreen.DEVICE_OPTIONS_SCREEN, true, 2 ) as UICanvas;
 		m_lodaing = m_deviceOptionCanvas.getView ("noticePanel") as UIElement;
 
 		m_helpButton = m_deviceOptionCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
-		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
 
-		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-	//	m_sliderDownPanel = m_menu.getView ("sildeDownPanel") as UIElement;
 
-		//honda 
-		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
-		m_settingButton.addClickCallback(onCloseMenu);
-		//end
-		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
-		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 		m_allowCallButton = m_deviceOptionCanvas.getView ("AllowCallButton") as UIToggle;
 		m_allowCallButton.isOn = false;
 		m_allowCallButton.addValueChangedCallback (toAllowCall);
@@ -141,13 +129,6 @@ public class DeviceOptionsState : GameState
 			}
 		}
 
-		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
-		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
-
-		m_tryPremiumButton = m_leftMenuCanvas.getView ("premiumButton") as UIButton;
-		m_buyGemsButton = m_leftMenuCanvas.getView ("buyGemsButton") as UIButton;
-		m_tryPremiumButton.addClickCallback (toPremiumScreen);
-		m_buyGemsButton.addClickCallback (toBuyGemsScreen);
 	}
 	
 	private void onMasterVolumeValueChanged( float p_float )
@@ -196,23 +177,7 @@ public class DeviceOptionsState : GameState
 		m_commonDialog.setOutPosition ();
 		m_helpButton.addClickCallback (onHelpButtonClick);
 	}
-
-	private void toBuyGemsScreen(UIButton p_button)
-	{
-		p_button.removeClickCallback (toBuyGemsScreen);
-		if(string.Empty.Equals(SessionHandler.getInstance().GemsJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset();
-			m_requestQueue.add(new ViewGemsRequest(viewGemsRequestComplete));
-			m_requestQueue.request();
-		}
-		else
-		{
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
-		}
-	}
+	
 
 	private void toRefreshContent(UIButton p_button)
 	{
@@ -281,46 +246,7 @@ public class DeviceOptionsState : GameState
 		Debug.Log("updated effects_volume volume: " + PlayerPrefs.GetInt("effects_volume"));
 
 	}
-	
-	private void toPremiumScreen(UIButton p_button)
-	{
-		updateSetting();
 
-		if (LocalSetting.find("User").getBool("UserTry",true))
-		{
-			if(!SessionHandler.getInstance().token.isCurrent())
-			{
-				m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
-				m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
-			}
-		}
-		else
-		{
-			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
-		}
-	}
-
-	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
-	{
-		if (checkInternet() == false)
-			return;
-
-		Kid l_kid = p_data as Kid;
-		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
-		{
-			updateSetting ();
-			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
-		}
-		else
-		{
-			updateSetting ();
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
-			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-		}
-	}
 
 
 	private void toNotificationScreen(UIButton p_button)
@@ -333,11 +259,6 @@ public class DeviceOptionsState : GameState
 	}
 
 
-
-	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-	}
 
 	private void toAllowCall(UIToggle p_toggle, bool p_value)
 	{
@@ -373,36 +294,7 @@ public class DeviceOptionsState : GameState
 		}
 	}
 
-	private void onCloseMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu)
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,false);
-			Vector3 l_position = m_menu.transform.localPosition;
-			
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (-200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, onCloseMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-	
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-	
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 
-	private void toShowAllChilren(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_leftMenuCanvas.showKids (addButtonClickCall);
-	}
 
 	private void updateDeviceRequestComplete(HttpsWWW p_response)
 	{
@@ -456,11 +348,8 @@ public class DeviceOptionsState : GameState
 	//Private variables
 	
 	private UICanvas    m_deviceOptionCanvas;
-	private LeftMenuCanvas	m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
 	private UIButton 	m_leftSideMenuButton;
-	private UIButton 	m_showProfileButton;
-	private UIElement 	m_menu;
 	private UIElement	m_lodaing;
 	private UILabel		m_noticeLabel;
 	private UIButton	m_closeButton;
@@ -482,7 +371,6 @@ public class DeviceOptionsState : GameState
 	private UIButton	m_deviceButton;
 	private bool 		m_allowCall;
 	private bool 		m_allowTip;
-	private UISwipeList m_childrenList;
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;
 	private UIButton	m_refreshButton;
