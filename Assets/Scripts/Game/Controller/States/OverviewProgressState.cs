@@ -27,7 +27,6 @@ public class OverviewProgressState : GameState {
 
 		m_requestQueue.dispose ();
 		
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARDL_PROGRESS );
@@ -45,8 +44,6 @@ public class OverviewProgressState : GameState {
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 )  as LeftMenuCanvas;
-		
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) as DashBoardControllerCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -66,17 +63,9 @@ public class OverviewProgressState : GameState {
 
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
 
 		m_helpButton = m_overallProgressCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
-
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
-
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 2 );
 		
 		UIElement l_newPanel = m_overallProgressCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -141,21 +130,7 @@ public class OverviewProgressState : GameState {
 		m_gameController.changeState( ZoodleState.CONTROL_SUBJECT );
 	}
 
-	private void onLeftButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_TIMESPENT);
-		}
-	}
-	
-	private void onRightButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_APP);
-		}
-	}
+
 
 
 	private bool checkInternet()
@@ -366,14 +341,11 @@ public class OverviewProgressState : GameState {
 	
 	private UIManager m_uiManager;
 
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private OverallProgressCanvas m_overallProgressCanvas;
 	private LeftMenuCanvas m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
 	private UICanvas m_paywallCanvas;
 	
-	private UIButton m_leftButton;
-	private UIButton m_rightButton;
 	private UIButton m_showProfileButton;
 	private UIButton m_closeLeftMenuButton;
 	private UIButton m_settingButton;

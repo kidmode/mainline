@@ -63,8 +63,6 @@ public class OverviewAppState : GameState
 		m_uiManager.removeScreen(UIScreen.APP_LIST);
 		m_uiManager.removeScreen(UIScreen.LEFT_MENU);
 		m_uiManager.removeScreen(UIScreen.RECOMMENDED_APP);
-		m_uiManager.removeScreen(UIScreen.DASHBOARD_CONTROLLER);
-		m_uiManager.removeScreen(UIScreen.DASHBOARD_COMMON);
 		m_uiManager.removeScreen(UIScreen.COMMON_DIALOG);
 	}
 
@@ -90,9 +88,7 @@ public class OverviewAppState : GameState
 		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
 		m_appListCanvas 	= m_uiManager.createScreen( UIScreen.APP_LIST, false, 12 );
 		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
-		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
 		m_recommendedAppCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_APP, true, 2 );
-		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 		m_prototype = m_appListCanvas.getView ("Prototype");
 		m_prototype.active = false;
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -116,13 +112,7 @@ public class OverviewAppState : GameState
 
 	private void _setupElment()
 	{
-		m_leftButton = m_dashboardControllerCanvas.getView( "leftButton" ) as UIButton;
-		m_leftButton.addClickCallback( onLeftButtonClick );
-		
-		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) as UIButton;
-		m_rightButton.addClickCallback( onRightButtonClick );
-		m_dashboardControllerCanvas.setupDotList( 6 );
-		m_dashboardControllerCanvas.setCurrentIndex( 3 );
+
 		m_gemCountLabel = m_recommendedAppCanvas.getView("gemCountText") as UILabel;
 		m_moreAppButton = m_recommendedAppCanvas.getView( "appListButton" ) as UIButton;
 		m_moreAppButton.addClickCallback( onMoreAppButtonClick );
@@ -133,30 +123,13 @@ public class OverviewAppState : GameState
 		m_appList = m_appListCanvas.getView ("appSwipeList") as UISwipeList;
 		
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 		
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
-		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
-		
+
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
 		m_settingButton.addClickCallback (toSettingScreen);
-
-		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
-		m_appsButton.addClickCallback(goToAddApps);
-
-		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_overviewButton.enabled = false;
-		
-		m_controlsButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_controlsButton.addClickCallback (goToControls);
-		
-		m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_statChartButton.addClickCallback (goToStarChart);
 		
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
@@ -181,19 +154,7 @@ public class OverviewAppState : GameState
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
 
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
+
 
 	private void onHelpButtonClick(UIButton p_button)
 	{
@@ -375,39 +336,9 @@ public class OverviewAppState : GameState
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 	}
 
-	private void onCloseMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu)
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,false);
-			Vector3 l_position = m_menu.transform.localPosition;
-			
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (-200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, onCloseMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
 
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
+
+
 
 	private void toSettingScreen(UIButton p_button)
 	{
@@ -415,19 +346,6 @@ public class OverviewAppState : GameState
 		{
 			p_button.removeClickCallback (toSettingScreen);
 			m_gameController.changeState (ZoodleState.SETTING_STATE);
-		}
-	}
-
-	private void goToAddApps( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.CONTROL_APP);
-	}
-
-	private void goToControls( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
 		}
 	}
 
@@ -452,11 +370,6 @@ public class OverviewAppState : GameState
 		ErrorMessage error = GameObject.FindWithTag("ErrorMessageTag").GetComponent<ErrorMessage>() as ErrorMessage;
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
-	}
-
-	private void goToStarChart( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.DASHBOARD_STAR_CHART);
 	}
 
 	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
@@ -489,21 +402,7 @@ public class OverviewAppState : GameState
 		canMoveLeftMenu = true;
 	}
 
-	private void onLeftButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_PROGRESS);
-		}
-	}
-	
-	private void onRightButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_BOOK);
-		}
-	}
+
 	
 	private void goToChildLock(UIButton p_button)
 	{
@@ -1085,8 +984,6 @@ public class OverviewAppState : GameState
 	}
 
 	
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
-	private UICanvas				  m_dashboardCommonCanvas;
 	private LeftMenuCanvas 			  m_leftMenuCanvas;
 	private CommonDialogCanvas 		  m_commonDialog;
 	private UICanvas				  m_recommendedAppCanvas;
@@ -1104,8 +1001,6 @@ public class OverviewAppState : GameState
 	private UIElement				  m_prototype;
 	private bool 					  isLoadApp = false;
 	private App 					  m_detailsApp;
-	private UIButton				  m_leftButton;
-	private UIButton				  m_rightButton;
 	private UIElement 				  m_menu;
 	private bool 					  canMoveLeftMenu = true;
 	private bool 					  appListOpen = false;
@@ -1123,7 +1018,6 @@ public class OverviewAppState : GameState
 	private int 					  m_currentPage;
 	private List<object> 			  m_currentAppList;
 
-	private UIButton 				  m_leftSideMenuButton;
 	private UIButton    			  m_showProfileButton;
 	private UIButton 				  m_closeLeftMenuButton;
 	private UIButton 				  m_childModeButton;
@@ -1131,10 +1025,6 @@ public class OverviewAppState : GameState
 	private UISwipeList				  m_childrenList;
 	private UIButton 				  m_tryPremiumButton;
 
-	private UIButton m_appsButton;
-	private UIButton				  m_overviewButton;
-	private UIButton 				  m_controlsButton;
-	private UIButton				  m_statChartButton;
 	private UIButton				  m_buyAppButton;
 
 	private RequestQueue 			  m_requestQueue;

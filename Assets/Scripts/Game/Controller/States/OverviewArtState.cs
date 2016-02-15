@@ -154,6 +154,9 @@ public class OverviewArtState : GameState {
 	private void _setupElment()
 	{
 
+		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
+		m_helpButton.addClickCallback (onHelpButtonClick);
+		//m_artGalleryCanvas
 		
 		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -196,6 +199,27 @@ public class OverviewArtState : GameState {
 
 	}
 
+
+	private void onHelpButtonClick(UIButton p_button)
+	{
+		p_button.removeAllCallbacks ();
+		m_commonDialog.setOriginalPosition ();
+		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
+		
+		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
+		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_TITLE);
+		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_CONTENT);
+		
+		l_closeButton.addClickCallback (onCloseDialogButtonClick);
+	}
+
+	private void onCloseDialogButtonClick(UIButton p_button)
+	{
+		p_button.removeAllCallbacks();
+		m_commonDialog.setOutPosition ();
+		m_helpButton.addClickCallback (onHelpButtonClick);
+	}
 
 
 	private bool checkInternet()
