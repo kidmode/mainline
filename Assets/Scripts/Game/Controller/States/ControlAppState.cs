@@ -11,6 +11,13 @@ public class ControlAppState : GameState
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue();
 		m_appList = new ArrayList ();
+
+		m_currentRecommendedAppPage = 1;
+		m_getRecommendedAppRequestQueue = new RequestQueue();
+		m_getRecommendedAppIconRequestQueue = new RequestQueue();
+		m_recommendedAppIconRequests = new List<RequestQueue>();
+		m_currentRecommendedAppList = SessionHandler.getInstance().currentKid.appList == null? new List<object>():SessionHandler.getInstance().currentKid.appList;
+
 		_setupScreen( p_gameController );
 		_setupElment();
 
@@ -20,8 +27,7 @@ public class ControlAppState : GameState
 		SwrveComponent.Instance.SDK.NamedEvent("Parent_Dashboard.start");
 
 		GoogleInstallAutoAddController.OnNewAppAdded += OnNewAppAdded;
-
-	}
+}
 	
 	public override void update (GameController p_gameController, int p_time)
 	{
@@ -30,40 +36,35 @@ public class ControlAppState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-		checkRequest ();
+		checkRequest();
 		
-		base.exit (p_gameController);
-		
-//		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_COMMON );
-//		m_uiManager.removeScreenImmediately( UIScreen.LEFT_MENU );
-		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
-		
+		base.exit(p_gameController);
+		disposeIconRequests();
+		m_getRecommendedAppIconRequestQueue.dispose();
+
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
-		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
+		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
+//		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
 
 		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-//		m_leftMenuCanvas 			= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 ) 				as LeftMenuCanvas;
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//		}
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-		}
+		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
+		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
 
-		m_addAppCanvas 				= m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) 				as AddAppCanvas;
-//		m_dashboardCommonCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
-
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_uiManager.setScreenEnable( UIScreen.ADD_APPS, false );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+//			m_uiManager.setScreenEnable( UIScreen.ADD_APPS, false );
+//		}
 	}
 
 	private void _setupElment()
@@ -78,11 +79,24 @@ public class ControlAppState : GameState
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f, onShowFinish, Tweener.Style.Standard, false);
 
-		//app part
+		//local app part
 		m_appSwipeList = m_addAppCanvas.getView ( "appSwipeList" ) as UISwipeList;
 		m_appSwipeList.addClickListener ( "controlButton", m_addAppCanvas.onButtonClicked );
 		m_appSwipeList.addClickListener ( "controlButton", onAppButtonClicked );
 		m_appSwipeList.active = false;
+
+		//recommended app part
+		//Create an empty list for set up swipeList.
+		m_recommendedAppSwipeList = m_addAppCanvas.getView ( "RecommendedAppSwipeList" ) as UISwipeList;
+		m_recommendedAppPrototype = m_recommendedAppSwipeList.getView ("Prototype");
+		m_recommendedAppPrototype.active = false;
+
+		List<System.Object> l_list = new List<System.Object>();
+		m_recommendedAppSwipeList.setData (l_list);
+		if((null == m_currentRecommendedAppList || m_currentRecommendedAppList.Count == 0) && SessionHandler.getInstance().appRequest.isCompleted())
+			loadAppList ();
+		else
+			loadAppListImmediate();
 	}
 
 	private void checkRequest()
@@ -117,7 +131,6 @@ public class ControlAppState : GameState
 		m_commonDialog.setOutPosition ();
 		m_helpButton.addClickCallback (onHelpButtonClick);
 	}
-
 
 	private void onAppButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
@@ -188,40 +201,17 @@ public class ControlAppState : GameState
 
 	private void onShowFinish(UIElement p_element, Tweener.TargetVar p_target)
 	{
-//		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
-//		{
-
 		try 
 		{
-
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
-			
 			Debug.LogWarning("      ****************************   lastLocalAppsList " + lastLocalAppsList.Count);
-
 			m_addAppCanvas.firstLoadApp();
-
-//			if(lastLocalAppsList.Count > 0 || PlayerPrefs.GetString( "lastLocalApps" ) == ""){
-//
-//				GoogleInstallAutoAddController.Instance.checkList();
-//
-//			}else{
-//
-//				m_addAppCanvas.firstLoadApp();
-//
-//			}
-
 
 		}
 		catch (System.Exception e)
 		{
 
 		}
-//		m_appSwipeList.removeClickListener( "controlButton", onAppButtonClicked );
-//		}
-//		else
-//		{
-//			m_appSwipeList.setData( new List<object>() );
-//		}
 	}
 
 	private void updateAddApp()
@@ -293,25 +283,497 @@ public class ControlAppState : GameState
 		}
 		return true;
 	}
+
+	//Begin of Recommended Apps---------------------------------------------------------------------------//
+	private void loadAppList()
+	{
+		m_getRecommendedAppRequestQueue.reset();
+		m_getRecommendedAppRequestQueue.add(
+			new NewGetAppByPageRequest(SessionHandler.getInstance().currentKid, 
+		                           	   "google", 
+			                           m_currentRecommendedAppPage, 
+			                           firstGetAppListComplete));
+		m_getRecommendedAppRequestQueue.request(RequestType.SEQUENCE);
+		
+//		isLoadApp = true;
+	}
+	
+	private void loadAppListImmediate()
+	{
+//		isLoadApp = true;
+		firstLoadMoreAppList ();
+	}
+	
+	private void firstGetAppListComplete(HttpsWWW p_response)
+	{
+		if(null == p_response.error)
+		{
+			string l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+			if(l_jsonResponse.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+				{
+					Hashtable l_result = l_response["response"] as Hashtable;
+					if(l_result.ContainsKey("app_owned"))
+					{
+						SessionHandler.getInstance().appOwn = l_result["app_owned"] as Hashtable;
+					}
+					if(l_result.ContainsKey("apps"))
+					{
+						ArrayList l_data = l_result["apps"] as ArrayList;
+						int l_dataCount = l_data.Count;
+						Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
+						for(int l_i = 0; l_i < l_dataCount; l_i++)
+						{
+							Hashtable l_table = l_data[l_i] as Hashtable;
+							App l_app = new App(l_table);
+							if(null != l_table)
+							{
+								l_app.own = l_appOwn.ContainsKey(l_app.id.ToString());
+							}
+							m_currentRecommendedAppList.Add(l_app);
+						}
+						firstLoadMoreAppList();
+					}
+				}
+			}
+		}
+	}
+
+	private void firstLoadMoreAppList()
+	{
+		m_recommendedAppPrototype.active = true;
+		if(null == m_appList)
+			m_recommendedAppSwipeList = m_addAppCanvas.getView ("RecommendedAppSwipeList") as UISwipeList;
+		if(null != m_currentRecommendedAppList)
+		{
+			m_recommendedAppSwipeList.setData( m_currentRecommendedAppList );
+			m_recommendedAppSwipeList.setDrawFunction( onListDraw );
+			m_recommendedAppSwipeList.redraw();
+			//if(m_getIconRequestQueue.isCompleted())
+			m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
+			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
+		}
+//		m_recommendedAppSwipeList.addClickListener("Prototype", onAppClick);
+		
+//		m_isLoaded = true;
+	}
+
+	private void onListToEnd(Vector2 p_value)
+	{
+		if( p_value.y <= 0 )
+		{
+			m_recommendedAppSwipeList.removeValueChangeListener(onListToEnd);
+			
+			if(m_currentRecommendedAppList.Count % 10 == 0 && m_getRecommendedAppRequestQueue.Completed())
+			{
+				m_currentRecommendedAppPage++;
+				m_getRecommendedAppRequestQueue.reset();
+				m_getRecommendedAppRequestQueue.add(
+					new GetAppByPageRequest(SessionHandler.getInstance().currentKid.age, 
+				                            "google", 
+				                            m_currentRecommendedAppList.Count/10 + 1, 
+				                            getRecommendedAppListComplete));
+				m_getRecommendedAppRequestQueue.request();
+			}
+			else
+			{
+				m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
+			}
+		}
+	}
+
+	private void getRecommendedAppListComplete(HttpsWWW p_response)
+	{
+		int l_dataCount = 0;
+		if(null == p_response.error)
+		{
+			string l_string = UnicodeDecoder.Unicode(p_response.text);
+			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+			ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
+			l_dataCount = l_data.Count;
+			Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
+			for(int l_i = 0; l_i < l_dataCount; l_i++)
+			{
+				Hashtable l_table = l_data[l_i] as Hashtable;
+				App l_app = new App(l_table);
+				if(null != l_table)
+				{
+					l_app.own = l_appOwn.ContainsKey(l_app.id.ToString());
+				}
+				m_currentRecommendedAppList.Add(l_app);
+			}
+			m_recommendedAppSwipeList.redraw();
+			if(m_getRecommendedAppIconRequestQueue.isCompleted())
+				m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
+		}
+		if(l_dataCount >= 10)
+			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
+	}
+
+	private void onListDraw( UIElement p_element, System.Object p_data, int p_index )
+	{
+		App l_app = (App)p_data;
+		_setupSignleApp (p_element, l_app);
+	}
+
+	private void _setupSignleApp(UIElement p_element, App p_app)
+	{
+		UILabel l_appName = p_element.getView ("appNameText") as UILabel;
+		l_appName.text = p_app.name;
+		UILabel l_appCostText = p_element.getView("appCostText") as UILabel;
+		UILabel l_appFreeText = p_element.getView("appFreeText") as UILabel;
+		UILabel l_sponsoredText = p_element.getView("sponsoredText") as UILabel;
+		UILabel l_subjectsText = p_element.getView ("subjectText") as UILabel;
+		
+		l_appFreeText.text = Localization.getString (Localization.TXT_56_LABEL_FREE);
+		if( null != l_sponsoredText )
+		{
+			l_sponsoredText.text = Localization.getString (Localization.TXT_56_LABEL_SPONSORED);
+		}
+		l_subjectsText.text = Localization.getString (Localization.TXT_56_LABEL_SUBJECTS);
+		
+		Token l_token = SessionHandler.getInstance ().token;
+		bool l_canShowCosts = true;
+		if( l_token.isPremium() || l_token.isCurrent() )
+		{
+			l_canShowCosts = false;
+			l_appCostText.active = false;
+			l_appFreeText.active = false;
+		}
+		
+		if(p_app.gems == 0)
+		{
+			l_appCostText.active = false;
+			l_appFreeText.active = true && l_canShowCosts;
+			if(null != l_sponsoredText)
+				l_sponsoredText.active = true;
+		}
+		else
+		{
+			if(p_app.own)
+			{
+				l_appCostText.active = false;
+				l_appFreeText.active = false;
+				
+				if(null != l_sponsoredText)
+					l_sponsoredText.active = false;
+			}
+			else if(!p_app.own)
+			{
+				l_appFreeText.active = false;
+				if(null != l_sponsoredText)
+					l_sponsoredText.active = false;
+				l_appCostText.active = true && l_canShowCosts;
+				l_appCostText.text = p_app.gems.ToString();
+			}
+		}
+		
+		if(null == p_app.icon)
+		{
+			if(!p_app.iconDownload)
+				downLoadAppIcon(p_element,p_app);
+		}
+		else
+		{
+			UIImage l_image = p_element.getView("appImage") as UIImage;
+			l_image.setTexture(p_app.icon);
+		}
+		
+		Dictionary< string, int > l_subjects = p_app.subjects;
+		
+		if (p_app.id == 8822) 
+		{
+			//			int l_a = 100;
+		}
+		UIElement l_mathColor = p_element.getView ("mathColor") as UIElement;
+		UIElement l_readingColor = p_element.getView ("readingColor") as UIElement;
+		UIElement l_scienceColor = p_element.getView ("scienceColor") as UIElement;
+		UIElement l_socialColor = p_element.getView ("socialColor") as UIElement;
+		UIElement l_cognitiveColor = p_element.getView ("cognitiveColor") as UIElement;
+		UIElement l_creativeColor = p_element.getView ("creativeColor") as UIElement;
+		UIElement l_lifeSkillsColor = p_element.getView ("lifeSkillsColor") as UIElement;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_MATH))
+			l_mathColor.active = true;
+		else
+			l_mathColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_LANGUAGE))
+			l_readingColor.active = true;
+		else
+			l_readingColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_SCIENCE))
+			l_scienceColor.active = true;
+		else
+			l_scienceColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_SOCIAL_SCIENCE))
+			l_socialColor.active = true;
+		else
+			l_socialColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_CONITIVE_DEVELOPMENT))
+			l_cognitiveColor.active = true;
+		else
+			l_cognitiveColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_CREATIVE_DEVELOPMENT))
+			l_creativeColor.active = true;
+		else
+			l_creativeColor.active = false;
+		
+		if(l_subjects.ContainsKey(AppTable.COLUMN_LIFE_SKILLS))
+			l_lifeSkillsColor.active = true;
+		else
+			l_lifeSkillsColor.active = false;
+	}
+
+	private void onAppButtonClick( UIButton p_button )
+	{
+//		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
+		
+//		m_buyedAppElement = (UIElement)p_button;
+//		UILabel l_appNameLable = p_button.getView ("appNameText") as UILabel;
+//		string l_name = l_appNameLable.text;
+//		App l_app = null;
+//		List<System.Object> l_list = m_currentRecommendedAppList;
+//		int l_count = l_list.Count;
+//		for(int l_i = 0; l_i < l_count; l_i ++)
+//		{
+//			App l_currentApp = l_list[l_i] as App;
+//			if(l_currentApp.name.Equals(l_name))
+//			{
+//				l_app = l_currentApp;
+//				break;
+//			}
+//		}
+//		
+//		if(null != l_app)
+//			showAppDetails (l_app);
+	}
+
+	private void downLoadAppIcon(UIElement p_element, App p_app)
+	{
+		RequestQueue l_queue = new RequestQueue();
+		l_queue.add(new IconRequest(p_app,p_element));
+		l_queue.request(RequestType.SEQUENCE);
+		m_recommendedAppIconRequests.Add(l_queue);
+		
+		//m_getIconRequestQueue.add (new IconRequest(p_app,p_element));
+		p_app.iconDownload = true;
+	}
+
+	private void disposeIconRequests()
+	{
+		int l_numRequests = m_recommendedAppIconRequests.Count;
+		for (int i = 0; i < l_numRequests; ++i)
+		{
+			RequestQueue l_queue = m_recommendedAppIconRequests[i];
+			l_queue.dispose();
+		}
+		m_recommendedAppIconRequests.Clear();
+		m_recommendedAppIconRequests = null;
+	}
+
+	private void onAppClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
+	{
+//		m_buyedAppElement = p_listElement;
+		App l_app = (App)p_data;
+//		switch(p_index)
+//		{
+//		case 0:
+//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appOne") as UIElement;
+//			break;
+//		case 1:
+//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appTwo") as UIElement;
+//			break;
+//		case 2:
+//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appThree") as UIElement;
+//			break;
+//		case 3:
+//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appFour") as UIElement;
+//			break;
+//		}
+		
+		showAppDetails (l_app);
+	}
+
+	private void showAppDetails(App p_app)
+	{
+		m_detailsRecommendedApp = p_app;
+		UILabel l_appCostText = m_recommendedAppDetailsCanvas.getView("appCostText") as UILabel;
+		UIButton l_buyAppButton = m_recommendedAppDetailsCanvas.getView("buyAppButton") as UIButton;
+		UILabel l_appFreeText = m_recommendedAppDetailsCanvas.getView("appFreeText") as UILabel;
+		
+		if(p_app.gems == 0)
+		{
+			l_appCostText.active = false;
+			l_buyAppButton.active = false;
+			l_appFreeText.active = true;
+		}
+		else 
+		{
+			if(p_app.own)
+			{
+				l_appCostText.active = false;
+				l_buyAppButton.active = false;
+				l_appFreeText.active = false;
+			}
+			else if(!p_app.own)
+			{
+				l_appFreeText.active = false;
+				l_appCostText.active = true;
+				l_buyAppButton.active = true;
+			}
+		}
+		
+		Token l_token = SessionHandler.getInstance ().token;
+		UILabel l_text = l_buyAppButton.getView( "Text" ) as UILabel;
+		if( l_token.isPremium() || l_token.isCurrent() )
+		{
+			l_appCostText.active = false;
+			l_appFreeText.active = false;
+			l_buyAppButton.active = true;
+			l_text.text = Localization.getString (Localization.TXT_70_LABEL_INSTALL);
+		}
+		else
+		{
+			l_text.text = Localization.getString (Localization.TXT_70_LABEL_BUY);
+		}
+		
+		resetSubjectColor ();
+		_setupSignleApp (m_recommendedAppDetailsCanvas, p_app);
+		
+		UILabel l_description = m_recommendedAppDetailsCanvas.getView("appDescriptionText") as UILabel;
+		UILabel l_violence = m_recommendedAppDetailsCanvas.getView("violenceLevelText") as UILabel;
+		UILabel l_age = m_recommendedAppDetailsCanvas.getView("ageText") as UILabel;
+		UIImage l_icon = m_recommendedAppDetailsCanvas.getView ("appImage") as UIImage;
+		l_buyAppButton.removeClickCallback (buyApp);
+		l_buyAppButton.addClickCallback (buyApp);
+		
+		l_description.text = p_app.description;
+		l_violence.text = p_app.violence.ToString();
+		l_age.text = p_app.ageMin.ToString() +"-"+ p_app.ageMax.ToString();
+		if(null != p_app.icon)
+		{
+			l_icon.setTexture(p_app.icon);
+		}
+		
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		UIElement l_newPanel = m_recommendedAppDetailsCanvas.getView ("mainPanel");
+		l_pointListIn.Add( l_newPanel.transform.localPosition );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+	}
+
+	private void resetSubjectColor()
+	{
+		UIElement l_readingColor = m_recommendedAppDetailsCanvas.getView ("readingColor") as UIElement;
+		l_readingColor.active = false;
+		
+		UIElement l_scienceColor = m_recommendedAppDetailsCanvas.getView ("scienceColor") as UIElement;
+		l_scienceColor.active = false;
+		
+		UIElement l_socialColor = m_recommendedAppDetailsCanvas.getView ("socialColor") as UIElement;
+		l_socialColor.active = false;
+		
+		UIElement l_cognitiveColor = m_recommendedAppDetailsCanvas.getView ("cognitiveColor") as UIElement;
+		l_cognitiveColor.active = false;
+		
+		UIElement l_creativeColor = m_recommendedAppDetailsCanvas.getView ("creativeColor") as UIElement;
+		l_creativeColor.active = false;
+		
+		UIElement l_lifeSkillsColor = m_recommendedAppDetailsCanvas.getView ("lifeSkillsColor") as UIElement;
+		l_lifeSkillsColor.active = false;
+		
+		UIElement l_mathColor = m_recommendedAppDetailsCanvas.getView ("mathColor") as UIElement;
+		l_mathColor.active = false;
+	}
+
+	private void buyApp(UIButton p_button)
+	{
+		
+		//Auto Add Code
+		GoogleInstallAutoAddController.Instance.hasLuanchedGoogle = 1;
+		
+		List<object> currentAppList = KidMode.getApps();
+		
+		KidMode.setLastLocalAppInfo();
+		//End Auto Add code
+		
+		Token l_token = SessionHandler.getInstance ().token;
+		if( l_token.isPremium() || l_token.isCurrent() )
+		{
+			installApp(m_detailsRecommendedApp.packageName);
+		}
+//		else
+//		{
+//			m_uiManager.changeScreen (UIScreen.APP_DETAILS,false);
+//			m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
+//			m_buyAppButton = p_button;
+//			confirmBuyApp (m_detailsRecommendedApp);
+//		}
+	}
+
+	private void installApp( string p_packageName )
+	{
+		#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidJavaClass l_jcPlayer = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+		AndroidJavaObject l_joActivity = l_jcPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+		
+		AndroidJavaClass jc_uri = new AndroidJavaClass("android.net.Uri");
+		
+		AndroidJavaObject l_uri = jc_uri.CallStatic<AndroidJavaObject>("parse", string.Format("market://details?id={0}", p_packageName));
+		
+		AndroidJavaClass jc_intent = new AndroidJavaClass("android.content.Intent");
+		
+		AndroidJavaObject jo_view = jc_intent.GetStatic<AndroidJavaObject>("ACTION_VIEW");
+		
+		AndroidJavaObject jo_intent = new AndroidJavaObject("android.content.Intent", jo_view, l_uri);
+		
+		AndroidJavaObject jo_chooser = jc_intent.CallStatic<AndroidJavaObject>("createChooser", jo_intent, Localization.getString(Localization.TXT_STATE_45_MARKET));
+		
+		l_joActivity.Call("startActivity", jo_chooser );
+		
+		GAUtil.logInstallApp(p_packageName);
+		#endif
+	}
+
+	//End of Recommended Apps-----------------------------------------------------------------------------//
 	
 	private UIManager 		m_uiManager;
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
-
-
 
 	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
 		
 	private UICanvas 		m_paywallCanvas;
 	private UIButton 		m_upgradeButton;
-
-
-	//app part
+	
+	//local app part
 	private AddAppCanvas 	m_addAppCanvas;
-
 	private UISwipeList 	m_appSwipeList;
 	private ArrayList 		m_appList;
+	//end of local app part
+
+	//recommended app part
+	private UISwipeList     	m_recommendedAppSwipeList;
+	private UICanvas	    	m_recommendedAppDetailsCanvas;
+	private List<object>    	m_currentRecommendedAppList;
+	private int 				m_currentRecommendedAppPage;
+
+	private RequestQueue 		m_getRecommendedAppRequestQueue;
+	private RequestQueue 		m_getRecommendedAppIconRequestQueue;
+	private List<RequestQueue> 	m_recommendedAppIconRequests;
+	private UIElement		 	m_recommendedAppPrototype;
+	private App 				m_detailsRecommendedApp;
+	//end of recommended app part
 }
 
 public class AppInfoData

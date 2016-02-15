@@ -668,12 +668,6 @@ public class OverviewAppState : GameState
 
 	private void onAppButtonClick( UIButton p_button )
 	{
-
-
-
-
-
-
 		//m_uiManager.changeScreen (UIScreen.APP_LIST,false);
 		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
 

@@ -158,6 +158,7 @@ public class PDMenuBarScript : MonoBehaviour {
 			break;
 		case "Apps":
 			type = ZoodleState.CONTROL_APP;
+//			type = ZoodleState.OVERVIEW_APP;
 			break;
 		case "Books":
 //			type = ZoodleState.OVERVIEW_READING;
@@ -201,6 +202,7 @@ public class PDMenuBarScript : MonoBehaviour {
 			return ZoodleState.OVERVIEW_INFO;
 		else if (number == 1)
 			return ZoodleState.CONTROL_APP;
+//			return ZoodleState.OVERVIEW_APP;
 		else if (number == 2)
 			return ZoodleState.CHILD_LOCK_STATE;
 		else
