@@ -28,8 +28,6 @@ public class ControlLanguageState : GameState
 		
 		base.exit (p_gameController);
 		
-//		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
-		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
@@ -42,7 +40,6 @@ public class ControlLanguageState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 		m_leftMenuCanvas 			= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 ) 				as LeftMenuCanvas;
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) 	as DashBoardControllerCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -52,7 +49,6 @@ public class ControlLanguageState : GameState
 		}
 
 		m_promoteLanguagesCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_LANGUAGES, true, 1 ) 		as PromoteLanguagesCanvas;
-		m_dashboardCommonCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -65,15 +61,7 @@ public class ControlLanguageState : GameState
 		m_helpButton = m_promoteLanguagesCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		
-		int l_listCount = 4;
 
-//		m_dashboardControllerCanvas.setupDotList (l_listCount);
-//		m_dashboardControllerCanvas.setCurrentIndex (1);
-//		
-//		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
-//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-//		m_rightButton.	addClickCallback( onRightButtonClick );
-//		m_leftButton.	addClickCallback( onLeftButtonClick );
 		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_promoteLanguagesCanvas.getView ("mainPanel");
@@ -97,19 +85,7 @@ public class ControlLanguageState : GameState
 		m_tryPremiumButton.		addClickCallback (toPremiumScreen);
 		m_buyGemsButton.		addClickCallback (toBuyGemsScreen);
 
-		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
-		m_appsButton.addClickCallback(goToAddApps);
 
-		m_leftSideMenuButton = 	m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_childModeButton = 	m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_overviewButton = 		m_dashboardCommonCanvas.getView ("overviewButton") 	as UIButton;
-		m_statChartButton = 	m_dashboardCommonCanvas.getView ("starButton") 		as UIButton;
-		m_controlsButton = 		m_dashboardCommonCanvas.getView ("controlButton") 	as UIButton;
-		m_leftSideMenuButton.	addClickCallback (toShowMenu);
-		m_childModeButton.		addClickCallback (toChildMode);
-		m_overviewButton.		addClickCallback (goToOverview);
-		m_statChartButton.		addClickCallback (goToStarChart);
-		m_controlsButton.		enabled = false;
 		
 		// language part
 		m_englishToggle 	= m_promoteLanguagesCanvas.getView( "englishToggle" )	 	as UIToggle;
@@ -309,57 +285,12 @@ public class ControlLanguageState : GameState
 		}
 	}
 
-	
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
-	
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
+
 
 	
 	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
 	{
 		canMoveLeftMenu = true;
-	}
-
-	private void goToAddApps( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.CONTROL_APP);
-	}
-
-	private void goToOverview( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.OVERVIEW_INFO);
-		}
 	}
 
 	private bool checkInternet()
@@ -385,26 +316,8 @@ public class ControlLanguageState : GameState
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 	
-	private void goToStarChart( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.DASHBOARD_STAR_CHART);
-	}
 
-	private void onLeftButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
-		}
-	}
-	
-	private void onRightButtonClick( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.CONTROL_TIME);
-		}
-	}
+
 	
 	private void onLanguagesChanged( UIToggle p_toggle, bool p_bool )
 	{
@@ -492,13 +405,10 @@ public class ControlLanguageState : GameState
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
-	private UICanvas 		m_dashboardCommonCanvas;
 	private LeftMenuCanvas 	m_leftMenuCanvas;
 	private UISwipeList 	m_childrenList;
 	
-	private DashBoardControllerCanvas m_dashboardControllerCanvas;
-	private UIButton 		m_leftButton;
-	private UIButton 		m_rightButton;
+
 
 	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
@@ -509,15 +419,9 @@ public class ControlLanguageState : GameState
 	//top bar part
 	private UIButton 		m_tryPremiumButton;
 	private UIButton 		m_buyGemsButton;
-	private UIButton 		m_leftSideMenuButton;
 	private UIButton 		m_showProfileButton;
 	private UIButton		m_closeLeftMenuButton;
-	private UIButton	    m_childModeButton;
 	private UIButton	    m_settingButton;
-	private UIButton		m_appsButton;
-	private UIButton 		m_overviewButton;
-	private UIButton		m_controlsButton;
-	private UIButton		m_statChartButton;
 	private UIElement 		m_menu;
 	private bool 			canMoveLeftMenu = true;
 

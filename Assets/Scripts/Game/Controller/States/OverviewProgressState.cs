@@ -57,7 +57,6 @@ public class OverviewProgressState : GameState {
 		
 		m_overallProgressCanvas = m_uiManager.createScreen( UIScreen.DASHBOARDL_PROGRESS, true, 1 ) as OverallProgressCanvas;
 		
-		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -87,31 +86,16 @@ public class OverviewProgressState : GameState {
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 		
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 		
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 		
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
 		m_settingButton.addClickCallback (toSettingScreen);
 
-		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
-		m_appsButton.addClickCallback(goToAddApps);
 
-		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_overviewButton.enabled = false;
-		
-		m_controlsButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_controlsButton.addClickCallback (goToControls);
-		
-		m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_statChartButton.addClickCallback (goToStarChart);
-		
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
 
@@ -173,18 +157,6 @@ public class OverviewProgressState : GameState {
 		}
 	}
 
-	private void goToAddApps( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.CONTROL_APP);
-	}
-
-	private void goToControls( UIButton p_button )
-	{
-		if (checkInternet())
-		{
-			m_gameController.changeState (ZoodleState.CONTROL_SUBJECT);
-		}
-	}
 
 	private bool checkInternet()
 	{
@@ -208,11 +180,7 @@ public class OverviewProgressState : GameState {
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
-	
-	private void goToStarChart( UIButton p_button )
-	{
-		m_gameController.changeState (ZoodleState.DASHBOARD_STAR_CHART);
-	}
+
 	
 	private void goToChildLock(UIButton p_button)
 	{
@@ -258,38 +226,7 @@ public class OverviewProgressState : GameState {
 		canMoveLeftMenu = true;
 	}
 	
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
-	
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
+
 	
 	private void toShowAllChilren(UIButton p_button)
 	{
@@ -431,25 +368,18 @@ public class OverviewProgressState : GameState {
 
 	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private OverallProgressCanvas m_overallProgressCanvas;
-	private UICanvas m_dashboardCommonCanvas;
 	private LeftMenuCanvas m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
 	private UICanvas m_paywallCanvas;
 	
 	private UIButton m_leftButton;
 	private UIButton m_rightButton;
-	private UIButton m_leftSideMenuButton;
 	private UIButton m_showProfileButton;
 	private UIButton m_closeLeftMenuButton;
-	private UIButton m_childModeButton;
 	private UIButton m_settingButton;
 	private UIButton m_helpButton;
 	private UIButton m_upgradeButton;
 
-	private UIButton m_appsButton;
-	private UIButton m_overviewButton;
-	private UIButton m_controlsButton;
-	private UIButton m_statChartButton;
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;
 	private RequestQueue m_requestQueue;

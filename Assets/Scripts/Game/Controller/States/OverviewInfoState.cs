@@ -69,7 +69,6 @@ public class OverviewInfoState : GameState {
 		base.exit (p_gameController);
 		m_requestQueue.dispose ();
 //		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
-//		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 //		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_INFO );
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
@@ -90,7 +89,6 @@ public class OverviewInfoState : GameState {
 
 		m_dashboardInfoCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_INFO, true, 1 );
 
-//		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 	}
 
 	private void _setupElment()

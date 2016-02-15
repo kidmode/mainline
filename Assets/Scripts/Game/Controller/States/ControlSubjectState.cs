@@ -39,7 +39,6 @@ public class ControlSubjectState : GameState
 	{
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) 	as DashBoardControllerCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -49,7 +48,6 @@ public class ControlSubjectState : GameState
 		}
 
 		m_promoteSubjectsCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_SUBJECTS, true, 1 );
-//		m_dashboardCommonCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -63,14 +61,6 @@ public class ControlSubjectState : GameState
 		m_helpButton.addClickCallback (onHelpButtonClick);
 
 		int l_listCount = 4;
-
-//		m_dashboardControllerCanvas.setupDotList (l_listCount);
-//		m_dashboardControllerCanvas.setCurrentIndex (0);
-//		
-//		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
-//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-//		m_rightButton.	addClickCallback( onRightButtonClick );
-//		m_leftButton.enabled = false;
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_promoteSubjectsCanvas.getView ("mainPanel");

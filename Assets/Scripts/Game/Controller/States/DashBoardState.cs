@@ -26,7 +26,6 @@ public class DashBoardState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 	}
 	
@@ -37,7 +36,6 @@ public class DashBoardState : GameState
 	{
 	
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3);
-		m_dashboardCommonCanvas = p_uiManager.createScreen (UIScreen.DASHBOARD_COMMON, true, 1);
 
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
 		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;

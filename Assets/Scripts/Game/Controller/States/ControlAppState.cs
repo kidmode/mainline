@@ -34,7 +34,6 @@ public class ControlAppState : GameState
 		
 		base.exit (p_gameController);
 		
-//		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_CONTROLLER );
 //		m_uiManager.removeScreenImmediately( UIScreen.DASHBOARD_COMMON );
 //		m_uiManager.removeScreenImmediately( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
@@ -50,7 +49,6 @@ public class ControlAppState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 //		m_leftMenuCanvas 			= m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 4 ) 				as LeftMenuCanvas;
-//		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 3 ) 	as DashBoardControllerCanvas;
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
@@ -72,18 +70,7 @@ public class ControlAppState : GameState
 	{
 		m_helpButton = m_addAppCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
-		
-		int l_listCount = 1;
 
-//		m_dashboardControllerCanvas.setupDotList (l_listCount);
-//		m_dashboardControllerCanvas.setCurrentIndex (0);
-//		
-//		m_leftButton = 	m_dashboardControllerCanvas.getView( "leftButton" ) 	as UIButton;
-//		m_rightButton = m_dashboardControllerCanvas.getView( "rightButton" ) 	as UIButton;
-//		m_leftButton.enabled = false;
-//		m_rightButton.enabled = false;
-
-		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_addAppCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );

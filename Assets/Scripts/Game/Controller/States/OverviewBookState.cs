@@ -45,7 +45,6 @@ public class OverviewBookState : GameState
 //		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.RECOMMENDED_BOOK );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_CONTROLLER );
-//		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 	}
@@ -63,7 +62,6 @@ public class OverviewBookState : GameState
 //		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
 //		m_dashboardControllerCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_CONTROLLER, false, 9 ) as DashBoardControllerCanvas;
 		m_recommendedBookCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_BOOK, true, 2 );
-//		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_recommendedBookCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
