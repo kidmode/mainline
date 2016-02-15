@@ -38,7 +38,6 @@ public class DeviceOptionsState : GameState
 			updateSetting ();
 		}
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_deviceOptionCanvas );
 		p_gameController.getUI().removeScreen( m_commonDialog );
@@ -52,16 +51,12 @@ public class DeviceOptionsState : GameState
 		m_commonDialog.setUIManager (p_uiManager);
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_deviceOptionCanvas = p_uiManager.createScreen( UIScreen.DEVICE_OPTIONS_SCREEN, true, 2 ) as UICanvas;
-		m_dashboardCommonCanvas = p_uiManager.createScreen( UIScreen.SETTING_COMMON, true, 1 );
 		m_lodaing = m_deviceOptionCanvas.getView ("noticePanel") as UIElement;
 
 		m_helpButton = m_deviceOptionCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
+
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 	//	m_sliderDownPanel = m_menu.getView ("sildeDownPanel") as UIElement;
@@ -78,14 +73,7 @@ public class DeviceOptionsState : GameState
 		m_tipButton = m_deviceOptionCanvas.getView ("tipButton") as UIToggle;
 		m_tipButton.isOn = false;
 		m_tipButton.addValueChangedCallback (toTip);
-		m_generalButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_generalButton.addClickCallback (toGeneral);
-		m_FAQButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_FAQButton.addClickCallback (toFAQ);
 
-		UIButton l_deviceOptionButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		l_deviceOptionButton.enabled = false;
-		m_generalButton.enabled = true;
 		m_FAQButton.enabled = true;
 
 		m_musicVolumeSlider = m_deviceOptionCanvas.getView ("musicVolumeSlider") as UISlider;
@@ -334,19 +322,6 @@ public class DeviceOptionsState : GameState
 		}
 	}
 
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
 
 	private void toNotificationScreen(UIButton p_button)
 	{
@@ -357,39 +332,7 @@ public class DeviceOptionsState : GameState
 		m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
 	}
 
-	private void toGeneral(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
 
-		p_button.removeClickCallback (toGeneral);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
-	}
-
-	private void toFAQ(UIButton p_button)
-	{
-		p_button.removeClickCallback (toFAQ);
-		m_gameController.changeState (ZoodleState.FAQ_STATE);
-	}
-
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
 
 	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
 	{
@@ -513,7 +456,6 @@ public class DeviceOptionsState : GameState
 	//Private variables
 	
 	private UICanvas    m_deviceOptionCanvas;
-	private UICanvas    m_dashboardCommonCanvas;
 	private LeftMenuCanvas	m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
 	private UIButton 	m_leftSideMenuButton;
@@ -535,7 +477,6 @@ public class DeviceOptionsState : GameState
 	private UISlider 	m_musicVolumeSlider;
 	private UISlider 	m_masterVolumeSlider;
 	private UISlider 	m_effectsVolumeSlider;
-	private UIButton    m_generalButton;
 	private UIButton    m_FAQButton;
 	private UIButton 	m_helpButton;
 	private UIButton	m_deviceButton;

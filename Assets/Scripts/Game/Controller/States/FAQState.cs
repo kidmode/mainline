@@ -26,7 +26,6 @@ public class FAQState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_faqCanvas );
 		p_gameController.getUI().removeScreen( m_faqDialogCanvas );
@@ -42,18 +41,13 @@ public class FAQState : GameState
 		m_faqDialogCanvas = p_uiManager.createScreen (UIScreen.FAQ_DIALOG, true, 5);
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_faqCanvas = p_uiManager.createScreen( UIScreen.FAQ_SCREEN, true, 2 ) as UICanvas;
-		m_dashboardCommonCanvas = p_uiManager.createScreen( UIScreen.SETTING_COMMON, true, 1 );
 
 		m_helpButton = m_faqCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		m_faqSwipeList = m_faqCanvas.getView ("FAQSwipeList") as UISwipeList;
 		m_faqSwipeList.addClickListener ( "Prototype", showDialog);
 
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 		//m_sliderDownPanel = m_menu.getView ("sildeDownPanel") as UIElement;
@@ -71,16 +65,6 @@ public class FAQState : GameState
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
 
-		m_generalButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_generalButton.addClickCallback (toGeneralOptions);
-
-		m_deviceButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_deviceButton.addClickCallback (toDeviceOptions);
-
-		UIButton l_FAQButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_generalButton.enabled = true;
-		m_deviceButton.enabled = true;
-		l_FAQButton.enabled = false;
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
 
@@ -176,59 +160,8 @@ public class FAQState : GameState
 		}
 	}
 
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu &&  checkInternet())
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-
-	private void toDeviceOptions(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		p_button.removeAllCallbacks ();
-		m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
-	}
-
-	private void toGeneralOptions(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		p_button.removeClickCallback (toGeneralOptions);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
-	}
-
-	private void toChildMode(UIButton p_button)
-	{
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
 
 
-	}
 
 	private void onCloseDialog(UIButton p_button)
 	{
@@ -328,7 +261,6 @@ public class FAQState : GameState
 
 	private UICanvas 	m_faqDialogCanvas;
 	private UICanvas    m_faqCanvas;
-	private UICanvas    m_dashboardCommonCanvas;
 	private CommonDialogCanvas m_commonDialog;
 	private UISwipeList m_faqSwipeList;
 
@@ -352,8 +284,6 @@ public class FAQState : GameState
 	private UIButton 	m_buyGemsButton;
 	private RequestQueue m_requestQueue;
 
-	private UIButton    m_generalButton;
-	private UIButton	m_deviceButton;
 	private bool 		canMoveLeftMenu = true;
 
 	//dialog part

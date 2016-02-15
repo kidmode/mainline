@@ -37,7 +37,6 @@ public class NotificationState : GameState
 			updateSetting ();
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_notificationCanvas );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_commonDialog );
 	}
@@ -94,15 +93,9 @@ public class NotificationState : GameState
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_notificationCanvas = p_uiManager.createScreen( UIScreen.NOTIFICATION, true, 2 );
 
-		m_dashboardCommonCanvas = p_uiManager.createScreen( UIScreen.SETTING_COMMON, true, 1 );
-
 		m_helpButton = m_notificationCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
@@ -123,16 +116,8 @@ public class NotificationState : GameState
 		m_smartSelectNotificationButton.addValueChangedCallback (onSetSmartSelect);
 		m_newAppAddedButton.addValueChangedCallback (onNewAppAdded);
 
-		m_generalButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_generalButton.addClickCallback (toGeneralScreen);
-		
-		m_faqButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_faqButton.addClickCallback (toFAQScreen);
-
-		UIButton l_deviceOptionButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		l_deviceOptionButton.enabled = false;
-		m_generalButton.enabled = true;
-		m_faqButton.enabled = true;
+//		m_generalButton.enabled = true;
+//		m_faqButton.enabled = true;
 
 		if(m_settingCache.active)
 		{
@@ -298,26 +283,6 @@ public class NotificationState : GameState
 		m_gameController.changeState (ZoodleState.DEVICE_OPTIONS_STATE);
 	}
 
-	private void toChildMode(UIButton p_button)
-	{
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-
-	}
 
 	private void setValue(Hashtable p_hashTable,string p_fieldName ,bool p_condition)
 	{
@@ -346,20 +311,7 @@ public class NotificationState : GameState
 		}
 	}
 
-	private void toGeneralScreen(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		p_button.removeClickCallback (toGeneralScreen);
-		m_gameController.changeState (ZoodleState.SETTING_STATE);
-	}
 	
-	private void toFAQScreen(UIButton p_button)
-	{
-		p_button.removeClickCallback (toFAQScreen);
-		m_gameController.changeState (ZoodleState.FAQ_STATE);
-	}
 
 	private void onSetSmartSelect(UIToggle p_toggle, bool p_value)
 	{
@@ -469,21 +421,18 @@ public class NotificationState : GameState
 	//Private variables
 	
 	private UICanvas    m_notificationCanvas;
-	private UICanvas    m_dashboardCommonCanvas;
 	private LeftMenuCanvas	m_leftMenuCanvas;
 	private CommonDialogCanvas m_commonDialog;
-	private UIButton 	m_leftSideMenuButton;
 	private UIButton 	m_showProfileButton;
 	private UIElement 	m_menu;
 	//honda
 	private UIButton	m_settingButton;
+
 	//end
 	private UIButton	m_closeLeftMenuButton;
 //	private UIButton    m_rightButton;
-	private UIButton    m_childModeButton;
+
 	private UISwipeList m_childrenList;
-	private UIButton    m_generalButton;
-	private UIButton	m_faqButton;
 	private UIButton 	m_helpButton;
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;

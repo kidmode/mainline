@@ -86,7 +86,6 @@ public class SettingChildLockState : GameState
 			updateSetting ();
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_childLockCanvas );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_leftMenuCanvas );
 		p_gameController.getUI().removeScreen( m_childLockHelpCanvas );
 		p_gameController.getUI().removeScreen( m_cancelLockConfirmCanvas );
@@ -148,15 +147,12 @@ public class SettingChildLockState : GameState
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_childLockCanvas = p_uiManager.createScreen( UIScreen.CHILD_LOCK_SCREEN, true, 2 );
 
-		m_dashboardCommonCanvas = p_uiManager.createScreen( UIScreen.SETTING_COMMON, true, 1 );
 
 		m_lockSwitchButton = m_childLockCanvas.getView ("childLockCheckButton") as UIToggle;
 
 		m_pinInputField = m_childLockCanvas.getView ("pinInputField").gameObject.GetComponent<InputField> ();
 		m_pinInputField.onValueChange.AddListener (pinValueChange);
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
@@ -210,18 +206,6 @@ public class SettingChildLockState : GameState
 		m_verifyBirth = m_childLockCanvas.getView ("verifyBirthButton") as UIToggle;
 		m_verifyBirth.isOn = m_settingCache.active?m_settingCache.verifyBirth:SessionHandler.getInstance().verifyBirth;
 
-		m_deviceButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_deviceButton.addClickCallback (toDeviceScreen);
-
-		m_faqButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_faqButton.addClickCallback (toFAQScreen);
-
-		UIButton l_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		l_overviewButton.enabled = false;
-		m_deviceButton.enabled = true;
-		m_faqButton.enabled = true;
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 
 		m_helpButton = m_childLockCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (showHelpDialog);
@@ -494,91 +478,8 @@ public class SettingChildLockState : GameState
 		}
 	}
 
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-
-	private void toDeviceScreen(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		p_button.removeClickCallback (toDeviceScreen);
-		if(checkPin())
-		{
-			m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
-		}
-		else
-		{
-			p_button.addClickCallback(toDeviceScreen);
-		}
-	}
-
-	private void toFAQScreen(UIButton p_button)
-	{
-		p_button.removeClickCallback (toFAQScreen);
-		if(checkPin())
-		{
-			m_gameController.changeState (ZoodleState.FAQ_STATE);
-		}
-		else
-		{
-			p_button.addClickCallback (toFAQScreen);
-		}
-	}
-
-	private void toChildMode(UIButton p_button)
-	{
 
 
-//		if (KidMode.isHomeLauncherKidMode ()) {
-//			
-//			if(checkPin())
-//			{
-//				m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-//			}
-//			
-//		} else {
-//			
-//			KidMode.enablePluginComponent();
-//			
-//			KidMode.openLauncherSelector ();
-//			
-//		}
-
-
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			if(checkPin())
-			{
-				m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			}
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		if(checkPin())
-		{
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		}
-		#endif
-	}
 
 	private void toCheckVerifyBirth(UIToggle p_button, bool p_value)
 	{
@@ -811,10 +712,8 @@ public class SettingChildLockState : GameState
 	
 	private UICanvas    m_childLockCanvas;
 	private CancelLockConfirmCanvas	m_cancelLockConfirmCanvas;
-	private UICanvas    m_dashboardCommonCanvas;
 	private ChildLockHelpCanvas m_childLockHelpCanvas;
 	private LeftMenuCanvas	m_leftMenuCanvas;
-	private UIButton 	m_leftSideMenuButton;
 	private UIButton 	m_showProfileButton;
 	private UIButton	m_helpButton;
 	private UIButton	m_closeButton;
@@ -827,9 +726,6 @@ public class SettingChildLockState : GameState
 	private UIButton	m_closeLeftMenuButton;
 //	private UIButton    m_leftButton;
 	private UIToggle    m_verifyBirth;
-	private UIButton    m_deviceButton;
-	private UIButton	m_faqButton;
-	private UIButton    m_childModeButton;
 	private UIButton	m_cancelTurnOffButton;
 	private UIButton	m_turnOffButton;
 	private UIButton	m_closeTurnOnConfirmButton;

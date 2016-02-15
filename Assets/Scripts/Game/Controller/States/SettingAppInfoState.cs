@@ -31,9 +31,8 @@ public class SettingAppInfoState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		base.exit( p_gameController );
-		p_gameController.getUI().removeScreen( m_dashboardCommonCanvas );
 		p_gameController.getUI().removeScreen( m_planDetailsCanvas );
-		p_gameController.getUI().removeScreen( m_cancelSubscriptionCanvas );
+//		p_gameController.getUI().removeScreen( m_cancelSubscriptionCanvas );
 		p_gameController.getUI().removeScreen( m_appInfoCanvas );
 		p_gameController.getUI().removeScreen( m_thankCanvas );
 		p_gameController.getUI().removeScreen( m_signOutConfirmCanvas );
@@ -49,21 +48,18 @@ public class SettingAppInfoState : GameState
 		m_planDetailsCanvas = p_uiManager.createScreen (UIScreen.PLAN_DEATILS, true, 6) as PlanDetails;
 
 		m_commonDialogCanvas =  p_uiManager.createScreen (UIScreen.COMMON_DIALOG, true, 11) as CommonDialogCanvas;
-		m_cancelSubscriptionCanvas = p_uiManager.createScreen (UIScreen.CANCEL_SUB, true, 10) as CancelSubscriptionCanvas;
+//		m_cancelSubscriptionCanvas = p_uiManager.createScreen (UIScreen.CANCEL_SUB, true, 10) as CancelSubscriptionCanvas;
 		m_thankCanvas =  p_uiManager.createScreen (UIScreen.THANK, true, 7) as ThankCanvas;
 		m_signOutConfirmCanvas =  p_uiManager.createScreen (UIScreen.SIGN_OUT, true, 8) as SignOutConfirmCanvas;
 		m_sentFeedBackCanvas = p_uiManager.createScreen (UIScreen.SENT_FEED_BACK, true, 9) as SentFeedBackCanvas;
 	
 		m_leftMenuCanvas = p_uiManager.createScreen (UIScreen.LEFT_MENU, true, 3) as LeftMenuCanvas;
 		m_appInfoCanvas = p_uiManager.createScreen (UIScreen.APP_INFO, true, 2);
-		m_dashboardCommonCanvas = p_uiManager.createScreen( UIScreen.SETTING_COMMON, true, 1 );
 
 		m_usernameText = m_appInfoCanvas.getView ("usernameText") as UILabel;
 		m_usernameText.text = m_session.username;
 
 		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
-		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
 		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
 		m_showProfileButton.addClickCallback (toShowAllChilren);
 
@@ -97,14 +93,14 @@ public class SettingAppInfoState : GameState
 		l_versionText.text = l_versionText.text.Replace("{0}", CurrentBundleVersion.version);
 
 		m_dialogCloseButton = m_planDetailsCanvas.getView ("closeMark") as UIButton;
-		m_cancelSubDialogCloseButton = m_cancelSubscriptionCanvas.getView ("closeMark") as UIButton;
+//		m_cancelSubDialogCloseButton = m_cancelSubscriptionCanvas.getView ("closeMark") as UIButton;
 
 		m_dialogCloseButton.addClickCallback (onCloseDialog);
-		m_cancelSubDialogCloseButton.addClickCallback (onCloseCalSubDialog);
+//		m_cancelSubDialogCloseButton.addClickCallback (onCloseCalSubDialog);
 
 
-		m_cancelSubButton = m_planDetailsCanvas.getView ("cancelButton") as UIButton;
-		m_cancelSubButton.addClickCallback (toCancelSubScreen);
+//		m_cancelSubButton = m_planDetailsCanvas.getView ("cancelButton") as UIButton;
+//		m_cancelSubButton.addClickCallback (toCancelSubScreen);
 
 		//honda 
 		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
@@ -112,20 +108,18 @@ public class SettingAppInfoState : GameState
 		//end
 		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
 		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
-		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
-		m_childModeButton.addClickCallback (toChildMode);
 
-		m_submitButton = m_cancelSubscriptionCanvas.getView ("submitButton") as UIButton;
-		m_submitButton.addClickCallback (onConfirm);
+//		m_submitButton = m_cancelSubscriptionCanvas.getView ("submitButton") as UIButton;
+//		m_submitButton.addClickCallback (onConfirm);
 
 		m_closeThankDialogButton = m_thankCanvas.getView ("closeMark") as UIButton;
 		m_closeThankDialogButton.addClickCallback (onCloseThankDialog);
 
-		m_buttonList = m_cancelSubscriptionCanvas.getView ("resonSelectSwipList") as UISwipeList;
+//		m_buttonList = m_cancelSubscriptionCanvas.getView ("resonSelectSwipList") as UISwipeList;
+//
+//		m_buttonList.addClickListener ("unCheckButton",OnClickReasonButton);
 
-		m_buttonList.addClickListener ("unCheckButton",OnClickReasonButton);
-
-		m_descriptionInput = m_cancelSubscriptionCanvas.getView ("reasonInputField").gameObject.GetComponent<InputField>();
+//		m_descriptionInput = m_cancelSubscriptionCanvas.getView ("reasonInputField").gameObject.GetComponent<InputField>();
 		m_signOutButton = m_appInfoCanvas.getView ("signOutButton") as UIButton;
 		m_signOutButton.addClickCallback (onSignOut);
 
@@ -156,14 +150,8 @@ public class SettingAppInfoState : GameState
 //		m_rightButton = m_appInfoCanvas.getView ("rightButton") as UIButton;
 //		m_rightButton.addClickCallback (goToChildLock);
 
-		m_deviceButton = m_dashboardCommonCanvas.getView ("controlButton") as UIButton;
-		m_deviceButton.addClickCallback (toDeviceScreen);
-		m_faqButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
-		m_faqButton.addClickCallback (toShowFAQ);
-		m_overviewButton = m_dashboardCommonCanvas.getView ("overviewButton") as UIButton;
-		m_overviewButton.enabled = false;
-		m_deviceButton.enabled = true;
-		m_faqButton.enabled = true;
+
+
 		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
 		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
 
@@ -304,31 +292,18 @@ public class SettingAppInfoState : GameState
 		}
 	}
 
-	private void OnClickReasonButton(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
-	{
-		if (null != m_currentReasonButton) 
-		{
-			m_currentReasonButton.alpha = 0.0f;
-		}
-		m_currentReasonButton = p_button;
-		p_button.alpha = 1.0f;
-		m_reason = p_data.ToString ();
-	}
+//	private void OnClickReasonButton(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
+//	{
+//		if (null != m_currentReasonButton) 
+//		{
+//			m_currentReasonButton.alpha = 0.0f;
+//		}
+//		m_currentReasonButton = p_button;
+//		p_button.alpha = 1.0f;
+//		m_reason = p_data.ToString ();
+//	}
 
-	private void toDeviceScreen(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
 
-		p_button.removeClickCallback (toDeviceScreen);
-		m_gameController.changeState(ZoodleState.NOTIFICATION_STATE);
-	}
-
-	private void toShowFAQ(UIButton p_button)
-	{
-		p_button.removeClickCallback (toShowFAQ);
-		m_gameController.changeState(ZoodleState.FAQ_STATE);
-	}
 
 	private void toBuyGemsScreen(UIButton p_button)
 	{
@@ -498,29 +473,29 @@ public class SettingAppInfoState : GameState
 		m_thankCanvas.setOutPosition ();
 	}
 
-	private void onConfirm(UIButton p_button)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		m_requestQueue.reset ();
-		m_requestQueue.add (new CancelSubcriptionRequest(m_reason,m_descriptionInput.text,cancelSubcriptionComplete));
-		m_requestQueue.request ();
-	}
+//	private void onConfirm(UIButton p_button)
+//	{
+//		Server.init (ZoodlesConstants.getHttpsHost());
+//		m_requestQueue.reset ();
+//		m_requestQueue.add (new CancelSubcriptionRequest(m_reason,m_descriptionInput.text,cancelSubcriptionComplete));
+//		m_requestQueue.request ();
+//	}
 
-	private void cancelSubcriptionComplete(HttpsWWW p_response)
-	{
-		if(null == p_response.error)
-		{
-			m_cancelSubscriptionCanvas.setOutPosition ();
-			m_thankCanvas.setOriginalPosition ();
-		}
-		Server.init (ZoodlesConstants.getHttpsHost());
-	}
+//	private void cancelSubcriptionComplete(HttpsWWW p_response)
+//	{
+//		if(null == p_response.error)
+//		{
+//			m_cancelSubscriptionCanvas.setOutPosition ();
+//			m_thankCanvas.setOriginalPosition ();
+//		}
+//		Server.init (ZoodlesConstants.getHttpsHost());
+//	}
 
-	private void toCancelSubScreen(UIButton p_button)
-	{
-		m_planDetailsCanvas.setOutPosition ();
-		m_cancelSubscriptionCanvas.setOriginalPosition ();
-	}
+//	private void toCancelSubScreen(UIButton p_button)
+//	{
+//		m_planDetailsCanvas.setOutPosition ();
+//		m_cancelSubscriptionCanvas.setOriginalPosition ();
+//	}
 	
 	private void onCloseDialog(UIButton p_button)
 	{
@@ -530,10 +505,10 @@ public class SettingAppInfoState : GameState
 		m_planDetailsButton.addClickCallback (onShowPlanDetails);
 	}
 
-	private void onCloseCalSubDialog(UIButton p_button)
-	{
-		m_cancelSubscriptionCanvas.setOutPosition ();
-	}
+//	private void onCloseCalSubDialog(UIButton p_button)
+//	{
+//		m_cancelSubscriptionCanvas.setOutPosition ();
+//	}
 
 	private void onCloseMenu(UIButton p_button)
 	{
@@ -560,38 +535,9 @@ public class SettingAppInfoState : GameState
 		canMoveLeftMenu = true;
 	}
 	
-	private void toChildMode(UIButton p_button)
-	{
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		if (KidMode.isHomeLauncherKidMode ()) {
-			
-			m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-			
-		} else {
-			
-			KidMode.enablePluginComponent();
-			
-			KidMode.openLauncherSelector ();
-			
-		}
-		#else
-		m_gameController.changeState (ZoodleState.PROFILE_SELECTION);
-		#endif
-	}
 
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_gameController.getUI().changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
+
+
 
 	private void toShowAllChilren(UIButton p_button)
 	{
@@ -629,7 +575,7 @@ public class SettingAppInfoState : GameState
 
 
 	//Private variables
-	private UIButton 	m_leftSideMenuButton;
+//	private UIButton 	m_leftSideMenuButton;
 	private UIButton 	m_showProfileButton;
 	private UIButton    m_planDetailsButton;
 	private UIButton	m_dialogCloseButton;
@@ -639,7 +585,7 @@ public class SettingAppInfoState : GameState
 	private UIButton	m_settingButton;
 	//end
 	private UIButton	m_closeLeftMenuButton;
-	private UIButton    m_childModeButton;
+//	private UIButton    m_childModeButton;
 	private UIButton  	m_submitButton;
 	private UIButton  	m_closeThankDialogButton;
 	private UIButton  	m_signOutButton;
@@ -649,22 +595,19 @@ public class SettingAppInfoState : GameState
 	private UIButton  	m_sendFeedBackButton;
 	private UIButton  	m_closeSendFeedBackButton;
 //	private UIButton    m_rightButton;
-	private UIButton    m_deviceButton;
-	private UIButton    m_faqButton;
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;
 	private UIButton 	m_sendButton;
 	private UIButton	m_editProfileButton;
-	private UIButton	m_overviewButton;
-	
+
 	private UIButton 	m_currentReasonButton;
 	private string 		m_reason;
-	private InputField  m_descriptionInput;
+//	private InputField  m_descriptionInput;
 	private UILabel     m_planText;
 	private UILabel     m_renewText;
 	private UILabel 	m_usernameText;
 
-	private UISwipeList m_buttonList;
+//	private UISwipeList m_buttonList;
 	private UISwipeList m_childrenList;
 
 	private UIElement 	m_menu;
@@ -675,10 +618,9 @@ public class SettingAppInfoState : GameState
 	private const string CANCEL_SUBSCRIPTION = "cancelSubscription";
 	private const string SHOW_DETAILS = "showDetail";
 
-	private UICanvas    		m_dashboardCommonCanvas;
 	private UICanvas			m_appInfoCanvas;
 	private PlanDetails			m_planDetailsCanvas;
-	private CancelSubscriptionCanvas	m_cancelSubscriptionCanvas;
+//	private CancelSubscriptionCanvas	m_cancelSubscriptionCanvas;
 	private LeftMenuCanvas		m_leftMenuCanvas;
 	private ThankCanvas 		m_thankCanvas;
 	private SignOutConfirmCanvas m_signOutConfirmCanvas;
