@@ -38,7 +38,6 @@ public class OverviewReadingState : GameState
 		base.exit (p_gameController);
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
 		m_uiManager.removeScreen( UIScreen.BOOK_LIST );
-		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_READING );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_COMMON );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
@@ -54,7 +53,6 @@ public class OverviewReadingState : GameState
 		m_recordStartCanvas = m_uiManager.createScreen( UIScreen.RECORD_START, false, 17 );
 		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
-		m_leftMenuCanvas = m_uiManager.createScreen( UIScreen.LEFT_MENU, true, 10 )  as LeftMenuCanvas;
 		m_recordAReadingCanvas	= m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
 		m_dashboardCommonCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_COMMON, true, 0 );
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -115,19 +113,12 @@ public class OverviewReadingState : GameState
 		m_costArea = m_confirmDialogCanvas.getView("costArea");
 		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
 
-		m_menu = m_leftMenuCanvas.getView ("LeftMenu") as UIElement;
 		m_leftSideMenuButton = m_dashboardCommonCanvas.getView ("menuButton") as UIButton;
-		m_leftSideMenuButton.addClickCallback (toShowMenu);
-		m_showProfileButton = m_menu.getView ("profileButton") as UIButton;
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-		
-		m_closeLeftMenuButton = m_leftMenuCanvas.getView ("closeButton") as UIButton;
-		m_closeLeftMenuButton.addClickCallback (onCloseMenu);
+
+
 		m_childModeButton = m_dashboardCommonCanvas.getView ("childModelButton") as UIButton;
 		m_childModeButton.addClickCallback (toChildMode);
-		
-		m_settingButton = m_leftMenuCanvas.getView ("settingButton") as UIButton;
-		m_settingButton.addClickCallback (toSettingScreen);
+
 
 		m_appsButton = m_dashboardCommonCanvas.getView ("appsButton") as UIButton;
 		m_appsButton.addClickCallback(goToAddApps);
@@ -140,27 +131,20 @@ public class OverviewReadingState : GameState
 		
 		m_statChartButton = m_dashboardCommonCanvas.getView ("starButton") as UIButton;
 		m_statChartButton.addClickCallback (goToStarChart);
-		
-		m_childrenList = m_leftMenuCanvas.getView ("childSwipeList") as UISwipeList;
-		m_childrenList.addClickListener ("Prototype",onSelectThisChild);
+
 		
 		m_selectButton 		= m_recordStartCanvas.getView ("selectButton") as UIButton;
 		m_saveButon 		= m_recordStartCanvas.getView ("saveButton") as UIButton;
 		m_exitRecordButton 	= m_recordStartCanvas.getView ("exitButton") as UIButton;
-		m_kidSwipeList 		= m_recordStartCanvas.getView ("kidSwipeList") as UISwipeList;
 		m_selectButton.addClickCallback( onSelectButtonClicked );
 		m_saveButon.addClickCallback( onSaveButtonClicked );
 		m_exitRecordButton.addClickCallback( onExitRecordButtonClick );
 		m_saveButon.enabled = false;
-		
-		m_tryPremiumButton = m_leftMenuCanvas.getView ("premiumButton") as UIButton;
-		m_buyGemsButton = m_leftMenuCanvas.getView ("buyGemsButton") as UIButton;
+
 		m_buyGemsButtonOnConfirm = m_confirmDialogCanvas.getView ("buyGemsButton") as UIButton;
-		m_tryPremiumButton.addClickCallback (toPremiumScreen);
-		m_buyGemsButton.addClickCallback (toBuyGemsScreen);
+
 		m_buyGemsButtonOnConfirm.addClickCallback (toBuyGemsScreen);
-		m_kidSwipeList.addClickListener ( "Prototype", onSelectKid );
-		
+
 		m_moreBookButton.active = false;
 		m_memberButton.active = false;
 		UIElement l_panel = m_recordAReadingCanvas.getView ("panel");
@@ -172,41 +156,7 @@ public class OverviewReadingState : GameState
 		}
 	}
 
-	private void onSelectKid( UISwipeList p_list, UIButton p_button, object p_data, int p_index )
-	{
-		Kid l_kid = p_data as Kid;
-		bool l_isBreak = false;
 
-		if( 0 < SessionHandler.getInstance().recordKidList.Count )
-		{
-			for( int i = 0; i < SessionHandler.getInstance().recordKidList.Count; i++ )
-			{
-				if( SessionHandler.getInstance().recordKidList[i].id == l_kid.id )
-				{
-					SessionHandler.getInstance().recordKidList.RemoveAt(i);
-					l_isBreak = true;
-					break;
-				}
-			}
-			if( !l_isBreak )
-			{
-				SessionHandler.getInstance().recordKidList.Add( l_kid );
-			}
-		}
-		else
-		{
-			SessionHandler.getInstance().recordKidList.Add( l_kid );
-		}
-
-		if( SessionHandler.getInstance().recordKidList.Count > 0 )
-		{
-			m_saveButon.enabled = true;
-		}
-		else
-		{
-			m_saveButon.enabled = false;
-		}
-	}
 
 	private void onSelectButtonClicked( UIButton p_button )
 	{
@@ -263,7 +213,15 @@ public class OverviewReadingState : GameState
 		m_gameController.connectState (ZoodleState.BOOK_RECORD, ZoodleState.OVERVIEW_READING);
 		m_gameController.changeState (ZoodleState.BOOK_RECORD);
 	}
+
+	private void toBuyGemsScreen(UIButton p_button)
+	{
+		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
+		gotoGetGems ();
+	}
 	
+
+
 	private void buyGems( UIButton p_button )
 	{
 		m_costArea.active = true;
@@ -641,47 +599,7 @@ public class OverviewReadingState : GameState
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
-	
-	private void toShowMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu && checkInternet())
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,true);
-			Vector3 l_position = m_menu.transform.localPosition;
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, toShowMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-	
-	private void toShowAllChilren(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_leftMenuCanvas.showKids (addButtonClickCall);
-	}
-	
-	private void addButtonClickCall( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		m_showProfileButton.addClickCallback (toShowAllChilren);
-	}
-	
-	private void onCloseMenu(UIButton p_button)
-	{
-		if(canMoveLeftMenu)
-		{
-			m_uiManager.changeScreen(UIScreen.LEFT_MENU,false);
-			Vector3 l_position = m_menu.transform.localPosition;
-			
-			List<Vector3> l_posList = new List<Vector3> ();
-			l_posList.Add (l_position);
-			l_posList.Add (l_position + new Vector3 (-200, 0, 0));
-			m_menu.tweener.addPositionTrack (l_posList, m_leftMenuCanvas.displaySpeed, onCloseMenuTweenFinished, Tweener.Style.QuadOutReverse);
-			canMoveLeftMenu = false;
-		}
-	}
-	
+
 	private void toChildMode(UIButton p_button)
 	{
 		#if UNITY_ANDROID && !UNITY_EDITOR
@@ -701,14 +619,7 @@ public class OverviewReadingState : GameState
 		#endif
 	}
 	
-	private void toSettingScreen(UIButton p_button)
-	{
-		if (checkInternet())
-		{
-			p_button.removeClickCallback (toSettingScreen);
-			m_gameController.changeState (ZoodleState.SETTING_STATE);
-		}
-	}
+
 
 	private void goToAddApps( UIButton p_button )
 	{
@@ -751,26 +662,7 @@ public class OverviewReadingState : GameState
 		m_gameController.changeState (ZoodleState.DASHBOARD_STAR_CHART);
 	}
 	
-	private void onSelectThisChild(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
-	{
-		if (checkInternet() == false)
-			return;
 
-		Kid l_kid = p_data as Kid;
-		if (Localization.getString(Localization.TXT_86_BUTTON_ADD_CHILD).Equals (l_kid.name))
-		{
-			SessionHandler.getInstance().CreateChild = true;
-			m_gameController.connectState(ZoodleState.CREATE_CHILD_NEW,int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.CREATE_CHILD_NEW);
-		}
-		else
-		{
-			List<Kid> l_kidList = SessionHandler.getInstance().kidList;
-			SessionHandler.getInstance().currentKid = l_kidList[p_index-1];
-			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-		}
-	}
-	
 	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
 	{
 		canMoveLeftMenu = true;
@@ -833,28 +725,7 @@ public class OverviewReadingState : GameState
 		}
 	}
 	
-	private void toPremiumScreen(UIButton p_button)
-	{
-		if (LocalSetting.find("User").getBool("UserTry",true))
-		{
-			if(!SessionHandler.getInstance().token.isCurrent())
-			{
-				m_gameController.connectState (ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName));
-				m_gameController.changeState (ZoodleState.VIEW_PREMIUM);	
-			}
-		}
-		else
-		{
-			m_gameController.connectState (ZoodleState.SIGN_IN_UPSELL, int.Parse(m_gameController.stateName));
-			m_gameController.changeState (ZoodleState.SIGN_IN_UPSELL);
-		}
-	}
-	
-	private void toBuyGemsScreen(UIButton p_button)
-	{
-		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
-		gotoGetGems ();
-	}
+
 	
 	private void gotoGetGems()
 	{	
@@ -1029,7 +900,6 @@ public class OverviewReadingState : GameState
 	
 	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 	private UICanvas 				  m_dashboardCommonCanvas;
-	private LeftMenuCanvas 			  m_leftMenuCanvas;
 	private UICanvas				  m_recordAReadingCanvas;
 	private UICanvas				  m_bookListCanvas;
 	private CommonDialogCanvas 		  m_commonDialog;
@@ -1043,7 +913,6 @@ public class OverviewReadingState : GameState
 	private Book	 			      m_wantedBook;
 	private UISwipeList 			  m_bookList;
 	private UIElement  				  m_costArea;
-	private UIButton 			      m_buyGemsButton;
 	private UIButton 			      m_buyGemsButtonOnConfirm;
 	private UIElement 				  m_needMoreArea;
 	private UIButton 			      m_clickedBuyButton;
@@ -1053,28 +922,22 @@ public class OverviewReadingState : GameState
 	private UIButton 			      m_cancelBuyButton;
 	private UIButton 				  m_confirmBuyButton;
 	private UIButton 				  m_leftSideMenuButton;
-	private UIButton    			  m_showProfileButton;
-	private UIButton 				  m_closeLeftMenuButton;
 	private UIButton 				  m_childModeButton;
-	private UIButton 				  m_settingButton;
-	private UISwipeList				  m_childrenList;
 	private RequestQueue 			  m_requestQueue;
 	private UIButton				  m_leftButton;
 	private UIButton 				  m_helpButton;
 	private UIButton				  m_rightButton;
-	private UIElement 				  m_menu;
 	private UIButton m_appsButton;
 	private UIButton				  m_overviewButton;
 	private UIButton 				  m_controlsButton;
 	private UIButton				  m_statChartButton;
-	private UIButton 				  m_tryPremiumButton;
 	private bool 					  canMoveLeftMenu = true;
 	private bool 					  bookListOpen = false;
 	private UIButton 				m_selectButton;
 	private UIButton 				m_saveButon;
-	private UISwipeList 			m_kidSwipeList;
 	private UIButton 				m_exitRecordButton;
 	private UIButton 				m_memberButton;
+	private UIButton 				m_buyGemsButton;
 	
 	private Hashtable m_bookDataTable 			= new Hashtable();
 	private List<int> m_recordedBookList 		= new List<int>();

@@ -104,7 +104,6 @@ public class OverviewArtState : GameState {
 	{
 		base.exit (p_gameController);
 		
-//		m_uiManager.removeScreen( UIScreen.LEFT_MENU );
 		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
 		m_uiManager.removeScreen( UIScreen.ART_LIST );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
