@@ -45,6 +45,16 @@ public class AppInfoScreen : MonoBehaviour {
 
 	}
 
+	public void buygGemsButtonClicked(){
+		game.gameController.connectState( ZoodleState.BUY_GEMS, ZoodleState.SETTING_STATE );
+		
+		game.gameController.changeState( ZoodleState.BUY_GEMS );
+		
+		game.setPDMenuBarVisible(false, false);
+		
+	}
+
+
 	public void subscribeButtonClicked(){
 		
 		game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.SETTING_STATE );
