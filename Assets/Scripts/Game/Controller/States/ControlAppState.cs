@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,7 +14,7 @@ public class ControlAppState : GameState
 
 		m_currentRecommendedAppPage = 1;
 		m_getRecommendedAppRequestQueue = new RequestQueue();
-		m_getRecommendedAppIconRequestQueue = new RequestQueue();
+//		m_getRecommendedAppIconRequestQueue = new RequestQueue();
 		m_recommendedAppIconRequests = new List<RequestQueue>();
 		m_currentRecommendedAppList = SessionHandler.getInstance().currentKid.appList == null? new List<object>():SessionHandler.getInstance().currentKid.appList;
 
@@ -40,7 +40,7 @@ public class ControlAppState : GameState
 		
 		base.exit(p_gameController);
 		disposeIconRequests();
-		m_getRecommendedAppIconRequestQueue.dispose();
+//		m_getRecommendedAppIconRequestQueue.dispose();
 
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
@@ -325,6 +325,7 @@ public class ControlAppState : GameState
 					{
 						ArrayList l_data = l_result["apps"] as ArrayList;
 						int l_dataCount = l_data.Count;
+						Debug.Log(l_dataCount + " recommended apps feteched");
 						Hashtable l_appOwn = SessionHandler.getInstance ().appOwn;
 						for(int l_i = 0; l_i < l_dataCount; l_i++)
 						{
@@ -354,7 +355,7 @@ public class ControlAppState : GameState
 			m_recommendedAppSwipeList.setDrawFunction( onListDraw );
 			m_recommendedAppSwipeList.redraw();
 			//if(m_getIconRequestQueue.isCompleted())
-			m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
+//			m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
 			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
 		}
 //		m_recommendedAppSwipeList.addClickListener("Prototype", onAppClick);
@@ -407,8 +408,8 @@ public class ControlAppState : GameState
 				m_currentRecommendedAppList.Add(l_app);
 			}
 			m_recommendedAppSwipeList.redraw();
-			if(m_getRecommendedAppIconRequestQueue.isCompleted())
-				m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
+//			if(m_getRecommendedAppIconRequestQueue.isCompleted())
+//				m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
 		}
 		if(l_dataCount >= 10)
 			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
@@ -475,7 +476,7 @@ public class ControlAppState : GameState
 		if(null == p_app.icon)
 		{
 			if(!p_app.iconDownload)
-				downLoadAppIcon(p_element,p_app);
+				downloadAppIcon(p_element,p_app);
 		}
 		else
 		{
@@ -557,7 +558,7 @@ public class ControlAppState : GameState
 //			showAppDetails (l_app);
 	}
 
-	private void downLoadAppIcon(UIElement p_element, App p_app)
+	private void downloadAppIcon(UIElement p_element, App p_app)
 	{
 		RequestQueue l_queue = new RequestQueue();
 		l_queue.add(new IconRequest(p_app,p_element));

@@ -570,7 +570,7 @@ public class ProfileState : GameState
 			{
 				m_uiManager.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 
-				//honda: test new parent dashboard menu bar ui
+				//honda: new parent dashboard menu bar ui
 				string screenPath = "Prefabs/Screens/ParentDashboardMenuBar";
 				GameObject l_screen = Resources.Load< GameObject >(screenPath);
 				
