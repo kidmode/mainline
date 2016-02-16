@@ -992,6 +992,8 @@ public class DrawingRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
+
+//		return;
 		if(null != p_response.error)
 		{
 			_Debug.log(p_response);
