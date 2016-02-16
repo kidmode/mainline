@@ -1977,6 +1977,16 @@ public class UpdatePhotoRequest : RequestQueue.Request
 }
 
 //Get plan details
+//Response Text example:
+/*
+{"next_renewal_at":"2043-01-04T08:59:48Z","plan_name":"Monthly","plan_info":
+	[
+		{"id":49,"en_name":"Monthly","amount":"7.95","renewal_period":1,"plan_bundle":"z"},
+		{"id":50,"en_name":"Semiannual","amount":"24.95","renewal_period":6,"plan_bundle":"z"},
+		{"id":51,"en_name":"Annual","amount":"59.95","renewal_period":12,"plan_bundle":"z"}
+	]
+}
+*/
 public class ShowPlanDetailsRequest : RequestQueue.Request
 {
 	public ShowPlanDetailsRequest(RequestQueue.RequestHandler p_handler = null) : base(p_handler)
