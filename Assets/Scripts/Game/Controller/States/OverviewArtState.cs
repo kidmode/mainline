@@ -366,9 +366,8 @@ public class OverviewArtState : GameState {
 			
 			if(info.icon != null){
 				l_image.setTexture(info.icon);
-			}
-//			else
-//				info.forceRequestIcon();
+			}else
+				info.forceRequestIcon();
 			
 			return;
 			
