@@ -171,8 +171,8 @@ public class OverviewArtState : GameState {
 		m_moreArtButton.addClickCallback( onMoreArtButtonClick );
 		m_moreArtButton.active = false;
 
-		m_exitArtListButton = m_artListCanvas.getView( "exitButton" ) as UIButton;
-		m_exitArtListButton.addClickCallback( onExitArtListButtonClick );
+//		m_exitArtListButton = m_artListCanvas.getView( "exitButton" ) as UIButton;
+//		m_exitArtListButton.addClickCallback( onExitArtListButtonClick );
 
 		//Create an empty list for set up swipeList.
 		List<System.Object> l_list = new List<System.Object>();
@@ -397,19 +397,19 @@ public class OverviewArtState : GameState {
 		}
 	}
 
-	private void onExitArtListButtonClick( UIButton p_button )
-	{
-
-		game.setPDMenuBarVisible(true, false);
-
-		m_uiManager.changeScreen ( m_artListCanvas, false );
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_artListCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
-
-	}
+//	private void onExitArtListButtonClick( UIButton p_button )
+//	{
+//
+//		game.setPDMenuBarVisible(true, false);
+//
+//		m_uiManager.changeScreen ( m_artListCanvas, false );
+//		List<Vector3> l_pointListOut = new List<Vector3>();
+//		UIElement l_currentPanel = m_artListCanvas.getView ("mainPanel");
+//		l_pointListOut.Add( l_currentPanel.transform.localPosition );
+//		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+//		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+//
+//	}
 
 	private void _setupArtGalleryCanvas()
 	{
@@ -418,7 +418,6 @@ public class OverviewArtState : GameState {
 
 		m_requestQueue.reset ();
 		
-		UILabel l_artCountLabel = m_artListCanvas.getView ("artCountText") as UILabel;
 
 		l_canvasList = new List<UIElement> ();
 		UIElement l_art1 = m_artGalleryCanvas.getView( "artOne" );
@@ -437,7 +436,6 @@ public class OverviewArtState : GameState {
 		
 		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;
 
-		l_artCountLabel.text = l_list.Count.ToString ();
 
 		int l_count = l_list.Count >= 6 ? 6 : l_list.Count;
 
@@ -549,7 +547,7 @@ public class OverviewArtState : GameState {
 
 	
 	private UIButton m_moreArtButton;
-	private UIButton m_exitArtListButton;
+//	private UIButton m_exitArtListButton;
 	private UIButton m_helpButton;
 	
 	private UISwipeList m_childrenList;

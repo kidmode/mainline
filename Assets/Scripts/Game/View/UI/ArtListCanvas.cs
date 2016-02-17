@@ -11,8 +11,8 @@ public class ArtListCanvas : UICanvas {
 	
 	public void setupLocalization()
 	{
-		UILabel l_title = getView("titleArea").getView ("Text") as UILabel;
-		l_title.text =  Localization.getString (Localization.TXT_78_LABEL_TITLE);
+//		UILabel l_title = getView("titleArea").getView ("Text") as UILabel;
+//		l_title.text =  Localization.getString (Localization.TXT_78_LABEL_TITLE);
 	}
 
 	public override void update ()
