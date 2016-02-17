@@ -72,27 +72,27 @@ public class PromoteSubjectsCanvas : UICanvas
 
 	private void SetupLocalizition()
 	{
-		UILabel l_top = getView("titleText") as UILabel;
+//		UILabel l_top = getView("titleText") as UILabel;
+//		
+//		l_top.text = Localization.getString( Localization.TXT_61_LABEL_TITLE );
 		
-		l_top.text = Localization.getString( Localization.TXT_61_LABEL_TITLE );
-		
-		UILabel l_math = getView("mathText") as UILabel;
-		UILabel l_reading = getView("readingText") as UILabel;
-		UILabel l_science = getView("scienceText") as UILabel;
-		UILabel l_social = getView("socialText") as UILabel;
-		UILabel l_cognitive = getView("cognitiveText") as UILabel;
-		UILabel l_creative = getView("creativeText") as UILabel;
-		UILabel l_life = getView("lifeSkillsText") as UILabel;
-
-		UILabel l_baseline = getView("TextBaseLine") as UILabel;
-		
-		l_math.text = Localization.getString( Localization.TXT_COURSE_MATH );
-		l_reading.text = Localization.getString( Localization.TXT_COURSE_READING );
-		l_science.text = Localization.getString( Localization.TXT_COURSE_SCIENCE );
-		l_social.text = Localization.getString( Localization.TXT_COURSE_SOCIAL );
-		l_cognitive.text = Localization.getString( Localization.TXT_COURSE_COGNITIVE );
-		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
-		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
+//		UILabel l_math = getView("mathText") as UILabel;
+//		UILabel l_reading = getView("readingText") as UILabel;
+//		UILabel l_science = getView("scienceText") as UILabel;
+//		UILabel l_social = getView("socialText") as UILabel;
+//		UILabel l_cognitive = getView("cognitiveText") as UILabel;
+//		UILabel l_creative = getView("creativeText") as UILabel;
+//		UILabel l_life = getView("lifeSkillsText") as UILabel;
+//
+////		UILabel l_baseline = getView("TextBaseLine") as UILabel;
+//		
+//		l_math.text = Localization.getString( Localization.TXT_COURSE_MATH );
+//		l_reading.text = Localization.getString( Localization.TXT_COURSE_READING );
+//		l_science.text = Localization.getString( Localization.TXT_COURSE_SCIENCE );
+//		l_social.text = Localization.getString( Localization.TXT_COURSE_SOCIAL );
+//		l_cognitive.text = Localization.getString( Localization.TXT_COURSE_COGNITIVE );
+//		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
+//		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
 
 //		l_baseline.text = Localization.getString( Localization.TXT_BASELINE );
 

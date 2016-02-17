@@ -777,6 +777,11 @@ public class Localization : object
 	//Kevin: New parent dashboard title
 	public const string TXT_REPORT_TIME_SPEND_TITLE             = "TXT_REPORT_TIME_SPEND_TITLE";
 	public const string TXT_REPORT_TIME_SPEND_PROMOTE_BUTTON             = "TXT_REPORT_TIME_SPEND_PROMOTE_BUTTON";
+
+	//Kevin: New parent dashboard control subjects control
+	public const string TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT             = "TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT";
+	public const string TXT_CONTENT_SUBJECT_GO_PREMIUM             = "TXT_CONTENT_SUBJECT_GO_PREMIUM";
+	public const string TXT_CONTENT_SUBJECT_SAVE             = "TXT_CONTENT_SUBJECT_SAVE";
 	/**************************************************************************************/
 
 	private string m_currLanguage   = "EN";

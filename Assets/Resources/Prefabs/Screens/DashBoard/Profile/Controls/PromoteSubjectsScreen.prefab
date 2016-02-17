@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11443108}
   - 114: {fileID: 11443106}
+  - 114: {fileID: 11454370}
   m_Layer: 0
   m_Name: PromoteSubjectsScreen
   m_TagString: Untagged
@@ -319,7 +320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &114378
 GameObject:
   m_ObjectHideFlags: 1
@@ -1016,7 +1017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &138276
 GameObject:
   m_ObjectHideFlags: 1
@@ -3091,6 +3092,42 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11454370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b0adcbaec0e4e268c5359fee053f2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizeProcesses:
+  - uText: {fileID: 11400082}
+    localizeTag: TXT_61_LABEL_TITLE
+  - uText: {fileID: 11438264}
+    localizeTag: TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT
+  - uText: {fileID: 11443112}
+    localizeTag: TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT
+  - uText: {fileID: 11438284}
+    localizeTag: TXT_CONTENT_SUBJECT_GO_PREMIUM
+  - uText: {fileID: 11438270}
+    localizeTag: TXT_CONTENT_SUBJECT_SAVE
+  - uText: {fileID: 11400004}
+    localizeTag: TXT_COURSE_MATH
+  - uText: {fileID: 11400006}
+    localizeTag: TXT_COURSE_READING
+  - uText: {fileID: 11400008}
+    localizeTag: TXT_COURSE_SCIENCE
+  - uText: {fileID: 11400010}
+    localizeTag: TXT_COURSE_SOCIAL
+  - uText: {fileID: 11400012}
+    localizeTag: TXT_COURSE_COGNITIVE
+  - uText: {fileID: 11400014}
+    localizeTag: TXT_COURSE_CREATIVE
+  - uText: {fileID: 11400016}
+    localizeTag: TXT_COURSE_LIFE
 --- !u!114 &11455218
 MonoBehaviour:
   m_ObjectHideFlags: 1
