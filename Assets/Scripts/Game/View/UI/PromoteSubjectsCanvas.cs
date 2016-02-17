@@ -94,7 +94,7 @@ public class PromoteSubjectsCanvas : UICanvas
 		l_creative.text = Localization.getString( Localization.TXT_COURSE_CREATIVE );
 		l_life.text = Localization.getString( Localization.TXT_COURSE_LIFE );
 
-		l_baseline.text = Localization.getString( Localization.TXT_BASELINE );
+//		l_baseline.text = Localization.getString( Localization.TXT_BASELINE );
 
 	}
 
