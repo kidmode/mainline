@@ -24,79 +24,77 @@ public class OverviewArtState : GameState {
 
 		SessionHandler.getInstance().onUpdateDrawingList += onSessionDrawingListUpdated;
 
-
-
 	}
 
 
 
 	public void onSessionDrawingListUpdated(){
 
-		Debug.LogWarning("    onSessionDrawingListUpdated   " );
-
-		for(int l_i = 0; l_i < l_canvasList.Count; l_i++)
-		{
-
-			UIButton l_element = l_canvasList[l_i] as UIButton;
-			//			Drawing l_drawing = l_list[l_i];
-			
-			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
-			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
-			
-			info.forceRequestIcon();
-			
-		}
+//		Debug.LogWarning("    onSessionDrawingListUpdated   " );
+//
+//		for(int l_i = 0; l_i < l_canvasList.Count; l_i++)
+//		{
+//
+//			UIButton l_element = l_canvasList[l_i] as UIButton;
+//			//			Drawing l_drawing = l_list[l_i];
+//			
+//			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+//			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+//			
+//			info.forceRequestIcon();
+//			
+//		}
 
 	}
 
 	public override void update (GameController p_gameController, int p_time)
 	{
 
-		base.update (p_gameController, p_time);
-
-		if(isLoadDrawing)
-		{
-			if(null != SessionHandler.getInstance().drawingList)
-			{
-				isLoadDrawing = false;
-
-				if( SessionHandler.getInstance().drawingList.Count > 0 )
-				{					
-					_setupArtGalleryCanvas();
-				}
-				else
-				{
-					UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
-					l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
-				}
-			}
-		}
-
-
+//		base.update (p_gameController, p_time);
+//
+//		if(isLoadDrawing)
+//		{
+//			if(null != SessionHandler.getInstance().drawingList)
+//			{
+//				isLoadDrawing = false;
+//
+//				if( SessionHandler.getInstance().drawingList.Count > 0 )
+//				{					
+////					_setupArtGalleryCanvas();
+//				}
+//				else
+//				{
+////					UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+////					l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
+//				}
+//			}
+//		}
 
 
-		for(int l_i = 0; l_i < funActivityList.Count; l_i++)
-		{
 
-			if(l_i < l_canvasList.Count){
-
-				UIButton l_element = l_canvasList[l_i] as UIButton;
-	//			Drawing l_drawing = l_list[l_i];
-				
-				//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
-				ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
-				
-	//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
-				
-				if( null != info.icon )
-				{
-					UIImage l_image = l_element.getView("artImage") as UIImage;
-					l_image.setTexture(info.icon);
-
-				}
-			}
-
-		}
+//
+//		for(int l_i = 0; l_i < funActivityList.Count; l_i++)
+//		{
+//
+//			if(l_i < l_canvasList.Count){
+//
+//				UIButton l_element = l_canvasList[l_i] as UIButton;
+//	//			Drawing l_drawing = l_list[l_i];
+//				
+//				//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+//				ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+//				
+//	//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+//				
+//				if( null != info.icon )
+//				{
+//					UIImage l_image = l_element.getView("artImage") as UIImage;
+//					l_image.setTexture(info.icon);
+//
+//				}
+//			}
+//
+//		}
 
 
 	}
@@ -105,7 +103,7 @@ public class OverviewArtState : GameState {
 	{
 		base.exit (p_gameController);
 		
-		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
+//		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
 		m_uiManager.removeScreen( UIScreen.ART_LIST );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
@@ -147,29 +145,31 @@ public class OverviewArtState : GameState {
 
 		m_artListCanvas 	= m_uiManager.createScreen( UIScreen.ART_LIST, false, 4 );
 
-		m_artGalleryCanvas 	= m_uiManager.createScreen( UIScreen.ART_GALLERY, true, 1 );
+//		m_artGalleryCanvas 	= m_uiManager.createScreen( UIScreen.ART_GALLERY, true, 1 );
 
 	}
 	
 	private void _setupElment()
 	{
 
-		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
+//		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
+
+		m_helpButton = m_artListCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 		//m_artGalleryCanvas
 		
-		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 491, 0 ));
-//		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
-		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
+//		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
+//		List<Vector3> l_pointListIn = new List<Vector3>();
+//		l_pointListIn.Add( l_newPanel.transform.localPosition );
+//		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 491, 0 ));
+////		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+//		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 
 
 
-		m_moreArtButton = m_artGalleryCanvas.getView( "artListButton" ) as UIButton;
-		m_moreArtButton.addClickCallback( onMoreArtButtonClick );
-		m_moreArtButton.active = false;
+//		m_moreArtButton = m_artGalleryCanvas.getView( "artListButton" ) as UIButton;
+//		m_moreArtButton.addClickCallback( onMoreArtButtonClick );
+//		m_moreArtButton.active = false;
 
 //		m_exitArtListButton = m_artListCanvas.getView( "exitButton" ) as UIButton;
 //		m_exitArtListButton.addClickCallback( onExitArtListButtonClick );
@@ -255,7 +255,7 @@ public class OverviewArtState : GameState {
 
 	private void showArtList(){
 
-		m_uiManager.changeScreen ( m_artListCanvas, true );
+//		m_uiManager.changeScreen ( m_artListCanvas, true );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_artListCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
@@ -314,35 +314,37 @@ public class OverviewArtState : GameState {
 		}
 	}
 
-	private void onArtButtonClick( UIButton p_button )
-	{
-		switch( p_button.name )
-		{
-		case "artOne" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[0];
-			break;
-		case "artTwo" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[1];
-			break;
-		case "artThree" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[2];
-			break;
-		case "artFour" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[3];
-			break;
-		case "artFive" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[4];
-			break;
-		case "artSix" :
-			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[5];
-			break;
-		}
-		
-		SessionHandler.getInstance ().IsParent = true;
-
-		m_gameController.connectState ( ZoodleState.PAINT_VIEW, ZoodleState.OVERVIEW_ART );
-		m_gameController.changeState (ZoodleState.PAINT_VIEW);
-	}
+	//This is old ones . . . . the six original thumbnails
+	//so remove them since no use for now
+//	private void onArtButtonClick( UIButton p_button )
+//	{
+//		switch( p_button.name )
+//		{
+//		case "artOne" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[0];
+//			break;
+//		case "artTwo" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[1];
+//			break;
+//		case "artThree" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[2];
+//			break;
+//		case "artFour" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[3];
+//			break;
+//		case "artFive" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[4];
+//			break;
+//		case "artSix" :
+//			SessionHandler.getInstance().currentDrawing = SessionHandler.getInstance().drawingList[5];
+//			break;
+//		}
+//		
+//		SessionHandler.getInstance ().IsParent = true;
+//
+//		m_gameController.connectState ( ZoodleState.PAINT_VIEW, ZoodleState.OVERVIEW_ART );
+//		m_gameController.changeState (ZoodleState.PAINT_VIEW);
+//	}
 
 	private void onArtClick( UISwipeList p_list, UIElement p_element, object p_data, int p_index )
 	{
@@ -411,93 +413,93 @@ public class OverviewArtState : GameState {
 //
 //	}
 
-	private void _setupArtGalleryCanvas()
-	{
-		UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
-		l_loading.active = false;
-
-		m_requestQueue.reset ();
-		
-
-		l_canvasList = new List<UIElement> ();
-		UIElement l_art1 = m_artGalleryCanvas.getView( "artOne" );
-		UIElement l_art2 = m_artGalleryCanvas.getView( "artTwo" );
-		UIElement l_art3 = m_artGalleryCanvas.getView( "artThree" );
-		UIElement l_art4 = m_artGalleryCanvas.getView( "artFour" );
-		UIElement l_art5 = m_artGalleryCanvas.getView( "artFive" );
-		UIElement l_art6 = m_artGalleryCanvas.getView( "artSix" );
-		
-		l_canvasList.Add (l_art1);
-		l_canvasList.Add (l_art2);
-		l_canvasList.Add (l_art3);
-		l_canvasList.Add (l_art4);
-		l_canvasList.Add (l_art5);
-		l_canvasList.Add (l_art6);
-		
-		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;
-
-
-		int l_count = l_list.Count >= 6 ? 6 : l_list.Count;
-
-		if( 0 == l_count )
-		{
-			return;
-		}
-
-		m_moreArtButton.active = true;
-
-
-		
-		for(int l_i = 0; l_i < l_count; l_i++)
-		{
-			UIButton l_element = l_canvasList[l_i] as UIButton;
-			Drawing l_drawing = l_list[l_i];
-
-//			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
-//			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+//	private void _setupArtGalleryCanvas()
+//	{
+//		UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+//		l_loading.active = false;
 //
-//			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+//		m_requestQueue.reset ();
+//		
 //
-//			if( null != info.icon )
-//			{
-//				UIImage l_image = l_element.getView("artImage") as UIImage;
-//				l_image.setTexture(info.icon);
+//		l_canvasList = new List<UIElement> ();
+//		UIElement l_art1 = m_artGalleryCanvas.getView( "artOne" );
+//		UIElement l_art2 = m_artGalleryCanvas.getView( "artTwo" );
+//		UIElement l_art3 = m_artGalleryCanvas.getView( "artThree" );
+//		UIElement l_art4 = m_artGalleryCanvas.getView( "artFour" );
+//		UIElement l_art5 = m_artGalleryCanvas.getView( "artFive" );
+//		UIElement l_art6 = m_artGalleryCanvas.getView( "artSix" );
+//		
+//		l_canvasList.Add (l_art1);
+//		l_canvasList.Add (l_art2);
+//		l_canvasList.Add (l_art3);
+//		l_canvasList.Add (l_art4);
+//		l_canvasList.Add (l_art5);
+//		l_canvasList.Add (l_art6);
+		
+//		List<Drawing> l_list = SessionHandler.getInstance ().drawingList;
 //
-//				Debug.LogWarning( "  ****** texture okay ");
-//			}
+//
+//		int l_count = l_list.Count >= 6 ? 6 : l_list.Count;
+//
+//		if( 0 == l_count )
+//		{
+//			return;
+//		}
+//
+//		m_moreArtButton.active = true;
+//
+//
+//		
+//		for(int l_i = 0; l_i < l_count; l_i++)
+//		{
+//			UIButton l_element = l_canvasList[l_i] as UIButton;
+//			Drawing l_drawing = l_list[l_i];
+//
+////			//get activity info again so I could request Image only; thats the only it will work so . .. . . .. .
+////			ActivityInfo info  = funActivityList[l_i] as ActivityInfo;
+////
+////			Debug.LogWarning(" l i " + l_i + "    info  " + info.icon); 
+////
+////			if( null != info.icon )
+////			{
+////				UIImage l_image = l_element.getView("artImage") as UIImage;
+////				l_image.setTexture(info.icon);
+////
+////				Debug.LogWarning( "  ****** texture okay ");
+////			}
+////			else
+////			{
+////				info.requestIcon();
+////
+////				Debug.LogWarning( "  ****** texture request ");
+////			}
+//
+//
+//			if(null == l_drawing.largeIcon)
+//				downLoadDrawing(l_element,l_drawing);
 //			else
 //			{
-//				info.requestIcon();
-//
-//				Debug.LogWarning( "  ****** texture request ");
+//				UIImage l_image = l_element.getView("artImage") as UIImage;
+//				l_image.setTexture(l_drawing.largeIcon);
+////
+////				ActivityInfo info = funActivityList[l_i] as ActivityInfo;
+////				info.requestIcon();
+//				//l_drawing.m
+////				delayedDownload(l_element,l_drawing);
 //			}
+//			l_element.active = true;
+//			l_element.addClickCallback( onArtButtonClick );
+//		}
+//		
+//		m_requestQueue.request ();
+//	}
 
 
-			if(null == l_drawing.largeIcon)
-				downLoadDrawing(l_element,l_drawing);
-			else
-			{
-				UIImage l_image = l_element.getView("artImage") as UIImage;
-				l_image.setTexture(l_drawing.largeIcon);
 //
-//				ActivityInfo info = funActivityList[l_i] as ActivityInfo;
-//				info.requestIcon();
-				//l_drawing.m
-//				delayedDownload(l_element,l_drawing);
-			}
-			l_element.active = true;
-			l_element.addClickCallback( onArtButtonClick );
-		}
-		
-		m_requestQueue.request ();
-	}
-
-
-
-	private IEnumerator delayedDownload(UIButton l_element, Drawing l_drawing) {
-		yield return new WaitForSeconds(2f);
-		downLoadDrawing(l_element,l_drawing);
-	}
+//	private IEnumerator delayedDownload(UIButton l_element, Drawing l_drawing) {
+//		yield return new WaitForSeconds(2f);
+//		downLoadDrawing(l_element,l_drawing);
+//	}
 
 
 
@@ -539,7 +541,7 @@ public class OverviewArtState : GameState {
 
 	private UIManager m_uiManager;
 //	private DashBoardControllerCanvas m_dashboardControllerCanvas;
-	private UICanvas m_artGalleryCanvas;
+//	private UICanvas m_artGalleryCanvas;
 	private UICanvas m_artListCanvas;
 //	private UICanvas m_dashboardCommonCanvas;
 //	private LeftMenuCanvas m_leftMenuCanvas;
