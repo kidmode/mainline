@@ -25,7 +25,7 @@ public class ControlSubjectState : GameState
 
 	public override void exit (GameController p_gameController)
 	{
-		checkRequest ();
+//		checkRequest ();
 
 		base.exit (p_gameController);
 
@@ -59,6 +59,9 @@ public class ControlSubjectState : GameState
 	{
 		m_helpButton = m_promoteSubjectsCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
+
+		saveButton = m_promoteSubjectsCanvas.getView ("saveButton") as UIButton; 
+		saveButton.addClickCallback (onSaveButtonClick);
 
 		int l_listCount = 4;
 
@@ -98,6 +101,14 @@ public class ControlSubjectState : GameState
 			m_isValueChanged = false;
 			updateSubjects();
 		}
+	}
+
+	private void onSaveButtonClick(UIButton p_button){
+
+		Debug.Log("  onSaveButtonClick ");
+
+		checkRequest();
+
 	}
 
 	private void onHelpButtonClick(UIButton p_button)
@@ -218,6 +229,7 @@ public class ControlSubjectState : GameState
 	private bool 			m_isValueChanged = false;
 
 	private UIButton 		m_helpButton;
+	private UIButton		saveButton;
 	private CommonDialogCanvas m_commonDialog;
 	
 	private UICanvas 		m_paywallCanvas;
