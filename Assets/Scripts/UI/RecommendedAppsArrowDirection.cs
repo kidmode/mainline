@@ -29,7 +29,7 @@ public class RecommendedAppsArrowDirection : MonoBehaviour {
 			return;
 		}
 
-		if (scrollRectPos.y > 0)
+		if (scrollRectPos.y > 0.01)
 		{
 			this.gameObject.SetActive(true);
 		}

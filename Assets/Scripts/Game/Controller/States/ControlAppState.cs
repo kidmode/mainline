@@ -14,7 +14,6 @@ public class ControlAppState : GameState
 
 		m_currentRecommendedAppPage = 1;
 		m_getRecommendedAppRequestQueue = new RequestQueue();
-//		m_getRecommendedAppIconRequestQueue = new RequestQueue();
 		m_recommendedAppIconRequests = new List<RequestQueue>();
 		m_currentRecommendedAppList = SessionHandler.getInstance().currentKid.appList == null? new List<object>():SessionHandler.getInstance().currentKid.appList;
 
@@ -40,10 +39,10 @@ public class ControlAppState : GameState
 		
 		base.exit(p_gameController);
 		disposeIconRequests();
-//		m_getRecommendedAppIconRequestQueue.dispose();
 
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
+		m_uiManager.removeScreenImmediately( UIScreen.CONFIRM_DIALOG );
 //		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
 
 		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
@@ -60,6 +59,7 @@ public class ControlAppState : GameState
 
 		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
 		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
+		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
 
 //		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 //		{
@@ -90,6 +90,7 @@ public class ControlAppState : GameState
 		m_recommendedAppSwipeList = m_addAppCanvas.getView ( "RecommendedAppSwipeList" ) as UISwipeList;
 		m_recommendedAppPrototype = m_recommendedAppSwipeList.getView ("Prototype");
 		m_recommendedAppPrototype.active = false;
+		m_recommendedAppTitle = m_addAppCanvas.getView("RecommandedAppPanel").getView("Title") as UILabel;
 
 		List<System.Object> l_list = new List<System.Object>();
 		m_recommendedAppSwipeList.setData (l_list);
@@ -97,6 +98,20 @@ public class ControlAppState : GameState
 			loadAppList ();
 		else
 			loadAppListImmediate();
+
+		//recommended app detail part
+		m_exitAppDetailsButton = m_recommendedAppDetailsCanvas.getView( "exitButton" ) as UIButton;
+		m_exitAppDetailsButton.addClickCallback( onExitAppDetailsButtonClick );
+
+		//cofirm dialog to buy or install a recommended app
+		m_costArea = m_confirmDialogCanvas.getView("costArea");
+		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
+		m_exitConfirmDialogButton = m_confirmDialogCanvas.getView ("exitButton") as UIButton;
+		m_exitConfirmDialogButton.addClickCallback (onExitConfiemDialogButtonClick);
+		m_cancelBuyButton = m_confirmDialogCanvas.getView ("cancelButton") as UIButton;
+		m_cancelBuyButton.addClickCallback (onExitConfiemDialogButtonClick);
+		m_confirmBuyButton = m_confirmDialogCanvas.getView ("confirmButton") as UIButton;
+		m_confirmBuyButton.addClickCallback (onConfiemButtonClick);
 	}
 
 	private void checkRequest()
@@ -206,7 +221,6 @@ public class ControlAppState : GameState
 			List<object> lastLocalAppsList = KidMode.getLastLocalApps();
 			Debug.LogWarning("      ****************************   lastLocalAppsList " + lastLocalAppsList.Count);
 			m_addAppCanvas.firstLoadApp();
-
 		}
 		catch (System.Exception e)
 		{
@@ -301,7 +315,8 @@ public class ControlAppState : GameState
 	private void loadAppListImmediate()
 	{
 //		isLoadApp = true;
-		firstLoadMoreAppList ();
+		setRecommendedAppsTitle();
+		firstLoadMoreAppList();
 	}
 	
 	private void firstGetAppListComplete(HttpsWWW p_response)
@@ -337,6 +352,7 @@ public class ControlAppState : GameState
 							}
 							m_currentRecommendedAppList.Add(l_app);
 						}
+						setRecommendedAppsTitle();
 						firstLoadMoreAppList();
 					}
 				}
@@ -354,18 +370,16 @@ public class ControlAppState : GameState
 			m_recommendedAppSwipeList.setData( m_currentRecommendedAppList );
 			m_recommendedAppSwipeList.setDrawFunction( onListDraw );
 			m_recommendedAppSwipeList.redraw();
-			//if(m_getIconRequestQueue.isCompleted())
-//			m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
 			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
 		}
-//		m_recommendedAppSwipeList.addClickListener("Prototype", onAppClick);
+		m_recommendedAppSwipeList.addClickListener("Prototype", onAppClick);
 		
 //		m_isLoaded = true;
 	}
 
 	private void onListToEnd(Vector2 p_value)
 	{
-		if( p_value.y <= 0 )
+		if( p_value.y <= 0.03 )
 		{
 			m_recommendedAppSwipeList.removeValueChangeListener(onListToEnd);
 			
@@ -407,9 +421,8 @@ public class ControlAppState : GameState
 				}
 				m_currentRecommendedAppList.Add(l_app);
 			}
+			setRecommendedAppsTitle();
 			m_recommendedAppSwipeList.redraw();
-//			if(m_getRecommendedAppIconRequestQueue.isCompleted())
-//				m_getRecommendedAppIconRequestQueue.request(RequestType.SEQUENCE);
 		}
 		if(l_dataCount >= 10)
 			m_recommendedAppSwipeList.addValueChangeListener(onListToEnd);
@@ -534,38 +547,13 @@ public class ControlAppState : GameState
 			l_lifeSkillsColor.active = false;
 	}
 
-	private void onAppButtonClick( UIButton p_button )
-	{
-//		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
-		
-//		m_buyedAppElement = (UIElement)p_button;
-//		UILabel l_appNameLable = p_button.getView ("appNameText") as UILabel;
-//		string l_name = l_appNameLable.text;
-//		App l_app = null;
-//		List<System.Object> l_list = m_currentRecommendedAppList;
-//		int l_count = l_list.Count;
-//		for(int l_i = 0; l_i < l_count; l_i ++)
-//		{
-//			App l_currentApp = l_list[l_i] as App;
-//			if(l_currentApp.name.Equals(l_name))
-//			{
-//				l_app = l_currentApp;
-//				break;
-//			}
-//		}
-//		
-//		if(null != l_app)
-//			showAppDetails (l_app);
-	}
-
 	private void downloadAppIcon(UIElement p_element, App p_app)
 	{
 		RequestQueue l_queue = new RequestQueue();
 		l_queue.add(new IconRequest(p_app,p_element));
 		l_queue.request(RequestType.SEQUENCE);
 		m_recommendedAppIconRequests.Add(l_queue);
-		
-		//m_getIconRequestQueue.add (new IconRequest(p_app,p_element));
+
 		p_app.iconDownload = true;
 	}
 
@@ -583,30 +571,15 @@ public class ControlAppState : GameState
 
 	private void onAppClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-//		m_buyedAppElement = p_listElement;
+		m_buyedRecommendedApp = p_listElement;
 		App l_app = (App)p_data;
-//		switch(p_index)
-//		{
-//		case 0:
-//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appOne") as UIElement;
-//			break;
-//		case 1:
-//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appTwo") as UIElement;
-//			break;
-//		case 2:
-//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appThree") as UIElement;
-//			break;
-//		case 3:
-//			m_buyedAppElementInRecommendPage = m_recommendedAppCanvas.getView("appFour") as UIElement;
-//			break;
-//		}
 		
 		showAppDetails (l_app);
 	}
 
 	private void showAppDetails(App p_app)
 	{
-		m_detailsRecommendedApp = p_app;
+		m_clickedRecommendedAppDetails = p_app;
 		UILabel l_appCostText = m_recommendedAppDetailsCanvas.getView("appCostText") as UILabel;
 		UIButton l_buyAppButton = m_recommendedAppDetailsCanvas.getView("buyAppButton") as UIButton;
 		UILabel l_appFreeText = m_recommendedAppDetailsCanvas.getView("appFreeText") as UILabel;
@@ -710,15 +683,15 @@ public class ControlAppState : GameState
 		Token l_token = SessionHandler.getInstance ().token;
 		if( l_token.isPremium() || l_token.isCurrent() )
 		{
-			installApp(m_detailsRecommendedApp.packageName);
+			installApp(m_clickedRecommendedAppDetails.packageName);
 		}
-//		else
-//		{
-//			m_uiManager.changeScreen (UIScreen.APP_DETAILS,false);
-//			m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
-//			m_buyAppButton = p_button;
-//			confirmBuyApp (m_detailsRecommendedApp);
-//		}
+		else
+		{
+			m_uiManager.changeScreen (UIScreen.APP_DETAILS, false);
+			m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, true);
+			m_buyAppButton = p_button;
+			confirmBuyApp (m_clickedRecommendedAppDetails);
+		}
 	}
 
 	private void installApp( string p_packageName )
@@ -745,6 +718,143 @@ public class ControlAppState : GameState
 		#endif
 	}
 
+	private void onExitAppDetailsButtonClick( UIButton p_button )
+	{
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		UIElement l_currentPanel = m_recommendedAppDetailsCanvas.getView ("mainPanel");
+		l_pointListOut.Add( l_currentPanel.transform.localPosition );
+		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+
+	public void confirmBuyApp(App p_app)
+	{
+		m_costArea.active = true;
+		m_needMoreArea.active = false;
+		
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
+		l_pointListIn.Add( l_newPanel.transform.localPosition );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
+		
+		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
+		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
+		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
+		l_notice1label2.text = p_app.name;
+		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
+		l_priceLabel.text = p_app.gems.ToString ();
+	}
+
+	private void onExitConfiemDialogButtonClick( UIButton p_button )
+	{
+		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, false);
+		m_uiManager.changeScreen (UIScreen.APP_DETAILS, true);
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
+		l_pointListOut.Add( l_currentPanel.transform.localPosition );
+		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+
+	private void onConfiemButtonClick( UIButton p_button )
+	{
+		if(null != m_clickedRecommendedAppDetails)
+		{
+			if(SessionHandler.getInstance().currentKid.gems >= m_clickedRecommendedAppDetails.gems)
+				sendBuyAppRequest ();
+			else
+			{
+				UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
+				UILabel l_needGems = m_confirmDialogCanvas.getView("needPriceText") as UILabel;
+				l_costGems.text = m_clickedRecommendedAppDetails.gems.ToString ();
+				l_needGems.text = (m_clickedRecommendedAppDetails.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
+				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
+				l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
+				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
+				l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
+				m_costArea.active = false;
+				m_needMoreArea.active = true;
+			}
+		}
+	}
+
+	private void sendBuyAppRequest()
+	{
+		m_requestQueue.reset();
+		m_requestQueue.add(new BuyAppRequest(m_clickedRecommendedAppDetails.id, _buyAppComplete));
+		m_requestQueue.request();
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
+	}
+
+	private void _buyAppComplete(HttpsWWW p_response)
+	{
+		if (null == p_response.error)
+		{
+			m_clickedRecommendedAppDetails.own = true;
+			UILabel l_appCostText = m_buyAppButton.parent.getView("appCostText") as UILabel;
+			UIButton l_buyAppButton = m_buyAppButton.parent.getView("buyAppButton") as UIButton;
+			l_appCostText.active = false;
+			l_buyAppButton.active = false;
+			
+			_updateAppState(m_buyedRecommendedApp);
+			
+			if (null != m_confirmDialogCanvas)
+			{
+				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+				m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
+				List<Vector3> l_pointListOut = new List<Vector3>();
+				UIElement l_currentPanel = m_confirmDialogCanvas.getView("mainPanel");
+				l_pointListOut.Add(l_currentPanel.transform.localPosition);
+				l_pointListOut.Add(l_currentPanel.transform.localPosition - new Vector3(0, 800, 0));
+				l_currentPanel.tweener.addPositionTrack(l_pointListOut, 0f);
+			}
+			
+			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+			Hashtable l_appDate = null;
+			App l_app = null;
+			if(l_data.ContainsKey("jsonResponse"))
+			{
+				Hashtable l_response = l_data["jsonResponse"] as Hashtable;
+				if(l_response.ContainsKey("response"))
+					l_appDate = l_response["response"] as Hashtable;
+			}
+			if(null != l_appDate)
+			{
+				l_app = new App(l_appDate);
+			}
+			else
+			{
+				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_50_FAIL),Localization.getString(Localization.TXT_STATE_50_CONTACT));
+			}
+			
+			installApp( l_app.packageName );
+		}
+	}
+
+	private void _updateAppState(UIElement p_element)
+	{
+		if (p_element == null)
+			return;
+		
+		UILabel l_costLabel = p_element.getView("appCostText") as UILabel;
+		UILabel l_freeLabel = p_element.getView("appFreeText") as UILabel;
+		UILabel l_sponsoredLabel = p_element.getView("sponsoredText") as UILabel;
+		
+		if (null != l_costLabel)
+			l_costLabel.active = false;
+		
+		l_freeLabel.active = false;
+		l_sponsoredLabel.active = false;
+	}
+
+	private void setRecommendedAppsTitle()
+	{
+		m_recommendedAppTitle.text = m_currentRecommendedAppList.Count.ToString() + " Recommended Apps";
+	}
+	
 	//End of Recommended Apps-----------------------------------------------------------------------------//
 	
 	private UIManager 		m_uiManager;
@@ -765,16 +875,32 @@ public class ControlAppState : GameState
 
 	//recommended app part
 	private UISwipeList     	m_recommendedAppSwipeList;
-	private UICanvas	    	m_recommendedAppDetailsCanvas;
 	private List<object>    	m_currentRecommendedAppList;
 	private int 				m_currentRecommendedAppPage;
 
 	private RequestQueue 		m_getRecommendedAppRequestQueue;
-	private RequestQueue 		m_getRecommendedAppIconRequestQueue;
 	private List<RequestQueue> 	m_recommendedAppIconRequests;
 	private UIElement		 	m_recommendedAppPrototype;
-	private App 				m_detailsRecommendedApp;
+	private App 				m_clickedRecommendedAppDetails;
+
+	private UIElement			m_buyedRecommendedApp;
+	private UILabel				m_recommendedAppTitle;
 	//end of recommended app part
+
+	//recommended app detail part
+	private UICanvas	    	m_recommendedAppDetailsCanvas;
+	private UIButton 			m_exitAppDetailsButton;
+	private UIButton			m_buyAppButton;
+	//end of recommended app detail part
+
+	//confirm dialog to buy or install a recommended app
+	private UICanvas	    	m_confirmDialogCanvas;
+	private UIElement  			m_costArea;
+	private UIElement 			m_needMoreArea;
+	private UIButton 			m_exitConfirmDialogButton;
+	private UIButton 			m_cancelBuyButton;
+	private UIButton 			m_confirmBuyButton;
+	//end of confirm dialog to buy or install a recommended app
 }
 
 public class AppInfoData
