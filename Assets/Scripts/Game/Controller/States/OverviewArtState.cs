@@ -161,8 +161,8 @@ public class OverviewArtState : GameState {
 		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 491, 0 ));
+//		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 
 
@@ -182,15 +182,21 @@ public class OverviewArtState : GameState {
 
 		if( null != SessionHandler.getInstance().drawingList)
 		{
-			if( SessionHandler.getInstance().drawingList.Count > 0 )
-			{					
-				_setupArtGalleryCanvas();
-			}
-			else
-			{
-				UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
-				l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
-			}
+
+
+
+//			if( SessionHandler.getInstance().drawingList.Count > 0 )
+//			{					
+//				_setupArtGalleryCanvas();
+//			}
+//			else
+//			{
+//				UILabel l_loading = m_artGalleryCanvas.getView ("loadingText") as UILabel;
+//				l_loading.text = Localization.getString(Localization.TXT_STATE_48_EMPTY);
+//			}
+
+			showArtList();
+
 		}
 		else
 		{
@@ -247,20 +253,25 @@ public class OverviewArtState : GameState {
 	
 
 
-
-
-
-	private void onMoreArtButtonClick( UIButton p_button )
-	{
-
-		game.setPDMenuBarVisible(false, false);
+	private void showArtList(){
 
 		m_uiManager.changeScreen ( m_artListCanvas, true );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_artListCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+//		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f,onArtPositionTrackFinish );
+
+	}
+
+
+	private void onMoreArtButtonClick( UIButton p_button )
+	{
+
+//		game.setPDMenuBarVisible(false, false);
+
+		showArtList();
+
 	}
 
 	private void onArtPositionTrackFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
@@ -519,6 +530,8 @@ public class OverviewArtState : GameState {
 		SessionHandler.getInstance ().drawingList = l_list;
 
 		_setupDrawingData();
+
+		showArtList();
 
 	}
 
