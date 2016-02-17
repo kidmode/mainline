@@ -774,6 +774,9 @@ public class Localization : object
 
 	public const string TXT_BASELINE = "Baseline";
 
+	//Kevin: New parent dashboard title
+	public const string TXT_REPORT_TIME_SPEND_TITLE             = "TXT_REPORT_TIME_SPEND_TITLE";
+	public const string TXT_REPORT_TIME_SPEND_PROMOTE_BUTTON             = "TXT_REPORT_TIME_SPEND_PROMOTE_BUTTON";
 	/**************************************************************************************/
 
 	private string m_currLanguage   = "EN";
