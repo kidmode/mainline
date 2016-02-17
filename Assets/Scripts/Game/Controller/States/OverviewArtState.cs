@@ -12,6 +12,7 @@ public class OverviewArtState : GameState {
 
 		base.enter (p_gameController);
 
+		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
 
 		_setupDrawingData();
 
@@ -251,6 +252,9 @@ public class OverviewArtState : GameState {
 
 	private void onMoreArtButtonClick( UIButton p_button )
 	{
+
+		game.setPDMenuBarVisible(false, false);
+
 		m_uiManager.changeScreen ( m_artListCanvas, true );
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_artListCanvas.getView ("mainPanel");
@@ -376,18 +380,24 @@ public class OverviewArtState : GameState {
 			l_image.setTexture(l_drawing.largeIcon);
 		}else{
 
+			List<Drawing> l_drawingList = SessionHandler.getInstance ().drawingList;
+
 
 		}
 	}
 
 	private void onExitArtListButtonClick( UIButton p_button )
 	{
+
+		game.setPDMenuBarVisible(true, false);
+
 		m_uiManager.changeScreen ( m_artListCanvas, false );
 		List<Vector3> l_pointListOut = new List<Vector3>();
 		UIElement l_currentPanel = m_artListCanvas.getView ("mainPanel");
 		l_pointListOut.Add( l_currentPanel.transform.localPosition );
 		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
 		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+
 	}
 
 	private void _setupArtGalleryCanvas()
@@ -485,9 +495,31 @@ public class OverviewArtState : GameState {
 	private void loadDrawingList()
 	{
 		m_requestQueue.reset ();
-		m_requestQueue.add(new GetDrawingRequest());
+		m_requestQueue.add(new GetDrawingRequest(loadDrawingListComplete));
 		m_requestQueue.request();
 		isLoadDrawing = true;
+	}
+
+	private void loadDrawingListComplete(HttpsWWW p_response)
+	{
+
+
+
+		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (p_response.text) as ArrayList;
+		int l_dataCount = l_data.Count;
+		List<Drawing> l_list = new List<Drawing> ();
+
+		for(int l_i = 0; l_i < l_dataCount; l_i++)
+		{
+			Hashtable l_table = l_data[l_i] as Hashtable;
+			Drawing l_drawing = new Drawing(l_table);
+			l_list.Add(l_drawing);
+		}
+
+		SessionHandler.getInstance ().drawingList = l_list;
+
+		_setupDrawingData();
+
 	}
 
 
@@ -520,5 +552,7 @@ public class OverviewArtState : GameState {
 
 	private ArrayList funActivityList;
 	private List<UIElement> l_canvasList;
+
+	private Game game;
 
 }

@@ -992,6 +992,8 @@ public class DrawingRequest : RequestQueue.Request
 	
 	private void _requestComplete(HttpsWWW p_response)
 	{
+
+//		return;
 		if(null != p_response.error)
 		{
 			_Debug.log(p_response);
@@ -1001,14 +1003,14 @@ public class DrawingRequest : RequestQueue.Request
 			m_drawing.largeIcon = p_response.texture;
 			if(null != m_element)
 			{
-				UIImage l_image = m_element.getView("artImage") as UIImage;
-
-				if( null == l_image )
-				{
-					return;
-				}
-
-				l_image.setTexture(p_response.texture);
+//				UIImage l_image = m_element.getView("artImage") as UIImage;
+//
+//				if( null == l_image )
+//				{
+//					return;
+//				}
+//
+//				l_image.setTexture(p_response.texture);
 			}
 		}
 	}
