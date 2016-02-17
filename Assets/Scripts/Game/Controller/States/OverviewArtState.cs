@@ -145,6 +145,21 @@ public class OverviewArtState : GameState {
 
 		m_artListCanvas 	= m_uiManager.createScreen( UIScreen.ART_LIST, false, 4 );
 
+		if( null != m_artListCanvas && null != m_artListCanvas.getView("mainPanel") )
+		{
+			
+			if( !m_artListCanvas.getView("mainPanel").active){
+				
+				Tweener tw = m_artListCanvas.getView("mainPanel").tweener;
+				
+				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+			}
+			
+		}
+
+		//FAde in the art list Canvas so there is no jump when it comes in
+		//m_artListCanvas
+
 //		m_artGalleryCanvas 	= m_uiManager.createScreen( UIScreen.ART_GALLERY, true, 1 );
 
 	}
@@ -513,8 +528,6 @@ public class OverviewArtState : GameState {
 
 	private void loadDrawingListComplete(HttpsWWW p_response)
 	{
-
-
 
 		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (p_response.text) as ArrayList;
 		int l_dataCount = l_data.Count;
