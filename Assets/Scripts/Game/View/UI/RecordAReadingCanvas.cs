@@ -11,17 +11,17 @@ public class RecordAReadingCanvas : UICanvas
 	
 	public void setupLocalization()
 	{
-		UILabel l_title = getView ("titleImage").getView ("titleText") as UILabel;
-		l_title.text = Localization.getString (Localization.TXT_98_LABEL_TITLE);
-		UILabel l_yourGems = getView ("gemText") as UILabel;
-		l_yourGems.text = Localization.getString (Localization.TXT_98_BUTTON_YOUR_GEMS);
-		UILabel l_seeMoreBook = getView ("bookListButton").getView ("Text") as UILabel;
-		l_seeMoreBook.text = Localization.getString (Localization.TXT_98_BUTTON_SEE_MORE);
-		UILabel l_memberButton = getView ("memberButton").getView ("Text") as UILabel;
-		l_memberButton.text = Localization.getString (Localization.TXT_98_BUTTON_BECOME_MEMBER);
-
-		UILabel l_loading = getView ("loadingText") as UILabel;
-		l_loading.text = Localization.getString (Localization.TXT_LABEL_LOADING);
+//		UILabel l_title = getView ("titleImage").getView ("titleText") as UILabel;
+//		l_title.text = Localization.getString (Localization.TXT_98_LABEL_TITLE);
+//		UILabel l_yourGems = getView ("gemText") as UILabel;
+//		l_yourGems.text = Localization.getString (Localization.TXT_98_BUTTON_YOUR_GEMS);
+//		UILabel l_seeMoreBook = getView ("bookListButton").getView ("Text") as UILabel;
+//		l_seeMoreBook.text = Localization.getString (Localization.TXT_98_BUTTON_SEE_MORE);
+//		UILabel l_memberButton = getView ("memberButton").getView ("Text") as UILabel;
+//		l_memberButton.text = Localization.getString (Localization.TXT_98_BUTTON_BECOME_MEMBER);
+//
+//		UILabel l_loading = getView ("loadingText") as UILabel;
+//		l_loading.text = Localization.getString (Localization.TXT_LABEL_LOADING);
 	}
 	
 	public override void update ()
