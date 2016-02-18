@@ -188,6 +188,9 @@ public class PDMenuBarScript : MonoBehaviour {
 		case "Notification":
 			type = ZoodleState.NOTIFICATION_STATE;
 			break;
+		case "FAQ":
+			type = ZoodleState.FAQ_STATE;
+			break;
 		default:
 			type = ZoodleState.OVERVIEW_INFO;
 			break;
