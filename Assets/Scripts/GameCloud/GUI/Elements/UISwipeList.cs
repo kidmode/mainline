@@ -346,6 +346,7 @@ public class UISwipeList : UIElement
 
 		//Get prototype.
 		m_prototype = m_scrollPanel.transform.FindChild("Prototype").gameObject;
+		m_duplicatedPrototype = GameObject.Instantiate(m_prototype) as GameObject;
 		DebugUtils.Assert(m_prototype != null);
 		
 		//Get prototype size
@@ -492,7 +493,7 @@ public class UISwipeList : UIElement
 	{		
 		while (m_listElements.Count < m_numVisibleElements)
 		{
-			GameObject l_newElement = GameObject.Instantiate(m_prototype) as GameObject;
+			GameObject l_newElement = GameObject.Instantiate(m_duplicatedPrototype) as GameObject;
 			Transform l_newTransform = l_newElement.transform;
 			Transform l_prototypeTransform = m_prototype.transform;
 
@@ -763,6 +764,8 @@ public class UISwipeList : UIElement
 	
 	//A gameobject representing an individual list item, derived from the lists initial contents
 	private GameObject m_prototype;
+	//this is to initiate new prototype to prevent using first changed prototype 
+	private GameObject m_duplicatedPrototype;
 	
 	//Callback to draw an element
 	private ListDrawFunction m_drawFunction;

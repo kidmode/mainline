@@ -7,7 +7,7 @@ public class Book : System.Object
 {
     public Book()
     {
-
+		isIconSet = false;
     }
 
     public Book( Hashtable p_table )
@@ -118,6 +118,8 @@ public class Book : System.Object
 
     public List< BookPage > pageList = new List< BookPage >();
 	public Hashtable pageTable = new Hashtable();
+
+	public bool		isIconSet	{get; set;}
 
     //-------------------- Private Implementation -------------------
     private void _readPages( ArrayList p_tempPageList )

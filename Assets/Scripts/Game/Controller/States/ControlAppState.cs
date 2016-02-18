@@ -57,6 +57,8 @@ public class ControlAppState : GameState
 //			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
 //		}
 
+		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 16 )  as CommonDialogCanvas;
+		m_commonDialog.setUIManager (p_gameController.getUI());
 		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
 		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
 		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
