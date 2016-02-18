@@ -84,27 +84,27 @@ public class DashBoardProfileInfoCanvas : UICanvas
 
 	private void SetupLocalizition()
 	{
-		UILabel l_title = getView("titleText") as UILabel;
-		UILabel l_edit = getView("editProfileButton").getView("Text") as UILabel;
-		UILabel l_zp = getView("zoodlePointsTitle") as UILabel;
-		UILabel l_gems = getView("gemsTitle") as UILabel;
-		UILabel l_app = getView("appPartTitle") as UILabel;
-		UILabel l_subjects = getView("subjectsText") as UILabel;
-		UILabel l_free = getView("appFreeText") as UILabel;
-		UILabel l_sponsored = getView("sponsoredText") as UILabel;
-
-		UILabel l_years = getView("ageContent").getView("Text") as UILabel;
-		
-		l_title.text = Localization.getString( Localization.TXT_56_LABEL_TITLE );
-		l_edit.text = Localization.getString( Localization.TXT_56_LABEL_EDIT );
-		l_zp.text = Localization.getString( Localization.TXT_56_LABEL_ZP );
-		l_gems.text = Localization.getString( Localization.TXT_56_LABEL_GEMS );
-		l_app.text = Localization.getString( Localization.TXT_56_LABEL_APP );
-		l_subjects.text = Localization.getString( Localization.TXT_56_LABEL_SUBJECTS );
-		l_free.text = Localization.getString( Localization.TXT_56_LABEL_FREE );
-		l_sponsored.text = Localization.getString( Localization.TXT_56_LABEL_SPONSORED );
-
-		l_years.text = Localization.getString( Localization.TXT_56_LABEL_YEARS );
+//		UILabel l_title = getView("titleText") as UILabel;
+//		UILabel l_edit = getView("editProfileButton").getView("Text") as UILabel;
+//		UILabel l_zp = getView("zoodlePointsTitle") as UILabel;
+//		UILabel l_gems = getView("gemsTitle") as UILabel;
+//		UILabel l_app = getView("appPartTitle") as UILabel;
+//		UILabel l_subjects = getView("subjectsText") as UILabel;
+//		UILabel l_free = getView("appFreeText") as UILabel;
+//		UILabel l_sponsored = getView("sponsoredText") as UILabel;
+//
+//		UILabel l_years = getView("ageContent").getView("Text") as UILabel;
+//		
+//		l_title.text = Localization.getString( Localization.TXT_56_LABEL_TITLE );
+//		l_edit.text = Localization.getString( Localization.TXT_56_LABEL_EDIT );
+//		l_zp.text = Localization.getString( Localization.TXT_56_LABEL_ZP );
+//		l_gems.text = Localization.getString( Localization.TXT_56_LABEL_GEMS );
+//		l_app.text = Localization.getString( Localization.TXT_56_LABEL_APP );
+//		l_subjects.text = Localization.getString( Localization.TXT_56_LABEL_SUBJECTS );
+//		l_free.text = Localization.getString( Localization.TXT_56_LABEL_FREE );
+//		l_sponsored.text = Localization.getString( Localization.TXT_56_LABEL_SPONSORED );
+//
+//		l_years.text = Localization.getString( Localization.TXT_56_LABEL_YEARS );
 	}
 
 	
