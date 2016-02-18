@@ -82,7 +82,7 @@ public class FAQState : GameState
 		List<Vector3> l_pointListOut = new List<Vector3>();
 		UIElement l_newPanel = m_faqDialogCanvas.getView ("mainPanel");
 		l_pointListOut.Add( l_newPanel.transform.localPosition );
-		l_pointListOut.Add( l_newPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+		l_pointListOut.Add( l_newPanel.transform.localPosition - new Vector3( 0, 1163, 0 ));
 		l_newPanel.tweener.addPositionTrack(l_pointListOut, 0.0f);
 	}
 
@@ -92,7 +92,7 @@ public class FAQState : GameState
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_faqDialogCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 1163, 0 ));
 		l_newPanel.tweener.addPositionTrack(l_pointListIn, 0.0f);
 
 		string[] l_data = p_data as string[];
