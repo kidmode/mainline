@@ -992,6 +992,17 @@ public class SessionHandler
 		readingTable = null;
 	}
 
+	//Kevin
+	public static void saveCurrentKidListToDisk(){
+
+		ArrayList l_list = new ArrayList();
+		foreach (Kid k in SessionHandler.getInstance ().kidList) {
+			l_list.Add(k.toHashTable());
+		}
+		String encodedString = MiniJSON.MiniJSON.jsonEncode(l_list);
+		SessionHandler.SaveKidList(encodedString);
+	}
+
 	// Cynthia: vzw
 	public static void SaveKidList(String str) 
 	{

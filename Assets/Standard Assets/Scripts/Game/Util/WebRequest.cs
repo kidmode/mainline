@@ -32,7 +32,7 @@ public class WebRequest : object
 	private int m_retryLimit = 10;
 //	private int m_retries = 0;
 	//unit: 5000ms(5s)
-	private float m_timeout = 5000;
+	private float m_timeout = 10000;
 	
 	private int m_status = (int)WebRequestStatus.InProgress;
 	private bool m_isDestroyed;

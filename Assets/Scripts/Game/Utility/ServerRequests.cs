@@ -1421,8 +1421,12 @@ public class SetSubjectsRequest : RequestQueue.Request
 				SessionHandler.getInstance().kidList[i].weightCognitiveDevelopment = l_kidData.weightCognitiveDevelopment;
 				SessionHandler.getInstance().kidList[i].weightCreativeDevelopment = l_kidData.weightCreativeDevelopment;
 				SessionHandler.getInstance().kidList[i].weightLifeSkills = l_kidData.weightLifeSkills;
+
+				SessionHandler.saveCurrentKidListToDisk();
 			}
 		}
+
+
 	}
 }
 
