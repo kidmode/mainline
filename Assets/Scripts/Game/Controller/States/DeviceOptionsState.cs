@@ -62,7 +62,7 @@ public class DeviceOptionsState : GameState
 		m_tipButton.isOn = false;
 		m_tipButton.addValueChangedCallback (toTip);
 
-		m_FAQButton.enabled = true;
+//		m_FAQButton.enabled = true;
 
 		m_musicVolumeSlider = m_deviceOptionCanvas.getView ("musicVolumeSlider") as UISlider;
 		m_masterVolumeSlider = m_deviceOptionCanvas.getView ("masterVolumeSlider") as UISlider;
@@ -167,7 +167,7 @@ public class DeviceOptionsState : GameState
 		p_button.active = false;
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		l_pointListIn.Add( m_lodaing.transform.localPosition );
-		l_pointListIn.Add( m_lodaing.transform.localPosition - new Vector3( 0, 800, 0 ));
+		l_pointListIn.Add( m_lodaing.transform.localPosition - new Vector3( 0, saveMessageDisplacement, 0 ));
 		m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
 	}
 	
@@ -192,10 +192,11 @@ public class DeviceOptionsState : GameState
 		{
 			updateSetting ();
 			p_button.removeAllCallbacks ();
-			List<Vector3> l_pointListIn = new List<Vector3>();
-			l_pointListIn.Add( m_lodaing.transform.localPosition );
-			l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, 800, 0 ));
-			m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 12);
+
+//			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, 10);
+
 		}
 	}
 
@@ -300,6 +301,15 @@ public class DeviceOptionsState : GameState
 	{
 		if(!exitState)
 		{
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			List<Vector3> l_pointListIn = new List<Vector3>();
+			l_pointListIn.Add( m_lodaing.transform.localPosition );
+			l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, saveMessageDisplacement, 0 ));
+			m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+
+
 			if(null != m_noticeLabel)
 				m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_UPDATE);
 			if(null != m_closeButton)
@@ -366,7 +376,7 @@ public class DeviceOptionsState : GameState
 	private UISlider 	m_musicVolumeSlider;
 	private UISlider 	m_masterVolumeSlider;
 	private UISlider 	m_effectsVolumeSlider;
-	private UIButton    m_FAQButton;
+//	private UIButton    m_FAQButton;
 	private UIButton 	m_helpButton;
 	private UIButton	m_deviceButton;
 	private bool 		m_allowCall;
@@ -381,4 +391,9 @@ public class DeviceOptionsState : GameState
 //	#endif
 	private bool 		canMoveLeftMenu = true;
 	private bool 		exitState = false;
+
+
+	//
+	private float saveMessageDisplacement = 1200.0f;
+//	protected UICanvas	m_messageCanvas;
 }
