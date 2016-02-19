@@ -80,6 +80,20 @@ public class DeviceOptionsState : GameState
 		m_refreshButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
 		m_refreshButton.addClickCallback (toRefreshContent);
 
+
+		//Kevin, set save button to gray / not interative at the start
+		m_refreshButton.enabled = false;
+
+		//Setup event so we know when the setttings cache has changed
+		SettingCache.onSettingCacheActiveChanged += onSettingCacheActiveChanged;
+
+		m_iconLock = m_deviceOptionCanvas.getView ("lockIcon") as UIImage;
+
+		m_iconLock.gameObject.SetActive(false);
+
+		//End
+
+
 		if(m_settingCache.active)
 		{
 			m_musicVolumeSlider.value   =(float) m_settingCache.musicVolum;
@@ -129,6 +143,8 @@ public class DeviceOptionsState : GameState
 			}
 		}
 
+		SessionHandler.getInstance ().settingCache.active = false;
+
 	}
 	
 	private void onMasterVolumeValueChanged( float p_float )
@@ -145,6 +161,34 @@ public class DeviceOptionsState : GameState
 	{
 		m_settingCache.effectsVolum =  (int)p_float;
 	}
+
+	#region Events
+
+	private void onSettingCacheActiveChanged(bool value){
+
+		if(value){
+
+			m_refreshButton.enabled = true;
+
+			if(SessionHandler.getInstance().token.isPremium()){
+
+				m_iconLock.gameObject.SetActive(false);
+
+			}else {
+
+				m_iconLock.gameObject.SetActive(true);
+
+			}
+
+		}else{
+
+			m_refreshButton.enabled = false;
+
+		}
+
+	}
+
+	#endregion
 
 	private void onHelpButtonClick(UIButton p_button)
 	{
@@ -181,8 +225,18 @@ public class DeviceOptionsState : GameState
 
 	private void toRefreshContent(UIButton p_button)
 	{
+
 		if (checkInternet() == false)
 			return;
+
+		//Kevin
+		//if this is free then just return;
+		if(!SessionHandler.getInstance().token.isPremium()){
+			
+			return;
+			
+		}
+		//End
 
 		int l_changedStateName = int.Parse( m_gameController.stateName);
 		if (SessionHandler.getInstance ().settingCache.active && 
@@ -198,6 +252,7 @@ public class DeviceOptionsState : GameState
 //			m_messageCanvas = m_gameController.getUI().createScreen(UIScreen.MESSAGE, false, 10);
 
 		}
+
 	}
 
 	public void updateSetting()
@@ -392,6 +447,8 @@ public class DeviceOptionsState : GameState
 	private bool 		canMoveLeftMenu = true;
 	private bool 		exitState = false;
 
+	//Kevin
+	private UIImage 	m_iconLock;
 
 	//
 	private float saveMessageDisplacement = 1200.0f;
