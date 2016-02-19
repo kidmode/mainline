@@ -347,7 +347,7 @@ public class OverviewInfoState : GameState {
 		}
 		else
 		{
-			l_lockImage.active = true;
+//			l_lockImage.active = true;
 			l_buyButton.active = true;
 			l_unlockLabel.text = Localization.getString (Localization.TXT_69_LABEL_UNLOCK);
 		}

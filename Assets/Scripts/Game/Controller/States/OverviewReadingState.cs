@@ -200,6 +200,8 @@ public class OverviewReadingState : GameState
 	{
 		m_gameController.connectState (ZoodleState.BOOK_RECORD, ZoodleState.OVERVIEW_READING);
 		m_gameController.changeState (ZoodleState.BOOK_RECORD);
+
+		m_gameController.game.setPDMenuBarVisible(false, false);
 	}
 	
 	private void onExitRecordButtonClick( UIButton p_button )
