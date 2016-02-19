@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 
 public class SettingCache : System.Object
 {
 	public void init()
 	{
-		m_enableCache = false;
+		active = false;
 	}
 
 	public bool childLockSwitch
@@ -12,7 +13,7 @@ public class SettingCache : System.Object
 		get { return m_childLockSwitch;   }
 		set 
 		{ 
-			m_enableCache = true;
+			active = true;
 			m_childLockSwitch = value; 
 		}
 	}
@@ -22,7 +23,7 @@ public class SettingCache : System.Object
 		get{return m_verifyBirth;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_verifyBirth = value;
 		}
 	}
@@ -32,7 +33,7 @@ public class SettingCache : System.Object
 		get{return m_freeWeeklyApp;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_freeWeeklyApp = value;
 		}
 	}
@@ -42,7 +43,7 @@ public class SettingCache : System.Object
 		get{return m_smartSelect;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_smartSelect = value;
 		}
 	}
@@ -61,7 +62,7 @@ public class SettingCache : System.Object
 		get{return m_musicVolum;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_musicVolum = value;
 		}
 	}
@@ -71,7 +72,7 @@ public class SettingCache : System.Object
 		get{return m_effectsVolum;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_effectsVolum = value;
 		}
 	}
@@ -81,7 +82,7 @@ public class SettingCache : System.Object
 		get{return m_masterVolum;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_masterVolum = value;
 		}
 	}
@@ -91,7 +92,7 @@ public class SettingCache : System.Object
 		get{return m_allowCall;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_allowCall = value;
 		}
 	}
@@ -101,7 +102,7 @@ public class SettingCache : System.Object
 		get{return m_tip;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_tip = value;
 		}
 	}
@@ -111,7 +112,7 @@ public class SettingCache : System.Object
 		get{return m_childLockPassword;}
 		set
 		{
-			m_enableCache = true;
+			active = true;
 			m_childLockPassword = value;
 		}
 	}
@@ -121,9 +122,19 @@ public class SettingCache : System.Object
 		get{return m_enableCache;}
 		set
 		{
+
 			m_enableCache = value;
+
+			if(onSettingCacheActiveChanged != null)
+				onSettingCacheActiveChanged(m_enableCache);
+
 		}
 	}
+
+	
+
+	//Event need for device options
+	public static event Action<bool> onSettingCacheActiveChanged;  
 
 	private bool m_childLockSwitch;
 	private bool m_verifyBirth;
