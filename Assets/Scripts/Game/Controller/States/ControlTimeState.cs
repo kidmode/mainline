@@ -32,7 +32,7 @@ public class ControlTimeState : GameState
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		m_uiManager.removeScreen( UIScreen.TIME_LIMITS );
-		m_uiManager.removeScreen( UIScreen.PAYWALL );
+//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -42,9 +42,9 @@ public class ControlTimeState : GameState
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
-			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
 		}
 
 		m_timeLimitsCanvas 			= m_uiManager.createScreen( UIScreen.TIME_LIMITS, true, 1 ) 			as TimeLimitsCanvas;
@@ -255,23 +255,23 @@ public class ControlTimeState : GameState
 
 	}
 
-	private void onUpgradeButtonClick(UIButton p_button)
-	{
-		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-
-		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-			m_requestQueue.request ();
-		}
-		else
-		{
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-	}
+//	private void onUpgradeButtonClick(UIButton p_button)
+//	{
+//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
+//
+//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
+//		{
+//			Server.init (ZoodlesConstants.getHttpsHost());
+//			m_requestQueue.reset ();
+//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
+//			m_requestQueue.request ();
+//		}
+//		else
+//		{
+//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+//		}
+//	}
 	
 	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
@@ -300,8 +300,8 @@ public class ControlTimeState : GameState
 	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
 	
-	private UICanvas 		m_paywallCanvas;
-	private UIButton 		m_upgradeButton;
+//	private UICanvas 		m_paywallCanvas;
+//	private UIButton 		m_upgradeButton;
 
 	// time part
 	private TimeLimitsCanvas m_timeLimitsCanvas;

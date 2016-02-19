@@ -33,7 +33,7 @@ public class ControlViolenceState : GameState
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		m_uiManager.removeScreen( UIScreen.VIOLENCE_FILTERS );
-		m_uiManager.removeScreen( UIScreen.PAYWALL );
+//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -43,9 +43,9 @@ public class ControlViolenceState : GameState
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
-			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
 		}
 
 		m_violenceFiltersCanvas 	= m_uiManager.createScreen( UIScreen.VIOLENCE_FILTERS, true, 1 );
@@ -178,23 +178,23 @@ public class ControlViolenceState : GameState
 		m_requestQueue.request (RequestType.SEQUENCE);
 	}
 	
-	private void onUpgradeButtonClick(UIButton p_button)
-	{
-		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-
-		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-			m_requestQueue.request ();
-		}
-		else
-		{
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-	}
+//	private void onUpgradeButtonClick(UIButton p_button)
+//	{
+//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
+//
+//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
+//		{
+//			Server.init (ZoodlesConstants.getHttpsHost());
+//			m_requestQueue.reset ();
+//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
+//			m_requestQueue.request ();
+//		}
+//		else
+//		{
+//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+//		}
+//	}
 	
 	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
@@ -222,8 +222,8 @@ public class ControlViolenceState : GameState
 	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
 	
-	private UICanvas 		m_paywallCanvas;
-	private UIButton 		m_upgradeButton;
+//	private UICanvas 		m_paywallCanvas;
+//	private UIButton 		m_upgradeButton;
 
 
 	//violence part
