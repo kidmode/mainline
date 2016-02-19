@@ -11,6 +11,10 @@ public class DeviceOptionsState : GameState
 	public override void enter( GameController p_gameController )
 	{
 		base.enter( p_gameController );
+
+		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+
+		game.setPDMenuBarVisible(true, false);
 		
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 //		m_changeState = true;
@@ -35,7 +39,7 @@ public class DeviceOptionsState : GameState
 		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE) && checkInternet())
 		{
 			exitState = true;
-			updateSetting ();
+//			updateSetting ();
 		}
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_deviceOptionCanvas );
@@ -233,6 +237,12 @@ public class DeviceOptionsState : GameState
 		//if this is free then just return;
 		if(!SessionHandler.getInstance().token.isPremium()){
 			
+			game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
+			
+			game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			
+			game.setPDMenuBarVisible(false, false);
+
 			return;
 			
 		}
@@ -449,6 +459,8 @@ public class DeviceOptionsState : GameState
 
 	//Kevin
 	private UIImage 	m_iconLock;
+
+	private Game 		game;
 
 	//
 	private float saveMessageDisplacement = 1200.0f;
