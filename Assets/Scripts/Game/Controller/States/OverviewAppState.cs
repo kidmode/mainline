@@ -83,8 +83,8 @@ public class OverviewAppState : GameState
 	{
 		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 16 )  as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
-		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
-		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
+		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
+		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 ) as AppDetailsCanvas;
 		m_appListCanvas 	= m_uiManager.createScreen( UIScreen.APP_LIST, false, 12 );
 		m_recommendedAppCanvas	= m_uiManager.createScreen( UIScreen.RECOMMENDED_APP, true, 2 );
 		m_prototype = m_appListCanvas.getView ("Prototype");
@@ -159,13 +159,14 @@ public class OverviewAppState : GameState
 
 	private void onExitConfiemDialogButtonClick( UIButton p_button )
 	{
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,false);
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+		m_confirmDialogCanvas.moveOutDialog();
+//		List<Vector3> l_pointListOut = new List<Vector3>();
+//		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
+//		l_pointListOut.Add( l_currentPanel.transform.localPosition );
+//		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+//		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
 	}
 
 	private void onConfiemButtonClick( UIButton p_button )
@@ -213,13 +214,15 @@ public class OverviewAppState : GameState
 			
 			if (null != m_confirmDialogCanvas)
 			{
-				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+
 				m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
-				List<Vector3> l_pointListOut = new List<Vector3>();
-				UIElement l_currentPanel = m_confirmDialogCanvas.getView("mainPanel");
-				l_pointListOut.Add(l_currentPanel.transform.localPosition);
-				l_pointListOut.Add(l_currentPanel.transform.localPosition - new Vector3(0, 800, 0));
-				l_currentPanel.tweener.addPositionTrack(l_pointListOut, 0f);
+				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+				m_confirmDialogCanvas.moveOutDialog();
+//				List<Vector3> l_pointListOut = new List<Vector3>();
+//				UIElement l_currentPanel = m_confirmDialogCanvas.getView("mainPanel");
+//				l_pointListOut.Add(l_currentPanel.transform.localPosition);
+//				l_pointListOut.Add(l_currentPanel.transform.localPosition - new Vector3(0, 800, 0));
+//				l_currentPanel.tweener.addPositionTrack(l_pointListOut, 0f);
 			}
 			
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
@@ -288,13 +291,8 @@ public class OverviewAppState : GameState
 	{
 		m_costArea.active = true;
 		m_needMoreArea.active = false;
-		
-		List<Vector3> l_pointListIn = new List<Vector3>();
+
 		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
 		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
@@ -303,6 +301,11 @@ public class OverviewAppState : GameState
 		l_notice1label2.text = p_app.name;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
 		l_priceLabel.text = p_app.gems.ToString ();
+
+		List<Vector3> l_pointListIn = new List<Vector3>();
+		l_pointListIn.Add( l_newPanel.transform.localPosition );
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 	}
 	
 
@@ -886,9 +889,9 @@ public class OverviewAppState : GameState
 	
 	private CommonDialogCanvas 		  m_commonDialog;
 	private UICanvas				  m_recommendedAppCanvas;
-	private UICanvas				  m_appDetailsCanvas;
+	private AppDetailsCanvas		  m_appDetailsCanvas;
 	private UICanvas				  m_appListCanvas;
-	private UICanvas				  m_confirmDialogCanvas;
+	private ConfirmDialogCanvas		  m_confirmDialogCanvas;
 	private UILabel 			      m_gemCountLabel;
 	private UIButton 				  m_moreAppButton;
 	private UIButton 				  m_exitAppListButton;
@@ -923,5 +926,5 @@ public class OverviewAppState : GameState
 	private RequestQueue 			  m_getAppRequestQueue;
 	private RequestQueue 			  m_getIconRequestQueue;
 
-	private List<RequestQueue>			m_iconRequests;
+	private List<RequestQueue>		  m_iconRequests;
 }

@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AppDetailsCanvas : UICanvas
 {
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
-		
+
+		m_dialog = getView ("mainPanel") as UIElement;
+		m_dialogMovePosition = 800;
+
 		SetupLocalizition ();
 	}
 
@@ -40,4 +44,32 @@ public class AppDetailsCanvas : UICanvas
 		l_safety.text = Localization.getString (Localization.TXT_70_LABEL_SAFETY);
 		l_age.text = Localization.getString (Localization.TXT_70_LABEL_AGES);
 	}
+
+	public void moveInDialog()
+	{
+		if(null != m_uiManager)
+		{
+			m_uiManager.changeScreen(UIScreen.APP_DETAILS, true);
+		}
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( m_dialog.transform.localPosition );
+		l_pointListOut.Add( m_dialog.transform.localPosition + new Vector3( 0, m_dialogMovePosition, 0 ));
+		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+	
+	public void moveOutDialog()
+	{
+		if(null != m_uiManager)
+		{
+			m_uiManager.changeScreen(UIScreen.APP_DETAILS, false);
+		}
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( m_dialog.transform.localPosition );
+		l_pointListOut.Add( m_dialog.transform.localPosition - new Vector3( 0, m_dialogMovePosition, 0 ));
+		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+	
+	private UIManager m_uiManager;
+	private UIElement m_dialog;
+	private int m_dialogMovePosition;
 }

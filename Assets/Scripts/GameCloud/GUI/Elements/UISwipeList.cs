@@ -149,6 +149,8 @@ public class UISwipeList : UIElement
 	
 	public override void dispose(bool p_deep)
 	{
+		GameObject.Destroy(m_duplicatedPrototype);
+
 		base.dispose(p_deep); 
 	}
 

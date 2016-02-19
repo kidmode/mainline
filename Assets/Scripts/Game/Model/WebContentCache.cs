@@ -19,23 +19,19 @@ public class WebContentCache : object
 	private bool isDoneWithWebcontentLoading = false;
 	private bool isDoneWithBookLoading = false;
 	//end
-
+	
 	public void startRequests()
 	{
 		m_sessionHandler = SessionHandler.getInstance();
 
 		clear();
 
-		m_webContentRequest = new RequestQueue();
-		m_webContentRequest.add(new WebContentRequest(_requestWebContentComplete));
-		m_webContentRequest.request(RequestType.SEQUENCE);
+		doWebContentRequest();
 
-		//honda
+		//honda: fetch data from local
 //		addBookList();
-		//honda: comment out request book list due to book list is put in the local place
-		m_bookListRequest = new RequestQueue();
-		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
-		m_bookListRequest.request();
+		//honda: request from the server
+		doBookListRequest();
 		//end
 	}
 
@@ -47,6 +43,20 @@ public class WebContentCache : object
 			onLoadingCompleted += completedEvent;
 		}
 		startRequests();
+	}
+
+	public void doWebContentRequest()
+	{
+		m_webContentRequest = new RequestQueue();
+		m_webContentRequest.add(new WebContentRequest(_requestWebContentComplete));
+		m_webContentRequest.request(RequestType.SEQUENCE);
+	}
+
+	public void doBookListRequest()
+	{
+		m_bookListRequest = new RequestQueue();
+		m_bookListRequest.add(new BookListRequest(true, _requestBookListComplete));
+		m_bookListRequest.request();
 	}
 	//end
 

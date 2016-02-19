@@ -1140,7 +1140,7 @@ public class WebContentRequest : RequestQueue.Request
 	}
 }
 
-// Book list request
+//honda: fetch detail books info and recorded books info
 public class BookListRequest : RequestQueue.Request
 {
 	public BookListRequest(bool p_topRequest, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
@@ -1223,6 +1223,7 @@ public class BookListRequest : RequestQueue.Request
 	private bool m_topRequest = false;
 }
 
+//get recorded book list
 public class GetBookReadingRequest : RequestQueue.Request
 {
 	private int bookID; 
@@ -1636,7 +1637,7 @@ public class GetAppRequest : RequestQueue.Request
 	private string m_channel;
 }
 
-// get book list
+//honda: fetch book info without detail info like pages info, responses only contain the user own books or not
 public class GetBookRequest : RequestQueue.Request
 {
 	public GetBookRequest(string p_pageRequest, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
@@ -1663,38 +1664,38 @@ public class GetBookRequest : RequestQueue.Request
 	{
 		if(null == p_response.error)
 		{
-			string l_string = "";
-			
-			l_string = UnicodeDecoder.Unicode(p_response.text);
-			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
-			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
-			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
-			if(l_jsonResponse.ContainsKey("jsonResponse"))
-			{
-				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
-				if(l_response.ContainsKey("response"))
-				{
-					Hashtable l_bookData = l_response["response"] as Hashtable;
-					ArrayList l_own = l_bookData["owned"] as ArrayList;
-					ArrayList l_unown = l_bookData["unowned"] as ArrayList;
-					int l_dataCount = l_own.Count;
-					List<Book> l_list = new List<Book> ();
-					for(int l_i = 0; l_i < l_dataCount; l_i++)
-					{
-						Hashtable l_table = l_own[l_i] as Hashtable;
-						Book l_book = new Book(l_table);
-						l_list.Add(l_book);
-					}
-					l_dataCount = l_unown.Count;
-					for(int l_i = 0; l_i < l_dataCount; l_i++)
-					{
-						Hashtable l_table = l_unown[l_i] as Hashtable;
-						Book l_book = new Book(l_table);
-						l_list.Add(l_book);
-					}
-					SessionHandler.getInstance ().bookList = l_list;
-				}
-			}
+//			string l_string = "";
+//			
+//			l_string = UnicodeDecoder.Unicode(p_response.text);
+//			l_string = UnicodeDecoder.UnicodeToChinese(l_string);
+//			l_string = UnicodeDecoder.CoverHtmlLabel(l_string);
+//			Hashtable l_jsonResponse = MiniJSON.MiniJSON.jsonDecode(l_string) as Hashtable;
+//			if(l_jsonResponse.ContainsKey("jsonResponse"))
+//			{
+//				Hashtable l_response = l_jsonResponse["jsonResponse"] as Hashtable;
+//				if(l_response.ContainsKey("response"))
+//				{
+//					Hashtable l_bookData = l_response["response"] as Hashtable;
+//					ArrayList l_own = l_bookData["owned"] as ArrayList;
+//					ArrayList l_unown = l_bookData["unowned"] as ArrayList;
+//					int l_dataCount = l_own.Count;
+//					List<Book> l_list = new List<Book> ();
+//					for(int l_i = 0; l_i < l_dataCount; l_i++)
+//					{
+//						Hashtable l_table = l_own[l_i] as Hashtable;
+//						Book l_book = new Book(l_table);
+//						l_list.Add(l_book);
+//					}
+//					l_dataCount = l_unown.Count;
+//					for(int l_i = 0; l_i < l_dataCount; l_i++)
+//					{
+//						Hashtable l_table = l_unown[l_i] as Hashtable;
+//						Book l_book = new Book(l_table);
+//						l_list.Add(l_book);
+//					}
+//					SessionHandler.getInstance ().bookList = l_list;
+//				}
+//			}
 			//SessionHandler.getInstance ().getBookIcon();
 		}
 	}
@@ -1741,7 +1742,7 @@ public class BuyBookRequest : RequestQueue.Request
 		m_book = p_book;
 		m_button = p_button;
 		m_element = p_element;
-		m_confirmCanvas = p_canvas;
+		m_confirmCanvas = p_canvas as ConfirmDialogCanvas;
 	}
 	
 	protected override void init()
@@ -1777,11 +1778,12 @@ public class BuyBookRequest : RequestQueue.Request
 
 			if(null != m_confirmCanvas)
 			{
-				List<Vector3> l_pointListOut = new List<Vector3>();
-				UIElement l_currentPanel = m_confirmCanvas.getView ("mainPanel");
-				l_pointListOut.Add( l_currentPanel.transform.localPosition );
-				l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-				l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+				m_confirmCanvas.moveOutDialog();
+//				List<Vector3> l_pointListOut = new List<Vector3>();
+//				UIElement l_currentPanel = m_confirmCanvas.getView ("mainPanel");
+//				l_pointListOut.Add( l_currentPanel.transform.localPosition );
+//				l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
+//				l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
 			}
 		}
 	}
@@ -1797,7 +1799,7 @@ public class BuyBookRequest : RequestQueue.Request
 		l_unlockLabel.active = false;
 	}
 
-	private UICanvas m_confirmCanvas;
+	private ConfirmDialogCanvas m_confirmCanvas;
 	private Book m_book;
 	private UIButton m_button;
 	private UIElement m_element;

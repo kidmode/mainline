@@ -8,11 +8,8 @@ public class OverviewInfoState : GameState {
 	{
 		base.enter (p_gameController);
 
-		game = GameObject.FindWithTag("GameController").GetComponent<Game>();
+		m_gameController.game.setPDMenuBarVisible(true, false);
 
-		game.setPDMenuBarVisible(true, false);
-
-//		canMoveLeftMenu = true;
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue ();
 		UICanvas l_backScreen = m_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
@@ -77,9 +74,9 @@ public class OverviewInfoState : GameState {
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
+		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
 
-		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
+		m_appDetailsCanvas 	= m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 ) as AppDetailsCanvas;
 
 		m_dashboardInfoCanvas 	= m_uiManager.createScreen( UIScreen.DASHBOARD_INFO, true, 1 );
 
@@ -141,15 +138,15 @@ public class OverviewInfoState : GameState {
 
 		if(l_list == null){
 
-			m_requestQueue.reset ();
+
+			m_requestQueue.reset();
 			m_requestQueue.add(new GetBookRequest("false",_requestBookListComplete));
 			m_requestQueue.request();
 
 		}else if(l_list.Count > 0){
 
-			//
+			bookList = l_list;
 			drawRecommendedBookInfo();
-
 
 		}
 
@@ -157,27 +154,27 @@ public class OverviewInfoState : GameState {
 
 	private void drawRecommendedBookInfo(){
 
-		List<Book> l_list = SessionHandler.getInstance().bookList;
+		List<Book> l_list = bookList;
 
-		UIElement l_element = m_dashboardInfoCanvas.getView ("bookOne") as UIElement;
+		m_selectedElement = m_dashboardInfoCanvas.getView ("bookOne") as UIElement;
 		
 		curretRecommendedBookIndex = Random.Range(0, l_list.Count);
 		
 		Book l_book = l_list[curretRecommendedBookIndex];
 		
-		_setupSignleBook(l_element,l_book);
-		UIButton l_buyButton = l_element.getView ("buyBookButton") as UIButton;
+		_setupSignleBook(m_selectedElement,l_book);
+		UIButton l_buyButton = m_selectedElement.getView ("buyBookButton") as UIButton;
 		l_buyButton.addClickCallback(onClickBuyBookButton);
-		UIButton l_openBook = l_element as UIButton;
-		l_openBook.addClickCallback(onOpenBookClick);
+//		UIButton l_openBook = m_selectedElement as UIButton;
+//		l_openBook.addClickCallback(onOpenBookClick);
 		if(null == l_book.icon)
-			downLoadBookIcon( l_book, l_element );
+			downLoadBookIcon( l_book, m_selectedElement );
 		else
 		{
-			UIImage l_image = l_element.getView("bookImage") as UIImage;
+			UIImage l_image = m_selectedElement.getView("bookImage") as UIImage;
 			l_image.setTexture(l_book.icon);
 		}
-		l_element.active = true;
+		m_selectedElement.active = true;
 
 	}
 
@@ -185,9 +182,8 @@ public class OverviewInfoState : GameState {
 	private void onOpenBookClick(UIButton p_button)
 	{
 		Book l_book = new Book();
-		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
 
-		l_book = l_bookList[curretRecommendedBookIndex];
+		l_book = bookList[curretRecommendedBookIndex];
 
 		if (null == l_book)
 			return;
@@ -234,13 +230,10 @@ public class OverviewInfoState : GameState {
 
 			m_gameController.changeState(ZoodleState.BOOK_ACTIVITY);
 
-			game.setPDMenuBarVisible(false, false);
-
-
+			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 
 		m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
-
 	}
 
 	//Once the requset book list is complete, update it in the SessionHandler
@@ -278,7 +271,7 @@ public class OverviewInfoState : GameState {
 						Book l_book = new Book(l_table);
 						l_list.Add(l_book);
 					}
-					SessionHandler.getInstance ().bookList = l_list;
+					bookList = l_list;
 
 					drawRecommendedBookInfo();
 				}
@@ -290,10 +283,8 @@ public class OverviewInfoState : GameState {
 	private void onClickBuyBookButton(UIButton p_button)
 	{
 		m_wantedBook = null;
-		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
 
-		//
-		m_wantedBook = l_bookList[curretRecommendedBookIndex];
+		m_wantedBook = bookList[curretRecommendedBookIndex];
 
 		m_clickedBuyButton = p_button;
 		confirmBuyBook (m_wantedBook);
@@ -313,28 +304,27 @@ public class OverviewInfoState : GameState {
 
 	public void confirmBuyBook(Book p_book)
 	{
-//		if(bookListOpen)
-//			m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
+		setGemsOnCostAreaOfConfirmDialog(p_book.title, p_book.gems);
+
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
+		m_confirmDialogCanvas.moveInDialog();
+	}
+
+	private void setGemsOnCostAreaOfConfirmDialog(string name, int gems)
+	{
 		m_costArea.active = true;
 		m_needMoreArea.active = false;
 		
-		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
 		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
 		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
 		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
-		l_notice1label2.text = p_book.title;
+		l_notice1label2.text = name;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
-		l_priceLabel.text = p_book.gems.ToString();
+		l_priceLabel.text = gems.ToString();
 	}
-
 
 	private void _setupSignleBook(UIElement p_element, Book p_book)
 	{
@@ -378,30 +368,48 @@ public class OverviewInfoState : GameState {
 
 	private void onConfiemButtonClick( UIButton p_button )
 	{
-		if(null != m_app)
+		if(null != m_app && isAppDetailsScreen)
 		{
 			if(SessionHandler.getInstance().currentKid.gems >= m_app.gems)
-				sendBuyAppRequest ();
+				sendBuyAppRequest();
 			else
-			{
-				UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
-				UILabel l_needGems = m_confirmDialogCanvas.getView("needPriceText") as UILabel;
-				l_costGems.text = m_app.gems.ToString ();
-				l_needGems.text = (m_app.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
-				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-				l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
-				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-				l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
-				m_costArea.active = false;
-				m_needMoreArea.active = true;
-			}
+				setGemsOnNeedMoreAreaOfConfirmDialog(m_app.gems);
 		}
+		else if (null != m_wantedBook)
+		{
+			if(SessionHandler.getInstance().currentKid.gems >= m_wantedBook.gems)
+				sendBuyBookRequest();
+			else
+				setGemsOnNeedMoreAreaOfConfirmDialog(m_wantedBook.gems);
+		}
+	}
+
+	private void setGemsOnNeedMoreAreaOfConfirmDialog(int gems)
+	{
+		UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
+		UILabel l_needGems = m_confirmDialogCanvas.getView("needPriceText") as UILabel;
+		l_costGems.text = gems.ToString();
+		l_needGems.text = (gems - SessionHandler.getInstance().currentKid.gems).ToString();
+		UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
+		UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
+		m_costArea.active = false;
+		m_needMoreArea.active = true;
+	}
+	
+	private void sendBuyBookRequest()
+	{
+		m_requestQueue.reset ();
+		m_requestQueue.add (new BuyBookRequest (m_wantedBook, m_clickedBuyButton, m_confirmDialogCanvas ,m_selectedElement));
+		m_requestQueue.request ();
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 	}
 
 	private void sendBuyAppRequest()
 	{
 		m_requestQueue.reset ();
-		m_requestQueue.add (new BuyRecommendAppRequest(m_app,onBuyAppComplete));
+		m_requestQueue.add (new BuyRecommendAppRequest(m_app, onBuyAppComplete));
 		m_requestQueue.request ();
 	}
 
@@ -437,13 +445,9 @@ public class OverviewInfoState : GameState {
 			removeAppPriceAndBuyButton(m_topRecommendAppArea);
 			if(null != m_confirmDialogCanvas)
 			{
-				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
 				m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
-				List<Vector3> l_pointListOut = new List<Vector3>();
-				UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
-				l_pointListOut.Add( l_currentPanel.transform.localPosition );
-				l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-				l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+				m_confirmDialogCanvas.moveOutDialog();
 			}
 
 			installApp( SessionHandler.getInstance().currentKid.topRecommendedApp.packageName );
@@ -479,13 +483,10 @@ public class OverviewInfoState : GameState {
 
 	private void onExitConfiemDialogButtonClick( UIButton p_button )
 	{
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,false);
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		if (isAppDetailsScreen)
+			m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
+		m_confirmDialogCanvas.moveOutDialog();
 	}
 
 	private void loadAppDetail()
@@ -552,12 +553,9 @@ public class OverviewInfoState : GameState {
 
 	private void showAppDetail(UIButton p_button)
 	{
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS,true);
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		UIElement l_newPanel = m_appDetailsCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+		isAppDetailsScreen = true;
+		m_uiManager.changeScreen(UIScreen.APP_DETAILS, true);
+		m_appDetailsCanvas.moveInDialog();
 	}
 
 	private void buyApp(UIButton p_button)
@@ -569,7 +567,7 @@ public class OverviewInfoState : GameState {
 		}
 		else
 		{
-			confirmBuyApp (m_app);
+			confirmBuyApp(m_app);
 		}
 	}
 
@@ -599,24 +597,11 @@ public class OverviewInfoState : GameState {
 
 	public void confirmBuyApp(App p_app)
 	{
-		m_costArea.active = true;
-		m_needMoreArea.active = false;
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS,false);
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-		
-		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
-		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
-		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
-		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
-		l_notice1label2.text = p_app.name;
-		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
-		l_priceLabel.text = p_app.gems.ToString ();
+		setGemsOnCostAreaOfConfirmDialog(p_app.name, p_app.gems);
+
+		m_uiManager.changeScreen (UIScreen.APP_DETAILS, false);
+		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, true);
+		m_confirmDialogCanvas.moveInDialog();
 	}
 
 	private void iconRequestComplete(HttpsWWW p_response)
@@ -800,15 +785,10 @@ public class OverviewInfoState : GameState {
 
 	private void onExitAppDetailsButtonClick( UIButton p_button )
 	{
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS,false);
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_appDetailsCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		isAppDetailsScreen = false;
+		m_uiManager.changeScreen (UIScreen.APP_DETAILS, false);
+		m_appDetailsCanvas.moveOutDialog();
 	}
-
-
 
 	private bool checkInternet()
 	{
@@ -832,21 +812,12 @@ public class OverviewInfoState : GameState {
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
-
-	
-	private void goToChildLock(UIButton p_button)
-	{
-		m_gameController.changeState (ZoodleState.CHILD_LOCK_STATE);
-	}
-
-
 	
 	private void toBuyGemsScreen(UIButton p_button)
 	{
-		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
 		SwrveComponent.Instance.SDK.NamedEvent("GotoGetGemsFromLeftMenu");
 
-		gotoGetGems ();
+		gotoGetGems();
 
 	}
 	
@@ -864,20 +835,21 @@ public class OverviewInfoState : GameState {
 			}
 			else
 			{
-				//sendCall (m_game.gameController,null,"/api/gems_amount/gems_amount?" + ZoodlesConstants.PARAM_TOKEN + "=" + SessionHandler.getInstance ().token.getSecret (),CallMethod.GET,ZoodleState.BUY_GEMS);
-				Server.init (ZoodlesConstants.getHttpsHost());
-				m_requestQueue.reset ();
-				m_requestQueue.add (new ViewGemsRequest(viewGemsRequestComplete));
-				m_requestQueue.request ();
+				doViewGemsRequest();
 			}
 		}
 		else
 		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new ViewGemsRequest(viewGemsRequestComplete));
-			m_requestQueue.request ();
+			doViewGemsRequest();
 		}
+	}
+
+	private void doViewGemsRequest()
+	{
+		Server.init(ZoodlesConstants.getHttpsHost());
+		m_requestQueue.reset();
+		m_requestQueue.add(new ViewGemsRequest(viewGemsRequestComplete));
+		m_requestQueue.request();
 	}
 	
 	private void viewGemsRequestComplete(HttpsWWW p_response)
@@ -899,8 +871,8 @@ public class OverviewInfoState : GameState {
 	private App m_app;
 
 	private UICanvas m_dashboardInfoCanvas;
-	private UICanvas m_appDetailsCanvas;
-	private UICanvas	m_confirmDialogCanvas;
+	private AppDetailsCanvas m_appDetailsCanvas;
+	private ConfirmDialogCanvas	m_confirmDialogCanvas;
 
 	private UIElement m_costArea;
 	private UIButton m_buyGemsButton;
@@ -914,11 +886,10 @@ public class OverviewInfoState : GameState {
 
 	private UIButton m_editProfileButton;
 
-	private UIButton	m_topRecommendAppArea;
+	private UIButton m_topRecommendAppArea;
 	private RequestQueue m_requestQueue;
 	private RequestQueue m_getTopRecommendAppRequestQueue;
-
-//	private bool 		canMoveLeftMenu;
+	
 	private bool 		canLoadTopRecommandApp;
 
 
@@ -930,6 +901,11 @@ public class OverviewInfoState : GameState {
 	//Buy button for the book
 	private UIButton 			      m_clickedBuyButton;
 	//Used to call Game script functions
-	private Game game;
-	
+//	private Game game;
+	private List<Book> bookList;
+	//selected top recommended book ui element
+	//currently, only have one top recommended book ui element
+	private UIElement m_selectedElement;
+
+	private bool isAppDetailsScreen = false;
 }

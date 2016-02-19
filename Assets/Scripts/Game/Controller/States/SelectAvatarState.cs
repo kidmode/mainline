@@ -60,7 +60,7 @@ public class SelectAvatarState : GameState
 					{
 						SessionHandler.getInstance().currentKid = SessionHandler.getInstance().kidList[0];
 					}
-					SessionHandler.getInstance().getBooklist();
+//					SessionHandler.getInstance().getBooklist();
 				}
 				SessionHandler.getInstance().CreateChild = false;
 			}

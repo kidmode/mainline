@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ConfirmDialogCanvas : UICanvas
 {
 	public override void init (GameObject p_gameObject)
 	{
 		base.init (p_gameObject);
+
+		m_dialog = getView ("mainPanel") as UIElement;
+		m_dialogMovePosition = 1660;
+
 		setupLocalization ();
 	}
 	
@@ -48,4 +53,37 @@ public class ConfirmDialogCanvas : UICanvas
 	{
 		base.exitingTransition ();
 	}
+
+	public void setUIManager(UIManager p_UIManager)
+	{
+		m_uiManager = p_UIManager;
+	}
+
+	public void moveInDialog()
+	{
+		if(null != m_uiManager)
+		{
+			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
+		}
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( m_dialog.transform.localPosition );
+		l_pointListOut.Add( m_dialog.transform.localPosition + new Vector3( 0, m_dialogMovePosition, 0 ));
+		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+	
+	public void moveOutDialog()
+	{
+		if(null != m_uiManager)
+		{
+			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
+		}
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		l_pointListOut.Add( m_dialog.transform.localPosition );
+		l_pointListOut.Add( m_dialog.transform.localPosition - new Vector3( 0, m_dialogMovePosition, 0 ));
+		m_dialog.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+
+	private UIManager m_uiManager;
+	private UIElement m_dialog;
+	private int m_dialogMovePosition;
 }

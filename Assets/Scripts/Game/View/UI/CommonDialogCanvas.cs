@@ -11,7 +11,7 @@ public class CommonDialogCanvas : UICanvas
 		tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED );
 
 		m_dialog = getView ("dialog") as UIElement;
-		m_dialogMovePosition = 800;
+		m_dialogMovePosition = 1660;
 	}
 	
 	public override void update()

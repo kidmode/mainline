@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -34,7 +34,6 @@ public class OverviewReadingState : GameState
 	{
 		base.exit (p_gameController);
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
-//		m_uiManager.removeScreen( UIScreen.BOOK_LIST );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_READING );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
@@ -45,12 +44,12 @@ public class OverviewReadingState : GameState
 	private void _setupScreen( GameController p_gameController )
 	{
 		//help screen
-		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 18 )  as CommonDialogCanvas;
+		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 18 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
 		m_recordStartCanvas = m_uiManager.createScreen( UIScreen.RECORD_START, false, 17 );
-		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
-//		m_bookListCanvas 	= m_uiManager.createScreen( UIScreen.BOOK_LIST, false, 12 );
+		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
+
 		m_recordAReadingCanvas	= m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -95,43 +94,35 @@ public class OverviewReadingState : GameState
 		m_recommendedbookList = m_recordAReadingCanvas.getView("RecommendedBooksSwipeList") as UISwipeList;
 		m_recommendedbookList.active = false;
 
-		m_requestQueue.reset ();
-		m_requestQueue.add(new BookListRequest(false, _requestBookListComplete));
-		m_requestQueue.request();
+		if (SessionHandler.getInstance().bookList == null || SessionHandler.getInstance().bookList.Count == 0)
+		{
+			doBookListRequest();
+		}
+		else
+		{
+			loadBookList();
+			finishLoodBookList();
+		}
+
+		m_unselectedSwipeList = m_recordStartCanvas.getView( "kidSwipeList" ) as UISwipeList;
+		m_selectAllButton 		= m_recordStartCanvas.getView ("selectButton") as UIButton;
+		m_saveButon 		= m_recordStartCanvas.getView ("saveButton") as UIButton;
+		m_exitRecordButton 	= m_recordStartCanvas.getView ("exitButton") as UIButton;
+		m_unselectedSwipeList.addClickListener ( "Prototype", onSelectKid );
+		m_selectAllButton.addClickCallback( onSelectAllButtonClicked );
+		m_saveButon.addClickCallback( onSaveButtonClicked );
+		m_exitRecordButton.addClickCallback( onExitRecordButtonClick );
+		m_saveButon.enabled = false;
 
 		m_buyGemsButton = m_confirmDialogCanvas.getView("buyGemsButton") as UIButton;
 		m_buyGemsButton.addClickCallback(buyGems);
 		m_costArea = m_confirmDialogCanvas.getView("costArea");
 		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
-	
-		m_selectButton 		= m_recordStartCanvas.getView ("selectButton") as UIButton;
-		m_saveButon 		= m_recordStartCanvas.getView ("saveButton") as UIButton;
-		m_exitRecordButton 	= m_recordStartCanvas.getView ("exitButton") as UIButton;
-		m_selectButton.addClickCallback( onSelectButtonClicked );
-		m_saveButon.addClickCallback( onSaveButtonClicked );
-		m_exitRecordButton.addClickCallback( onExitRecordButtonClick );
-		m_saveButon.enabled = false;
 
 		m_buyGemsButtonOnConfirm = m_confirmDialogCanvas.getView ("buyGemsButton") as UIButton;
-
 		m_buyGemsButtonOnConfirm.addClickCallback (toBuyGemsScreen);
 	}
 
-	private void onSelectButtonClicked( UIButton p_button )
-	{
-		SessionHandler.getInstance ().recordKidList.Clear ();
-		SessionHandler.getInstance ().recordKidList.AddRange(SessionHandler.getInstance ().kidList);
-
-		if( SessionHandler.getInstance().recordKidList.Count > 0 )
-		{
-			m_saveButon.enabled = true;
-		}
-		else
-		{
-			m_saveButon.enabled = false;
-		}
-	}
-	
 	private void onHelpButtonClick(UIButton p_button)
 	{
 		p_button.removeAllCallbacks ();
@@ -152,26 +143,76 @@ public class OverviewReadingState : GameState
 		m_commonDialog.setOutPosition ();
 		m_helpButton.addClickCallback (onHelpButtonClick);
 	}
-	
-	private void onExitRecordButtonClick( UIButton p_button )
+
+	#region Recording Start Screen
+	private void onSelectKid( UISwipeList p_list, UIButton p_button, object p_data, int p_index )
 	{
-		m_uiManager.changeScreen (UIScreen.RECORD_START,false);
-		if(bookListOpen)
+		Kid l_kid = p_data as Kid;
+		bool l_isBreak = false;
+		
+		if( SessionHandler.getInstance().recordKidList.Count > 0 )
 		{
-			m_uiManager.changeScreen (UIScreen.BOOK_LIST,true);
+			for( int i = 0; i < SessionHandler.getInstance().recordKidList.Count; i++ )
+			{
+				if( SessionHandler.getInstance().recordKidList[i].id == l_kid.id )
+				{
+					SessionHandler.getInstance().recordKidList.RemoveAt(i);
+					l_isBreak = true;
+					break;
+				}
+			}
+			if( !l_isBreak )
+			{
+				SessionHandler.getInstance().recordKidList.Add( l_kid );
+			}
 		}
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_recordStartCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		else
+		{
+			SessionHandler.getInstance().recordKidList.Add( l_kid );
+		}
+
+		if( SessionHandler.getInstance().recordKidList.Count > 0 )
+		{
+			m_saveButon.enabled = true;
+		}
+		else
+		{
+			m_saveButon.enabled = false;
+		}
 	}
-	
+
+	private void onSelectAllButtonClicked( UIButton p_button )
+	{
+		SessionHandler.getInstance ().recordKidList.Clear();
+		SessionHandler.getInstance ().recordKidList.AddRange(SessionHandler.getInstance().kidList);
+		
+		if( SessionHandler.getInstance().recordKidList.Count > 0 )
+		{
+			m_saveButon.enabled = true;
+		}
+		else
+		{
+			m_saveButon.enabled = false;
+		}
+	}
+
 	private void onSaveButtonClicked( UIButton p_button )
 	{
 		m_gameController.connectState (ZoodleState.BOOK_RECORD, ZoodleState.OVERVIEW_READING);
 		m_gameController.changeState (ZoodleState.BOOK_RECORD);
 	}
+	
+	private void onExitRecordButtonClick( UIButton p_button )
+	{
+		m_uiManager.changeScreen (UIScreen.RECORD_START, false);
+
+		List<Vector3> l_pointListOut = new List<Vector3>();
+		UIElement l_currentPanel = m_recordStartCanvas.getView ("mainPanel");
+		l_pointListOut.Add( l_currentPanel.transform.localPosition );
+		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 1400, 0 ));
+		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+	}
+	#endregion	
 
 	private void toBuyGemsScreen(UIButton p_button)
 	{
@@ -300,12 +341,8 @@ public class OverviewReadingState : GameState
 	
 	private void onExitConfiemDialogButtonClick( UIButton p_button )
 	{
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,false);
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
+		m_confirmDialogCanvas.moveOutDialog();
 	}
 	
 	private void onClickRecordBookButton(UIButton p_button)
@@ -364,25 +401,33 @@ public class OverviewReadingState : GameState
 		m_clickedBuyButton = p_button;
 		confirmBuyBook (m_wantedBook);
 	}
-	
+
+	#region Prototype Callback
 	private void onRecordBookClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
-		SessionHandler.getInstance ().currentBook = m_bookDataTable[(p_data as Book).id] as Book;
+		Book currentBook = p_data as Book;
+		SessionHandler.getInstance().currentBook = m_bookDataTable[currentBook.id] as Book;
 
-		if( 0 == SessionHandler.getInstance ().currentBook.pageList.Count )
+		if( 0 == SessionHandler.getInstance().currentBook.pageList.Count )
 		{
 			return;
 		}
 
-		m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
-		m_uiManager.changeScreen (UIScreen.RECORD_START,true);
+		UIImage icon = m_recordStartCanvas.getView("BookCover") as UIImage;
+		UILabel title = m_recordStartCanvas.getView("BookTitle") as UILabel;
+		if (currentBook.icon)
+			icon.setTexture(currentBook.icon);
+		title.text = currentBook.title;
+
+		m_uiManager.changeScreen (UIScreen.RECORD_START, true);
+
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_recordStartCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 1400, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 	}
-	
+
 	private void onBookClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
 		m_selectedElement = null;
@@ -407,6 +452,7 @@ public class OverviewReadingState : GameState
 		m_clickedBuyButton = p_listElement;
 		confirmBuyBook (m_wantedBook);
 	}
+	#endregion
 	
 	private void finishLoodBookList()
 	{
@@ -452,11 +498,11 @@ public class OverviewReadingState : GameState
 	{
 		Book l_book = (Book)p_data;
 		_setupSignleBook (p_element, (Book)p_data);
-		if(null != l_book.icon && !l_book.isIconSet)
+		if(null != l_book.icon/* && !l_book.isIconSet*/)
 		{
 			UIImage l_image = p_element.getView("bookImage") as UIImage;
 			l_image.setTexture(l_book.icon);
-			l_book.isIconSet = true;
+//			l_book.isIconSet = true;
 		}
 	}
 
@@ -465,7 +511,7 @@ public class OverviewReadingState : GameState
 		if(null != m_wantedBook && null != m_clickedBuyButton)
 		{
 			if(SessionHandler.getInstance().currentKid.gems >= m_wantedBook.gems)
-				sendBuyBookRequest ();
+				sendBuyBookRequest();
 			else
 			{
 				UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
@@ -489,26 +535,22 @@ public class OverviewReadingState : GameState
 	
 	public void confirmBuyBook(Book p_book)
 	{
-		if(bookListOpen)
-			m_uiManager.changeScreen (UIScreen.BOOK_LIST,false);
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,true);
+
 		m_costArea.active = true;
 		m_needMoreArea.active = false;
-		
-		List<Vector3> l_pointListIn = new List<Vector3>();
+
 		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
-		l_titleLabel.text = "Confirm Purchase";
+		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
-		l_notice1label.text = "You are purchasing:";
+		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
 		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
 		l_notice1label2.text = p_book.title;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
 		l_priceLabel.text = p_book.gems.ToString();
+
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
+		m_confirmDialogCanvas.moveInDialog();
 	}
 	
 	private void sendBuyBookRequest()
@@ -516,7 +558,7 @@ public class OverviewReadingState : GameState
 		m_requestQueue.reset ();
 		m_requestQueue.add (new BuyBookRequest (m_wantedBook, m_clickedBuyButton, m_confirmDialogCanvas ,m_selectedElement));
 		m_requestQueue.request ();
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG,false);
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 	}
 
 	private void loadBookList()
@@ -540,9 +582,9 @@ public class OverviewReadingState : GameState
 			}
 		}
 		
-		RequestQueue l_request = new RequestQueue ();
-		l_request.add ( new GetReadingsRequest( _requestReadingListComplete ) );
-		l_request.request (RequestType.RUSH);
+//		RequestQueue l_request = new RequestQueue ();
+//		l_request.add ( new GetReadingsRequest( _requestReadingListComplete ) );
+//		l_request.request (RequestType.RUSH);
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -646,6 +688,15 @@ public class OverviewReadingState : GameState
 			setErrorMessage(m_gameController,Localization.getString( Localization.TXT_STATE_11_FAIL ),Localization.getString( Localization.TXT_STATE_64_GET_DATA_FAIL ));
 		}
 	}
+
+
+	#region BookListRequest
+	private void doBookListRequest()
+	{
+		m_requestQueue.reset ();
+		m_requestQueue.add(new BookListRequest(false, _requestBookListComplete));
+		m_requestQueue.request();
+	}
 	
 	private void _requestBookListComplete(HttpsWWW p_response)
 	{
@@ -665,23 +716,32 @@ public class OverviewReadingState : GameState
 				
 				ArrayList l_books = l_bookData["books"] as ArrayList;
 
-				if( null == SessionHandler.getInstance ().bookList )
-				{
-					int l_dataCount = l_books.Count;
-					List<Book> l_bookList = new List<Book> ();
-					for(int l_i = 0; l_i < l_dataCount; l_i++)
-					{
-						Hashtable l_table = l_books[l_i] as Hashtable;
-						Book l_book = new Book(l_table);
-						l_bookList.Add(l_book);
-					}
-					SessionHandler.getInstance().bookList = l_bookList;
-				}
-				
+//				if( null == SessionHandler.getInstance ().bookList )
+//				{
+//					int l_dataCount = l_books.Count;
+//					List<Book> l_bookList = new List<Book> ();
+//					for(int l_i = 0; l_i < l_dataCount; l_i++)
+//					{
+//						Hashtable l_table = l_books[l_i] as Hashtable;
+//						Book l_book = new Book(l_table);
+//						l_bookList.Add(l_book);
+//					}
+//					SessionHandler.getInstance().bookList = l_bookList;
+//				}
+
+				bool isBookListSet = false;
+				List<Book> l_bookList = null;
+				if(SessionHandler.getInstance().bookList == null)
+					l_bookList = new List<Book>();
+				else
+					isBookListSet = true;
+
 				foreach (object o in l_books)
 				{
 					Book l_book = new Book(o as Hashtable);
 					m_bookDataTable[l_book.id] = l_book;
+					if (isBookListSet == false)
+						l_bookList.Add(l_book);
 
 					string l_record = LocalSetting.find("User").getString(l_book.id.ToString(), string.Empty);
 					if( !l_record.Equals(string.Empty) )
@@ -697,7 +757,12 @@ public class OverviewReadingState : GameState
 						}
 					}
 				}
-				
+				if (isBookListSet == false)
+				{
+					SessionHandler.getInstance().bookList = l_bookList;
+					isBookListSet = true;
+				}
+
 				ArrayList l_readings = l_bookData["readings"] as ArrayList;
 				foreach (object o in l_readings)
 				{
@@ -716,12 +781,18 @@ public class OverviewReadingState : GameState
 				finishLoodBookList();
 			}
 		}
-//		ArrayList l_data = MiniJSON.MiniJSON.jsonDecode (l_string) as ArrayList;
-
-//
 //		loadBookList ();
 	}
-	
+	#endregion
+
+	#region GetReadingsRequest
+	private void doGetReadingRequest()
+	{
+		RequestQueue l_request = new RequestQueue ();
+		l_request.add ( new GetReadingsRequest( _requestReadingListComplete ) );
+		l_request.request (RequestType.RUSH);
+	}
+
 	private void _requestReadingListComplete(HttpsWWW p_response)
 	{
 		if (p_response.error == null)
@@ -768,16 +839,16 @@ public class OverviewReadingState : GameState
 				m_recordedBookList.Add( l_bookReading.bookId );
 			}
 			
-			_setupRecordAReadingCanvas();
+//			_setupRecordAReadingCanvas();
 		}
 	}
+	#endregion
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
 
 	private UICanvas				  m_recordAReadingCanvas;
-//	private UICanvas				  m_bookListCanvas;
 	private CommonDialogCanvas 		  m_commonDialog;
-	private UICanvas 				  m_confirmDialogCanvas;
+	private ConfirmDialogCanvas 	  m_confirmDialogCanvas;
 	private UIManager 				  m_uiManager;
 	private UIButton				  m_exitBookDetailsButton;
 	private Book	 			      m_wantedBook;
@@ -786,7 +857,8 @@ public class OverviewReadingState : GameState
 	private UIButton 			      m_buyGemsButtonOnConfirm;
 	private UIElement 				  m_needMoreArea;
 	private UIButton 			      m_clickedBuyButton;
-	private UICanvas    			  m_recordStartCanvas;
+
+
 	private UIElement 			   	  m_selectedElement;
 	private UIButton 				  m_exitConfirmDialogButton;
 	private UIButton 			      m_cancelBuyButton;
@@ -794,9 +866,13 @@ public class OverviewReadingState : GameState
 	private RequestQueue 			  m_requestQueue;
 	private UIButton 				  m_helpButton;
 	private bool 					  bookListOpen = false;
-	private UIButton 				  m_selectButton;
+	//record start screen
+	private UICanvas    			  m_recordStartCanvas;
+	private UISwipeList 			  m_unselectedSwipeList;
+	private UIButton 				  m_selectAllButton;
 	private UIButton 				  m_saveButon;
 	private UIButton 				  m_exitRecordButton;
+	//end of record start screen
 	private UIButton 				  m_buyGemsButton;
 	
 	private Hashtable m_bookDataTable 			= new Hashtable();

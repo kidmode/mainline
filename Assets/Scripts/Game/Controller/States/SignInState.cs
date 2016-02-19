@@ -469,7 +469,7 @@ public class SignInState : GameState
 			{
 				SessionHandler.getInstance().getAllKidApplist();
 				SessionHandler.getInstance().currentKid = l_kidList[0];
-				SessionHandler.getInstance().getBooklist();
+//				SessionHandler.getInstance().getBooklist();
 			}
 			//cynthia
 			ArrayList l_list = new ArrayList();

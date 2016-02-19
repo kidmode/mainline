@@ -43,6 +43,7 @@ public class ControlAppState : GameState
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
 		m_uiManager.removeScreenImmediately( UIScreen.CONFIRM_DIALOG );
+		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
 //		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
 
 		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
@@ -60,8 +61,8 @@ public class ControlAppState : GameState
 		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 16 )  as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
-		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 );
-		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 );
+		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 ) as AppDetailsCanvas;
+		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
 
 //		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 //		{
@@ -639,12 +640,9 @@ public class ControlAppState : GameState
 		{
 			l_icon.setTexture(p_app.icon);
 		}
-		
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		UIElement l_newPanel = m_recommendedAppDetailsCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
+
+		m_uiManager.changeScreen(UIScreen.APP_DETAILS, true);
+		m_recommendedAppDetailsCanvas.moveInDialog();
 	}
 
 	private void resetSubjectColor()
@@ -689,8 +687,6 @@ public class ControlAppState : GameState
 		}
 		else
 		{
-			m_uiManager.changeScreen (UIScreen.APP_DETAILS, false);
-			m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, true);
 			m_buyAppButton = p_button;
 			confirmBuyApp (m_clickedRecommendedAppDetails);
 		}
@@ -722,24 +718,16 @@ public class ControlAppState : GameState
 
 	private void onExitAppDetailsButtonClick( UIButton p_button )
 	{
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_recommendedAppDetailsCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		m_uiManager.changeScreen(UIScreen.APP_DETAILS, false);
+		m_recommendedAppDetailsCanvas.moveOutDialog();
 	}
 
 	public void confirmBuyApp(App p_app)
 	{
 		m_costArea.active = true;
 		m_needMoreArea.active = false;
-		
-		List<Vector3> l_pointListIn = new List<Vector3>();
+
 		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
-		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-		
 		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
 		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
 		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
@@ -748,17 +736,17 @@ public class ControlAppState : GameState
 		l_notice1label2.text = p_app.name;
 		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
 		l_priceLabel.text = p_app.gems.ToString ();
+
+		m_uiManager.changeScreen(UIScreen.APP_DETAILS, false);
+		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
+		m_confirmDialogCanvas.moveInDialog();
 	}
 
 	private void onExitConfiemDialogButtonClick( UIButton p_button )
 	{
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, false);
 		m_uiManager.changeScreen (UIScreen.APP_DETAILS, true);
-		List<Vector3> l_pointListOut = new List<Vector3>();
-		UIElement l_currentPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		l_pointListOut.Add( l_currentPanel.transform.localPosition );
-		l_pointListOut.Add( l_currentPanel.transform.localPosition - new Vector3( 0, 800, 0 ));
-		l_currentPanel.tweener.addPositionTrack( l_pointListOut, 0f );
+		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, false);
+		m_confirmDialogCanvas.moveOutDialog();
 	}
 
 	private void onConfiemButtonClick( UIButton p_button )
@@ -805,13 +793,9 @@ public class ControlAppState : GameState
 			
 			if (null != m_confirmDialogCanvas)
 			{
-				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
-				m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
-				List<Vector3> l_pointListOut = new List<Vector3>();
-				UIElement l_currentPanel = m_confirmDialogCanvas.getView("mainPanel");
-				l_pointListOut.Add(l_currentPanel.transform.localPosition);
-				l_pointListOut.Add(l_currentPanel.transform.localPosition - new Vector3(0, 800, 0));
-				l_currentPanel.tweener.addPositionTrack(l_pointListOut, 0f);
+				m_uiManager.changeScreen(UIScreen.APP_DETAILS, true);
+				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
+				m_confirmDialogCanvas.moveOutDialog();
 			}
 			
 			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
@@ -890,13 +874,13 @@ public class ControlAppState : GameState
 	//end of recommended app part
 
 	//recommended app detail part
-	private UICanvas	    	m_recommendedAppDetailsCanvas;
+	private AppDetailsCanvas	m_recommendedAppDetailsCanvas;
 	private UIButton 			m_exitAppDetailsButton;
 	private UIButton			m_buyAppButton;
 	//end of recommended app detail part
 
 	//confirm dialog to buy or install a recommended app
-	private UICanvas	    	m_confirmDialogCanvas;
+	private ConfirmDialogCanvas	m_confirmDialogCanvas;
 	private UIElement  			m_costArea;
 	private UIElement 			m_needMoreArea;
 	private UIButton 			m_exitConfirmDialogButton;
