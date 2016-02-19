@@ -38,7 +38,7 @@ public class PromoteSubjectsScreen : MonoBehaviour {
 
 	public void goPremiumButtonClicked(){
 		
-		game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.SETTING_STATE );
+		game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.CONTROL_SUBJECT );
 		
 		game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
 		

@@ -9,6 +9,13 @@ public class ControlSubjectState : GameState
 		base.enter (p_gameController);
 
 		m_uiManager = m_gameController.getUI();
+
+		//make sure the menu bar is visible whenever we enter the state
+		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+
+		game.setPDMenuBarVisible(true, false);
+
+
 		m_requestQueue = new RequestQueue();
 		_setupScreen( p_gameController );
 		_setupElment();
@@ -32,7 +39,7 @@ public class ControlSubjectState : GameState
 		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		m_uiManager.removeScreen( UIScreen.PROMOTE_SUBJECTS );
-		m_uiManager.removeScreen( UIScreen.PAYWALL );
+//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
@@ -42,17 +49,17 @@ public class ControlSubjectState : GameState
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
 		{
-			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
 		}
 
 		m_promoteSubjectsCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_SUBJECTS, true, 1 );
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_uiManager.setScreenEnable( UIScreen.PROMOTE_SUBJECTS, false );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+//			m_uiManager.setScreenEnable( UIScreen.PROMOTE_SUBJECTS, false );
+//		}
 	}
 
 	private void _setupElment()
@@ -191,23 +198,23 @@ public class ControlSubjectState : GameState
 		m_requestQueue.request (RequestType.RUSH);
 	}
 
-	private void onUpgradeButtonClick(UIButton p_button)
-	{
-		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-
-		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-			m_requestQueue.request ();
-		}
-		else
-		{
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-	}
+//	private void onUpgradeButtonClick(UIButton p_button)
+//	{
+//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
+//
+//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
+//		{
+//			Server.init (ZoodlesConstants.getHttpsHost());
+//			m_requestQueue.reset ();
+//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
+//			m_requestQueue.request ();
+//		}
+//		else
+//		{
+//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
+//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+//		}
+//	}
 	
 	private void viewPremiumRequestComplete(HttpsWWW p_response)
 	{
@@ -245,4 +252,7 @@ public class ControlSubjectState : GameState
 	private UISlider 	m_cognitiveSlider;
 	private UISlider 	m_creativeSlider;
 	private UISlider 	m_lifeSkillsSlider;
+
+	//Kevin
+	private Game		game;
 }
