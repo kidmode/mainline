@@ -100,7 +100,10 @@ public class FAQState : GameState
 		m_questionLabel.text = l_data[1];
 		m_titleLabel.text = "FAQ" + (p_index + 1).ToString ();
 
+		//faqcontent
+
 		UILabel l_faqContent = m_faqDialogCanvas.getView (l_data[0].ToString()) as UILabel;
+
 		if (null != l_faqContent)
 		{
 			if(null != m_showFaq)
