@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,6 +8,10 @@ public class ControlSubjectState : GameState
 	public override void enter (GameController p_gameController)
 	{
 		base.enter (p_gameController);
+
+		//Kevin
+		HasAnySliderChanged = false;
+		//End
 
 		m_uiManager = m_gameController.getUI();
 
@@ -70,6 +75,8 @@ public class ControlSubjectState : GameState
 		saveButton = m_promoteSubjectsCanvas.getView ("saveButton") as UIButton; 
 		saveButton.addClickCallback (onSaveButtonClick);
 
+		goPremiumButton = m_promoteSubjectsCanvas.getView ("goPremiumButton") as UIButton; 
+
 		int l_listCount = 4;
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -96,6 +103,13 @@ public class ControlSubjectState : GameState
 		m_cognitiveSlider.addValueChangedCallback( onSliderValueChanged );
 		m_creativeSlider.addValueChangedCallback( onSliderValueChanged );
 		m_lifeSkillsSlider.addValueChangedCallback( onSliderValueChanged );
+
+		//Kevin
+		//Disable Save buttons
+		saveButton.enabled = false;
+
+		goPremiumButton.enabled = false;
+		//End
 	}
 
 	private void checkRequest()
@@ -168,6 +182,9 @@ public class ControlSubjectState : GameState
 	private void onSliderValueChanged( float p_float )
 	{
 		m_isValueChanged = true;
+
+		HasAnySliderChanged = true;
+
 	}
 
 
@@ -197,6 +214,31 @@ public class ControlSubjectState : GameState
 		m_requestQueue.add( new SetSubjectsRequest( l_param ) );
 		m_requestQueue.request (RequestType.RUSH);
 	}
+
+
+	#region properties
+	//Kevin
+	// use this so there is only one place to change it and we know when
+	bool HasAnySliderChanged {
+		get {
+			return this.hasAnySliderChanged;
+		}
+		set {
+
+			hasAnySliderChanged = value;
+
+			if(hasAnySliderChanged){
+
+				saveButton.enabled = true;
+
+				goPremiumButton.enabled = true;
+
+			}
+
+		}
+	}
+	#endregion
+
 
 //	private void onUpgradeButtonClick(UIButton p_button)
 //	{
@@ -255,4 +297,10 @@ public class ControlSubjectState : GameState
 
 	//Kevin
 	private Game		game;
+
+	private bool hasAnySliderChanged = false;
+
+	private UIButton	goPremiumButton; //used for free user
+	//End
+
 }

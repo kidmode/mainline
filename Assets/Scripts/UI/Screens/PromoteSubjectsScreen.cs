@@ -24,6 +24,7 @@ public class PromoteSubjectsScreen : MonoBehaviour {
 		}
 	
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -46,10 +47,5 @@ public class PromoteSubjectsScreen : MonoBehaviour {
 		
 	}
 
-//	public void saveSubjectClicked(){
-//		
-////		game.gameController.changeState( ZoodleState.OVERVIEW_TIMESPENT );
-//		
-//	}
 
 }
