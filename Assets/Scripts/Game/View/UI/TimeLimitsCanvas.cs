@@ -10,6 +10,9 @@ public class TimeLimitsCanvas : UICanvas
 		SetupLocalizition ();
 		
 		_setupElement();
+
+
+
 	}
 	
 	public override void update ()
@@ -20,6 +23,9 @@ public class TimeLimitsCanvas : UICanvas
 	public override void dispose (bool p_deep)
 	{
 		base.dispose (p_deep);
+
+		ControlTimeState.onControlValueChangedToTrue -= onControlValueChangedToTrue;
+
 	}
 	
 	public override void enteringTransition ()
@@ -41,8 +47,33 @@ public class TimeLimitsCanvas : UICanvas
 			return;
 		
 		m_data = p_hashTable;
+
 		_setupData();
+
+		ControlTimeState.onControlValueChangedToTrue += onControlValueChangedToTrue;
+
 	}
+
+	#region Event
+	//-----Event
+	//Kevin
+	private void onControlValueChangedToTrue(){
+		
+		mSaveButton.enabled = true;
+		
+		if(SessionHandler.getInstance().token.isPremium()){
+			
+			m_iconLock.gameObject.SetActive(false);
+			
+		}else {
+			
+			m_iconLock.gameObject.SetActive(true);
+			
+		}
+		
+	}
+	
+	#endregion
 	
 	//------------------ Private Implementation --------------------
 	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
@@ -66,6 +97,20 @@ public class TimeLimitsCanvas : UICanvas
 		m_weekendTwoHours 		= m_weekendGroup.getView( "twoHoursToggle" )	 as UIToggle;
 		m_weekendFourHours 		= m_weekendGroup.getView( "fourHoursToggle" )	 as UIToggle;
 		m_weekendUnlimited 		= m_weekendGroup.getView( "unlimitedToggle" )	 as UIToggle;
+
+		//New Save Button
+		mSaveButton = getView ("saveButton") as UIButton;
+		
+		//Kevin, set save button to gray / not interative at the start
+		mSaveButton.enabled = false;
+		
+		//Setup event so we know when the setttings cache has changed
+		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
+		
+		m_iconLock = getView ("lockIcon") as UIImage;
+		
+		m_iconLock.gameObject.SetActive(false);
+
 	}
 	
 	private void _setupData()
@@ -167,4 +212,11 @@ public class TimeLimitsCanvas : UICanvas
 	private UIToggle m_weekendUnlimited;
 	
 	private Hashtable m_data;
+
+	//Kevin
+	//New Save Button
+	private UIButton mSaveButton;
+	
+	private UIImage m_iconLock;
+
 }

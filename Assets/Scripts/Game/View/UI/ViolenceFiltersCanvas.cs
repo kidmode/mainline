@@ -17,18 +17,6 @@ public class ViolenceFiltersCanvas : UICanvas
 
 
 
-		//New Save Button
-		mSaveButton = getView ("saveButton") as UIButton;
-		
-		//Kevin, set save button to gray / not interative at the start
-		mSaveButton.enabled = false;
-		
-		//Setup event so we know when the setttings cache has changed
-		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
-		
-		m_iconLock = getView ("lockIcon") as UIImage;
-		
-		m_iconLock.gameObject.SetActive(false);
 
 
 	}
@@ -91,6 +79,23 @@ public class ViolenceFiltersCanvas : UICanvas
 		m_levelTwoToggle 	= getView( "levelTwoToggle" )	 as UIToggle;
 		m_levelThreeToggle 	= getView( "levelThreeToggle" )	 as UIToggle;
 		m_levelFourToggle 	= getView( "levelFourToggle" )	 as UIToggle;
+
+		//New Save Button
+		mSaveButton = getView ("saveButton") as UIButton;
+		
+		//Kevin, set save button to gray / not interative at the start
+		mSaveButton.enabled = false;
+
+		
+		//Setup event so we know when the setttings cache has changed
+		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
+
+
+		m_iconLock = getView ("lockIcon") as UIImage;
+		
+		m_iconLock.gameObject.SetActive(false);
+
+
 	}
 
 	private void _setupData()

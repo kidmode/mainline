@@ -198,17 +198,9 @@ public class ControlViolenceState : GameState
 
 		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
 
-		UILabel messageTitle = messageCanvas.getView("messageLabel") as UILabel;
-
-		UILabel messageContent = messageCanvas.getView("messageContent")as UILabel;
-
 		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
 
 		messageCloseButton.addClickCallback(closePDMessage);
-
-//		messageTitle.text = Localization.getString(Localization.TXT_PD_SETTIGNS_SAVED_TITLE);
-//
-//		messageContent.text = Localization.getString(Localization.TXT_PD_SETTIGNS_SAVED_CONTENT);
 
 
 		if(p_response.error == null){
