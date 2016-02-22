@@ -14,6 +14,8 @@ public class ViolenceFiltersCanvas : UICanvas
 			_setupElement();
 			_setupData();
 		}
+
+		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
 	}
 	
 	public override void update ()
@@ -24,6 +26,8 @@ public class ViolenceFiltersCanvas : UICanvas
 	public override void dispose (bool p_deep)
 	{
 		base.dispose (p_deep);
+
+		ControlViolenceState.onControlValueChangedToTrue -= onControlValueChangedToTrue;
 	}
 	
 	public override void enteringTransition ()
@@ -36,6 +40,15 @@ public class ViolenceFiltersCanvas : UICanvas
 	{
 		base.exitingTransition ();
 	}
+
+	#region Event
+	//-----Event
+	//Kevin
+	private void onControlValueChangedToTrue(){
+
+	}
+
+	#endregion
 	
 	//------------------ Private Implementation --------------------
 	private void onFadeFinish( UIElement p_element, Tweener.TargetVar p_targetVariable )
@@ -113,4 +126,8 @@ public class ViolenceFiltersCanvas : UICanvas
 	private UIToggle m_levelTwoToggle;
 	private UIToggle m_levelThreeToggle;
 	private UIToggle m_levelFourToggle;
+
+
+	//Kevin
+	//New Save Button
 }

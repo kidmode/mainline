@@ -32,6 +32,7 @@ public class DeviceOptionsState : GameState
 	
 	public override void exit( GameController p_gameController )
 	{
+
 		int l_changedStateName = int.Parse( m_gameController.stateName);
 		if (SessionHandler.getInstance().settingCache.active && 
 		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
@@ -81,21 +82,11 @@ public class DeviceOptionsState : GameState
 		m_closeButton.active = false;
 		m_noticeLabel.text = Localization.getString(Localization.TXT_LABEL_LOADING);
 		m_closeButton.addClickCallback (closeNoticeDialog);
-		m_refreshButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
-		m_refreshButton.addClickCallback (toRefreshContent);
+		m_saveButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
+		m_saveButton.addClickCallback (toRefreshContent);
 
 
-		//Kevin, set save button to gray / not interative at the start
-		m_refreshButton.enabled = false;
 
-		//Setup event so we know when the setttings cache has changed
-		SettingCache.onSettingCacheActiveChanged += onSettingCacheActiveChanged;
-
-		m_iconLock = m_deviceOptionCanvas.getView ("lockIcon") as UIImage;
-
-		m_iconLock.gameObject.SetActive(false);
-
-		//End
 
 
 		if(m_settingCache.active)
@@ -166,33 +157,33 @@ public class DeviceOptionsState : GameState
 		m_settingCache.effectsVolum =  (int)p_float;
 	}
 
-	#region Events
-
-	private void onSettingCacheActiveChanged(bool value){
-
-		if(value){
-
-			m_refreshButton.enabled = true;
-
-			if(SessionHandler.getInstance().token.isPremium()){
-
-				m_iconLock.gameObject.SetActive(false);
-
-			}else {
-
-				m_iconLock.gameObject.SetActive(true);
-
-			}
-
-		}else{
-
-			m_refreshButton.enabled = false;
-
-		}
-
-	}
-
-	#endregion
+//	#region Events
+//
+//	private void onSettingCacheActiveChanged(bool value){
+//
+//		if(value){
+//
+//			m_saveButton.enabled = true;
+//
+//			if(SessionHandler.getInstance().token.isPremium()){
+//
+//				m_iconLock.gameObject.SetActive(false);
+//
+//			}else {
+//
+//				m_iconLock.gameObject.SetActive(true);
+//
+//			}
+//
+//		}else{
+//
+//			m_saveButton.enabled = false;
+//
+//		}
+//
+//	}
+//
+//	#endregion
 
 	private void onHelpButtonClick(UIButton p_button)
 	{
@@ -210,7 +201,7 @@ public class DeviceOptionsState : GameState
 
 	private void closeNoticeDialog(UIButton p_button)
 	{
-		m_refreshButton.addClickCallback (toRefreshContent);
+		m_saveButton.addClickCallback (toRefreshContent);
 		m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_LOADING);
 		p_button.active = false;
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -448,7 +439,7 @@ public class DeviceOptionsState : GameState
 	private bool 		m_allowTip;
 	private UIButton 	m_tryPremiumButton;
 	private UIButton 	m_buyGemsButton;
-	private UIButton	m_refreshButton;
+	private UIButton	m_saveButton;
 	private RequestQueue m_requestQueue;
 	private SettingCache m_settingCache;
 //	#if UNITY_ANDROID && !UNITY_EDITOR

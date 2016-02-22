@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,7 +27,7 @@ public class ControlViolenceState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-		checkRequest ();
+//		checkRequest ();
 		
 		base.exit (p_gameController);
 
@@ -94,6 +95,7 @@ public class ControlViolenceState : GameState
 			m_isValueChanged = false;
 			updateViolenceFilters();
 		}
+
 	}
 
 	private void onHelpButtonClick(UIButton p_button)
@@ -147,6 +149,10 @@ public class ControlViolenceState : GameState
 	private void onViolenceChanged( UIToggle p_toggle, bool p_bool )
 	{
 		m_isValueChanged = true;
+
+		if(onControlValueChangedToTrue != null)
+			onControlValueChangedToTrue();
+
 	}
 
 	private void updateViolenceFilters ()
@@ -234,4 +240,8 @@ public class ControlViolenceState : GameState
 	private UIToggle 		m_levelTwoToggle;
 	private UIToggle 		m_levelThreeToggle;
 	private UIToggle 		m_levelFourToggle;
+
+	//Kevin - event when control values changed to true 
+	public static event Action	onControlValueChangedToTrue;
+
 }
