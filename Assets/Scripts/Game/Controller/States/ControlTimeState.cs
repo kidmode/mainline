@@ -176,9 +176,9 @@ public class ControlTimeState : GameState
 
 		m_isValueChanged = true;
 
-		if( onControlValueChangedToTrue != null){
+		if( onControlValueChanged != null){
 
-			onControlValueChangedToTrue();
+			onControlValueChanged(m_isValueChanged);
 
 		}
 
@@ -287,6 +287,13 @@ public class ControlTimeState : GameState
 
 		}
 
+
+		if( onControlValueChanged != null){
+			
+			onControlValueChanged(m_isValueChanged);
+			
+		}
+
 	}
 
 	private void closePDMessage(UIButton button){
@@ -363,7 +370,7 @@ public class ControlTimeState : GameState
 	private float mainPanelOffset = 1124.25f;
 
 	//Kevin - event when control values changed to true 
-	public static event Action	onControlValueChangedToTrue;
+	public static event Action<bool>	onControlValueChanged;
 
 	//Kevin - Save Button
 	UIButton mSaveButton;

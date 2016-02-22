@@ -30,7 +30,7 @@ public class ViolenceFiltersCanvas : UICanvas
 	{
 		base.dispose (p_deep);
 
-		ControlViolenceState.onControlValueChangedToTrue -= onControlValueChangedToTrue;
+		ControlViolenceState.onControlValueChanged -= onControlValueChanged;
 	}
 	
 	public override void enteringTransition ()
@@ -47,20 +47,27 @@ public class ViolenceFiltersCanvas : UICanvas
 	#region Event
 	//-----Event
 	//Kevin
-	private void onControlValueChangedToTrue(){
+	private void onControlValueChanged(bool value){
 
-		mSaveButton.enabled = true;
-		
-		if(SessionHandler.getInstance().token.isPremium()){
+		if(value){
 			
-			m_iconLock.gameObject.SetActive(false);
+			mSaveButton.enabled = true;
+			
+			if(SessionHandler.getInstance().token.isPremium()){
+				
+				m_iconLock.gameObject.SetActive(false);
+				
+			}else {
+				
+				m_iconLock.gameObject.SetActive(true);
+				
+			}
 			
 		}else {
 			
-			m_iconLock.gameObject.SetActive(true);
+			mSaveButton.enabled = false;
 			
 		}
-
 	}
 
 	#endregion
@@ -88,7 +95,7 @@ public class ViolenceFiltersCanvas : UICanvas
 
 		
 		//Setup event so we know when the setttings cache has changed
-		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
+		ControlViolenceState.onControlValueChanged += onControlValueChanged;
 
 
 		m_iconLock = getView ("lockIcon") as UIImage;

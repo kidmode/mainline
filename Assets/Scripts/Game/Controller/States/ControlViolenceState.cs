@@ -156,8 +156,8 @@ public class ControlViolenceState : GameState
 	{
 		m_isValueChanged = true;
 
-		if(onControlValueChangedToTrue != null)
-			onControlValueChangedToTrue();
+		if(onControlValueChanged != null)
+			onControlValueChanged(m_isValueChanged);
 
 	}
 
@@ -212,6 +212,10 @@ public class ControlViolenceState : GameState
 			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
 
 		}
+
+		if(onControlValueChanged != null)
+			onControlValueChanged(m_isValueChanged);
+
 
 	}
 
@@ -279,7 +283,7 @@ public class ControlViolenceState : GameState
 	private UIToggle 		m_levelFourToggle;
 
 	//Kevin - event when control values changed to true 
-	public static event Action	onControlValueChangedToTrue;
+	public static event Action<bool>	onControlValueChanged;
 
 	private float saveMessageDisplacement = 1092.0f;
 
