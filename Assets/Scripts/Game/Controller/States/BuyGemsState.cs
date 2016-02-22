@@ -170,7 +170,7 @@ public class BuyGemsState : GameState
 					//SwrveComponent.Instance.SDK.Iap(
 					//SwrveComponent.Instance.SDK.Purchase("Gems", "usd", int.Parse(l_gemPrice), int.Parse(l_gemAmount));
 					//swrve end
-					m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
+					changeToNextState();
 				}
 				else
 				{
@@ -256,6 +256,7 @@ public class BuyGemsState : GameState
 		p_button.removeClickCallback ( goBack );
 		int l_state = m_gameController.getConnectedState ( ZoodleState.BUY_GEMS );
 		m_gameController.changeState (l_state);
+		m_gameController.game.setPDMenuBarVisible(true, false);
 	}
 
 	private void gotoGoodPayment( UIButton p_button )
@@ -275,7 +276,7 @@ public class BuyGemsState : GameState
 		#endif
 
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
+		changeToNextState();
 #elif UNITY_ANDROID
 		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.good");
 #endif
@@ -297,7 +298,7 @@ public class BuyGemsState : GameState
 		#endif
 		
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
+		changeToNextState();
 #elif UNITY_ANDROID
 		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.better");
 #endif
@@ -319,7 +320,7 @@ public class BuyGemsState : GameState
 		#endif
 		
 #if UNITY_EDITOR
-		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
+		changeToNextState();
 #elif UNITY_ANDROID
 		AndroidInAppPurchaseManager.instance.purchase("com.zoodles.v2.best");
 #endif
@@ -334,6 +335,14 @@ public class BuyGemsState : GameState
 		l_handler.errorName = p_errorTitle;
 		l_handler.errorMessage = p_errorMessage;
 		m_gameController.changeState(ZoodleState.ERROR_STATE);
+	}
+
+	private void changeToNextState()
+	{
+		int state = m_gameController.getConnectedState(ZoodleState.BUY_GEMS);
+		m_gameController.connectState(ZoodleState.BUY_GEMS, state);
+		m_gameController.connectState(ZoodleState.PAY_GEMS_CONFIRM, state);
+		m_gameController.changeState(ZoodleState.PAY_GEMS_CONFIRM);
 	}
 
 	//Private variables

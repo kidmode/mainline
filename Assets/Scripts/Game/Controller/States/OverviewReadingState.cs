@@ -48,9 +48,9 @@ public class OverviewReadingState : GameState
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
 		m_recordStartCanvas = m_uiManager.createScreen( UIScreen.RECORD_START, false, 17 );
-		m_confirmDialogCanvas 	= m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
+		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
 
-		m_recordAReadingCanvas	= m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
+		m_recordAReadingCanvas = m_uiManager.createScreen( UIScreen.DASHBOARD_READING, true, 2 );
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_recordAReadingCanvas.getView ("mainPanel");
@@ -77,9 +77,6 @@ public class OverviewReadingState : GameState
 		m_helpButton = m_recordAReadingCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 
-//		m_exitBookListButton = m_bookListCanvas.getView( "exitButton" ) as UIButton;
-//		m_exitBookListButton.addClickCallback( onExitBookListButtonClick );
-
 		m_costArea = m_confirmDialogCanvas.getView("costArea");
 		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
 		m_exitConfirmDialogButton = m_confirmDialogCanvas.getView ("exitButton") as UIButton;
@@ -93,6 +90,8 @@ public class OverviewReadingState : GameState
 		m_bookList.active = false;
 		m_recommendedbookList = m_recordAReadingCanvas.getView("RecommendedBooksSwipeList") as UISwipeList;
 		m_recommendedbookList.active = false;
+		m_premiumMyBookList = m_recordAReadingCanvas.getView("PremiumMyBooksSwipeList") as UISwipeList;
+		m_premiumMyBookList.active = false;
 
 		if (SessionHandler.getInstance().bookList == null || SessionHandler.getInstance().bookList.Count == 0)
 		{
@@ -105,7 +104,7 @@ public class OverviewReadingState : GameState
 		}
 
 		m_unselectedSwipeList = m_recordStartCanvas.getView( "kidSwipeList" ) as UISwipeList;
-		m_selectAllButton 		= m_recordStartCanvas.getView ("selectButton") as UIButton;
+		m_selectAllButton 	= m_recordStartCanvas.getView ("selectButton") as UIButton;
 		m_saveButon 		= m_recordStartCanvas.getView ("saveButton") as UIButton;
 		m_exitRecordButton 	= m_recordStartCanvas.getView ("exitButton") as UIButton;
 		m_unselectedSwipeList.addClickListener ( "Prototype", onSelectKid );
@@ -459,10 +458,8 @@ public class OverviewReadingState : GameState
 	private void finishLoodBookList()
 	{
 		m_requestQueue.reset();
-		if (m_bookList == null)
-			m_bookList = m_recordAReadingCanvas.getView ("MyBooksSwipeList") as UISwipeList;
-		if (m_recommendedbookList == null)
-			m_recommendedbookList = m_recordAReadingCanvas.getView ("RecommendedBooksSwipeList") as UISwipeList;
+
+		Token l_token = SessionHandler.getInstance ().token;
 
 		List<Book> l_bookList = SessionHandler.getInstance().bookList;
 		if(null != l_bookList)
@@ -479,20 +476,52 @@ public class OverviewReadingState : GameState
 				if (null == book.icon)
 					downLoadBookIcon(book, null);
 			}
-			m_requestQueue.request ();
-			m_bookList.setData(ownedBooks);
-			m_bookList.setDrawFunction(onBookListDraw);
-			m_bookList.redraw();
+			m_requestQueue.request();
 
-			m_recommendedbookList.setData(recommendedBooks);
-			m_recommendedbookList.setDrawFunction(onBookListDraw);
-			m_recommendedbookList.redraw();
+			if ((l_token.isPremium() || l_token.isCurrent()) && recommendedBooks.Count == 0)
+			{
+				UIElement m_premiumMyBooksPanel = m_recordAReadingCanvas.getView("PremiumMyBooksPanel");
+				m_premiumMyBooksPanel.active = true;
 
-			m_bookList.active = true;
-			m_recommendedbookList.active = true;
+				if (m_premiumMyBookList == null)
+					m_premiumMyBookList = m_recordAReadingCanvas.getView ("PremiumMyBooksSwipeList") as UISwipeList;
 
-			m_bookList.addClickListener("recordButton", onRecordBookClick);
-			m_recommendedbookList.addClickListener("buyBookButton", onBookClick);
+				m_premiumMyBookList.setData(ownedBooks);
+				m_premiumMyBookList.setDrawFunction(onBookListDraw);
+				m_premiumMyBookList.redraw();
+
+				m_premiumMyBookList.active = true;
+				m_premiumMyBookList.addClickListener("recordButton", onRecordBookClick);
+			}
+			else
+			{
+				//get panels for active free or premium panels
+				UIElement m_myBooksPanel = m_recordAReadingCanvas.getView("MyBooksPanel");
+				m_myBooksPanel.active = true;
+				UIElement m_recommendedBooksPanel = m_recordAReadingCanvas.getView("RecommendedBooksPanel");
+				m_recommendedBooksPanel.active = true;
+				UIElement middleLine = m_recordAReadingCanvas.getView("MiddleLine");
+				middleLine.active = true;
+
+				if (m_bookList == null)
+					m_bookList = m_recordAReadingCanvas.getView ("MyBooksSwipeList") as UISwipeList;
+				if (m_recommendedbookList == null)
+					m_recommendedbookList = m_recordAReadingCanvas.getView ("RecommendedBooksSwipeList") as UISwipeList;
+
+				m_bookList.setData(ownedBooks);
+				m_bookList.setDrawFunction(onBookListDraw);
+				m_bookList.redraw();
+				
+				m_recommendedbookList.setData(recommendedBooks);
+				m_recommendedbookList.setDrawFunction(onBookListDraw);
+				m_recommendedbookList.redraw();
+				
+				m_bookList.active = true;
+				m_recommendedbookList.active = true;
+				
+				m_bookList.addClickListener("recordButton", onRecordBookClick);
+				m_recommendedbookList.addClickListener("buyBookButton", onBookClick);
+			}
 		}
 	}
 	
@@ -614,37 +643,6 @@ public class OverviewReadingState : GameState
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
-//	private void toViewPremiumScreen(UIButton p_button)
-//	{
-//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-//		{
-//			Server.init (ZoodlesConstants.getHttpsHost());
-//			m_requestQueue.reset ();
-//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-//			m_requestQueue.request ();
-//		}
-//		else
-//		{
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//	}
-
-//	private void viewPremiumRequestComplete(HttpsWWW p_response)
-//	{
-//		Server.init (ZoodlesConstants.getHttpsHost());
-//		if(null == p_response.error)
-//		{
-//			SessionHandler.getInstance ().PremiumJson = p_response.text;
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//		else
-//		{
-//			setErrorMessage(m_gameController,Localization.getString( Localization.TXT_STATE_11_FAIL ),Localization.getString( Localization.TXT_STATE_64_GET_DATA_FAIL ));
-//		}
-//	}
-
 	private void gotoGetGems()
 	{	
 		string l_returnJson = SessionHandler.getInstance ().GemsJson;
@@ -655,14 +653,16 @@ public class OverviewReadingState : GameState
 			if(l_date.ContainsKey("jsonResponse"))
 			{
 				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-				m_gameController.changeState (ZoodleState.BUY_GEMS);
+				m_gameController.changeState(ZoodleState.BUY_GEMS);
+
+				m_gameController.game.setPDMenuBarVisible(false, false);
 			}
 			else
 			{
 				//sendCall (m_game.gameController,null,"/api/gems_amount/gems_amount?" + ZoodlesConstants.PARAM_TOKEN + "=" + SessionHandler.getInstance ().token.getSecret (),CallMethod.GET,ZoodleState.BUY_GEMS);
 				Server.init (ZoodlesConstants.getHttpsHost());
 				m_requestQueue.reset ();
-				m_requestQueue.add (new ViewGemsRequest(viewGemsRequestComplete));
+				m_requestQueue.add(new ViewGemsRequest(viewGemsRequestComplete));
 				m_requestQueue.request ();
 			}
 		}
@@ -682,8 +682,10 @@ public class OverviewReadingState : GameState
 		if(p_response.error == null)
 		{
 			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
+			m_gameController.connectState(ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName));
 			m_gameController.changeState (ZoodleState.BUY_GEMS);
+
+			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 		else
 		{
@@ -854,12 +856,11 @@ public class OverviewReadingState : GameState
 	private UIManager 				  m_uiManager;
 	private UIButton				  m_exitBookDetailsButton;
 	private Book	 			      m_wantedBook;
-	private UISwipeList 			  m_bookList;
+
 	private UIElement  				  m_costArea;
 	private UIButton 			      m_buyGemsButtonOnConfirm;
 	private UIElement 				  m_needMoreArea;
 	private UIButton 			      m_clickedBuyButton;
-
 
 	private UIElement 			   	  m_selectedElement;
 	private UIButton 				  m_exitConfirmDialogButton;
@@ -880,5 +881,8 @@ public class OverviewReadingState : GameState
 	private Hashtable m_bookDataTable 			= new Hashtable();
 	private List<int> m_recordedBookList 		= new List<int>();
 
+	//contents of specific Scroll views
+	private UISwipeList 			  m_bookList;
 	private UISwipeList 			  m_recommendedbookList;
+	private UISwipeList 			  m_premiumMyBookList;
 }

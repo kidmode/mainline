@@ -81,7 +81,6 @@ public class OverviewBookState : GameState
 		m_helpButton = m_recommendedBookCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 
-
 		m_gemCountLabelInBook = m_recommendedBookCanvas.getView ("gemCountText") as UILabel;
 		m_moreBookButton = m_recommendedBookCanvas.getView( "bookListButton" ) as UIButton;
 		m_moreBookButton.addClickCallback( onMoreBookButtonClick );

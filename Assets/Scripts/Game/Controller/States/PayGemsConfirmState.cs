@@ -41,7 +41,9 @@ public class PayGemsConfirmState : GameState
 	
 	private void _goBack(UIButton p_button)
 	{
-		m_gameController.changeState(ZoodleState.PROFILE_SELECTION);
+		int state = m_gameController.getConnectedState(ZoodleState.PAY_GEMS_CONFIRM);
+		m_gameController.changeState(state);
+		m_gameController.game.setPDMenuBarVisible(true, false);
 	}
 }
 

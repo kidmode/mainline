@@ -484,6 +484,7 @@ public class PDMenuBarScript : MonoBehaviour {
 		if (visible)
 		{
 			menuBarCanvas.sortingOrder = 10;
+			removeSplashScreen();
 //			setCurrentKidOnFirstMenuBar();
 //			if (isChildUpdated)
 //				updateChildren();
@@ -594,5 +595,14 @@ public class PDMenuBarScript : MonoBehaviour {
 		int totalItems = childernList.transform.childCount;
 
 		childSelectorSrollRect.horizontalNormalizedPosition = (float)currentKidIndex/(float)totalItems;
+	}
+
+	private void removeSplashScreen()
+	{
+		UIManager l_ui = game.gameController.getUI();
+		SplashBackCanvas splashCanvas = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		
+		if(splashCanvas != null)
+			l_ui.removeScreenImmediately(splashCanvas);
 	}
 }
