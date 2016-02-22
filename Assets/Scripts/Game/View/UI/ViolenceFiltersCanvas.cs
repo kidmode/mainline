@@ -15,7 +15,22 @@ public class ViolenceFiltersCanvas : UICanvas
 			_setupData();
 		}
 
+
+
+		//New Save Button
+		mSaveButton = getView ("saveButton") as UIButton;
+		
+		//Kevin, set save button to gray / not interative at the start
+		mSaveButton.enabled = false;
+		
+		//Setup event so we know when the setttings cache has changed
 		ControlViolenceState.onControlValueChangedToTrue += onControlValueChangedToTrue;
+		
+		m_iconLock = getView ("lockIcon") as UIImage;
+		
+		m_iconLock.gameObject.SetActive(false);
+
+
 	}
 	
 	public override void update ()
@@ -45,6 +60,18 @@ public class ViolenceFiltersCanvas : UICanvas
 	//-----Event
 	//Kevin
 	private void onControlValueChangedToTrue(){
+
+		mSaveButton.enabled = true;
+		
+		if(SessionHandler.getInstance().token.isPremium()){
+			
+			m_iconLock.gameObject.SetActive(false);
+			
+		}else {
+			
+			m_iconLock.gameObject.SetActive(true);
+			
+		}
 
 	}
 
@@ -130,4 +157,8 @@ public class ViolenceFiltersCanvas : UICanvas
 
 	//Kevin
 	//New Save Button
+	private UIButton mSaveButton;
+
+	private UIImage m_iconLock;
+
 }

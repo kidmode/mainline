@@ -136,6 +136,9 @@ public class UIScreen
 	public const int PARENT_BIRTH_CHECK     = 1207;
 	//honda: Debug Mode
 	public const int ADD_ITEMS_MANUALLY     = 1208;
+
+	//Kevin
+	public const int PD_MESSAGE			= 1300;
 }
 
 
@@ -258,6 +261,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 		// Kevin: vzw
 		m_directoryMap.Add( UIScreen.TABLET_SETTINGS,				SCREEN_DIRECTORY + "DashBoard/TabletSettingsScreen" );
+		m_directoryMap.Add( UIScreen.PD_MESSAGE,				SCREEN_DIRECTORY + "DashBoard/PDMessageScreen" ); // parent dashboard message
 
 		//Add_YOUR_APP
 		m_directoryMap.Add( UIScreen.TUTORIAL_MAIN_PROCESS,				SCREEN_DIRECTORY + "Tutorials/TutMainProcess" );
@@ -405,6 +409,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.TABLET_SETTINGS:			return new UICanvas() 			as UICanvas;
 			case UIScreen.TUTORIAL_MAIN_PROCESS:			return new UICanvas() 			as UICanvas;
 			case UIScreen.TUTORIAL_CONTROL_VIOLENCE:			return new UICanvas() 			as UICanvas;
+			case UIScreen.PD_MESSAGE: 	return new PDMessageCanvas() 		as UICanvas;
 			// end vzw
 
 			//honda: vzw
@@ -422,6 +427,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 
 			//honda: debug mode
 			case UIScreen.ADD_ITEMS_MANUALLY:		return new UICanvas()			as UICanvas;
+
 
 		}
 		return new UICanvas();

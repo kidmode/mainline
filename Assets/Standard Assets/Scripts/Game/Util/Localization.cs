@@ -782,6 +782,13 @@ public class Localization : object
 	public const string TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT             = "TXT_CONTENT_SUBJECT_VIEW_SUBJECT_REPORT";
 	public const string TXT_CONTENT_SUBJECT_GO_PREMIUM             = "TXT_CONTENT_SUBJECT_GO_PREMIUM";
 	public const string TXT_CONTENT_SUBJECT_SAVE             = "TXT_CONTENT_SUBJECT_SAVE";
+
+	//New PD violence
+	public const string TXT_PD_SETTIGNS_SAVED_TITLE             = "TXT_PD_SETTIGNS_SAVED_TITLE";
+	public const string TXT_PD_SETTIGNS_SAVED_CONTENT             = "TXT_PD_SETTIGNS_SAVED_CONTENT";
+
+
+
 	/**************************************************************************************/
 
 	private string m_currLanguage   = "EN";
