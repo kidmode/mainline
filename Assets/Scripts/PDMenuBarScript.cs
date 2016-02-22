@@ -334,7 +334,7 @@ public class PDMenuBarScript : MonoBehaviour {
 				child.SetActive(true);
 			}
 
-			setContentWidth();
+//			setContentWidth();
 		}
 		else
 		{
