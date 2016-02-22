@@ -63,7 +63,7 @@ public class ControlTimeState : GameState
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_timeLimitsCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, mainPanelOffset, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 		
@@ -317,4 +317,8 @@ public class ControlTimeState : GameState
 	private UIToggle m_weekendTwoHours;
 	private UIToggle m_weekendFourHours;
 	private UIToggle m_weekendUnlimited;
+
+
+	//Kevin
+	private float mainPanelOffset = 1124.25f;
 }
