@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,7 +27,7 @@ public class ControlViolenceState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-		checkRequest ();
+//		checkRequest ();
 		
 		base.exit (p_gameController);
 
@@ -61,11 +62,15 @@ public class ControlViolenceState : GameState
 		m_helpButton = m_violenceFiltersCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
 
+		//New Save Button
+		mSaveButton = m_violenceFiltersCanvas.getView ("saveButton") as UIButton;
+		mSaveButton.addClickCallback (checkRequest);
+
 		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_violenceFiltersCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, saveMessageDisplacement, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 
@@ -84,16 +89,19 @@ public class ControlViolenceState : GameState
 		m_levelFourToggle.addValueChangedCallback ( onViolenceChanged );
 	}
 
-	private void checkRequest()
+	private void checkRequest(UIButton p_button)
 	{
 		if (checkInternet() == false)
 			return;
 
-		if( m_isValueChanged )
-		{
+//		if( m_isValueChanged )
+//		{
+
 			m_isValueChanged = false;
+
 			updateViolenceFilters();
-		}
+//		}
+
 	}
 
 	private void onHelpButtonClick(UIButton p_button)
@@ -147,6 +155,10 @@ public class ControlViolenceState : GameState
 	private void onViolenceChanged( UIToggle p_toggle, bool p_bool )
 	{
 		m_isValueChanged = true;
+
+		if(onControlValueChanged != null)
+			onControlValueChanged(m_isValueChanged);
+
 	}
 
 	private void updateViolenceFilters ()
@@ -174,10 +186,45 @@ public class ControlViolenceState : GameState
 		}
 
 		m_requestQueue.reset ();
-		m_requestQueue.add( new SetSubjectsRequest( l_param ) );
+		m_requestQueue.add( new SetSubjectsRequest( l_param , updateViolenceSettingComplete) );
 		m_requestQueue.request (RequestType.SEQUENCE);
+
+		m_uiManager.createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 10);
+
 	}
-	
+
+	private void updateViolenceSettingComplete(HttpsWWW p_response)
+	{
+
+		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
+
+		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
+
+		messageCloseButton.addClickCallback(closePDMessage);
+
+
+		if(p_response.error == null){
+
+			m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		}else{
+
+			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
+
+		}
+
+		if(onControlValueChanged != null)
+			onControlValueChanged(m_isValueChanged);
+
+
+	}
+
+	private void closePDMessage(UIButton button){
+
+		m_uiManager.removeScreen(UIScreen.PD_MESSAGE);
+
+	}
+
 //	private void onUpgradeButtonClick(UIButton p_button)
 //	{
 //		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
@@ -234,4 +281,13 @@ public class ControlViolenceState : GameState
 	private UIToggle 		m_levelTwoToggle;
 	private UIToggle 		m_levelThreeToggle;
 	private UIToggle 		m_levelFourToggle;
+
+	//Kevin - event when control values changed to true 
+	public static event Action<bool>	onControlValueChanged;
+
+	private float saveMessageDisplacement = 1092.0f;
+
+	//Kevin - Save Button
+	UIButton mSaveButton;
+
 }

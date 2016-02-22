@@ -211,10 +211,42 @@ public class ControlSubjectState : GameState
 		SessionHandler.getInstance ().currentKid.weightLifeSkills 			= Mathf.CeilToInt (m_lifeSkillsSlider.value);
 
 		m_requestQueue.reset ();
-		m_requestQueue.add( new SetSubjectsRequest( l_param ) );
+		m_requestQueue.add( new SetSubjectsRequest( l_param, updateSubjectComplete ) );
 		m_requestQueue.request (RequestType.RUSH);
+
+		m_uiManager.createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 10);
+
 	}
 
+	private void updateSubjectComplete(HttpsWWW p_response)
+	{
+
+		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
+		
+		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
+		
+		messageCloseButton.addClickCallback(closePDMessage);
+		
+		
+		if(p_response.error == null){
+			
+			m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+			
+		}else{
+			
+			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
+			
+		}
+
+		saveButton.enabled = false;
+
+	}
+
+	private void closePDMessage(UIButton button){
+		
+		m_uiManager.removeScreen(UIScreen.PD_MESSAGE);
+		
+	}
 
 	#region properties
 	//Kevin

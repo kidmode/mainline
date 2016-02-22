@@ -25,7 +25,7 @@ public class ControlTimeState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-		checkRequest ();
+//		checkRequest ();
 		
 		base.exit (p_gameController);
 		
@@ -63,7 +63,7 @@ public class ControlTimeState : GameState
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_timeLimitsCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, mainPanelOffset, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 		
@@ -101,17 +101,25 @@ public class ControlTimeState : GameState
 			m_requestQueue.add (new GetTimeLimitsRequest(_getTimeLimitRequestComplete));
 			m_requestQueue.request( RequestType.SEQUENCE );
 		}
+
+		//New Save Button
+		mSaveButton = m_timeLimitsCanvas.getView ("saveButton") as UIButton;
+		mSaveButton.addClickCallback (checkRequest);
+
 	}
 
-	private void checkRequest()
+	private void checkRequest(UIButton button)
 	{
 		if (checkInternet() == false)
 			return;
 
 		if( m_isValueChanged )
 		{
+
 			m_isValueChanged = false;
+
 			updateTimeLimits();
+
 		}
 	}
 
@@ -165,7 +173,15 @@ public class ControlTimeState : GameState
 
 	private void onTimeLimitsChanged( UIToggle p_toggle, bool p_bool )
 	{
+
 		m_isValueChanged = true;
+
+		if( onControlValueChanged != null){
+
+			onControlValueChanged(m_isValueChanged);
+
+		}
+
 	}
 
 	private void _getTimeLimitRequestComplete(HttpsWWW p_response)
@@ -240,19 +256,50 @@ public class ControlTimeState : GameState
 		m_requestQueue.reset ();
 		m_requestQueue.add ( new SetTimeLimitsRequest(l_param, _setTimeLimitRequestComplete));
 		m_requestQueue.request (RequestType.SEQUENCE);
+
+		m_uiManager.createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 10);
+
 	}
 
 	private void _setTimeLimitRequestComplete(HttpsWWW p_response)
 	{
+
+		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
+		
+		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
+		
+		messageCloseButton.addClickCallback(closePDMessage);
+
 		if (p_response.error == null)
 		{
+
 			Debug.Log(p_response.text);
+
+			m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
 		}
 		else
 		{
+
 			Debug.Log(p_response.error);
+
+			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
+
 		}
 
+
+		if( onControlValueChanged != null){
+			
+			onControlValueChanged(m_isValueChanged);
+			
+		}
+
+	}
+
+	private void closePDMessage(UIButton button){
+		
+		m_uiManager.removeScreen(UIScreen.PD_MESSAGE);
+		
 	}
 
 //	private void onUpgradeButtonClick(UIButton p_button)
@@ -317,4 +364,15 @@ public class ControlTimeState : GameState
 	private UIToggle m_weekendTwoHours;
 	private UIToggle m_weekendFourHours;
 	private UIToggle m_weekendUnlimited;
+
+
+	//Kevin
+	private float mainPanelOffset = 1124.25f;
+
+	//Kevin - event when control values changed to true 
+	public static event Action<bool>	onControlValueChanged;
+
+	//Kevin - Save Button
+	UIButton mSaveButton;
+
 }

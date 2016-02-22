@@ -16,6 +16,22 @@ public class DeviceOptionsCanvas : UICanvas
 		m_displayHelpFulTips.active = false;
 		m_sliderArea.active = false;
 		tweener.addAlphaTrack( 0.0f, 1.0f, 0.1f, onShowFinish );
+
+
+		//New Save Button
+		mSaveButton = getView ("refreshButton") as UIButton;
+
+		//Kevin, set save button to gray / not interative at the start
+		mSaveButton.enabled = false;
+		
+		//Setup event so we know when the setttings cache has changed
+		SettingCache.onSettingCacheActiveChanged += onSettingCacheActiveChanged;
+
+		m_iconLock = getView ("lockIcon") as UIImage;
+		
+		m_iconLock.gameObject.SetActive(false);
+		//End
+
 	}
 	
 	public override void update()
@@ -25,6 +41,9 @@ public class DeviceOptionsCanvas : UICanvas
 	
 	public override void dispose( bool p_deep )
 	{
+
+		SettingCache.onSettingCacheActiveChanged -= onSettingCacheActiveChanged;
+
 		base.dispose( p_deep );
 	}
 	
@@ -74,8 +93,41 @@ public class DeviceOptionsCanvas : UICanvas
 		l_close.text = Localization.getString( Localization.TXT_49_LABEL_CLOSE );
 	}
 
+	#region Events
+	
+	private void onSettingCacheActiveChanged(bool value){
+		
+		if(value){
+			
+			mSaveButton.enabled = true;
+			
+			if(SessionHandler.getInstance().token.isPremium()){
+				
+				m_iconLock.gameObject.SetActive(false);
+				
+			}else {
+				
+				m_iconLock.gameObject.SetActive(true);
+				
+			}
+			
+		}else{
+			
+			mSaveButton.enabled = false;
+			
+		}
+		
+	}
+	
+	#endregion
+
 	private UIElement m_sliderArea;
 	private UIElement m_allowIncomingCall;
 	private UIElement m_displayHelpFulTips;
+
+	//Kevin - Save Button
+	UIButton mSaveButton;
+
+	private UIImage 	m_iconLock;
 
 }
