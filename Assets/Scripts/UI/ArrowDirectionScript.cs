@@ -10,16 +10,18 @@ public class ArrowDirectionScript : MonoBehaviour {
 	private RectTransform scrollViewSize;
 	[SerializeField]
 	private RectTransform contentSize;
-//	[SerializeField]
-//	private ContentSizeFitter contentSizeFitter;
-	
-	// Use this for initialization
+	[SerializeField]
+	private ExtendedContentSizeFitter contentSizeFitter;
+
 	void Start () {
 		
 		scrollRect.onValueChanged.AddListener(onValueChanged);
+		if (contentSizeFitter != null)
+			contentSizeFitter.rectTransformChanged += receiveRectTransformChanged;
+
 		showArrowIfLargerThenScrollContentSize();
 	}
-	
+
 	private void onValueChanged(Vector2 scrollRectPos)
 	{
 		if (!showArrowIfLargerThenScrollContentSize())
@@ -58,5 +60,12 @@ public class ArrowDirectionScript : MonoBehaviour {
 			result = true;
 		}
 		return result;
+	}
+
+	private void receiveRectTransformChanged()
+	{
+		showArrowIfLargerThenScrollContentSize();
+		if (contentSizeFitter != null)
+			contentSizeFitter.rectTransformChanged -= receiveRectTransformChanged;
 	}
 }
