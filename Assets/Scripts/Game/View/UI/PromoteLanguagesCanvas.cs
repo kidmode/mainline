@@ -20,7 +20,6 @@ public class PromoteLanguagesCanvas : UICanvas
 	public override void dispose (bool p_deep)
 	{
 
-		ControlLanguageState.onControlValueChanged -= onControlValueChanged;
 
 		base.dispose (p_deep);
 
@@ -47,9 +46,6 @@ public class PromoteLanguagesCanvas : UICanvas
 		m_data = p_languageList;
 		_setupData();
 
-		//Setup event so we know when the setttings cache has changed
-		ControlLanguageState.onControlValueChanged += onControlValueChanged;
-
 	}
 
 	//------------------ Private Implementation --------------------
@@ -73,17 +69,7 @@ public class PromoteLanguagesCanvas : UICanvas
 		m_germanToggle 		= getView( "germanToggle" )		 as UIToggle;
 
 
-		//New Save Button
-		mSaveButton = getView ("saveButton") as UIButton;
-		
-		//Kevin, set save button to gray / not interative at the start
-		mSaveButton.enabled = false;
-		
 
-		
-		m_iconLock = getView ("lockIcon") as UIImage;
-		
-		m_iconLock.gameObject.SetActive(false);
 
 	}
 
@@ -157,34 +143,7 @@ public class PromoteLanguagesCanvas : UICanvas
 		l_de.text = Localization.getString( Localization.TXT_62_LABEL_DE );
 	}
 
-	#region Event
-	//-----Event
-	//Kevin
-	private void onControlValueChanged(bool value){
 
-		if(value){
-
-			mSaveButton.enabled = true;
-			
-			if(SessionHandler.getInstance().token.isPremium()){
-				
-				m_iconLock.gameObject.SetActive(false);
-				
-			}else {
-				
-				m_iconLock.gameObject.SetActive(true);
-				
-			}
-
-		}else {
-
-			mSaveButton.enabled = false;
-
-		}
-		
-	}
-	
-	#endregion
 
 	private UIToggle m_englishToggle;
 	private UIToggle m_simpChineseToggle;
@@ -210,10 +169,10 @@ public class PromoteLanguagesCanvas : UICanvas
 	private const string IT = "it";
 	private const string NL = "nl";
 
-	//Kevin
-	//New Save Button
-	private UIButton mSaveButton;
-	
-	private UIImage m_iconLock;
+//	//Kevin
+//	//New Save Button
+//	private UIButton mSaveButton;
+//	
+//	private UIImage m_iconLock;
 
 }

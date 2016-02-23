@@ -16,6 +16,12 @@ public class ControlTimeState : GameState
 
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
+
+
+		Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+		
+		game.setPDMenuBarVisible(true, false);
+
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -40,19 +46,19 @@ public class ControlTimeState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//		}
 
 		m_timeLimitsCanvas 			= m_uiManager.createScreen( UIScreen.TIME_LIMITS, true, 1 ) 			as TimeLimitsCanvas;
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_uiManager.setScreenEnable( UIScreen.TIME_LIMITS, false );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+////			m_uiManager.setScreenEnable( UIScreen.TIME_LIMITS, false );
+//		}
 	}
 
 	private void _setupElment()
@@ -100,11 +106,17 @@ public class ControlTimeState : GameState
 			m_requestQueue.reset ();
 			m_requestQueue.add (new GetTimeLimitsRequest(_getTimeLimitRequestComplete));
 			m_requestQueue.request( RequestType.SEQUENCE );
+		}else{
+
+			setValueChangedEvent();
+
 		}
 
 		//New Save Button
 		mSaveButton = m_timeLimitsCanvas.getView ("saveButton") as UIButton;
 		mSaveButton.addClickCallback (checkRequest);
+
+
 
 	}
 
@@ -113,14 +125,30 @@ public class ControlTimeState : GameState
 		if (checkInternet() == false)
 			return;
 
-		if( m_isValueChanged )
+		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
 		{
 
-			m_isValueChanged = false;
+			if( m_isValueChanged )
+			{
 
-			updateTimeLimits();
+				m_isValueChanged = false;
+
+				updateTimeLimits();
+
+			}
+
+		}else{
+
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.CONTROL_TIME );
+			
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+
+			Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+
+			game.setPDMenuBarVisible(false, false);
 
 		}
+
 	}
 
 	private void onHelpButtonClick(UIButton p_button)
@@ -197,6 +225,19 @@ public class ControlTimeState : GameState
 
 		l_panel.active = true;
 		m_isValueChanged = false;
+
+
+		setValueChangedEvent();
+
+	}
+
+	private void setValueChangedEvent(){
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_timeLimitsCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
+
 	}
 
 	//honda: update TimeLimits to currentkid and save kidinfo to local
