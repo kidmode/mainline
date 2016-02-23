@@ -2,52 +2,53 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PDSaveButton : MonoBehaviour {
-
+public class PDLockIcon : MonoBehaviour {
+	
 	[SerializeField]
 	private PDControlValueChanged pdControlValueChanged;
-
-	private Button button;
-
+	
+	private Image iconImage;
+	
 	// Use this for initialization
 	void Start () {
+		
+		iconImage = gameObject.GetComponent<Image>();
 
-		button = gameObject.GetComponent<Button>();
-
-		button.interactable = false;
+		iconImage.enabled = false;
+//		Image.Equals/
+		
+	}
 	
-	}
-
 	void OnEnable(){
-
+		
 		pdControlValueChanged.onControlValueChangedTrue += onControlValueChangedTrue;
-
+		
 		PDUpdateComplete.onUpdateComplete += onUpdateComplete;
-
+		
 	}
-
+	
 	void OnDisable(){
-
+		
 		pdControlValueChanged.onControlValueChangedTrue -= onControlValueChangedTrue;
-
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+	}
 	
-	}
-
 	void onControlValueChangedTrue(){
-
-		button.interactable = true;
-
+		
+		iconImage.enabled = true;
+		
 	}
-
+	
 	void onUpdateComplete(){
-
-		if(button!= null)
-			button.interactable = false;
-
+		
+		if(iconImage!= null)
+			iconImage.enabled = false;
+		
 	}
-
+	
 }

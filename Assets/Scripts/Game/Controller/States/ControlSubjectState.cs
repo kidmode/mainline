@@ -9,10 +9,6 @@ public class ControlSubjectState : GameState
 	{
 		base.enter (p_gameController);
 
-		//Kevin
-		HasAnySliderChanged = false;
-		//End
-
 		m_uiManager = m_gameController.getUI();
 
 		//make sure the menu bar is visible whenever we enter the state
@@ -75,8 +71,6 @@ public class ControlSubjectState : GameState
 		saveButton = m_promoteSubjectsCanvas.getView ("saveButton") as UIButton; 
 		saveButton.addClickCallback (onSaveButtonClick);
 
-		goPremiumButton = m_promoteSubjectsCanvas.getView ("goPremiumButton") as UIButton; 
-
 		int l_listCount = 4;
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -134,6 +128,8 @@ public class ControlSubjectState : GameState
 
 	}
 
+
+
 	private void onHelpButtonClick(UIButton p_button)
 	{
 		p_button.removeAllCallbacks ();
@@ -185,7 +181,6 @@ public class ControlSubjectState : GameState
 	{
 		m_isValueChanged = true;
 
-		HasAnySliderChanged = true;
 
 	}
 
@@ -223,53 +218,28 @@ public class ControlSubjectState : GameState
 	private void updateSubjectComplete(HttpsWWW p_response)
 	{
 
-		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
-		
-		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
-		
-		messageCloseButton.addClickCallback(closePDMessage);
-		
-		
-		if(p_response.error == null){
-			
-			m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
-			
-		}else{
-			
-			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
-			
-		}
+		m_promoteSubjectsCanvas.gameObject.transform.parent.gameObject.SendMessage("updateComplete", p_response, SendMessageOptions.RequireReceiver);
+
+//
+//		UICanvas messageCanvas = m_uiManager.createScreen(UIScreen.PD_MESSAGE, false, 20);
+//		
+//		UIButton messageCloseButton = messageCanvas.getView("quitButton") as UIButton;
+//		
+//		messageCloseButton.addClickCallback(closePDMessage);
+//		
+//		
+//		if(p_response.error == null){
+//			
+//			m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+//			
+//		}else{
+//			
+//			m_uiManager.createScreen(UIScreen.ERROR_MESSAGE, false, 20);
+//			
+//		}
 
 
 	}
-
-	private void closePDMessage(UIButton button){
-		
-		m_uiManager.removeScreen(UIScreen.PD_MESSAGE);
-		
-	}
-
-	#region properties
-	//Kevin
-	// use this so there is only one place to change it and we know when
-	bool HasAnySliderChanged {
-		get {
-			return this.hasAnySliderChanged;
-		}
-		set {
-
-			hasAnySliderChanged = value;
-
-			if(hasAnySliderChanged){
-
-
-//				goPremiumButton.enabled = true;
-
-			}
-
-		}
-	}
-	#endregion
 
 
 //	private void onUpgradeButtonClick(UIButton p_button)
@@ -329,8 +299,6 @@ public class ControlSubjectState : GameState
 
 	//Kevin
 	private Game		game;
-
-	private bool hasAnySliderChanged = false;
 
 	private UIButton	goPremiumButton; //used for free user
 	//End
