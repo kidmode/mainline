@@ -59,17 +59,6 @@ public class OverviewReadingState : GameState
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
 		
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, ZoodlesScreenFactory.FADE_SPEED);
-//		if(null == SessionHandler.getInstance().bookList)
-//		{
-//			m_requestQueue.reset ();
-////			m_requestQueue.add(new GetBookRequest(_requestBookListComplete));
-//			m_requestQueue.add(new BookListRequest(false, _requestBookListComplete));
-//			m_requestQueue.request();
-//		}
-//		else
-//		{
-//			loadBookList();
-//		}
 	}
 	
 	private void _setupElment()
@@ -215,7 +204,6 @@ public class OverviewReadingState : GameState
 
 	private void toBuyGemsScreen(UIButton p_button)
 	{
-		//m_game.gameController.changeState(ZoodleState.BUY_GEMS);
 		gotoGetGems ();
 	}
 
@@ -225,77 +213,6 @@ public class OverviewReadingState : GameState
 		m_needMoreArea.active = false;
 		
 		gotoGetGems ();
-	}
-	
-	private void _setupRecordAReadingCanvas()
-	{
-//		UILabel l_loading = m_recordAReadingCanvas.getView ("loadingText") as UILabel;
-//		
-//		List<Book> l_list = SessionHandler.getInstance().bookList;
-//
-//		if( l_list.Count > 0 )
-//		{
-//			if(null != l_loading)
-//			l_loading.active = false;
-//		}
-//		else
-//		{
-//			l_loading.text = Localization.getString(Localization.TXT_14_LABEL_INFO);
-//			return;
-//		}
-
-
-//		m_requestQueue.reset ();
-
-//		List<UIElement> l_canvasList = new List<UIElement> ();
-//		UIElement l_book1 = m_recordAReadingCanvas.getView ("bookOne") as UIElement;
-//		UIElement l_book2 = m_recordAReadingCanvas.getView ("bookTwo") as UIElement;
-//		UIElement l_book3 = m_recordAReadingCanvas.getView ("bookThree") as UIElement;
-//		UIElement l_book4 = m_recordAReadingCanvas.getView ("bookFour") as UIElement;
-//		
-//		l_canvasList.Add (l_book1);
-//		l_canvasList.Add (l_book2);
-//		l_canvasList.Add (l_book3);
-//		l_canvasList.Add (l_book4);
-		
-//		UILabel l_bookCountLabel = m_bookListCanvas.getView ("bookCountText") as UILabel;
-//
-//		if( null == l_bookCountLabel )
-//		{
-//			return;
-//		}
-//		l_bookCountLabel.text = l_list.Count.ToString ();
-		
-//		int l_count = l_list.Count >= 4 ? 4 : l_list.Count;
-//		for(int l_i = 0; l_i < l_count; l_i++)
-//		{
-//			UIElement l_element = l_canvasList[l_i];
-//			
-//			Book l_book = l_list[l_i];
-//			
-//			_setupSignleBook(l_element,l_book);
-//			UIButton l_buyButton = l_element.getView ("buyBookButton") as UIButton;
-//			l_buyButton.addClickCallback(onClickBuyBookButton);
-//			UIButton l_recordButton = l_element.getView ("recordButton") as UIButton;
-//			l_recordButton.addClickCallback(onClickRecordBookButton);
-//
-//			UILabel l_record = l_element.getView ("buyAppButtonText") as UILabel;
-//			l_record.text = Localization.getString(Localization.TXT_LABEL_RECORD);
-//
-//			if(null == l_book.icon)
-//				downLoadBookIcon( l_book, l_element );
-//			else
-//			{
-//				UIImage l_image = l_element.getView("bookImage") as UIImage;
-//				l_image.setTexture(l_book.icon);
-//			}
-//			l_element.active = true;
-//		}
-//		
-//		m_requestQueue.request ();
-
-//		UIElement l_panel = m_recordAReadingCanvas.getView ("panel");
-//		l_panel.active = true;
 	}
 	
 	private void _setupSignleBook(UIElement p_element, Book p_book)
@@ -347,22 +264,6 @@ public class OverviewReadingState : GameState
 	private void onClickRecordBookButton(UIButton p_button)
 	{
 		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
-
-//		switch(p_button.parent.parent.name)
-//		{
-//		case "bookOne":
-//			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[0].id] as Book;
-//			break;
-//		case "bookTwo":
-//			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[1].id] as Book;
-//			break;
-//		case "bookThree":
-//			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[2].id] as Book;
-//			break;
-//		case "bookFour":
-//			SessionHandler.getInstance().currentBook = m_bookDataTable[l_bookList[3].id] as Book;
-//			break;
-//		}
 		
 		if( 0 == SessionHandler.getInstance ().currentBook.pageList.Count )
 		{
@@ -376,29 +277,6 @@ public class OverviewReadingState : GameState
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
 		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 800, 0 ));
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f);
-	}
-	
-	private void onClickBuyBookButton(UIButton p_button)
-	{
-		m_wantedBook = null;
-		List<Book> l_bookList = SessionHandler.getInstance ().bookList;
-		switch(p_button.parent.parent.name)
-		{
-		case "bookOne":
-			m_wantedBook = l_bookList[0];
-			break;
-		case "bookTwo":
-			m_wantedBook = l_bookList[1];
-			break;
-		case "bookThree":
-			m_wantedBook = l_bookList[2];
-			break;
-		case "bookFour":
-			m_wantedBook = l_bookList[3];
-			break;
-		}
-		m_clickedBuyButton = p_button;
-		confirmBuyBook (m_wantedBook);
 	}
 
 	#region Prototype Callback
@@ -430,23 +308,8 @@ public class OverviewReadingState : GameState
 	private void onBookClick(UISwipeList p_list, UIButton p_listElement, System.Object p_data, int p_index)
 	{
 		m_selectedElement = null;
-//		switch(p_index)
-//		{
-//		case 0:
-//			m_selectedElement = m_recordAReadingCanvas.getView("bookOne") as UIElement;
-//			break;
-//		case 1:
-//			m_selectedElement = m_recordAReadingCanvas.getView("bookTwo") as UIElement;
-//			break;
-//		case 2:
-//			m_selectedElement = m_recordAReadingCanvas.getView("bookThree") as UIElement;
-//			break;
-//		case 3:
-//			m_selectedElement = m_recordAReadingCanvas.getView("bookFour") as UIElement;
-//			break;
-//		default:
-//			break;
-//		}
+		//TODO: find a way to get prototype to assign to m_selectedElement
+//		m_selectedElement = m_recordAReadingCanvas.getView("bookOne") as UIElement;
 		m_wantedBook = (Book)p_data;
 		m_clickedBuyButton = p_listElement;
 		confirmBuyBook (m_wantedBook);
@@ -655,7 +518,6 @@ public class OverviewReadingState : GameState
 			}
 			else
 			{
-				//sendCall (m_game.gameController,null,"/api/gems_amount/gems_amount?" + ZoodlesConstants.PARAM_TOKEN + "=" + SessionHandler.getInstance ().token.getSecret (),CallMethod.GET,ZoodleState.BUY_GEMS);
 				Server.init (ZoodlesConstants.getHttpsHost());
 				m_requestQueue.reset ();
 				m_requestQueue.add(new ViewGemsRequest(viewGemsRequestComplete));
@@ -668,7 +530,6 @@ public class OverviewReadingState : GameState
 			m_requestQueue.reset ();
 			m_requestQueue.add (new ViewGemsRequest(viewGemsRequestComplete));
 			m_requestQueue.request ();
-			//sendCall (m_game.gameController,null,"/api/gems_amount/gems_amount?" + ZoodlesConstants.PARAM_TOKEN + "=" + SessionHandler.getInstance ().token.getSecret (),CallMethod.GET,ZoodleState.BUY_GEMS);
 		}
 	}
 	
@@ -774,8 +635,6 @@ public class OverviewReadingState : GameState
 					m_recordedBookList.Add( l_bookReading.bookId );
 				}
 
-//				_setupRecordAReadingCanvas();
-
 				finishLoodBookList();
 			}
 		}
@@ -836,8 +695,6 @@ public class OverviewReadingState : GameState
 
 				m_recordedBookList.Add( l_bookReading.bookId );
 			}
-			
-//			_setupRecordAReadingCanvas();
 		}
 	}
 	#endregion

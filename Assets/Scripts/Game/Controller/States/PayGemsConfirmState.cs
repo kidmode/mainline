@@ -12,7 +12,7 @@ public class PayGemsConfirmState : GameState
 	public override void exit(GameController p_gameController)
 	{
 		p_gameController.getUI().removeScreenImmediately(UIScreen.PAY_GEMS_COMFIRM);
-
+		p_gameController.getUI().removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 		base.exit(p_gameController);
 	}
 	
@@ -20,6 +20,13 @@ public class PayGemsConfirmState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
+		UICanvas m_backScreen = p_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
+		if (m_backScreen == null)
+		{
+			m_backScreen = p_uiManager.createScreen(UIScreen.SPLASH_BACKGROUND,true, -1);
+			(m_backScreen as SplashBackCanvas).setDown();
+		}
+
 		string l_gemAmount = m_gameController.board.read("gems") as string;
 
 		UICanvas l_payConfirmCanvas = p_uiManager.createScreen(UIScreen.PAY_GEMS_COMFIRM, true, 1);
