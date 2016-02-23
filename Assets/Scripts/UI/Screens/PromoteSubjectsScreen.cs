@@ -42,10 +42,6 @@ public class PromoteSubjectsScreen : MonoBehaviour {
 		game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.CONTROL_SUBJECT );
 		
 		game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
-
-		//honda: (to be removed) move the code to changeState 
-//		game.setPDMenuBarVisible(false, false);
-		
 	}
 
 

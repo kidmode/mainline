@@ -8,6 +8,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11476656}
+  - 114: {fileID: 11469636}
   m_Layer: 0
   m_Name: PromoteLanguagesScreen
   m_TagString: Untagged
@@ -1048,7 +1050,6 @@ GameObject:
   - 222: {fileID: 22229796}
   - 114: {fileID: 11429796}
   - 114: {fileID: 11429798}
-  - 114: {fileID: 11429800}
   m_Layer: 0
   m_Name: ArrowDirection
   m_TagString: Untagged
@@ -1066,6 +1067,7 @@ GameObject:
   - 224: {fileID: 22491098}
   - 222: {fileID: 22291098}
   - 114: {fileID: 11491096}
+  - 114: {fileID: 11480474}
   m_Layer: 5
   m_Name: lockIcon
   m_TagString: Untagged
@@ -1101,6 +1103,7 @@ GameObject:
   - 224: {fileID: 22491102}
   - 222: {fileID: 22291102}
   - 114: {fileID: 11491102}
+  - 114: {fileID: 11469634}
   m_Layer: 5
   m_Name: saveButton
   m_TagString: Untagged
@@ -2761,19 +2764,6 @@ MonoBehaviour:
   scrollViewSize: {fileID: 22400074}
   contentSize: {fileID: 22400118}
   contentSizeFitter: {fileID: 0}
---- !u!114 &11429800
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 129796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973656822fa114103b0b83ccd38985d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addAndroidAppsScrollRect: {fileID: 0}
-  minContentSizeToShowArrow: 4
 --- !u!114 &11442084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2833,6 +2823,65 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11469634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5d0570ff23a47b39d32e6fe0696a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11476656}
+--- !u!114 &11469636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e1f7bea9d5646d080c03b1d7ec3969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11476656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliders: []
+  toggles:
+  - {fileID: 11400120}
+  - {fileID: 11400096}
+  - {fileID: 11400094}
+  - {fileID: 11400076}
+  - {fileID: 11400074}
+  - {fileID: 11400056}
+  - {fileID: 11400054}
+  - {fileID: 11400036}
+  - {fileID: 11400034}
+  - {fileID: 11400016}
+  hasControlValueChanged: 0
+--- !u!114 &11480474
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7bac6d802bf4501990046babf4beef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11476656}
 --- !u!114 &11491096
 MonoBehaviour:
   m_ObjectHideFlags: 1
