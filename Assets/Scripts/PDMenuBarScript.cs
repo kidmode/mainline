@@ -600,9 +600,9 @@ public class PDMenuBarScript : MonoBehaviour {
 	private void removeSplashScreen()
 	{
 		UIManager l_ui = game.gameController.getUI();
-		SplashBackCanvas splashCanvas = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND) as SplashBackCanvas;
+		UICanvas splashCanvas = l_ui.findScreen(UIScreen.SPLASH_BACKGROUND);
 		
 		if(splashCanvas != null)
-			l_ui.removeScreenImmediately(splashCanvas);
+			l_ui.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 	}
 }

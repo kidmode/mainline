@@ -28,6 +28,7 @@ public class BuyGemsState : GameState
 		Server.init (ZoodlesConstants.getHttpsHost());
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_buyGemsCanvas );
+		p_gameController.getUI().removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
 	}
 
 	//---------------- Private Implementation ----------------------

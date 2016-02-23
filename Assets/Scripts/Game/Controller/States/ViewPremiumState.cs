@@ -31,7 +31,7 @@ public class ViewPremiumState : GameState
 		p_gameController.getUI().removeScreen( m_premiumCanvas );
 		if( null != m_backScreen )
 		{
-			p_gameController.getUI().removeScreen( m_backScreen );
+			p_gameController.getUI().removeScreenImmediately( m_backScreen );
 		}
 	}
 
