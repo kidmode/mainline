@@ -1037,6 +1037,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &129796
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22429796}
+  - 222: {fileID: 22229796}
+  - 114: {fileID: 11429796}
+  - 114: {fileID: 11429798}
+  - 114: {fileID: 11429800}
+  m_Layer: 0
+  m_Name: ArrowDirection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &191098
 GameObject:
   m_ObjectHideFlags: 1
@@ -2706,6 +2725,55 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &11429796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 63d7b884973424d39809966aa79d8d02, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &11429798
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f64bd6656ff4240b82c3b0cdb59c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 11442088}
+  scrollViewSize: {fileID: 22400074}
+  contentSize: {fileID: 22400118}
+  contentSizeFitter: {fileID: 0}
+--- !u!114 &11429800
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 973656822fa114103b0b83ccd38985d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addAndroidAppsScrollRect: {fileID: 0}
+  minContentSizeToShowArrow: 4
 --- !u!114 &11442084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3245,6 +3313,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100116}
+--- !u!222 &22229796
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129796}
 --- !u!222 &22242084
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -3314,6 +3388,7 @@ RectTransform:
   - {fileID: 22400010}
   - {fileID: 22400074}
   - {fileID: 22491102}
+  - {fileID: 22429796}
   m_Father: {fileID: 22400104}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -4378,6 +4453,23 @@ RectTransform:
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: -4, y: -79}
   m_SizeDelta: {x: 1460.40002, y: 692.400024}
+  m_Pivot: {x: .5, y: .5}
+--- !u!224 &22429796
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129796}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 267}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22400000}
+  m_RootOrder: 6
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 0}
+  m_AnchoredPosition: {x: 3, y: 82}
+  m_SizeDelta: {x: 102, y: 96}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22491098
 RectTransform:
