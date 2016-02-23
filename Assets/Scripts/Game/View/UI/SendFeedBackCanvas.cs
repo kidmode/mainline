@@ -12,7 +12,7 @@ public class SentFeedBackCanvas : UICanvas
 
 		m_dialog = getView ("dialog") as UIElement;
 
-		m_dialogMovePosition = 800;
+		m_dialogMovePosition = 850;
 	}
 	
 	public override void update()
