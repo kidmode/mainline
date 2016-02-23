@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11462808}
   m_Layer: 0
   m_Name: ViolenceFiltersScreen
   m_TagString: Untagged
@@ -693,7 +694,6 @@ GameObject:
   - 222: {fileID: 22227160}
   - 114: {fileID: 11427156}
   - 114: {fileID: 11427158}
-  - 114: {fileID: 11427160}
   m_Layer: 0
   m_Name: ArrowDirection
   m_TagString: Untagged
@@ -1891,19 +1891,6 @@ MonoBehaviour:
   scrollViewSize: {fileID: 22400062}
   contentSize: {fileID: 22400060}
   contentSizeFitter: {fileID: 0}
---- !u!114 &11427160
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 127160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973656822fa114103b0b83ccd38985d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addAndroidAppsScrollRect: {fileID: 0}
-  minContentSizeToShowArrow: 4
 --- !u!114 &11446466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1925,6 +1912,25 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11462808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliders: []
+  toggles:
+  - {fileID: 11400050}
+  - {fileID: 11400044}
+  - {fileID: 11400026}
+  - {fileID: 11400020}
+  - {fileID: 11400002}
+  hasControlValueChanged: 0
 --- !u!114 &11477630
 MonoBehaviour:
   m_ObjectHideFlags: 1

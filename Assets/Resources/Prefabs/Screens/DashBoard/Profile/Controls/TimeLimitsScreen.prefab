@@ -1032,6 +1032,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11418606}
   m_Layer: 0
   m_Name: TimeLimitsScreen
   m_TagString: Untagged
@@ -1101,7 +1102,6 @@ GameObject:
   - 222: {fileID: 22214552}
   - 114: {fileID: 11414548}
   - 114: {fileID: 11414550}
-  - 114: {fileID: 11414552}
   m_Layer: 0
   m_Name: ArrowDirection
   m_TagString: Untagged
@@ -2941,19 +2941,30 @@ MonoBehaviour:
   scrollViewSize: {fileID: 22400116}
   contentSize: {fileID: 22432296}
   contentSizeFitter: {fileID: 0}
---- !u!114 &11414552
+--- !u!114 &11418606
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 114552}
+  m_GameObject: {fileID: 100120}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973656822fa114103b0b83ccd38985d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addAndroidAppsScrollRect: {fileID: 0}
-  minContentSizeToShowArrow: 4
+  sliders: []
+  toggles:
+  - {fileID: 11400128}
+  - {fileID: 11400038}
+  - {fileID: 11400036}
+  - {fileID: 11400018}
+  - {fileID: 11400016}
+  - {fileID: 11400100}
+  - {fileID: 11400078}
+  - {fileID: 11400076}
+  - {fileID: 11400058}
+  - {fileID: 11400056}
+  hasControlValueChanged: 0
 --- !u!114 &11421664
 MonoBehaviour:
   m_ObjectHideFlags: 1

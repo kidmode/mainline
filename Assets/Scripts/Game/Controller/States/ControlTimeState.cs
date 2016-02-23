@@ -106,6 +106,8 @@ public class ControlTimeState : GameState
 		mSaveButton = m_timeLimitsCanvas.getView ("saveButton") as UIButton;
 		mSaveButton.addClickCallback (checkRequest);
 
+
+
 	}
 
 	private void checkRequest(UIButton button)
@@ -197,6 +199,12 @@ public class ControlTimeState : GameState
 
 		l_panel.active = true;
 		m_isValueChanged = false;
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_timeLimitsCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
+
 	}
 
 	//honda: update TimeLimits to currentkid and save kidinfo to local

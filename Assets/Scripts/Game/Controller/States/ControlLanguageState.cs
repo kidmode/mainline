@@ -106,6 +106,10 @@ public class ControlLanguageState : GameState
 			m_requestQueue.add (new GetLanguagesRequest (_getLanguagesRequestComplete));
 			m_requestQueue.request( RequestType.SEQUENCE );
 		}
+
+
+
+
 	}
 
 	private void checkRequest(UIButton button)
@@ -209,7 +213,10 @@ public class ControlLanguageState : GameState
 		l_panel.active = true;
 		m_isValueChanged = false;
 
-
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_promoteLanguagesCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
 
 	}
 

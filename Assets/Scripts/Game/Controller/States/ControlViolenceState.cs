@@ -87,6 +87,12 @@ public class ControlViolenceState : GameState
 		m_levelTwoToggle.addValueChangedCallback ( onViolenceChanged );
 		m_levelThreeToggle.addValueChangedCallback ( onViolenceChanged );
 		m_levelFourToggle.addValueChangedCallback ( onViolenceChanged );
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_violenceFiltersCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+
+		valueChanged.setListeners();
+
 	}
 
 	private void checkRequest(UIButton p_button)

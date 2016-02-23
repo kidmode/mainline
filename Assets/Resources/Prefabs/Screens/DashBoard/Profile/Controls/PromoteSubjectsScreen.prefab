@@ -11,6 +11,7 @@ GameObject:
   - 114: {fileID: 11443108}
   - 114: {fileID: 11443106}
   - 114: {fileID: 11454370}
+  - 114: {fileID: 11451252}
   m_Layer: 0
   m_Name: PromoteSubjectsScreen
   m_TagString: Untagged
@@ -1064,6 +1065,7 @@ GameObject:
   - 224: {fileID: 22438280}
   - 222: {fileID: 22238280}
   - 114: {fileID: 11438276}
+  - 114: {fileID: 11486966}
   m_Layer: 0
   m_Name: saveButton
   m_TagString: Untagged
@@ -1081,6 +1083,7 @@ GameObject:
   - 224: {fileID: 22438282}
   - 222: {fileID: 22238282}
   - 114: {fileID: 11438278}
+  - 114: {fileID: 11486968}
   m_Layer: 0
   m_Name: goPremiumButton
   m_TagString: Untagged
@@ -3130,6 +3133,27 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11451252
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliders:
+  - {fileID: 11414382}
+  - {fileID: 11414392}
+  - {fileID: 11414402}
+  - {fileID: 11414412}
+  - {fileID: 11414422}
+  - {fileID: 11414432}
+  - {fileID: 11414442}
+  toggles: []
+  hasControlValueChanged: 0
 --- !u!114 &11454370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3187,6 +3211,30 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &11486966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5d0570ff23a47b39d32e6fe0696a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11451252}
+--- !u!114 &11486968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5d0570ff23a47b39d32e6fe0696a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11451252}
 --- !u!222 &22200000
 CanvasRenderer:
   m_ObjectHideFlags: 1

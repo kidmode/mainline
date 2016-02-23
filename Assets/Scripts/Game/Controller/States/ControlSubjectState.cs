@@ -104,12 +104,14 @@ public class ControlSubjectState : GameState
 		m_creativeSlider.addValueChangedCallback( onSliderValueChanged );
 		m_lifeSkillsSlider.addValueChangedCallback( onSliderValueChanged );
 
-		//Kevin
-		//Disable Save buttons
-		saveButton.enabled = false;
 
 		goPremiumButton.enabled = false;
 		//End
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_promoteSubjectsCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
 	}
 
 	private void checkRequest()
@@ -238,7 +240,6 @@ public class ControlSubjectState : GameState
 			
 		}
 
-		saveButton.enabled = false;
 
 	}
 
@@ -261,9 +262,8 @@ public class ControlSubjectState : GameState
 
 			if(hasAnySliderChanged){
 
-				saveButton.enabled = true;
 
-				goPremiumButton.enabled = true;
+//				goPremiumButton.enabled = true;
 
 			}
 

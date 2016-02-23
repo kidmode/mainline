@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11476656}
   m_Layer: 0
   m_Name: PromoteLanguagesScreen
   m_TagString: Untagged
@@ -1048,7 +1049,6 @@ GameObject:
   - 222: {fileID: 22229796}
   - 114: {fileID: 11429796}
   - 114: {fileID: 11429798}
-  - 114: {fileID: 11429800}
   m_Layer: 0
   m_Name: ArrowDirection
   m_TagString: Untagged
@@ -2761,19 +2761,6 @@ MonoBehaviour:
   scrollViewSize: {fileID: 22400074}
   contentSize: {fileID: 22400118}
   contentSizeFitter: {fileID: 0}
---- !u!114 &11429800
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 129796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973656822fa114103b0b83ccd38985d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addAndroidAppsScrollRect: {fileID: 0}
-  minContentSizeToShowArrow: 4
 --- !u!114 &11442084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2833,6 +2820,30 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11476656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliders: []
+  toggles:
+  - {fileID: 11400120}
+  - {fileID: 11400096}
+  - {fileID: 11400094}
+  - {fileID: 11400076}
+  - {fileID: 11400074}
+  - {fileID: 11400056}
+  - {fileID: 11400054}
+  - {fileID: 11400036}
+  - {fileID: 11400034}
+  - {fileID: 11400016}
+  hasControlValueChanged: 0
 --- !u!114 &11491096
 MonoBehaviour:
   m_ObjectHideFlags: 1
