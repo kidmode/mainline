@@ -39,8 +39,17 @@ public class PDLockIcon : MonoBehaviour {
 	}
 	
 	void onControlValueChangedTrue(){
-		
-		iconImage.enabled = true;
+
+		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
+		{
+
+			iconImage.enabled = false;
+
+		}else{
+
+			iconImage.enabled = true;
+
+		}
 		
 	}
 	

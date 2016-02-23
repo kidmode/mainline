@@ -14,6 +14,11 @@ public class ControlViolenceState : GameState
 		_setupScreen( p_gameController );
 		_setupElment();
 
+		//make sure the menu bar is visible whenever we enter the state
+		Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+		
+		game.setPDMenuBarVisible(true, false);
+
 //		TutorialController.Instance.showTutorial(TutorialSequenceName.VIOLENCE_LEVEL);
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
@@ -42,19 +47,19 @@ public class ControlViolenceState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//		}
 
 		m_violenceFiltersCanvas 	= m_uiManager.createScreen( UIScreen.VIOLENCE_FILTERS, true, 1 );
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_uiManager.setScreenEnable( UIScreen.VIOLENCE_FILTERS, false );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+//			m_uiManager.setScreenEnable( UIScreen.VIOLENCE_FILTERS, false );
+//		}
 	}
 
 	private void _setupElment()
@@ -88,9 +93,15 @@ public class ControlViolenceState : GameState
 		m_levelThreeToggle.addValueChangedCallback ( onViolenceChanged );
 		m_levelFourToggle.addValueChangedCallback ( onViolenceChanged );
 
+		setEventLisenters();
+
+	}
+
+	private void setEventLisenters(){
+
 		//set up value changed events
 		PDControlValueChanged valueChanged = m_violenceFiltersCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
-
+		
 		valueChanged.setListeners();
 
 	}
@@ -100,12 +111,37 @@ public class ControlViolenceState : GameState
 		if (checkInternet() == false)
 			return;
 
+
+		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
+		{
+			
+			if( m_isValueChanged )
+			{
+				
+				m_isValueChanged = false;
+				
+				updateViolenceFilters();
+				
+			}
+			
+			
+		}else{
+			
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.CONTROL_VIOLENCE );
+			
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			
+			Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+			
+			game.setPDMenuBarVisible(false, false);
+			
+		}
+
+
 //		if( m_isValueChanged )
 //		{
 
-			m_isValueChanged = false;
-
-			updateViolenceFilters();
+			
 //		}
 
 	}
@@ -162,8 +198,6 @@ public class ControlViolenceState : GameState
 	{
 		m_isValueChanged = true;
 
-		if(onControlValueChanged != null)
-			onControlValueChanged(m_isValueChanged);
 
 	}
 
@@ -219,8 +253,6 @@ public class ControlViolenceState : GameState
 
 		}
 
-		if(onControlValueChanged != null)
-			onControlValueChanged(m_isValueChanged);
 
 
 	}
@@ -288,9 +320,8 @@ public class ControlViolenceState : GameState
 	private UIToggle 		m_levelThreeToggle;
 	private UIToggle 		m_levelFourToggle;
 
-	//Kevin - event when control values changed to true 
-	public static event Action<bool>	onControlValueChanged;
 
+	//Kevin
 	private float saveMessageDisplacement = 1092.0f;
 
 	//Kevin - Save Button

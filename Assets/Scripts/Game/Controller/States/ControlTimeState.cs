@@ -227,6 +227,7 @@ public class ControlTimeState : GameState
 		m_isValueChanged = false;
 
 
+		setValueChangedEvent();
 
 	}
 
