@@ -1033,6 +1033,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11418606}
+  - 114: {fileID: 11478032}
   m_Layer: 0
   m_Name: TimeLimitsScreen
   m_TagString: Untagged
@@ -3276,6 +3277,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pdControlValueChanged: {fileID: 11418606}
+--- !u!114 &11478032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e1f7bea9d5646d080c03b1d7ec3969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &22200000
 CanvasRenderer:
   m_ObjectHideFlags: 1

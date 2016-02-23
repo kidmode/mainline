@@ -16,6 +16,11 @@ public class ControlLanguageState : GameState
 
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
+
+		Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+		
+		game.setPDMenuBarVisible(true, false);
+
 	}
 	
 	public override void update (GameController p_gameController, int p_time)
@@ -40,19 +45,19 @@ public class ControlLanguageState : GameState
 		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
+////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
+////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
+//		}
 
 		m_promoteLanguagesCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_LANGUAGES, true, 1 ) 		as PromoteLanguagesCanvas;
 
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-			m_uiManager.setScreenEnable( UIScreen.PROMOTE_LANGUAGES, false );
-		}
+//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
+//		{
+//			m_uiManager.setScreenEnable( UIScreen.PROMOTE_LANGUAGES, false );
+//		}
 	}
 
 	private void _setupElment()
@@ -105,6 +110,11 @@ public class ControlLanguageState : GameState
 			l_panel.active = false;
 			m_requestQueue.add (new GetLanguagesRequest (_getLanguagesRequestComplete));
 			m_requestQueue.request( RequestType.SEQUENCE );
+
+		}else{
+
+			setupValueChangedEvents();
+
 		}
 
 
@@ -117,13 +127,29 @@ public class ControlLanguageState : GameState
 		if (checkInternet() == false)
 			return;
 
-		if( m_isValueChanged )
+		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
 		{
+			
+			if( m_isValueChanged )
+			{
+				
+				m_isValueChanged = false;
+				
+				updateLanguages();
+				
+			}
 
-			m_isValueChanged = false;
-
-			updateLanguages();
-
+			
+		}else{
+			
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.CONTROL_LANGUAGE );
+			
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			
+			Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+			
+			game.setPDMenuBarVisible(false, false);
+			
 		}
 	}
 
@@ -213,11 +239,17 @@ public class ControlLanguageState : GameState
 		l_panel.active = true;
 		m_isValueChanged = false;
 
+		setupValueChangedEvents();
+
+	}
+
+	private void setupValueChangedEvents(){
+
 		//set up value changed events
 		PDControlValueChanged valueChanged = m_promoteLanguagesCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
 		
 		valueChanged.setListeners();
-
+		
 	}
 
 	private void updateLanguages ()
@@ -276,8 +308,8 @@ public class ControlLanguageState : GameState
 		}
 
 
-		if(onControlValueChanged != null)
-			onControlValueChanged(m_isValueChanged);
+//		if(onControlValueChanged != null)
+//			onControlValueChanged(m_isValueChanged);
 
 	}
 

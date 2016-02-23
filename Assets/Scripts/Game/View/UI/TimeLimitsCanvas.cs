@@ -24,7 +24,6 @@ public class TimeLimitsCanvas : UICanvas
 	{
 		base.dispose (p_deep);
 
-		ControlTimeState.onControlValueChanged -= onControlValueChanged;
 
 	}
 	
@@ -50,7 +49,6 @@ public class TimeLimitsCanvas : UICanvas
 
 		_setupData();
 
-		ControlTimeState.onControlValueChanged += onControlValueChanged;
 
 	}
 

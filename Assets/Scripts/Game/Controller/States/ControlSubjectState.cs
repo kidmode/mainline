@@ -99,7 +99,7 @@ public class ControlSubjectState : GameState
 		m_lifeSkillsSlider.addValueChangedCallback( onSliderValueChanged );
 
 
-		goPremiumButton.enabled = false;
+//		goPremiumButton.enabled = false;
 		//End
 
 		//set up value changed events
@@ -300,7 +300,7 @@ public class ControlSubjectState : GameState
 	//Kevin
 	private Game		game;
 
-	private UIButton	goPremiumButton; //used for free user
+//	private UIButton	goPremiumButton; //used for free user
 	//End
 
 }
