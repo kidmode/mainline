@@ -8,8 +8,6 @@ public class OverviewInfoState : GameState {
 	{
 		base.enter (p_gameController);
 
-		m_gameController.game.setPDMenuBarVisible(true, false);
-
 		m_uiManager = m_gameController.getUI();
 		m_requestQueue = new RequestQueue ();
 		UICanvas l_backScreen = m_uiManager.findScreen( UIScreen.SPLASH_BACKGROUND );
@@ -229,8 +227,6 @@ public class OverviewInfoState : GameState {
 			m_gameController.connectState(ZoodleState.BOOK_ACTIVITY, ZoodleState.OVERVIEW_INFO);
 
 			m_gameController.changeState(ZoodleState.BOOK_ACTIVITY);
-
-			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 
 		m_uiManager.removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
@@ -362,7 +358,6 @@ public class OverviewInfoState : GameState {
 			SessionHandler.getInstance ().selectAvatar = string.Empty;
 			SessionHandler.getInstance ().CreateChild = false;
 			m_gameController.changeState (ZoodleState.CREATE_CHILD);
-			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 	}
 

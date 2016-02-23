@@ -33,7 +33,7 @@ public class PayGemsConfirmState : GameState
 		ArrayList l_replaces = new ArrayList();
 		l_replaces.Add(l_gemAmount);
 		UILabel l_noticeText = l_payConfirmCanvas.getView("noticeText") as UILabel;
-		l_noticeText.text = Localization.getString(Localization.TXT_STATE_20_GEMS_NOTICE, l_replaces);;
+		l_noticeText.text = Localization.getString(Localization.TXT_STATE_20_GEMS_NOTICE, l_replaces);
 		
 		UIButton l_backButton = l_payConfirmCanvas.getView("backButton") as UIButton;
 		l_backButton.addClickCallback(_goBack);
@@ -43,7 +43,6 @@ public class PayGemsConfirmState : GameState
 	{
 		int state = m_gameController.getConnectedState(ZoodleState.PAY_GEMS_CONFIRM);
 		m_gameController.changeState(state);
-		m_gameController.game.setPDMenuBarVisible(true, false);
 	}
 }
 

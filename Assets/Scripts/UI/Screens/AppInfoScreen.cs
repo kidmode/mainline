@@ -15,7 +15,8 @@ public class AppInfoScreen : MonoBehaviour {
 
 		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
 
-		game.setPDMenuBarVisible(true, false);
+		//honda: (to be removed) move the code to changeState 
+//		game.setPDMenuBarVisible(true, false);
 
 		m_queue = new RequestQueue();
 
@@ -49,8 +50,8 @@ public class AppInfoScreen : MonoBehaviour {
 		game.gameController.connectState( ZoodleState.BUY_GEMS, ZoodleState.SETTING_STATE );
 		
 		game.gameController.changeState( ZoodleState.BUY_GEMS );
-		
-		game.setPDMenuBarVisible(false, false);
+		//honda: (to be removed) move the code to changeState 
+//		game.setPDMenuBarVisible(false, false);
 		
 	}
 
@@ -60,8 +61,8 @@ public class AppInfoScreen : MonoBehaviour {
 		game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.SETTING_STATE );
 
 		game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
-
-		game.setPDMenuBarVisible(false, false);
+		//honda: (to be removed) move the code to changeState 
+//		game.setPDMenuBarVisible(false, false);
 		
 	}
 	#endregion

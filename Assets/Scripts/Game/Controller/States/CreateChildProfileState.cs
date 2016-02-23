@@ -59,7 +59,6 @@ public class CreateChildProfileState : GameState
 			break;
 		case SubState.GO_OVERVIEWINFO:
 			m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-			m_gameController.game.setPDMenuBarVisible(true, false);
 			m_subState = SubState.NONE;
 			break;
 		}
@@ -71,7 +70,6 @@ public class CreateChildProfileState : GameState
 			else
 			{
 				m_gameController.game.updateChildSelectorAndCurrentKidInfo();
-				m_gameController.game.setPDMenuBarVisible(true, false);
 				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			}
 		}
@@ -353,7 +351,6 @@ public class CreateChildProfileState : GameState
 		SessionHandler.getInstance().inputedChildName = "";
 		SessionHandler.getInstance().inputedbirthday = "";
 		m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
-		m_gameController.game.setPDMenuBarVisible(true, false);
 	}
 
 	private void toBackSign(UIButton p_button)

@@ -257,7 +257,6 @@ public class BuyGemsState : GameState
 		p_button.removeClickCallback ( goBack );
 		int l_state = m_gameController.getConnectedState ( ZoodleState.BUY_GEMS );
 		m_gameController.changeState (l_state);
-		m_gameController.game.setPDMenuBarVisible(true, false);
 	}
 
 	private void gotoGoodPayment( UIButton p_button )

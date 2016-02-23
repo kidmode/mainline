@@ -569,18 +569,6 @@ public class ProfileState : GameState
 //			else
 			{
 				m_uiManager.removeScreenImmediately(UIScreen.SPLASH_BACKGROUND);
-
-				//honda: new parent dashboard menu bar ui
-				string screenPath = "Prefabs/Screens/ParentDashboardMenuBar";
-				GameObject l_screen = Resources.Load< GameObject >(screenPath);
-				
-				if( l_screen == null )
-				{
-					_Debug.logError( string.Format( "Could not load canvas at: {0}", screenPath ) );
-				}
-				
-				GameObject l_screenObj = GameObject.Instantiate( l_screen ) as GameObject;
-				//end
 				m_gameController.changeState(ZoodleState.OVERVIEW_INFO);
 			}
 		}

@@ -889,7 +889,98 @@ public class Game : MonoBehaviour
 		if (pdMenuBar != null)
 			pdMenuBar.updateChildSelectorAndCurrentKidInfo();
 	}
+	//Instantiate parent dashboard menu bar
+	public void addPDMenuBar()
+	{
+		//honda: create new parent dashboard menu bar ui
+		string screenPath = "Prefabs/Screens/ParentDashboardMenuBar";
+		GameObject l_screen = Resources.Load< GameObject >(screenPath);
+		
+		if( l_screen == null )
+		{
+			_Debug.logError( string.Format( "Could not load canvas at: {0}", screenPath ) );
+		}
+		
+		GameObject l_screenObj = GameObject.Instantiate( l_screen ) as GameObject;
+		//end
+	}
 
+	public void checkIfNeedToAddShowHideMenuBar(int stateType)
+	{
+		//check if the app is going to parent dashboard
+		if (checkParentDashBoardState(stateType))
+		{
+			//create parent dashboard menu bar
+			if (pdMenuBar == null)
+			{
+				addPDMenuBar();
+			}
+			//show parent dashboard menu bar
+			else
+			{
+				setPDMenuBarVisible(true, false);
+			}
+		}
+		//it is going back to kid mode
+		else
+		{
+			//hide parent dashboard menu bar
+			if (pdMenuBar != null)
+			{
+				setPDMenuBarVisible(false, false);
+			}
+		}
+	}
+
+	public void checkIfNeedToRemoveMenuBar(int stateType)
+	{
+		//check if the app is back to specific kid mode state 
+		if (checkSpecificKidModeState(stateType))
+		{
+			if (pdMenuBar != null)
+			{
+				removePDMenuBar();
+			}
+			return;
+		}
+	}
+
+	private bool checkSpecificKidModeState(int stateType)
+	{
+		if (stateType == ZoodleState.PROFILE_SELECTION)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private bool checkParentDashBoardState(int stateType)
+	{
+		//here is all states on parent dashboard
+		if (stateType == ZoodleState.OVERVIEW_INFO 		||
+		    stateType == ZoodleState.OVERVIEW_TIMESPENT ||
+		    stateType == ZoodleState.OVERVIEW_ART 		||
+		    stateType == ZoodleState.CONTROL_APP 		||
+		    stateType == ZoodleState.OVERVIEW_READING 	||
+		    stateType == ZoodleState.CONTROL_SUBJECT 	||
+		    stateType == ZoodleState.CONTROL_LANGUAGE 	||
+		    stateType == ZoodleState.CONTROL_TIME 		||
+		    stateType == ZoodleState.CONTROL_VIOLENCE 	||
+		    stateType == ZoodleState.CHILD_LOCK_STATE 	||
+		    stateType == ZoodleState.DEVICE_OPTIONS_STATE ||
+		    stateType == ZoodleState.SETTING_STATE 		||
+		    stateType == ZoodleState.NOTIFICATION_STATE ||
+		    stateType == ZoodleState.FAQ_STATE)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	private PwdStore m_pwdStore;
 	private static PwdStore _pwdStore;
 	//end

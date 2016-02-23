@@ -199,8 +199,6 @@ public class OverviewReadingState : GameState
 	{
 		m_gameController.connectState (ZoodleState.BOOK_RECORD, ZoodleState.OVERVIEW_READING);
 		m_gameController.changeState (ZoodleState.BOOK_RECORD);
-
-		m_gameController.game.setPDMenuBarVisible(false, false);
 	}
 	
 	private void onExitRecordButtonClick( UIButton p_button )
@@ -654,8 +652,6 @@ public class OverviewReadingState : GameState
 			{
 				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
 				m_gameController.changeState(ZoodleState.BUY_GEMS);
-
-				m_gameController.game.setPDMenuBarVisible(false, false);
 			}
 			else
 			{
@@ -684,8 +680,6 @@ public class OverviewReadingState : GameState
 			SessionHandler.getInstance ().GemsJson = p_response.text;
 			m_gameController.connectState(ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName));
 			m_gameController.changeState (ZoodleState.BUY_GEMS);
-
-			m_gameController.game.setPDMenuBarVisible(false, false);
 		}
 		else
 		{

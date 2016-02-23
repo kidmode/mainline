@@ -18,9 +18,6 @@ public class ControlSubjectState : GameState
 		//make sure the menu bar is visible whenever we enter the state
 		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
 
-		game.setPDMenuBarVisible(true, false);
-
-
 		m_requestQueue = new RequestQueue();
 		_setupScreen( p_gameController );
 		_setupElment();

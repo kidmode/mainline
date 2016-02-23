@@ -40,10 +40,6 @@ public class CreateChildState : GameState
 			SessionHandler.getInstance().inputedbirthday = "";
 			int previousState = m_gameController.getConnectedState(int.Parse(m_gameController.stateName));
 			p_gameController.changeState(previousState);
-			if (previousState != ZoodleState.PROFILE_SELECTION)
-			{
-				m_gameController.game.setPDMenuBarVisible(true, false);
-			}
 			m_subState = SubState.NONE;
 			break;
 		case SubState.GO_PROFILE:

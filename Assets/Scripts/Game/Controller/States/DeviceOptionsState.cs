@@ -14,8 +14,6 @@ public class DeviceOptionsState : GameState
 
 		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
 
-		game.setPDMenuBarVisible(true, false);
-		
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 //		m_changeState = true;
 //		#endif 
@@ -231,9 +229,6 @@ public class DeviceOptionsState : GameState
 			game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
 			
 			game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
-			
-			game.setPDMenuBarVisible(false, false);
-
 			return;
 			
 		}

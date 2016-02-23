@@ -70,8 +70,23 @@ public class GameController
 
 		m_state = m_states[ p_stateType ];
 
+		//honda
+		//check new state belongs to parent dashboard or not
+		//if yes, create parent dashboard menu bar if PDMenuBar is not created
+		//or show parent dashboard menu bar if PDMenuBar exists
+		//if not, hide parent dashboard menu bar
+		m_game.checkIfNeedToAddShowHideMenuBar(p_stateType);
+		//end 
+
 		if (null != m_state)
 			m_state.enter(this);
+
+		//honda
+		//check if the app is back to specific kid mode state
+		//like ProfileSelection...
+		//remove  parent dashboard menu bar
+		m_game.checkIfNeedToRemoveMenuBar(p_stateType);
+		//end
 
 		if(TrialTimeController.Instance != null)
 			TrialTimeController.Instance.changeStateCheck();

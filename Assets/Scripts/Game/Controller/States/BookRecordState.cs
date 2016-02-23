@@ -105,7 +105,6 @@ public class BookRecordState : GameState
 			if (l_nextState != 0)
 			{
 				p_gameController.changeState(l_nextState);
-				m_gameController.game.setPDMenuBarVisible(true, false);
 			}
 		}
 
