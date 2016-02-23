@@ -9,7 +9,7 @@ public class AppDetailsCanvas : UICanvas
 		base.init (p_gameObject);
 
 		m_dialog = getView ("mainPanel") as UIElement;
-		m_dialogMovePosition = 800;
+		m_dialogMovePosition = 1660;
 
 		SetupLocalizition ();
 	}
