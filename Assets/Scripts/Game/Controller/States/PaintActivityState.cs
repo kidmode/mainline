@@ -40,6 +40,10 @@ public class PaintActivityState : GameState
 				_setupCanvas(p_gameController, p_response.texture);
 			}));
 			l_queue.request(RequestType.RUSH);
+
+			//Kevin added loading screen
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 20);
+
 		}
 
 		PointSystemController.Instance.setPointOK (PointSystemController.PointRewardState.No_Point);
@@ -80,6 +84,13 @@ public class PaintActivityState : GameState
 	
 	private void _setupCanvas(GameController p_gameController, Texture2D p_texture)
 	{
+
+		if(m_gameController.getUI().findScreen(UIScreen.LOADING_SPINNER_ELEPHANT) != null){
+
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		}
+
 		m_paintController = new PaintAcitivityController(p_gameController, m_activityCanvas, p_texture);
 		
 		UIElement l_toolPanel = m_activityCanvas.getView("ToolPanel");

@@ -74,14 +74,29 @@ public class BuildPlayer : MonoBehaviour
 	
 
 	//Note this is not for debug MODE which is another branch
-	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PLAY" )]
-	public static void Build_MAINLINE_DEV_DEBUG_PLAY()
+	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PRODUCTION_PLAY" )]
+	public static void Build_MAINLINE_DEV_DEBUG_PRODUCTION_PLAY()
 	{
-		
+
+		writeServerEnvironment(SERVER_PRODUCTION);
+
 		BuildOptions androidBuildOptions = BuildOptions.Development | BuildOptions.AllowDebugging | BuildOptions.AutoRunPlayer | BuildOptions.ShowBuiltPlayer;
 		
 		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
 
+	}
+
+	//Staging
+	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_STAGING_PLAY" )]
+	public static void Build_MAINLINE_DEV_DEBUG_STAGING_PLAY()
+	{
+		
+		writeServerEnvironment(SERVER_STAGING);
+		
+		BuildOptions androidBuildOptions = BuildOptions.Development | BuildOptions.AllowDebugging | BuildOptions.AutoRunPlayer | BuildOptions.ShowBuiltPlayer;
+		
+		build("MainLine", "Assets/keystore/android", "android", "android", "android", androidBuildOptions);
+		
 	}
 	
 	
