@@ -294,8 +294,11 @@ public class PDMenuBarScript : MonoBehaviour {
 				toggle.onValueChanged.AddListener((on) => kidSelected(kid, on));
 				toggle.group = childernList.GetComponent<ToggleGroup>();
 				//change image
-				Image image = child.transform.FindChild("Icon").gameObject.GetComponent<Image>();
-				image.sprite = createSprite(kid.kid_photo);
+				if (kid.kid_photo != null)
+				{
+					Image image = child.transform.FindChild("Icon").gameObject.GetComponent<Image>();
+					image.sprite = createSprite(kid.kid_photo);
+				}
 				//added to childernList
 				child.transform.localScale = menuBarCanvas.transform.localScale;
 				child.transform.parent = gridLayout.transform;
@@ -387,6 +390,9 @@ public class PDMenuBarScript : MonoBehaviour {
 	//create image sprite from image texture
 	private Sprite createSprite(Texture2D p_texture)
 	{
+		if (p_texture == null)
+			return null;
+
 		Sprite l_sprite = Sprite.Create(p_texture, 
 		                                new Rect(0, 0, p_texture.width, p_texture.height), 
 		                                new Vector2(0, 0));
@@ -418,7 +424,8 @@ public class PDMenuBarScript : MonoBehaviour {
 		else
 			currentkidText.text = kid.name;
 //		kid.requestPhoto();
-		currentKidImage.sprite = createSprite(kid.kid_photo);
+		if (kid.kid_photo != null)
+			currentKidImage.sprite = createSprite(kid.kid_photo);
 		currentKidImage.gameObject.SetActive(false);
 		currentKidImage.gameObject.SetActive(true);
 		currentkidArrowDown.SetActive(true);
