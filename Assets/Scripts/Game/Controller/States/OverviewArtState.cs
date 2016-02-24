@@ -139,7 +139,7 @@ public class OverviewArtState : GameState {
 	
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 )  as CommonDialogCanvas;
+		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 )  as CommonDialogCanvas;
 	
 		m_commonDialog.setUIManager (p_gameController.getUI());
 

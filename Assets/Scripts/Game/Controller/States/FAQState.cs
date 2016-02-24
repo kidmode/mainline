@@ -37,7 +37,7 @@ public class FAQState : GameState
 	{
 		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 7 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_uiManager);
-		m_faqDialogCanvas = p_uiManager.createScreen (UIScreen.FAQ_DIALOG, true, 5);
+		m_faqDialogCanvas = p_uiManager.createScreen (UIScreen.FAQ_DIALOG, true, 12);
 		m_faqCanvas = p_uiManager.createScreen( UIScreen.FAQ_SCREEN, true, 2 ) as UICanvas;
 
 		m_helpButton = m_faqCanvas.getView ("helpButton") as UIButton;
@@ -82,7 +82,7 @@ public class FAQState : GameState
 		List<Vector3> l_pointListOut = new List<Vector3>();
 		UIElement l_newPanel = m_faqDialogCanvas.getView ("mainPanel");
 		l_pointListOut.Add( l_newPanel.transform.localPosition );
-		l_pointListOut.Add( l_newPanel.transform.localPosition - new Vector3( 0, 1163, 0 ));
+		l_pointListOut.Add( l_newPanel.transform.localPosition - new Vector3( 0, dialogDisplacement, 0 ));
 		l_newPanel.tweener.addPositionTrack(l_pointListOut, 0.0f);
 	}
 
@@ -92,7 +92,7 @@ public class FAQState : GameState
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_faqDialogCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
-		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 1163, 0 ));
+		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, dialogDisplacement, 0 ));
 		l_newPanel.tweener.addPositionTrack(l_pointListIn, 0.0f);
 
 		string[] l_data = p_data as string[];
@@ -162,4 +162,9 @@ public class FAQState : GameState
 	private UILabel 	m_titleLabel;
 	private UIButton 	m_exitButton;
 	private UILabel 	m_showFaq;
+
+
+	//Kevin
+	private float dialogDisplacement = 1090.0f;
+
 }

@@ -142,7 +142,7 @@ public class SettingChildLockState : GameState
 
 
 		m_cancelLockConfirmCanvas = p_uiManager.createScreen( UIScreen.CANCEL_CHILD_LOCK, true, 6 ) as CancelLockConfirmCanvas;
-		m_childLockHelpCanvas =  p_uiManager.createScreen( UIScreen.CHILD_LOCK_HELP, true, 5 ) as ChildLockHelpCanvas;
+		m_childLockHelpCanvas =  p_uiManager.createScreen( UIScreen.CHILD_LOCK_HELP, true, 15 ) as ChildLockHelpCanvas;
 		m_childLockCanvas = p_uiManager.createScreen( UIScreen.CHILD_LOCK_SCREEN, true, 2 );
 
 

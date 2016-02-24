@@ -87,7 +87,7 @@ public class NotificationState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
-		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 5 ) as CommonDialogCanvas;
+		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 15 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_uiManager);
 		m_notificationCanvas = p_uiManager.createScreen( UIScreen.NOTIFICATION, true, 2 );
 
