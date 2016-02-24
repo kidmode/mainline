@@ -74,8 +74,8 @@ public class BuildPlayer : MonoBehaviour
 	
 
 	//Note this is not for debug MODE which is another branch
-	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_RELEASE_PLAY" )]
-	public static void Build_MAINLINE_DEV_DEBUG_RELEASE_PLAY()
+	[MenuItem( "Build/Android/MAINLINE_DEV_DEBUG_PRODUCTION_PLAY" )]
+	public static void Build_MAINLINE_DEV_DEBUG_PRODUCTION_PLAY()
 	{
 
 		writeServerEnvironment(SERVER_PRODUCTION);
