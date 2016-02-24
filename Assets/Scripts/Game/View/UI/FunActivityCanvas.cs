@@ -32,6 +32,18 @@ public class ActivityInfo : object
 	private int maxTryingTimes = 3;
 	private RequestQueue rQueue;
 	//end
+
+	#region Properties
+	//Kevin 
+	//Properties
+	public bool IsRequested {
+		get {
+			return this.isRequested;
+		}
+	}
+	#endregion
+	//
+
 	public void requestIcon()
 	{
 		if( m_icon == null && m_drawing != null && isRequested == false)
