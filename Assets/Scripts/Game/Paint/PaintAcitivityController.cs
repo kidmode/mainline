@@ -238,6 +238,8 @@ public class PaintAcitivityController : System.Object
 
 		m_textureManager.onSaveDrawingCompleted += saveDrawingCompleted;
 
+		m_textureManager.onSaveNewDrawingCompleted += saveDrawingCompleted;
+
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false,  20);
 
 		m_textureManager.save();
@@ -249,17 +251,17 @@ public class PaintAcitivityController : System.Object
 
 		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
-		if(p_response.error == null){
-		
-			m_textureManager.onSaveDrawingCompleted -= saveDrawingCompleted;
+		m_textureManager.onSaveNewDrawingCompleted -= saveDrawingCompleted;
 
-			exit(null);
+		m_textureManager.onSaveDrawingCompleted -= saveDrawingCompleted;
 
-		}else{
+		exit(null);
 
-			exit(null);
-
-		}
+//		if(p_response.error == null){
+//
+//		}else{
+//
+//		}
 		
 	}
 
