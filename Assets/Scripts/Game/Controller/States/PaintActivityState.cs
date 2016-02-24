@@ -34,15 +34,24 @@ public class PaintActivityState : GameState
 		}
 		else
 		{
-			RequestQueue l_queue = new RequestQueue();
-			l_queue.add(new ImageRequest("texture", l_drawing.largeUrl, (HttpsWWW p_response)=>
-			{
-				_setupCanvas(p_gameController, p_response.texture);
-			}));
-			l_queue.request(RequestType.RUSH);
 
-			//Kevin added loading screen
-			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 20);
+			if(SessionHandler.getInstance().currentDrawing.largeIcon != null){
+
+				_setupCanvas(p_gameController, SessionHandler.getInstance().currentDrawing.largeIcon);
+
+			}else{
+
+				RequestQueue l_queue = new RequestQueue();
+				l_queue.add(new ImageRequest("texture", l_drawing.largeUrl, (HttpsWWW p_response)=>
+				{
+					_setupCanvas(p_gameController, p_response.texture);
+				}));
+				l_queue.request(RequestType.RUSH);
+
+				//Kevin added loading screen
+				m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 20);
+
+			}
 
 		}
 

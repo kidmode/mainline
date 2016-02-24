@@ -215,8 +215,11 @@ public class PaintAcitivityController : System.Object
 
 	private void saveAndExit(UIButton p_button)
 	{
+
 		save(p_button);
+
 		exit(p_button);
+
 	}
 
 	private void addSystemButton(string p_buttonName, ButtonClickCallback m_callback)

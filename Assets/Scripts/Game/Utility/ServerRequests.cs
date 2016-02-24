@@ -978,7 +978,7 @@ public class IconRequest : RequestQueue.Request
 }
 
 // Request an drawing icon
-// Kevin, looks as this is the same largeUrl
+// Kevin, looks as this is the same largeUrl with ImageRequest. 
 public class DrawingRequest : RequestQueue.Request
 {
 	public DrawingRequest(Drawing p_drawing, UIElement p_element, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
