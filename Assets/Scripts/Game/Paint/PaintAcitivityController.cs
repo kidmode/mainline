@@ -13,6 +13,9 @@ public class PaintAcitivityController : System.Object
 		m_paintTexture = p_texture;
 		m_isFinished = false;
 		setup();
+
+
+
 	}
 
 	public void setup()
@@ -218,9 +221,11 @@ public class PaintAcitivityController : System.Object
 
 		save(p_button);
 
-		exit(p_button);
+//		exit(p_button);
 
 	}
+
+
 
 	private void addSystemButton(string p_buttonName, ButtonClickCallback m_callback)
 	{
@@ -230,7 +235,32 @@ public class PaintAcitivityController : System.Object
 
 	private void save(UIButton p_button)
 	{
+
+		m_textureManager.onSaveDrawingCompleted += saveDrawingCompleted;
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false,  20);
+
 		m_textureManager.save();
+
+	}
+
+	private void saveDrawingCompleted(HttpsWWW p_response)
+	{
+
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+		if(p_response.error == null){
+		
+			m_textureManager.onSaveDrawingCompleted -= saveDrawingCompleted;
+
+			exit(null);
+
+		}else{
+
+			exit(null);
+
+		}
+		
 	}
 
 	private void load(UIButton p_button)
@@ -298,4 +328,6 @@ public class PaintAcitivityController : System.Object
 	private bool m_isFinished;
 	private Dictionary<UIElement, UIElement> m_toolPanelMap;
 	private Dictionary<UIElement, ToolState> m_toolStateMap;
+
+
 }
