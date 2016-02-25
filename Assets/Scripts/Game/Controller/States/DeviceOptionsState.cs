@@ -52,7 +52,7 @@ public class DeviceOptionsState : GameState
 		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 15 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_uiManager);
 		m_deviceOptionCanvas = p_uiManager.createScreen( UIScreen.DEVICE_OPTIONS_SCREEN, true, 2 ) as UICanvas;
-		m_lodaing = m_deviceOptionCanvas.getView ("noticePanel") as UIElement;
+//		m_lodaing = m_deviceOptionCanvas.getView ("noticePanel") as UIElement;
 
 		m_helpButton = m_deviceOptionCanvas.getView ("helpButton") as UIButton;
 		m_helpButton.addClickCallback (onHelpButtonClick);
@@ -75,11 +75,12 @@ public class DeviceOptionsState : GameState
 		m_effectsVolumeSlider.addValueChangedCallback (onEffectVolumeValueChanged);
 //		m_leftButton = m_deviceOptionCanvas.getView ("leftButton") as UIButton;
 //		m_leftButton.addClickCallback (toNotificationScreen);
-		m_noticeLabel = m_lodaing.getView ("noticeText") as UILabel;
-		m_closeButton = m_lodaing.getView ("closeButton") as UIButton;
-		m_closeButton.active = false;
-		m_noticeLabel.text = Localization.getString(Localization.TXT_LABEL_LOADING);
-		m_closeButton.addClickCallback (closeNoticeDialog);
+//		m_noticeLabel = m_lodaing.getView ("noticeText") as UILabel;
+//		m_closeButton = m_lodaing.getView ("closeButton") as UIButton;
+//		m_closeButton.active = false;
+//		m_noticeLabel.text = Localization.getString(Localization.TXT_LABEL_LOADING);
+//		m_closeButton.addClickCallback (closeNoticeDialog);
+
 		m_saveButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
 		m_saveButton.addClickCallback (toRefreshContent);
 
@@ -137,6 +138,12 @@ public class DeviceOptionsState : GameState
 		}
 
 		SessionHandler.getInstance ().settingCache.active = false;
+
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_deviceOptionCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
 
 	}
 	
@@ -197,16 +204,16 @@ public class DeviceOptionsState : GameState
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
 
-	private void closeNoticeDialog(UIButton p_button)
-	{
-		m_saveButton.addClickCallback (toRefreshContent);
-		m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_LOADING);
-		p_button.active = false;
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( m_lodaing.transform.localPosition );
-		l_pointListIn.Add( m_lodaing.transform.localPosition - new Vector3( 0, saveMessageDisplacement, 0 ));
-		m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
-	}
+//	private void closeNoticeDialog(UIButton p_button)
+//	{
+//		m_saveButton.addClickCallback (toRefreshContent);
+//		m_noticeLabel.text = Localization.getString(Localization.TXT_STATE_31_LOADING);
+//		p_button.active = false;
+//		List<Vector3> l_pointListIn = new List<Vector3>();
+//		l_pointListIn.Add( m_lodaing.transform.localPosition );
+//		l_pointListIn.Add( m_lodaing.transform.localPosition - new Vector3( 0, saveMessageDisplacement, 0 ));
+//		m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+//	}
 	
 	private void onCloseDialogButtonClick(UIButton p_button)
 	{
@@ -355,10 +362,10 @@ public class DeviceOptionsState : GameState
 
 			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
 
-			List<Vector3> l_pointListIn = new List<Vector3>();
-			l_pointListIn.Add( m_lodaing.transform.localPosition );
-			l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, saveMessageDisplacement, 0 ));
-			m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
+//			List<Vector3> l_pointListIn = new List<Vector3>();
+//			l_pointListIn.Add( m_lodaing.transform.localPosition );
+//			l_pointListIn.Add( m_lodaing.transform.localPosition + new Vector3( 0, saveMessageDisplacement, 0 ));
+//			m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
 
 
 			if(null != m_noticeLabel)
@@ -366,6 +373,12 @@ public class DeviceOptionsState : GameState
 			if(null != m_closeButton)
 				m_closeButton.active = true;
 		}
+
+		m_saveButton.addClickCallback (toRefreshContent);
+
+		m_deviceOptionCanvas.gameObject.transform.parent.gameObject.SendMessage("updateComplete", p_response, SendMessageOptions.RequireReceiver);
+
+
 	}
 
 	private void viewGemsRequestComplete(HttpsWWW p_response)
@@ -444,7 +457,6 @@ public class DeviceOptionsState : GameState
 	private bool 		exitState = false;
 
 	//Kevin
-	private UIImage 	m_iconLock;
 
 	private Game 		game;
 

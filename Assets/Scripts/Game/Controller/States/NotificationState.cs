@@ -30,11 +30,12 @@ public class NotificationState : GameState
 	public override void exit( GameController p_gameController )
 	{
 		int l_changedStateName = int.Parse( m_gameController.stateName);
-		if (SessionHandler.getInstance().settingCache.active && 
-		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
-		  l_changedStateName == ZoodleState.DEVICE_OPTIONS_STATE || 
-		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE) && checkInternet())
-			updateSetting ();
+//		if (SessionHandler.getInstance().settingCache.active && 
+//		    !(l_changedStateName == ZoodleState.SETTING_STATE || 
+//		  l_changedStateName == ZoodleState.DEVICE_OPTIONS_STATE || 
+//		  l_changedStateName == ZoodleState.CHILD_LOCK_STATE) && checkInternet())
+//			updateSetting ();
+
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_notificationCanvas );
 		p_gameController.getUI().removeScreen( m_commonDialog );
@@ -42,6 +43,16 @@ public class NotificationState : GameState
 
 	public void updateSetting()
 	{
+		//Check if it is premium if not then go and upsell
+		if(!SessionHandler.getInstance().token.isPremium()){
+			
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
+			
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			return;
+			
+		}
+
 		//update childLock
 		m_requestQueue.reset ();
 		if(m_settingCache.childLockSwitch && !m_settingCache.verifyBirth)
@@ -68,9 +79,40 @@ public class NotificationState : GameState
 			m_requestQueue.add(new UpdateSettingRequest("false"));
 		}
 		//update notifucation
-		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
-		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum));
-		m_requestQueue.request (RequestType.SEQUENCE);
+		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp, updateWeeklyComplete));
+//		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
+
+		m_requestQueue.request (RequestType.RUSH);
+
+		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 20);
+
+	}
+
+
+	private void updateWeeklyComplete(HttpsWWW p_response)
+	{
+
+		if(p_response.error == null){
+
+			m_requestQueue.reset();
+
+			m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
+
+			m_requestQueue.request (RequestType.RUSH);
+
+		}else{
+
+			m_gameController.getUI().createScreen(UIScreen.ERROR);
+
+		}
+
+	}
+
+	private void updateComplete(HttpsWWW p_response)
+	{
+		
+		m_notificationCanvas.gameObject.transform.parent.gameObject.SendMessage("updateComplete", p_response, SendMessageOptions.RequireReceiver);
+
 		//update device option
 		SessionHandler.getInstance().resetSetting ();
 		Debug.Log("Notification set volume data from setting cache to session handler");
@@ -81,18 +123,26 @@ public class NotificationState : GameState
 		PlayerPrefs.SetInt ("music_volume",SessionHandler.getInstance ().musicVolum);
 		PlayerPrefs.SetInt ("effects_volume",SessionHandler.getInstance ().effectsVolum);
 		PlayerPrefs.Save ();
+		
 	}
 
 	//---------------- Private Implementation ----------------------
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
+
+
+
 		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 15 ) as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_uiManager);
 		m_notificationCanvas = p_uiManager.createScreen( UIScreen.NOTIFICATION, true, 2 );
 
-		m_helpButton = m_notificationCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
+
+		saveButton = m_notificationCanvas.getView ("saveButton") as UIButton; 
+		saveButton.addClickCallback (onSaveButtonClick);
+
+//		m_helpButton = m_notificationCanvas.getView ("helpButton") as UIButton;
+//		m_helpButton.addClickCallback (onHelpButtonClick);
 
 
 //		m_rightButton = m_notificationCanvas.getView ("rightButton") as UIButton;
@@ -166,28 +216,41 @@ public class NotificationState : GameState
 				m_newAppAddedButton.isOn = false;
 			}
 		}
-	}
 
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_notificationCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
 		
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_CONTENT);
+		valueChanged.setListeners();
 
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 	}
-	
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
+
+
+	private void onSaveButtonClick(UIButton p_button){
+
+		updateSetting();
+
 	}
+//	private void onHelpButtonClick(UIButton p_button)
+//	{
+//		p_button.removeAllCallbacks ();
+//		m_commonDialog.setOriginalPosition ();
+//		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
+//		
+//		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
+//		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
+//		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_TITLE);
+//		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_CONTENT);
+//
+//		l_closeButton.addClickCallback (onCloseDialogButtonClick);
+//	}
+//	
+//	private void onCloseDialogButtonClick(UIButton p_button)
+//	{
+//		p_button.removeAllCallbacks();
+//		m_commonDialog.setOutPosition ();
+//		m_helpButton.addClickCallback (onHelpButtonClick);
+//	}
 
 
 	
@@ -338,4 +401,7 @@ public class NotificationState : GameState
 	private bool 		canMoveLeftMenu = true;
 
 	private int 		m_state;
+
+	//Kevin
+	private UIButton saveButton;
 }
