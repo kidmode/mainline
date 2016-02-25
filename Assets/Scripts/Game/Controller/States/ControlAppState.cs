@@ -72,8 +72,6 @@ public class ControlAppState : GameState
 
 	private void _setupElment()
 	{
-		m_helpButton = m_addAppCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
 
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_addAppCanvas.getView ("mainPanel");
@@ -129,26 +127,7 @@ public class ControlAppState : GameState
 		}
 	}
 	
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
 
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_59_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_59_HELP_CONTENT);
-
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-	}
-	
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
-	}
 
 	private void onAppButtonClicked(UISwipeList p_list, UIButton p_button, System.Object p_data, int p_index)
 	{
@@ -847,7 +826,6 @@ public class ControlAppState : GameState
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
-	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
 		
 	private UICanvas 		m_paywallCanvas;

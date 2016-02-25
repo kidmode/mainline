@@ -62,8 +62,6 @@ public class ControlLanguageState : GameState
 
 	private void _setupElment()
 	{
-		m_helpButton = m_promoteLanguagesCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
 
 		//New Save Button
 		mSaveButton = m_promoteLanguagesCanvas.getView ("saveButton") as UIButton;
@@ -153,26 +151,6 @@ public class ControlLanguageState : GameState
 		}
 	}
 
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-		
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_56_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_56_HELP_CONTENT);
-
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-	}
-	
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
-	}
 
 
 	private void viewGemsRequestComplete(HttpsWWW p_response)
@@ -357,10 +335,7 @@ public class ControlLanguageState : GameState
 	private bool 			m_isValueChanged = false;
 
 	private UISwipeList 	m_childrenList;
-	
 
-
-	private UIButton 		m_helpButton;
 	private CommonDialogCanvas m_commonDialog;
 	
 //	private UICanvas 		m_paywallCanvas;

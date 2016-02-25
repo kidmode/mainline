@@ -63,8 +63,6 @@ public class OverviewReadingState : GameState
 	
 	private void _setupElment()
 	{
-		m_helpButton = m_recordAReadingCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
 
 		m_costArea = m_confirmDialogCanvas.getView("costArea");
 		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
@@ -111,26 +109,6 @@ public class OverviewReadingState : GameState
 		m_buyGemsButtonOnConfirm.addClickCallback (toBuyGemsScreen);
 	}
 
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-		
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString( Localization.TXT_STATE_64_RECORD_READING );
-		l_contentLabel.text = Localization.getString( Localization.TXT_STATE_64_CHOOSE_FROM );
-		
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-	}
-	
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
-	}
 
 	#region Recording Start Screen
 	private void onSelectKid( UISwipeList p_list, UIButton p_button, object p_data, int p_index )
@@ -718,7 +696,6 @@ public class OverviewReadingState : GameState
 	private UIButton 			      m_cancelBuyButton;
 	private UIButton 				  m_confirmBuyButton;
 	private RequestQueue 			  m_requestQueue;
-	private UIButton 				  m_helpButton;
 	private bool 					  bookListOpen = false;
 	//record start screen
 	private UICanvas    			  m_recordStartCanvas;
