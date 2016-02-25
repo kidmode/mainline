@@ -63,9 +63,11 @@ public class PDSaveButton : MonoBehaviour {
 
 		button.interactable = true;
 
-		interactiveText.gameObject.SetActive(true);
-		
-		uninteractiveText.gameObject.SetActive(false);
+		if(interactiveText != null)
+			interactiveText.gameObject.SetActive(true);
+
+		if(interactiveText != null)
+			uninteractiveText.gameObject.SetActive(false);
 
 	}
 
@@ -73,9 +75,11 @@ public class PDSaveButton : MonoBehaviour {
 
 		button.interactable = false;
 
-		interactiveText.gameObject.SetActive(false);
+		if(interactiveText != null)
+			interactiveText.gameObject.SetActive(false);
 
-		uninteractiveText.gameObject.SetActive(true);
+		if(interactiveText != null)
+			uninteractiveText.gameObject.SetActive(true);
 
 	}
 
