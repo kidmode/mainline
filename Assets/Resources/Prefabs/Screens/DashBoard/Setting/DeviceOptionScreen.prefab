@@ -10,6 +10,7 @@ GameObject:
   - 224: {fileID: 22400000}
   - 222: {fileID: 22200000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11430890}
   m_Layer: 5
   m_Name: refreshButton
   m_TagString: Untagged
@@ -366,6 +367,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11430892}
+  - 114: {fileID: 11430888}
   m_Layer: 5
   m_Name: DeviceOptionScreen
   m_TagString: Untagged
@@ -660,6 +663,7 @@ GameObject:
   - 224: {fileID: 22404672}
   - 222: {fileID: 22204672}
   - 114: {fileID: 11404672}
+  - 114: {fileID: 11430886}
   m_Layer: 5
   m_Name: lockIcon
   m_TagString: Untagged
@@ -1076,8 +1080,8 @@ MonoBehaviour:
     m_FadeDuration: .100000001
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 21300000, guid: 3b50d9fefc6432243aa46a4fca88db9d, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: 37c285a704989d646b0ba28c36e5a3ec, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 725be0b7f6c0d5d4791edb122ddbf78d, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 740e977ea95b94ad58ee0762b5eb438d, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -1103,7 +1107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 21300000, guid: 32a5f92f5fe22f04c95c7aab04ddbd02, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b3a04efdd345b3b42adbaf8f82f6e4cc, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2026,6 +2030,62 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11430886
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7bac6d802bf4501990046babf4beef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11430892}
+--- !u!114 &11430888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e1f7bea9d5646d080c03b1d7ec3969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11430890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5d0570ff23a47b39d32e6fe0696a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdControlValueChanged: {fileID: 11430892}
+  interactiveText: {fileID: 0}
+  uninteractiveText: {fileID: 0}
+--- !u!114 &11430892
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fedb62621922496791c7a3a9a48b950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliders:
+  - {fileID: 11400104}
+  - {fileID: 11400094}
+  - {fileID: 11400040}
+  toggles:
+  - {fileID: 11471538}
+  - {fileID: 11401064}
+  hasControlValueChanged: 0
 --- !u!114 &11433676
 MonoBehaviour:
   m_ObjectHideFlags: 1
