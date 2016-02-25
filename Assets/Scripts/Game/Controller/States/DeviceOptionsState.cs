@@ -139,6 +139,12 @@ public class DeviceOptionsState : GameState
 
 		SessionHandler.getInstance ().settingCache.active = false;
 
+
+		//set up value changed events
+		PDControlValueChanged valueChanged = m_deviceOptionCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
+		
+		valueChanged.setListeners();
+
 	}
 	
 	private void onMasterVolumeValueChanged( float p_float )
