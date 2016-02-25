@@ -16,7 +16,7 @@ public class PDHelpButton : MonoBehaviour {
 
 	private Game game;
 
-	private CommonDialogCanvas helpDialogCanvas;
+	private UICanvas helpDialogCanvas;
 
 	private HelpInfo currHelpInfo;
 
@@ -68,17 +68,25 @@ public class PDHelpButton : MonoBehaviour {
 
 	public void helpButtonClicked(){
 
-		helpDialogCanvas = game.gameController.getUI().createScreen( UIScreen.COMMON_DIALOG, true, 15 )  as CommonDialogCanvas;
+		helpDialogCanvas = game.gameController.getUI().createScreen( UIScreen.PD_HELPDIALOG, true, 30 )  as UICanvas;
 		
-		helpDialogCanvas.setUIManager (game.gameController.getUI());
+//		helpDialogCanvas.setUIManager (game.gameController.getUI());
 
-		helpDialogCanvas.setOriginalPosition ();
+//		helpDialogCanvas.setOriginalPosition ();
 		UIButton l_closeButton = helpDialogCanvas.getView ("closeMark") as UIButton;
+
+//		UIButton l_closeButton = helpDialogCanvas.getView ("quitButton") as UIButton;
+
 		
 		UILabel l_titleLabel = helpDialogCanvas.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = helpDialogCanvas.getView ("contentText") as UILabel;
 		l_titleLabel.text = Localization.getString(currHelpInfo.localizeHelpTitleTAG);
 		l_contentLabel.text = Localization.getString(currHelpInfo.localizeHelpContentTAG);
+
+//		UILabel l_titleLabel = helpDialogCanvas.getView ("messageLabel") as UILabel;
+//		UILabel l_contentLabel = helpDialogCanvas.getView ("messageContent") as UILabel;
+//		l_titleLabel.text = Localization.getString(currHelpInfo.localizeHelpTitleTAG);
+//		l_contentLabel.text = Localization.getString(currHelpInfo.localizeHelpContentTAG);
 		
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 
@@ -86,7 +94,8 @@ public class PDHelpButton : MonoBehaviour {
 
 	private void onCloseDialogButtonClick(UIButton button){
 
-		helpDialogCanvas.setOutPosition ();
+//		helpDialogCanvas.setOutPosition ();
+		game.gameController.getUI().removeScreen(UIScreen.PD_HELPDIALOG);
 
 	}
 
