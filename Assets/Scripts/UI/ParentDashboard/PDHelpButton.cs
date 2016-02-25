@@ -18,6 +18,8 @@ public class PDHelpButton : MonoBehaviour {
 
 	private CommonDialogCanvas helpDialogCanvas;
 
+	private HelpInfo currHelpInfo;
+
 	// Use this for initialization
 	void Start () {
 
@@ -75,8 +77,8 @@ public class PDHelpButton : MonoBehaviour {
 		
 		UILabel l_titleLabel = helpDialogCanvas.getView ("dialogText") as UILabel;
 		UILabel l_contentLabel = helpDialogCanvas.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_48_HELP_CONTENT);
+		l_titleLabel.text = Localization.getString(currHelpInfo.localizeHelpTitleTAG);
+		l_contentLabel.text = Localization.getString(currHelpInfo.localizeHelpContentTAG);
 		
 		l_closeButton.addClickCallback (onCloseDialogButtonClick);
 
@@ -96,6 +98,8 @@ public class PDHelpButton : MonoBehaviour {
 
 		if(hasStateHelpButton(stateType)){
 
+			currHelpInfo = getHelpInfoWithStateType(stateType);
+
 			enableButton();
 
 		}else{
@@ -108,6 +112,23 @@ public class PDHelpButton : MonoBehaviour {
 
 	//End
 	#endregion
+
+	private HelpInfo getHelpInfoWithStateType(int stateType){
+
+		for (int i = 0; i < helpInfo.Length; i++) {
+			
+			HelpInfo info = helpInfo[i];
+			
+			if(info.stateType == stateType)
+				
+				return info;
+			
+		}
+
+		return null;
+
+
+	}
 
 	private bool hasStateHelpButton(int stateType){
 
@@ -132,6 +153,9 @@ public class HelpInfo{
 
 	public int stateType;
 
+	public string localizeHelpTitleTAG;
+
+	public string localizeHelpContentTAG;
 
 }
 
