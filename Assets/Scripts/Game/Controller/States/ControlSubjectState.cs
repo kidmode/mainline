@@ -42,7 +42,7 @@ public class ControlSubjectState : GameState
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 5 ) 			as CommonDialogCanvas;
+		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 ) 			as CommonDialogCanvas;
 		m_commonDialog.setUIManager (p_gameController.getUI());
 
 		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
@@ -62,8 +62,6 @@ public class ControlSubjectState : GameState
 
 	private void _setupElment()
 	{
-		m_helpButton = m_promoteSubjectsCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
 
 		saveButton = m_promoteSubjectsCanvas.getView ("saveButton") as UIButton; 
 		saveButton.addClickCallback (onSaveButtonClick);
@@ -127,26 +125,6 @@ public class ControlSubjectState : GameState
 
 
 
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-		
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_55_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_55_HELP_CONTENT);
-
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-	}
-
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
-	}
 
 
 
@@ -276,7 +254,6 @@ public class ControlSubjectState : GameState
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
-	private UIButton 		m_helpButton;
 	private UIButton		saveButton;
 	private CommonDialogCanvas m_commonDialog;
 	

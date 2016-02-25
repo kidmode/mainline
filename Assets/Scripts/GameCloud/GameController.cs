@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,6 +18,10 @@ public class GameController
 	private IGameStateFactory m_gameStateFactory;
 
 	private GameStateBoard m_board;
+
+	//Kevin
+	public static event Action<GameState, int > onStateChanged;
+	//End
 	
 	public GameController( Game p_game, IScreenFactory p_screenFactory, 
 	                      IGameStateFactory p_gameStateFactory ) 
@@ -87,6 +92,14 @@ public class GameController
 		//remove  parent dashboard menu bar
 		m_game.checkIfNeedToRemoveMenuBar(p_stateType);
 		//end
+
+		//Kevin - Fire state Changed
+		if(onStateChanged != null){
+
+			onStateChanged(m_state, p_stateType);
+
+		}
+		//
 
 		if(TrialTimeController.Instance != null)
 			TrialTimeController.Instance.changeStateCheck();

@@ -139,6 +139,7 @@ public class UIScreen
 
 	//Kevin
 	public const int PD_MESSAGE			= 1300;
+	public const int PD_HELPDIALOG		= 1301;
 }
 
 
@@ -281,11 +282,14 @@ public class ZoodlesScreenFactory : IScreenFactory
 		//honda
 		m_directoryMap.Add( UIScreen.FOTA_POPUP,				SCREEN_DIRECTORY + "FOTAPopup" );
 		m_directoryMap.Add( UIScreen.PARENT_BIRTH_CHECK,		SCREEN_DIRECTORY + "CheckParentBirthPopup" );
+
 	
 		//honda: debug mode
 		m_directoryMap.Add( UIScreen.ADD_ITEMS_MANUALLY, 		SCREEN_DIRECTORY + "AddItemManuallyPopup" );
 
 
+		//Kevin
+		m_directoryMap.Add( UIScreen.PD_HELPDIALOG, 		SCREEN_DIRECTORY + "DashBoard/Setting/Dialog/HelpDialogScreen" );
 	}
 
 	public Dictionary<int,string> getDirectoryMap()
@@ -343,6 +347,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 			case UIScreen.NOTIFICATION:  		return new SettingNotificationCanvas() as UICanvas;
 			case UIScreen.SETTING_COMMON:  		return new SettingCommonCanvas()  	  as UICanvas;
 			case UIScreen.COMMON_DIALOG:  		return new CommonDialogCanvas()  	  as UICanvas;
+			case UIScreen.PD_HELPDIALOG:  		return new CommonDialogCanvas()  	  as UICanvas;
 			case UIScreen.FAQ_SCREEN:			return new FAQCanvas() 					as UICanvas;
 			case UIScreen.DEVICE_OPTIONS_SCREEN:return new DeviceOptionsCanvas()  	  as UICanvas;
 			case UIScreen.KIDS_PROFILE: 		return new KidsProfileCanvas() 			as UICanvas;

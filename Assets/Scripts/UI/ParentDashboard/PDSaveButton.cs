@@ -9,12 +9,20 @@ public class PDSaveButton : MonoBehaviour {
 
 	private Button button;
 
+	[SerializeField]
+	private Text interactiveText;
+
+	[SerializeField]
+	private Text uninteractiveText;
+
+
+
 	// Use this for initialization
 	void Start () {
 
 		button = gameObject.GetComponent<Button>();
 
-		button.interactable = false;
+		setButtonNotInteractive();
 	
 	}
 
@@ -39,14 +47,39 @@ public class PDSaveButton : MonoBehaviour {
 
 	void onControlValueChangedTrue(){
 
-		button.interactable = true;
+		setButtonInteractive();
 
 	}
 
 	void onUpdateComplete(){
 
 		if(button!= null)
-			button.interactable = false;
+			setButtonNotInteractive();
+
+	}
+
+
+	void setButtonInteractive(){
+
+		button.interactable = true;
+
+		if(interactiveText != null)
+			interactiveText.gameObject.SetActive(true);
+
+		if(interactiveText != null)
+			uninteractiveText.gameObject.SetActive(false);
+
+	}
+
+	void setButtonNotInteractive(){
+
+		button.interactable = false;
+
+		if(interactiveText != null)
+			interactiveText.gameObject.SetActive(false);
+
+		if(interactiveText != null)
+			uninteractiveText.gameObject.SetActive(true);
 
 	}
 
