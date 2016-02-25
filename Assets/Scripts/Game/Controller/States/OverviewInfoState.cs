@@ -95,22 +95,23 @@ public class OverviewInfoState : GameState {
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 
 
-
-
-		m_costArea = m_confirmDialogCanvas.getView("costArea");
-		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
+		//confirm dialog items
 		m_exitConfirmDialogButton = m_confirmDialogCanvas.getView ("exitButton") as UIButton;
 		m_exitConfirmDialogButton.addClickCallback (onExitConfiemDialogButtonClick);
+		
+		m_costArea = m_confirmDialogCanvas.getView("costArea");
 		m_cancelBuyButton = m_confirmDialogCanvas.getView ("cancelButton") as UIButton;
 		m_cancelBuyButton.addClickCallback (onExitConfiemDialogButtonClick);
 		m_confirmBuyButton = m_confirmDialogCanvas.getView ("confirmButton") as UIButton;
 		m_confirmBuyButton.addClickCallback (onConfiemButtonClick);
+		
+		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
 		m_buyGemsButtonOnConfirm = m_confirmDialogCanvas.getView ("buyGemsButton") as UIButton;
 		m_buyGemsButtonOnConfirm.addClickCallback (toBuyGemsScreen);
+		//end of confirm dialog items
 
 		m_topRecommendAppArea = m_dashboardInfoCanvas.getView ("app") as UIButton;
 		m_topRecommendAppArea.addClickCallback (showAppDetail);
-
 
 		if (null == m_app)
 		{
@@ -163,17 +164,18 @@ public class OverviewInfoState : GameState {
 		_setupSignleBook(m_selectedElement,l_book);
 		UIButton l_buyButton = m_selectedElement.getView ("buyBookButton") as UIButton;
 		l_buyButton.addClickCallback(onClickBuyBookButton);
+		UIButton bookButton = m_selectedElement.getView ("BookButton") as UIButton;
+		bookButton.addClickCallback(onClickBuyBookButton);
 //		UIButton l_openBook = m_selectedElement as UIButton;
 //		l_openBook.addClickCallback(onOpenBookClick);
 		if(null == l_book.icon)
 			downLoadBookIcon( l_book, m_selectedElement );
 		else
 		{
-			UIImage l_image = m_selectedElement.getView("bookImage") as UIImage;
+			UIImage l_image = m_selectedElement.getView("BookImage") as UIImage;
 			l_image.setTexture(l_book.icon);
 		}
 		m_selectedElement.active = true;
-
 	}
 
 
@@ -283,7 +285,7 @@ public class OverviewInfoState : GameState {
 		m_wantedBook = bookList[curretRecommendedBookIndex];
 
 		m_clickedBuyButton = p_button;
-		confirmBuyBook (m_wantedBook);
+		confirmBuyBook(m_wantedBook);
 	}
 
 
@@ -300,7 +302,42 @@ public class OverviewInfoState : GameState {
 
 	public void confirmBuyBook(Book p_book)
 	{
-		setGemsOnCostAreaOfConfirmDialog(p_book.title, p_book.gems);
+		UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
+		//enough gems to buy the item
+		if (SessionHandler.getInstance().currentKid.gems >= p_book.gems)
+		{
+			m_costArea.active = true;
+			m_needMoreArea.active = false;
+			
+			l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
+			UILabel nameLabel = m_costArea.getView("ItemName") as UILabel;
+			nameLabel.text = p_book.title;
+			if (p_book.icon != null)
+			{
+				UIImage image = m_costArea.getView("ItemImage") as UIImage;
+				image.setTexture(p_book.icon);
+			}
+			UILabel currentGemsLabel = m_costArea.getView("CurrentGems") as UILabel;
+			currentGemsLabel.text = SessionHandler.getInstance().currentKid.gems.ToString("N0");
+			UILabel l_priceLabel = m_costArea.getView("priceText") as UILabel;
+			l_priceLabel.text = p_book.gems.ToString("N0");
+		}
+		//not enough gems to buy items
+		else
+		{
+			m_costArea.active = false;
+			m_needMoreArea.active = true;
+			
+			l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
+			UILabel currentGemsLabel = m_needMoreArea.getView("CurrentGems") as UILabel;
+			currentGemsLabel.text = SessionHandler.getInstance().currentKid.gems.ToString("N0");
+			UILabel nameLabel = m_needMoreArea.getView("ItemName") as UILabel;
+			nameLabel.text = p_book.title;
+			UILabel l_notice3_2 = m_needMoreArea.getView("noticeText3") as UILabel;
+			l_notice3_2.text = string.Format(Localization.getString(Localization.TXT_75_LABEL_ITEM_COST), "book");
+			UILabel l_priceLabel = m_needMoreArea.getView("costPriceText") as UILabel;
+			l_priceLabel.text = p_book.gems.ToString();
+		}
 
 		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
 		m_confirmDialogCanvas.moveInDialog();
@@ -370,12 +407,10 @@ public class OverviewInfoState : GameState {
 			else
 				setGemsOnNeedMoreAreaOfConfirmDialog(m_app.gems);
 		}
-		else if (null != m_wantedBook)
+		else if (null != m_wantedBook && null != m_clickedBuyButton)
 		{
 			if(SessionHandler.getInstance().currentKid.gems >= m_wantedBook.gems)
 				sendBuyBookRequest();
-			else
-				setGemsOnNeedMoreAreaOfConfirmDialog(m_wantedBook.gems);
 		}
 	}
 
@@ -813,7 +848,6 @@ public class OverviewInfoState : GameState {
 		SwrveComponent.Instance.SDK.NamedEvent("GotoGetGemsFromLeftMenu");
 
 		gotoGetGems();
-
 	}
 	
 	private void gotoGetGems()
@@ -825,6 +859,7 @@ public class OverviewInfoState : GameState {
 			Hashtable l_date = MiniJSON.MiniJSON.jsonDecode (l_returnJson) as Hashtable;
 			if(l_date.ContainsKey("jsonResponse"))
 			{
+				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 				m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
 				m_gameController.changeState (ZoodleState.BUY_GEMS);
 			}
@@ -852,12 +887,15 @@ public class OverviewInfoState : GameState {
 		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
+			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 			SessionHandler.getInstance ().GemsJson = p_response.text;
 			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
 			m_gameController.changeState (ZoodleState.BUY_GEMS);
 		}
 		else
 		{
+			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
+			m_confirmDialogCanvas.moveOutDialog();
 			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
 		}
 	}

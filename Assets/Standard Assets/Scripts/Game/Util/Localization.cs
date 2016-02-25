@@ -488,7 +488,10 @@ public class Localization : object
 	public const string TXT_75_BUTTON_BUY_GEMS  	  = "TXT_75_BUTTON_BUY_GEMS";
 	public const string TXT_75_BUTTON_CONFIRM  	 	  = "TXT_75_BUTTON_CONFIRM";
 	public const string TXT_75_BUTTON_CANCEL  	 	  = "TXT_75_BUTTON_CANCEL";
-
+	//honda: new parameter
+	public const string TXT_75_LABEL_CURRENT_GEM_TEXT = "TXT_75_LABEL_CURRENT_GEM_TEXT";
+	public const string TXT_75_LABEL_ITEM_COST 		  = "TXT_75_LABEL_ITEM_COST";
+	//end
 	public const string TXT_STATE_0_FAIL  	 	  	= "TXT_STATE_0_FAIL";
 	public const string TXT_STATE_0_FAIL_MESSAGE 	= "TXT_STATE_0_FAIL_MESSAGE";
 

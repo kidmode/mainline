@@ -889,6 +889,13 @@ public class Game : MonoBehaviour
 		if (pdMenuBar != null)
 			pdMenuBar.updateChildSelectorAndCurrentKidInfo();
 	}
+
+	public void updatePDMenuBar(int stateId)
+	{
+		if (pdMenuBar != null)
+			pdMenuBar.updateMenuBar(stateId);
+	}
+
 	//Instantiate parent dashboard menu bar
 	public void addPDMenuBar()
 	{
@@ -919,6 +926,7 @@ public class Game : MonoBehaviour
 			else
 			{
 				setPDMenuBarVisible(true, false);
+				updatePDMenuBar(stateType);
 			}
 		}
 		//it is going back to kid mode

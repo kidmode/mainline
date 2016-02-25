@@ -197,6 +197,41 @@ public class PDMenuBarScript : MonoBehaviour {
 		return type;
 	}
 
+	//get second tier name by bstate id 
+	private string getSecondTierByStateId(int stateId)
+	{	
+		string name = "Info";
+		if (stateId == ZoodleState.OVERVIEW_INFO)
+			name = "Info";
+		else if (stateId == ZoodleState.OVERVIEW_TIMESPENT)
+			name = "Subjects";
+		else if (stateId == ZoodleState.OVERVIEW_ART)
+			name = "Gallery";
+		else if (stateId == ZoodleState.CONTROL_APP)
+			name = "Apps";
+		else if (stateId == ZoodleState.OVERVIEW_READING)
+			name = "Books";
+		else if (stateId == ZoodleState.CONTROL_SUBJECT)
+			name = "ContentSubjects";
+		else if (stateId == ZoodleState.CONTROL_LANGUAGE)
+			name = "Language";
+		else if (stateId == ZoodleState.CONTROL_TIME)
+			name = "Time";
+		else if (stateId == ZoodleState.CONTROL_VIOLENCE)
+			name = "Violence";
+		else if (stateId == ZoodleState.CHILD_LOCK_STATE)
+			name = "ChildLock";
+		else if (stateId == ZoodleState.DEVICE_OPTIONS_STATE)
+			name = "Sound";
+		else if (stateId == ZoodleState.SETTING_STATE)
+			name = "Account";
+		else if (stateId == ZoodleState.NOTIFICATION_STATE)
+			name = "Notification";
+		else if (stateId == ZoodleState.FAQ_STATE)
+			name = "FAQ";
+		return name;
+	}
+
 	//get state id by pressed button on first tier menu bar
 	private int getSteteByNumber(int number)
 	{
@@ -209,6 +244,53 @@ public class PDMenuBarScript : MonoBehaviour {
 			return ZoodleState.CHILD_LOCK_STATE;
 		else
 			return ZoodleState.SETTING_STATE;
+	}
+
+	//get first tier group id by state id 
+	private int getFirstTierGroupIdByStateId(int stateId)
+	{	
+		int firstTierId = 0;
+		if (stateId == ZoodleState.OVERVIEW_INFO ||
+		    stateId == ZoodleState.OVERVIEW_TIMESPENT ||
+		    stateId == ZoodleState.OVERVIEW_ART)
+		{
+			firstTierId = 0;
+		}
+		else if (stateId == ZoodleState.CONTROL_APP ||
+		         stateId == ZoodleState.OVERVIEW_READING ||
+		         stateId == ZoodleState.CONTROL_SUBJECT ||
+		         stateId == ZoodleState.CONTROL_LANGUAGE ||
+		         stateId == ZoodleState.CONTROL_TIME || 
+		         stateId == ZoodleState.CONTROL_VIOLENCE)
+		{
+			firstTierId = 1;
+		}
+		else if (stateId == ZoodleState.CHILD_LOCK_STATE ||
+		         stateId == ZoodleState.DEVICE_OPTIONS_STATE)
+		{
+			firstTierId = 2;
+		}
+		else if (stateId == ZoodleState.SETTING_STATE ||
+		         stateId == ZoodleState.NOTIFICATION_STATE ||
+		         stateId == ZoodleState.FAQ_STATE)
+		{
+			firstTierId = 3;
+		}
+		return firstTierId;
+	}
+
+	private void updateFirstTierToggle(int firstTierId)
+	{
+		int number = 0;;
+		foreach (GameObject item in firstTierBar)
+		{
+			Toggle toggle = item.GetComponent<Toggle>() as Toggle;
+			if (number == firstTierId)
+				toggle.isOn = true;
+			else
+				toggle.isOn = false;
+			number++;
+		}
 	}
 
 	//change button normal, highlighted, pressed color
@@ -502,6 +584,12 @@ public class PDMenuBarScript : MonoBehaviour {
 		}
 
 		menuBarObject.SetActive(visible);
+	}
+
+	public void updateMenuBar(int stateId)
+	{
+		updateFirstTierToggle(getFirstTierGroupIdByStateId(stateId));
+		changeSecondTierButtonColor(getSecondTierByStateId(stateId));
 	}
 
 	public void updateChildSelectorAndCurrentKidInfo()

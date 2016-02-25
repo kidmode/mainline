@@ -1044,7 +1044,7 @@ public class BookIconRequest : RequestQueue.Request
 			m_book.icon = p_response.texture;
 			if(null != m_element)
 			{
-				UIImage l_image = m_element.getView("bookImage") as UIImage;
+				UIImage l_image = m_element.getView("BookImage") as UIImage;
 
 				if( null == l_image )
 				{

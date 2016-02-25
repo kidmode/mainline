@@ -357,7 +357,7 @@ public class OverviewReadingState : GameState
 				//click cost button to trigger confirm dialog
 				m_recommendedbookList.addClickListener("buyBookButton", onBookClick);
 				//click book image to trigger confirm dialog
-//				m_recommendedbookList.addClickListener("bookImage", onBookClick);
+				m_recommendedbookList.addClickListener("BookButton", onBookClick);
 			}
 		}
 	}
@@ -368,7 +368,7 @@ public class OverviewReadingState : GameState
 		_setupSignleBook (p_element, (Book)p_data);
 		if(null != l_book.icon/* && !l_book.isIconSet*/)
 		{
-			UIImage l_image = p_element.getView("bookImage") as UIImage;
+			UIImage l_image = p_element.getView("BookImage") as UIImage;
 			l_image.setTexture(l_book.icon);
 //			l_book.isIconSet = true;
 		}
@@ -380,19 +380,6 @@ public class OverviewReadingState : GameState
 		{
 			if(SessionHandler.getInstance().currentKid.gems >= m_wantedBook.gems)
 				sendBuyBookRequest();
-//			else
-//			{
-//				UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
-//				UILabel l_needGems = m_confirmDialogCanvas.getView("needPriceText") as UILabel;
-//				l_costGems.text = m_wantedBook.gems.ToString ();
-//				l_needGems.text = (m_wantedBook.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
-//				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-//				l_titleLabel.text = Localization.getString( Localization.TXT_STATE_64_NEED_MORE_GEMS );
-//				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-//				l_notice1label.text = Localization.getString( Localization.TXT_STATE_64_YOU_NEED_MORE_GEMS );
-//				m_costArea.active = false;
-//				m_needMoreArea.active = true;
-//			}
 		}
 	}
 	
@@ -403,15 +390,14 @@ public class OverviewReadingState : GameState
 	
 	public void confirmBuyBook(Book p_book)
 	{
+		UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
 		//enough gems to buy the item
 		if (SessionHandler.getInstance().currentKid.gems >= p_book.gems)
 		{
 			m_costArea.active = true;
 			m_needMoreArea.active = false;
 
-			UILabel l_titleLabel = m_costArea.getView("titleText") as UILabel;
 			l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
-
 			UILabel nameLabel = m_costArea.getView("ItemName") as UILabel;
 			nameLabel.text = p_book.title;
 			if (p_book.icon != null)
@@ -429,11 +415,14 @@ public class OverviewReadingState : GameState
 		{
 			m_costArea.active = false;
 			m_needMoreArea.active = true;
-
+		
+			l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
 			UILabel currentGemsLabel = m_needMoreArea.getView("CurrentGems") as UILabel;
 			currentGemsLabel.text = SessionHandler.getInstance().currentKid.gems.ToString("N0");
 			UILabel nameLabel = m_needMoreArea.getView("ItemName") as UILabel;
 			nameLabel.text = p_book.title;
+			UILabel l_notice3_2 = m_needMoreArea.getView("noticeText3") as UILabel;
+			l_notice3_2.text = string.Format(Localization.getString(Localization.TXT_75_LABEL_ITEM_COST), "book");
 			UILabel l_priceLabel = m_needMoreArea.getView("costPriceText") as UILabel;
 			l_priceLabel.text = p_book.gems.ToString();
 		}
@@ -536,10 +525,10 @@ public class OverviewReadingState : GameState
 		Server.init (ZoodlesConstants.getHttpsHost());
 		if(p_response.error == null)
 		{
+			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 			SessionHandler.getInstance ().GemsJson = p_response.text;
 			m_gameController.connectState(ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName));
 			m_gameController.changeState (ZoodleState.BUY_GEMS);
-			m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
 		}
 		else
 		{
