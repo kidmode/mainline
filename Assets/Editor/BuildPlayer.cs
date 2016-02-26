@@ -143,8 +143,8 @@ public class BuildPlayer : MonoBehaviour
 		AssetDatabase.Refresh();
 
 
-
-		return;
+		//Testing
+//		return;
 
 		//=============================================
 		//=============================================

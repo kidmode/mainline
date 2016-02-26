@@ -44,11 +44,12 @@ public class NotificationState : GameState
 	public void updateSetting()
 	{
 		//Check if it is premium if not then go and upsell
-		if(!SessionHandler.getInstance().token.isPremium()){
+		if(!SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() ){
 			
 			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
 			
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
+
 			return;
 			
 		}
@@ -79,38 +80,39 @@ public class NotificationState : GameState
 			m_requestQueue.add(new UpdateSettingRequest("false"));
 		}
 		//update notifucation
-		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp, updateWeeklyComplete));
-//		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
+		m_requestQueue.add (new UpdateNotificateRequest(m_settingCache.newAddApp,m_settingCache.smartSelect,m_settingCache.freeWeeklyApp));
+		m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
 
-		m_requestQueue.request (RequestType.RUSH);
+		m_requestQueue.request (RequestType.SEQUENCE);
 
 		m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT, false, 20);
 
 	}
 
 
-	private void updateWeeklyComplete(HttpsWWW p_response)
-	{
-
-		if(p_response.error == null){
-
-			m_requestQueue.reset();
-
-			m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
-
-			m_requestQueue.request (RequestType.RUSH);
-
-		}else{
-
-			m_gameController.getUI().createScreen(UIScreen.ERROR);
-
-		}
-
-	}
+//	private void updateWeeklyComplete(HttpsWWW p_response)
+//	{
+//
+//		if(p_response.error == null){
+//
+//			m_requestQueue.reset();
+//
+//			m_requestQueue.add (new UpdateDeviceOptionRequest(m_settingCache.allowCall?"true":"false",m_settingCache.tip?"true":"false",m_settingCache.masterVolum,m_settingCache.musicVolum,m_settingCache.effectsVolum, updateComplete));
+//
+//			m_requestQueue.request (RequestType.RUSH);
+//
+//		}else{
+//
+//			m_gameController.getUI().createScreen(UIScreen.ERROR);
+//
+//		}
+//
+//	}
 
 	private void updateComplete(HttpsWWW p_response)
 	{
-		
+
+		//Send message so we know it is comoleted - so other componenets will know
 		m_notificationCanvas.gameObject.transform.parent.gameObject.SendMessage("updateComplete", p_response, SendMessageOptions.RequireReceiver);
 
 		//update device option

@@ -139,6 +139,7 @@ public class OverviewArtState : GameState {
 	
 	private void _setupScreen( GameController p_gameController )
 	{
+
 		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 )  as CommonDialogCanvas;
 	
 		m_commonDialog.setUIManager (p_gameController.getUI());
@@ -152,7 +153,7 @@ public class OverviewArtState : GameState {
 				
 				Tweener tw = m_artListCanvas.getView("mainPanel").tweener;
 				
-				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+//				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
 			}
 			
 		}
@@ -197,9 +198,6 @@ public class OverviewArtState : GameState {
 
 		if( null != SessionHandler.getInstance().drawingList)
 		{
-
-
-
 //			if( SessionHandler.getInstance().drawingList.Count > 0 )
 //			{					
 //				_setupArtGalleryCanvas();
@@ -491,8 +489,6 @@ public class OverviewArtState : GameState {
 //		
 //		m_requestQueue.request ();
 //	}
-
-
 //
 //	private IEnumerator delayedDownload(UIButton l_element, Drawing l_drawing) {
 //		yield return new WaitForSeconds(2f);
