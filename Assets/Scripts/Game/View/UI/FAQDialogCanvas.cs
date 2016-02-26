@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class FAQDialogCanvas : UICanvas
@@ -32,6 +33,8 @@ public class FAQDialogCanvas : UICanvas
 	public override void update ()
 	{
 		base.update ();
+
+
 	}
 
 	public override void dispose (bool p_deep)

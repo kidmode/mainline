@@ -83,6 +83,11 @@ public class FAQState : GameState
 				m_showFaq.active = false;
 			l_faqContent.active = true;
 			m_showFaq = l_faqContent;
+
+			ScrollRect scrollFaq = l_faqContent.gameObject.GetComponentInChildren<ScrollRect>();
+
+			scrollFaq.verticalNormalizedPosition = 1.0f;
+
 		}
 	}
 
