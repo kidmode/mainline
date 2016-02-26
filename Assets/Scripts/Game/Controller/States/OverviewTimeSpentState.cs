@@ -48,7 +48,7 @@ public class OverviewTimeSpentState : GameState {
 //		l_pointListIn.Add( l_newPanel.transform.localPosition );
 //		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
 //		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
-		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
+//		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
 
 
 //		if( SessionHandler.getInstance().token.isPremium() || SessionHandler.getInstance().token.isCurrent() )
