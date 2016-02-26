@@ -30,34 +30,14 @@ public class ControlLanguageState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-//		checkRequest ();
-		
 		base.exit (p_gameController);
-		
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		m_uiManager.removeScreen( UIScreen.PROMOTE_LANGUAGES );
-//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 ) 			as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-//		}
-
 		m_promoteLanguagesCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_LANGUAGES, true, 1 ) 		as PromoteLanguagesCanvas;
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_uiManager.setScreenEnable( UIScreen.PROMOTE_LANGUAGES, false );
-//		}
 	}
 
 	private void _setupElment()
@@ -151,23 +131,6 @@ public class ControlLanguageState : GameState
 		}
 	}
 
-
-
-	private void viewGemsRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(p_response.error == null)
-		{
-			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
-
 	private bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable 
@@ -190,10 +153,7 @@ public class ControlLanguageState : GameState
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
-	
 
-
-	
 	private void onLanguagesChanged( UIToggle p_toggle, bool p_bool )
 	{
 
@@ -298,50 +258,12 @@ public class ControlLanguageState : GameState
 		
 	}
 
-//	private void onUpgradeButtonClick(UIButton p_button)
-//	{
-//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-//		{
-//			Server.init (ZoodlesConstants.getHttpsHost());
-//			m_requestQueue.reset ();
-//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-//			m_requestQueue.request ();
-//		}
-//		else
-//		{
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//	}
-	
-	private void viewPremiumRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(null == p_response.error)
-		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
-	
 	private UIManager 		m_uiManager;
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
 	private UISwipeList 	m_childrenList;
-
-	private CommonDialogCanvas m_commonDialog;
 	
-//	private UICanvas 		m_paywallCanvas;
-//	private UIButton 		m_upgradeButton;
-
-
 	//language part
 	private PromoteLanguagesCanvas m_promoteLanguagesCanvas;
 
@@ -363,5 +285,4 @@ public class ControlLanguageState : GameState
 	
 	//Kevin - Save Button
 	UIButton mSaveButton;
-
 }

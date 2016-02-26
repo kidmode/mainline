@@ -105,7 +105,6 @@ public class OverviewArtState : GameState {
 		
 //		m_uiManager.removeScreen( UIScreen.ART_GALLERY );
 		m_uiManager.removeScreen( UIScreen.ART_LIST );
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		SessionHandler.getInstance().onUpdateDrawingList -= onSessionDrawingListUpdated;
 	}
@@ -139,10 +138,6 @@ public class OverviewArtState : GameState {
 	
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 )  as CommonDialogCanvas;
-	
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
 		m_artListCanvas 	= m_uiManager.createScreen( UIScreen.ART_LIST, false, 4 );
 
 		if( null != m_artListCanvas && null != m_artListCanvas.getView("mainPanel") )
@@ -166,12 +161,6 @@ public class OverviewArtState : GameState {
 	
 	private void _setupElment()
 	{
-
-//		m_helpButton = m_artGalleryCanvas.getView ("helpButton") as UIButton;
-
-//		m_helpButton = m_artListCanvas.getView ("helpButton") as UIButton;
-//		m_helpButton.addClickCallback (onHelpButtonClick);
-		//m_artGalleryCanvas
 		
 //		UIElement l_newPanel = m_artGalleryCanvas.getView ("mainPanel");
 //		List<Vector3> l_pointListIn = new List<Vector3>();
@@ -257,16 +246,12 @@ public class OverviewArtState : GameState {
 		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f,onArtPositionTrackFinish );
 
 	}
-
-
-	private void onMoreArtButtonClick( UIButton p_button )
-	{
-
-//		game.setPDMenuBarVisible(false, false);
-
-		showArtList();
-
-	}
+	
+//	private void onMoreArtButtonClick( UIButton p_button )
+//	{
+//		showArtList();
+//
+//	}
 
 	private void onArtPositionTrackFinish(UIElement p_element, Tweener.TargetVar p_targetVar)
 	{
@@ -536,17 +521,11 @@ public class OverviewArtState : GameState {
 
 
 	private UIManager m_uiManager;
-//	private DashBoardControllerCanvas m_dashboardControllerCanvas;
 //	private UICanvas m_artGalleryCanvas;
 	private UICanvas m_artListCanvas;
-//	private UICanvas m_dashboardCommonCanvas;
-//	private LeftMenuCanvas m_leftMenuCanvas;
-	private CommonDialogCanvas m_commonDialog;
 
-	
 	private UIButton m_moreArtButton;
 //	private UIButton m_exitArtListButton;
-//	private UIButton m_helpButton;
 	
 	private UISwipeList m_childrenList;
 	

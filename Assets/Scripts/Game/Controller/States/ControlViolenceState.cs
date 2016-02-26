@@ -32,39 +32,18 @@ public class ControlViolenceState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-//		checkRequest ();
-		
 		base.exit (p_gameController);
 
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
-
 		m_uiManager.removeScreen( UIScreen.VIOLENCE_FILTERS );
-//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 ) 			as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-//		}
-
 		m_violenceFiltersCanvas 	= m_uiManager.createScreen( UIScreen.VIOLENCE_FILTERS, true, 1 );
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_uiManager.setScreenEnable( UIScreen.VIOLENCE_FILTERS, false );
-//		}
 	}
 
 	private void _setupElment()
 	{
-
 		//New Save Button
 		mSaveButton = m_violenceFiltersCanvas.getView ("saveButton") as UIButton;
 		mSaveButton.addClickCallback (checkRequest);
@@ -92,7 +71,6 @@ public class ControlViolenceState : GameState
 		m_levelFourToggle.addValueChangedCallback ( onViolenceChanged );
 
 		setEventLisenters();
-
 	}
 
 	private void setEventLisenters(){
@@ -134,14 +112,6 @@ public class ControlViolenceState : GameState
 			game.setPDMenuBarVisible(false, false);
 			
 		}
-
-
-//		if( m_isValueChanged )
-//		{
-
-			
-//		}
-
 	}
 
 
@@ -167,9 +137,6 @@ public class ControlViolenceState : GameState
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
-
-	
-
 
 	private void onViolenceChanged( UIToggle p_toggle, bool p_bool )
 	{
@@ -240,52 +207,11 @@ public class ControlViolenceState : GameState
 
 	}
 
-//	private void onUpgradeButtonClick(UIButton p_button)
-//	{
-//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-//
-//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-//		{
-//			Server.init (ZoodlesConstants.getHttpsHost());
-//			m_requestQueue.reset ();
-//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-//			m_requestQueue.request ();
-//		}
-//		else
-//		{
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//	}
-	
-	private void viewPremiumRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(null == p_response.error)
-		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
-
 	private UIManager 		m_uiManager;
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
-
-
-	private UISwipeList 	m_childrenList;
-
-
-	private CommonDialogCanvas m_commonDialog;
 	
-//	private UICanvas 		m_paywallCanvas;
-//	private UIButton 		m_upgradeButton;
-
+	private UISwipeList 	m_childrenList;
 
 	//violence part
 	private UICanvas 		m_violenceFiltersCanvas;
@@ -295,7 +221,6 @@ public class ControlViolenceState : GameState
 	private UIToggle 		m_levelTwoToggle;
 	private UIToggle 		m_levelThreeToggle;
 	private UIToggle 		m_levelFourToggle;
-
 
 	//Kevin
 	private float saveMessageDisplacement = 1092.0f;

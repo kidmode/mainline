@@ -28,20 +28,15 @@ public class FAQState : GameState
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_faqCanvas );
 		p_gameController.getUI().removeScreen( m_faqDialogCanvas );
-//		p_gameController.getUI().removeScreen( m_commonDialog );
 	}
 	
 	//---------------- Private Implementation ----------------------
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
-//		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 7 ) as CommonDialogCanvas;
-//		m_commonDialog.setUIManager (p_uiManager);
 		m_faqDialogCanvas = p_uiManager.createScreen (UIScreen.FAQ_DIALOG, true, 12);
 		m_faqCanvas = p_uiManager.createScreen( UIScreen.FAQ_SCREEN, true, 2 ) as UICanvas;
 
-//		m_helpButton = m_faqCanvas.getView ("helpButton") as UIButton;
-//		m_helpButton.addClickCallback (onHelpButtonClick);
 		m_faqSwipeList = m_faqCanvas.getView ("FAQSwipeList") as UISwipeList;
 		m_faqSwipeList.addClickListener ( "Prototype", showDialog);
 
@@ -53,28 +48,6 @@ public class FAQState : GameState
 		m_exitButton.addClickCallback (onCloseDialog);
 
 	}
-
-//	private void onHelpButtonClick(UIButton p_button)
-//	{
-//		p_button.removeAllCallbacks ();
-//		m_commonDialog.setOriginalPosition ();
-//		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-//		
-//		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-//		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-//		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_30_HELP_TITLE);
-//		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_30_HELP_CONTENT);
-//
-//		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-//	}
-//	
-//	private void onCloseDialogButtonClick(UIButton p_button)
-//	{
-//		p_button.removeAllCallbacks();
-//		m_commonDialog.setOutPosition ();
-//		m_helpButton.addClickCallback (onHelpButtonClick);
-//	}
-
 
 	private void onCloseDialog(UIButton p_button)
 	{
@@ -144,12 +117,9 @@ public class FAQState : GameState
 
 	private UICanvas 	m_faqDialogCanvas;
 	private UICanvas    m_faqCanvas;
-//	private CommonDialogCanvas m_commonDialog;
+
 	private UISwipeList m_faqSwipeList;
-
-	private UIButton 	m_leftSideMenuButton;
-	private UIButton 	m_helpButton;
-
+	
 	private UIButton    m_childModeButton;
 
 	private RequestQueue m_requestQueue;
@@ -162,8 +132,7 @@ public class FAQState : GameState
 	private UILabel 	m_titleLabel;
 	private UIButton 	m_exitButton;
 	private UILabel 	m_showFaq;
-
-
+	
 	//Kevin
 	private float dialogDisplacement = 1090.0f;
 

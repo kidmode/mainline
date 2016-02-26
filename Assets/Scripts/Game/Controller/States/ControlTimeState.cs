@@ -31,39 +31,18 @@ public class ControlTimeState : GameState
 	
 	public override void exit (GameController p_gameController)
 	{
-//		checkRequest ();
-		
 		base.exit (p_gameController);
-		
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 
 		m_uiManager.removeScreen( UIScreen.TIME_LIMITS );
-//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 ) 			as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-////			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-////			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-////			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-//		}
-
-		m_timeLimitsCanvas 			= m_uiManager.createScreen( UIScreen.TIME_LIMITS, true, 1 ) 			as TimeLimitsCanvas;
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-////			m_uiManager.setScreenEnable( UIScreen.TIME_LIMITS, false );
-//		}
+		m_timeLimitsCanvas = m_uiManager.createScreen( UIScreen.TIME_LIMITS, true, 1 ) as TimeLimitsCanvas;
 	}
 
 	private void _setupElment()
 	{
-		
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_timeLimitsCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
@@ -113,9 +92,6 @@ public class ControlTimeState : GameState
 		//New Save Button
 		mSaveButton = m_timeLimitsCanvas.getView ("saveButton") as UIButton;
 		mSaveButton.addClickCallback (checkRequest);
-
-
-
 	}
 
 	private void checkRequest(UIButton button)
@@ -319,39 +295,6 @@ public class ControlTimeState : GameState
 		m_uiManager.removeScreen(UIScreen.PD_MESSAGE);
 		
 	}
-
-//	private void onUpgradeButtonClick(UIButton p_button)
-//	{
-//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-//
-//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-//		{
-//			Server.init (ZoodlesConstants.getHttpsHost());
-//			m_requestQueue.reset ();
-//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-//			m_requestQueue.request ();
-//		}
-//		else
-//		{
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//	}
-	
-	private void viewPremiumRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(null == p_response.error)
-		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
 	
 	private UIManager 		m_uiManager;
 	private RequestQueue 	m_requestQueue;
@@ -361,12 +304,7 @@ public class ControlTimeState : GameState
 	
 	private UIButton 		m_leftButton;
 	private UIButton 		m_rightButton;
-
-	private CommonDialogCanvas m_commonDialog;
 	
-//	private UICanvas 		m_paywallCanvas;
-//	private UIButton 		m_upgradeButton;
-
 	// time part
 	private TimeLimitsCanvas m_timeLimitsCanvas;
 
@@ -381,8 +319,7 @@ public class ControlTimeState : GameState
 	private UIToggle m_weekendTwoHours;
 	private UIToggle m_weekendFourHours;
 	private UIToggle m_weekendUnlimited;
-
-
+	
 	//Kevin
 	private float mainPanelOffset = 1124.25f;
 

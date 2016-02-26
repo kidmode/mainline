@@ -12,8 +12,6 @@ public class DeviceOptionsState : GameState
 	{
 		base.enter( p_gameController );
 
-		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
-
 //		#if UNITY_ANDROID && !UNITY_EDITOR
 //		m_changeState = true;
 //		#endif 
@@ -42,21 +40,14 @@ public class DeviceOptionsState : GameState
 		}
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_deviceOptionCanvas );
-		p_gameController.getUI().removeScreen( m_commonDialog );
 	}
 	
 	//---------------- Private Implementation ----------------------
 
 	private void _setupScreen( UIManager p_uiManager )
 	{
-		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 15 ) as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_uiManager);
 		m_deviceOptionCanvas = p_uiManager.createScreen( UIScreen.DEVICE_OPTIONS_SCREEN, true, 2 ) as UICanvas;
 //		m_lodaing = m_deviceOptionCanvas.getView ("noticePanel") as UIElement;
-
-		m_helpButton = m_deviceOptionCanvas.getView ("helpButton") as UIButton;
-		m_helpButton.addClickCallback (onHelpButtonClick);
-
 
 		m_allowCallButton = m_deviceOptionCanvas.getView ("AllowCallButton") as UIToggle;
 		m_allowCallButton.isOn = false;
@@ -65,16 +56,13 @@ public class DeviceOptionsState : GameState
 		m_tipButton.isOn = false;
 		m_tipButton.addValueChangedCallback (toTip);
 
-//		m_FAQButton.enabled = true;
-
 		m_musicVolumeSlider = m_deviceOptionCanvas.getView ("musicVolumeSlider") as UISlider;
 		m_masterVolumeSlider = m_deviceOptionCanvas.getView ("masterVolumeSlider") as UISlider;
 		m_effectsVolumeSlider = m_deviceOptionCanvas.getView ("effectsVolumeSlider") as UISlider;
 		m_musicVolumeSlider.addValueChangedCallback (onMusicVolumeValueChanged);
 		m_masterVolumeSlider.addValueChangedCallback (onMasterVolumeValueChanged);
 		m_effectsVolumeSlider.addValueChangedCallback (onEffectVolumeValueChanged);
-//		m_leftButton = m_deviceOptionCanvas.getView ("leftButton") as UIButton;
-//		m_leftButton.addClickCallback (toNotificationScreen);
+
 //		m_noticeLabel = m_lodaing.getView ("noticeText") as UILabel;
 //		m_closeButton = m_lodaing.getView ("closeButton") as UIButton;
 //		m_closeButton.active = false;
@@ -83,10 +71,6 @@ public class DeviceOptionsState : GameState
 
 		m_saveButton = m_deviceOptionCanvas.getView ("refreshButton") as UIButton;
 		m_saveButton.addClickCallback (toRefreshContent);
-
-
-
-
 
 		if(m_settingCache.active)
 		{
@@ -190,19 +174,6 @@ public class DeviceOptionsState : GameState
 //
 //	#endregion
 
-	private void onHelpButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks ();
-		m_commonDialog.setOriginalPosition ();
-		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-		
-		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_31_HELP_TITLE);
-		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_31_HELP_CONTENT);
-
-		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-	}
 
 //	private void closeNoticeDialog(UIButton p_button)
 //	{
@@ -214,13 +185,7 @@ public class DeviceOptionsState : GameState
 //		l_pointListIn.Add( m_lodaing.transform.localPosition - new Vector3( 0, saveMessageDisplacement, 0 ));
 //		m_lodaing.tweener.addPositionTrack(l_pointListIn, 0.0f);
 //	}
-	
-	private void onCloseDialogButtonClick(UIButton p_button)
-	{
-		p_button.removeAllCallbacks();
-		m_commonDialog.setOutPosition ();
-		m_helpButton.addClickCallback (onHelpButtonClick);
-	}
+
 	
 
 	private void toRefreshContent(UIButton p_button)
@@ -233,9 +198,9 @@ public class DeviceOptionsState : GameState
 		//if this is free then just return;
 		if(!SessionHandler.getInstance().token.isPremium()){
 			
-			game.gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
+			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
 			
-			game.gameController.changeState( ZoodleState.VIEW_PREMIUM );
+			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
 			return;
 			
 		}
@@ -306,19 +271,6 @@ public class DeviceOptionsState : GameState
 
 	}
 
-
-
-	private void toNotificationScreen(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		//p_button.removeClickCallback (toNotificationScreen);
-		m_gameController.changeState (ZoodleState.NOTIFICATION_STATE);
-	}
-
-
-
 	private void toAllowCall(UIToggle p_toggle, bool p_value)
 	{
 		if( false == p_value )
@@ -381,21 +333,6 @@ public class DeviceOptionsState : GameState
 
 	}
 
-	private void viewGemsRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(p_response.error == null)
-		{
-			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
-
 	private bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable 
@@ -422,45 +359,30 @@ public class DeviceOptionsState : GameState
 	//Private variables
 	
 	private UICanvas    m_deviceOptionCanvas;
-	private CommonDialogCanvas m_commonDialog;
-	private UIButton 	m_leftSideMenuButton;
 	private UIElement	m_lodaing;
 	private UILabel		m_noticeLabel;
 	private UIButton	m_closeButton;
 //	private UIElement 	m_sliderDownPanel;
-	//honda
-	private UIButton	m_settingButton;
-	//end
-	private UIButton	m_closeLeftMenuButton;
-	private UIButton    m_childModeButton;
-//	private UIButton    m_leftButton;
+	
 	private int 		m_volume;
 	private UIToggle	m_allowCallButton;
 	private UIToggle	m_tipButton;
 	private UISlider 	m_musicVolumeSlider;
 	private UISlider 	m_masterVolumeSlider;
 	private UISlider 	m_effectsVolumeSlider;
-//	private UIButton    m_FAQButton;
-	private UIButton 	m_helpButton;
-	private UIButton	m_deviceButton;
+	
 	private bool 		m_allowCall;
 	private bool 		m_allowTip;
-	private UIButton 	m_tryPremiumButton;
-	private UIButton 	m_buyGemsButton;
+
 	private UIButton	m_saveButton;
 	private RequestQueue m_requestQueue;
 	private SettingCache m_settingCache;
 //	#if UNITY_ANDROID && !UNITY_EDITOR
 //	private bool 		m_changeState = true;
 //	#endif
-	private bool 		canMoveLeftMenu = true;
+
 	private bool 		exitState = false;
 
-	//Kevin
-
-	private Game 		game;
-
-	//
 	private float saveMessageDisplacement = 1200.0f;
 //	protected UICanvas	m_messageCanvas;
 }

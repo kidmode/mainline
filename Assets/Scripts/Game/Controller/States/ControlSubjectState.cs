@@ -30,46 +30,25 @@ public class ControlSubjectState : GameState
 
 	public override void exit (GameController p_gameController)
 	{
-//		checkRequest ();
-
 		base.exit (p_gameController);
 
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
-
 		m_uiManager.removeScreen( UIScreen.PROMOTE_SUBJECTS );
-//		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-		m_commonDialog 				= m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 15 ) 			as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
-		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-		{
-//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-		}
-
-		m_promoteSubjectsCanvas 	= m_uiManager.createScreen( UIScreen.PROMOTE_SUBJECTS, true, 1 );
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_uiManager.setScreenEnable( UIScreen.PROMOTE_SUBJECTS, false );
-//		}
+		m_promoteSubjectsCanvas = m_uiManager.createScreen( UIScreen.PROMOTE_SUBJECTS, true, 1 );
 	}
 
 	private void _setupElment()
 	{
-
 		saveButton = m_promoteSubjectsCanvas.getView ("saveButton") as UIButton; 
 		saveButton.addClickCallback (onSaveButtonClick);
 
 		int l_listCount = 4;
 
-		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_promoteSubjectsCanvas.getView ("mainPanel");
+//		List<Vector3> l_pointListIn = new List<Vector3>();
 //		l_pointListIn.Add( l_newPanel.transform.localPosition );
 //		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
 //		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
@@ -92,10 +71,6 @@ public class ControlSubjectState : GameState
 		m_cognitiveSlider.addValueChangedCallback( onSliderValueChanged );
 		m_creativeSlider.addValueChangedCallback( onSliderValueChanged );
 		m_lifeSkillsSlider.addValueChangedCallback( onSliderValueChanged );
-
-
-//		goPremiumButton.enabled = false;
-		//End
 
 		//set up value changed events
 		PDControlValueChanged valueChanged = m_promoteSubjectsCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
@@ -123,11 +98,6 @@ public class ControlSubjectState : GameState
 
 	}
 
-
-
-
-
-
 	private bool checkInternet()
 	{
 		if (Application.internetReachability == NetworkReachability.NotReachable 
@@ -151,15 +121,10 @@ public class ControlSubjectState : GameState
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
-
 	private void onSliderValueChanged( float p_float )
 	{
 		m_isValueChanged = true;
-
-
 	}
-
-
 
 	private void updateSubjects ()
 	{
@@ -216,49 +181,11 @@ public class ControlSubjectState : GameState
 
 	}
 
-
-//	private void onUpgradeButtonClick(UIButton p_button)
-//	{
-//		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-//
-//		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-//		{
-//			Server.init (ZoodlesConstants.getHttpsHost());
-//			m_requestQueue.reset ();
-//			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-//			m_requestQueue.request ();
-//		}
-//		else
-//		{
-//			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-//			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-//		}
-//	}
-	
-	private void viewPremiumRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(null == p_response.error)
-		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
-
 	private UIManager 		m_uiManager;
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
 	private UIButton		saveButton;
-	private CommonDialogCanvas m_commonDialog;
-	
-	private UICanvas 		m_paywallCanvas;
-	private UIButton 		m_upgradeButton;
 
 	//subjects part
 	private UICanvas m_promoteSubjectsCanvas;
@@ -273,8 +200,4 @@ public class ControlSubjectState : GameState
 
 	//Kevin
 	private Game		game;
-
-//	private UIButton	goPremiumButton; //used for free user
-	//End
-
 }
