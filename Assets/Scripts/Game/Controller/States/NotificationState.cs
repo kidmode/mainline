@@ -38,7 +38,6 @@ public class NotificationState : GameState
 
 		base.exit( p_gameController );
 		p_gameController.getUI().removeScreen( m_notificationCanvas );
-		p_gameController.getUI().removeScreen( m_commonDialog );
 	}
 
 	public void updateSetting()
@@ -47,7 +46,6 @@ public class NotificationState : GameState
 		if(!SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() ){
 			
 			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, ZoodleState.DEVICE_OPTIONS_STATE );
-			
 			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
 
 			return;
@@ -132,23 +130,10 @@ public class NotificationState : GameState
 	
 	private void _setupScreen( UIManager p_uiManager )
 	{
-
-
-
-		m_commonDialog 	= p_uiManager.createScreen( UIScreen.COMMON_DIALOG, false, 15 ) as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_uiManager);
 		m_notificationCanvas = p_uiManager.createScreen( UIScreen.NOTIFICATION, true, 2 );
-
 
 		saveButton = m_notificationCanvas.getView ("saveButton") as UIButton; 
 		saveButton.addClickCallback (onSaveButtonClick);
-
-//		m_helpButton = m_notificationCanvas.getView ("helpButton") as UIButton;
-//		m_helpButton.addClickCallback (onHelpButtonClick);
-
-
-//		m_rightButton = m_notificationCanvas.getView ("rightButton") as UIButton;
-//		m_rightButton.addClickCallback (toDeviceOptions);
 
 		m_weeklyAppsNotificationButton = m_notificationCanvas.getView ("WeeklyAppsNotification") as UIToggle;
 		m_smartSelectNotificationButton = m_notificationCanvas.getView ("smartSelectNotification") as UIToggle;
@@ -156,9 +141,6 @@ public class NotificationState : GameState
 		m_weeklyAppsNotificationButton.addValueChangedCallback (onSetWeeklyApps);
 		m_smartSelectNotificationButton.addValueChangedCallback (onSetSmartSelect);
 		m_newAppAddedButton.addValueChangedCallback (onNewAppAdded);
-
-//		m_generalButton.enabled = true;
-//		m_faqButton.enabled = true;
 
 		if(m_settingCache.active)
 		{
@@ -219,55 +201,18 @@ public class NotificationState : GameState
 			}
 		}
 
-
 		//set up value changed events
 		PDControlValueChanged valueChanged = m_notificationCanvas.gameObject.transform.parent.gameObject.GetComponent<PDControlValueChanged>();
 		
 		valueChanged.setListeners();
 
 	}
-
-
+	
 	private void onSaveButtonClick(UIButton p_button){
 
 		updateSetting();
 
 	}
-//	private void onHelpButtonClick(UIButton p_button)
-//	{
-//		p_button.removeAllCallbacks ();
-//		m_commonDialog.setOriginalPosition ();
-//		UIButton l_closeButton = m_commonDialog.getView ("closeMark") as UIButton;
-//		
-//		UILabel l_titleLabel = m_commonDialog.getView ("dialogText") as UILabel;
-//		UILabel l_contentLabel = m_commonDialog.getView ("contentText") as UILabel;
-//		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_TITLE);
-//		l_contentLabel.text = Localization.getString(Localization.TXT_STATE_28_HELP_CONTENT);
-//
-//		l_closeButton.addClickCallback (onCloseDialogButtonClick);
-//	}
-//	
-//	private void onCloseDialogButtonClick(UIButton p_button)
-//	{
-//		p_button.removeAllCallbacks();
-//		m_commonDialog.setOutPosition ();
-//		m_helpButton.addClickCallback (onHelpButtonClick);
-//	}
-
-
-	
-
-
-
-	private void toDeviceOptions(UIButton p_button)
-	{
-		if (checkInternet() == false)
-			return;
-
-		p_button.addClickCallback (toDeviceOptions);
-		m_gameController.changeState (ZoodleState.DEVICE_OPTIONS_STATE);
-	}
-
 
 	private void setValue(Hashtable p_hashTable,string p_fieldName ,bool p_condition)
 	{
@@ -327,33 +272,6 @@ public class NotificationState : GameState
 			m_settingCache.newAddApp = true;
 		}
 	}
-	
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-	
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
-
-
-
-	private void viewGemsRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(p_response.error == null)
-		{
-			SessionHandler.getInstance ().GemsJson = p_response.text;
-			m_gameController.connectState( ZoodleState.BUY_GEMS, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState (ZoodleState.BUY_GEMS);
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
-	}
 
 	private bool checkInternet()
 	{
@@ -377,17 +295,10 @@ public class NotificationState : GameState
 		error.onClick -= onClickExit;;
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
-
-
-	//Private variables
 	
+	//Private variables
 	private UICanvas    m_notificationCanvas;
-	private CommonDialogCanvas m_commonDialog;
 
-	private UIButton	m_closeLeftMenuButton;
-//	private UIButton    m_rightButton;
-
-	private UIButton 	m_helpButton;
 	private UIToggle 	m_weeklyAppsNotificationButton;
 	private UIToggle 	m_smartSelectNotificationButton;
 	private UIToggle 	m_newAppAddedButton;
@@ -400,8 +311,6 @@ public class NotificationState : GameState
 //	private bool 		m_weeklyAppsNotification = false;
 //	private bool 		m_smartSelectNotification = false;
 //	private bool 		m_newAppAdded = false;
-	private bool 		canMoveLeftMenu = true;
-
 	private int 		m_state;
 
 	//Kevin

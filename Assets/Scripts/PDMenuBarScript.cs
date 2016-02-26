@@ -4,9 +4,10 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using System;
 
 public class PDMenuBarScript : MonoBehaviour {
-
+	
 	public GameObject menuBarObject;
 	public Canvas menuBarCanvas;
 
@@ -49,6 +50,9 @@ public class PDMenuBarScript : MonoBehaviour {
 		menuBarCanvas.worldCamera = Camera.main;
 		menuBarCanvas.sortingOrder = 10;
 
+		//add first tier toggle listener
+		addRemoveToggleListener(true, onFirstTierToogleChanged);
+
 		//show selected button of default page on parent dashboard
 		changeSecondTierButtonColor();
 		//set button listener on second tier menu bar
@@ -89,42 +93,48 @@ public class PDMenuBarScript : MonoBehaviour {
 	}
 
 	//when pressing button on first tier menu bar
-	public void onToogleChanged(bool isOn)
+	private void onFirstTierToogleChanged(bool isOn)
 	{
 		if (isOn)
 		{
-			int number = 0;
-			foreach (GameObject item in firstTierBar)
-			{
-				Toggle toggle = item.GetComponent<Toggle>() as Toggle;
-				if (toggle.isOn)
-				{
-					break;
-				}
-				number++;
-			}
-
-			int count = 0;
-			foreach (GameObject item in secondTierBar)
-			{
-				if (count == number)
-				{
-					item.SetActive(true);
-				}
-				else
-				{
-					item.SetActive(false);
-				}
-				count++;
-			}
-			currentToogle = number;
+			//denpending on new first tier toggle, update second tier menu bar
+			updateSecondTierMenuBar();
 			//change state to new page
-			onButtonClicked(getSteteByNumber(number));
+			onButtonClicked(getSteteByNumber(currentToogle));
 			//change first button color(defalut button) on second tier menu bar
 			changeSecondTierButtonColor();
 			//hide child selector if needed
 			setChildSelectorVisible(false);
 		}
+	}
+
+	private void updateSecondTierMenuBar()
+	{
+		int number = 0;
+		foreach (GameObject item in firstTierBar)
+		{
+			Toggle toggle = item.GetComponent<Toggle>() as Toggle;
+			if (toggle.isOn)
+			{
+				break;
+			}
+			number++;
+		}
+		
+		int count = 0;
+		foreach (GameObject item in secondTierBar)
+		{
+			if (count == number)
+			{
+				item.SetActive(true);
+			}
+			else
+			{
+				item.SetActive(false);
+			}
+			count++;
+		}
+		currentToogle = number;
 	}
 
 	//return to profile switch 
@@ -138,7 +148,10 @@ public class PDMenuBarScript : MonoBehaviour {
 	public void onButtonClicked(int stateType)
 	{
 		Debug.Log(stateType + " Button clicked");
-		game.gameController.changeState(stateType);
+		if (game.gameController.stateName != stateType.ToString("N0"))
+		{
+			game.gameController.changeState(stateType);
+		}
 	}
 
 	//get state id by button name 
@@ -282,6 +295,8 @@ public class PDMenuBarScript : MonoBehaviour {
 	private void updateFirstTierToggle(int firstTierId)
 	{
 		int number = 0;;
+		addRemoveToggleListener(false, onFirstTierToogleChanged);
+		addRemoveToggleListener(true, onFirstTierToogleChangedWOStateChange);
 		foreach (GameObject item in firstTierBar)
 		{
 			Toggle toggle = item.GetComponent<Toggle>() as Toggle;
@@ -290,6 +305,32 @@ public class PDMenuBarScript : MonoBehaviour {
 			else
 				toggle.isOn = false;
 			number++;
+		}
+		addRemoveToggleListener(false, onFirstTierToogleChangedWOStateChange);
+		addRemoveToggleListener(true, onFirstTierToogleChanged);
+	}
+
+	private void addRemoveToggleListener(bool add, UnityAction<bool> onToggleChanged)
+	{
+		foreach (GameObject item in firstTierBar)
+		{
+			Toggle toggle = item.GetComponent<Toggle>() as Toggle;
+			if (add)
+				toggle.onValueChanged.AddListener(onToggleChanged);
+			else
+				toggle.onValueChanged.RemoveListener(onToggleChanged);
+		}
+	}
+
+	//when pressing button on first tier menu bar
+	private void onFirstTierToogleChangedWOStateChange(bool isOn)
+	{
+		if (isOn)
+		{
+			//denpending on new first tier toggle, update second tier menu bar
+			updateSecondTierMenuBar();
+			//hide child selector if needed
+			setChildSelectorVisible(false);
 		}
 	}
 

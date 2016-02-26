@@ -43,36 +43,19 @@ public class ControlAppState : GameState
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
 		m_uiManager.removeScreenImmediately( UIScreen.CONFIRM_DIALOG );
-		m_uiManager.removeScreenImmediately( UIScreen.COMMON_DIALOG );
-//		m_uiManager.removeScreenImmediately( UIScreen.PAYWALL );
 
 		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
 	}
 
 	private void _setupScreen( GameController p_gameController )
 	{
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_paywallCanvas = m_uiManager.createScreen( UIScreen.PAYWALL, false, 2 );
-//			m_upgradeButton = m_paywallCanvas.getView( "upgradeButton" ) as UIButton;
-//			m_upgradeButton.addClickCallback( onUpgradeButtonClick );
-//		}
-
-		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 16 )  as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
 		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
 		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 ) as AppDetailsCanvas;
 		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
-
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_uiManager.setScreenEnable( UIScreen.ADD_APPS, false );
-//		}
 	}
 
 	private void _setupElment()
 	{
-
 		List<Vector3> l_pointListIn = new List<Vector3>();
 		UIElement l_newPanel = m_addAppCanvas.getView ("mainPanel");
 		l_pointListIn.Add( l_newPanel.transform.localPosition );
@@ -231,42 +214,10 @@ public class ControlAppState : GameState
 		m_requestQueue.request( RequestType.SEQUENCE );
 	}
 
-	private void onUpgradeButtonClick(UIButton p_button)
-	{
-		SwrveComponent.Instance.SDK.NamedEvent("UpgradeBtnInDashBoard");
-		if(string.Empty.Equals(SessionHandler.getInstance().PremiumJson))
-		{
-			Server.init (ZoodlesConstants.getHttpsHost());
-			m_requestQueue.reset ();
-			m_requestQueue.add (new GetPlanDetailsRequest(viewPremiumRequestComplete));
-			m_requestQueue.request ();
-		}
-		else
-		{
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-	}
-
 	private void OnNewAppAdded(){
 
 		m_addAppCanvas.firstLoadApp();
 
-	}
-	
-	private void viewPremiumRequestComplete(HttpsWWW p_response)
-	{
-		Server.init (ZoodlesConstants.getHttpsHost());
-		if(null == p_response.error)
-		{
-			SessionHandler.getInstance ().PremiumJson = p_response.text;
-			m_gameController.connectState( ZoodleState.VIEW_PREMIUM, int.Parse(m_gameController.stateName) );
-			m_gameController.changeState( ZoodleState.VIEW_PREMIUM );
-		}
-		else
-		{
-			setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_11_FAIL),Localization.getString(Localization.TXT_STATE_11_FAIL_DATA));
-		}
 	}
 
 	private bool checkInternet()
@@ -826,11 +777,6 @@ public class ControlAppState : GameState
 	private RequestQueue 	m_requestQueue;
 	private bool 			m_isValueChanged = false;
 
-	private CommonDialogCanvas m_commonDialog;
-		
-	private UICanvas 		m_paywallCanvas;
-	private UIButton 		m_upgradeButton;
-	
 	//local app part
 	private AddAppCanvas 	m_addAppCanvas;
 	private UISwipeList 	m_appSwipeList;

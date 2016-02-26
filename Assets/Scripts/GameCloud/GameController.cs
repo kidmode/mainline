@@ -68,12 +68,18 @@ public class GameController
 	
 	public void changeState( int p_stateType )
 	{
-		Debug.Log("m_state = " + p_stateType);
-		m_stateName = p_stateType.ToString();
+		if (m_stateName == p_stateType.ToString("N0"))
+			return;
+
 		if (null != m_state)
 			m_state.exit(this);
 
+		Debug.Log("new m_state = " + p_stateType);
+		m_stateName = p_stateType.ToString("N0");
 		m_state = m_states[ p_stateType ];
+
+		if (null != m_state)
+			m_state.enter(this);
 
 		//honda
 		//check new state belongs to parent dashboard or not
@@ -82,9 +88,6 @@ public class GameController
 		//if not, hide parent dashboard menu bar
 		m_game.checkIfNeedToAddShowHideMenuBar(p_stateType);
 		//end 
-
-		if (null != m_state)
-			m_state.enter(this);
 
 		//honda
 		//check if the app is back to specific kid mode state

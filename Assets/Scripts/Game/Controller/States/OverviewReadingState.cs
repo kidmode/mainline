@@ -36,17 +36,12 @@ public class OverviewReadingState : GameState
 		m_uiManager.removeScreen( UIScreen.CONFIRM_DIALOG );
 		m_uiManager.removeScreen( UIScreen.DASHBOARD_READING );
 		m_uiManager.removeScreen( UIScreen.RECORD_START );
-		m_uiManager.removeScreen( UIScreen.COMMON_DIALOG );
 	}
 	
 	//----------------- Private Implementation -------------------
 	
 	private void _setupScreen( GameController p_gameController )
 	{
-		//help screen
-		m_commonDialog = m_uiManager.createScreen( UIScreen.COMMON_DIALOG, true, 18 ) as CommonDialogCanvas;
-		m_commonDialog.setUIManager (p_gameController.getUI());
-
 		m_recordStartCanvas = m_uiManager.createScreen( UIScreen.RECORD_START, false, 17 );
 		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
 
@@ -692,7 +687,6 @@ public class OverviewReadingState : GameState
 	//-------------------------------------------------------------------------------------------------------------------------------------------------//
 
 	private UICanvas				  m_recordAReadingCanvas;
-	private CommonDialogCanvas 		  m_commonDialog;
 	private ConfirmDialogCanvas 	  m_confirmDialogCanvas;
 	private UIManager 				  m_uiManager;
 	private UIButton				  m_exitBookDetailsButton;

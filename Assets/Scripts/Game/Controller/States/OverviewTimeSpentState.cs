@@ -31,30 +31,21 @@ public class OverviewTimeSpentState : GameState {
 		m_requestQueue.dispose ();
 
 		m_uiManager.removeScreen( UIScreen.TIME_SPEND );
-		
-		m_uiManager.removeScreen( UIScreen.PAYWALL );
 	}
 	
 	//----------------- Private Implementation -------------------
 	
 	private void _setupScreen( GameController p_gameController )
 	{
-
-		
 		m_timeSpendCanvas 	= m_uiManager.createScreen( UIScreen.TIME_SPEND, true, 1 ) as TimeSpendCanvas;
-		
-//		if( !SessionHandler.getInstance().token.isPremium() && !SessionHandler.getInstance().token.isCurrent() )
-//		{
-//			m_uiManager.setScreenEnable( UIScreen.TIME_SPEND, false );
-//		}
 	}
 	
 	private void _setupElment()
 	{
 		
 		UIElement l_newPanel = m_timeSpendCanvas.getView ("mainPanel");
-		List<Vector3> l_pointListIn = new List<Vector3>();
-		l_pointListIn.Add( l_newPanel.transform.localPosition );
+//		List<Vector3> l_pointListIn = new List<Vector3>();
+//		l_pointListIn.Add( l_newPanel.transform.localPosition );
 //		l_pointListIn.Add( l_newPanel.transform.localPosition + new Vector3( 0, 830, 0 ));
 //		l_newPanel.tweener.addPositionTrack( l_pointListIn, 0f );
 		l_newPanel.tweener.addAlphaTrack( 0.0f, 1.0f, 0.5f);
@@ -93,21 +84,14 @@ public class OverviewTimeSpentState : GameState {
 		m_gameController.changeState (ZoodleState.CONTROL_APP);
 	}
 
-
-	
-
-
 	private void _getTimeSpendRequestComplete(HttpsWWW p_response)
 	{
 		m_timeSpendCanvas.setData(MiniJSON.MiniJSON.jsonDecode(p_response.text) as ArrayList);
 	}
 
-
-	
 	private UIManager m_uiManager;
 
 	private TimeSpendCanvas m_timeSpendCanvas;
-
-
+	
 	private RequestQueue m_requestQueue;
 }

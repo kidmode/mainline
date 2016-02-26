@@ -407,18 +407,7 @@ public class SettingAppInfoState : GameState
 //	{
 //		m_cancelSubscriptionCanvas.setOutPosition ();
 //	}
-
-
-
-	private void onCloseMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 	
-	private void toShowMenuTweenFinished( UIElement p_element, Tweener.TargetVar p_targetVar )
-	{
-		canMoveLeftMenu = true;
-	}
 
 
 	private bool checkInternet()
@@ -488,8 +477,7 @@ public class SettingAppInfoState : GameState
 	private SignOutConfirmCanvas m_signOutConfirmCanvas;
 	private SentFeedBackCanvas  m_sentFeedBackCanvas;
 	private CommonDialogCanvas  m_commonDialogCanvas;
-
-	private bool 		canMoveLeftMenu = true;
+	
 	private bool		canClick = true;
 
 	private RequestQueue m_requestQueue;
