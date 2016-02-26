@@ -147,7 +147,7 @@ public class OverviewArtState : GameState {
 				
 				Tweener tw = m_artListCanvas.getView("mainPanel").tweener;
 				
-				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
+//				tw.addAlphaTrack( 0.0f, 1.0f, 1.0f );
 			}
 			
 		}
