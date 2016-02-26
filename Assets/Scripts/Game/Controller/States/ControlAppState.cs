@@ -65,7 +65,7 @@ public class ControlAppState : GameState
 
 		//local app part
 		m_appSwipeList = m_addAppCanvas.getView ( "appSwipeList" ) as UISwipeList;
-		m_appSwipeList.addClickListener ( "controlButton", m_addAppCanvas.onButtonClicked );
+//		m_appSwipeList.addClickListener ( "controlButton", m_addAppCanvas.onButtonClicked );
 		m_appSwipeList.addClickListener ( "controlButton", onAppButtonClicked );
 		m_appSwipeList.active = false;
 
@@ -117,7 +117,11 @@ public class ControlAppState : GameState
 //		p_list.removeClickListener ( "controlButton", onAppButtonClicked );
 		if(TutorialController.Instance != null)
 			TutorialController.Instance.showNextPage();
-		
+
+		m_addAppCanvas.onButtonClicked(p_list, p_button, p_data, p_index);
+
+		#if UNITY_ANDROID && !UNITY_EDITOR
+
 		AppInfo l_appInfo = p_data as AppInfo;
 		DebugUtils.Assert ( l_appInfo != null );
 		
@@ -177,6 +181,7 @@ public class ControlAppState : GameState
 		_Debug.log ( MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
 		
 		PlayerPrefs.SetString( "addedAppList", MiniJSON.MiniJSON.jsonEncode(l_appNameList) );
+		#endif
 	}
 
 	private void onShowFinish(UIElement p_element, Tweener.TargetVar p_target)

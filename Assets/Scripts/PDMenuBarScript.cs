@@ -145,10 +145,10 @@ public class PDMenuBarScript : MonoBehaviour {
 	}
 
 	//change state to new page
-	public void onButtonClicked(int stateType)
+	public void onButtonClicked(int stateType, bool forceChange = false)
 	{
 		Debug.Log(stateType + " Button clicked");
-		if (game.gameController.stateName != stateType.ToString("N0"))
+		if (game.gameController.stateName != stateType.ToString("N0") || forceChange)
 		{
 			game.gameController.changeState(stateType);
 		}
@@ -485,7 +485,7 @@ public class PDMenuBarScript : MonoBehaviour {
 			//change state to overview info
 			currentToogle = 0;
 			changeSecondTierButtonColor();
-			onButtonClicked(getSteteByNumber(currentToogle));
+			onButtonClicked(getSteteByNumber(currentToogle), true);
 
 			setCurrentKidOnFirstMenuBar();
 			Invoke("hideChildSeletor", .3f);

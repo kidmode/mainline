@@ -68,8 +68,8 @@ public class GameController
 	
 	public void changeState( int p_stateType )
 	{
-		if (m_stateName == p_stateType.ToString("N0"))
-			return;
+//		if (m_stateName == p_stateType.ToString("N0"))
+//			return;
 
 		if (null != m_state)
 			m_state.exit(this);
