@@ -199,7 +199,7 @@ public class ZoodlesScreenFactory : IScreenFactory
 		m_directoryMap.Add( UIScreen.NOTIFICATION,				SCREEN_DIRECTORY + "DashBoard/Setting/NotificationScreen");
 		m_directoryMap.Add( UIScreen.SETTING_COMMON,			SCREEN_DIRECTORY + "DashBoard/SettingCommonScreen");
 		m_directoryMap.Add( UIScreen.COMMON_DIALOG,				SCREEN_DIRECTORY + "DashBoard/Setting/Dialog/CommonDialogScreen");
-		m_directoryMap.Add( UIScreen.FAQ_SCREEN,				SCREEN_DIRECTORY + "DashBoard/Setting/FAQScreen_1");
+		m_directoryMap.Add( UIScreen.FAQ_SCREEN,				SCREEN_DIRECTORY + "DashBoard/Setting/FAQScreen");
 		m_directoryMap.Add( UIScreen.DEVICE_OPTIONS_SCREEN,		SCREEN_DIRECTORY + "DashBoard/Setting/DeviceOptionScreen");
 		m_directoryMap.Add( UIScreen.DASHBOARDL_PROGRESS,		SCREEN_DIRECTORY + "DashBoard/Profile/Overview/OverallProgressScreen");
 		m_directoryMap.Add( UIScreen.KIDS_PROFILE,				SCREEN_DIRECTORY + "KidsProfile/KidsProfileScreen");
