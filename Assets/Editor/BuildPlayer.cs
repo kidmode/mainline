@@ -122,16 +122,16 @@ public class BuildPlayer : MonoBehaviour
 		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//Set Icons for build
 		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Texture2D icon192 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_192.png");
-		Texture2D icon144 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_144.png");
-		Texture2D icon96 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_96.png");
-		Texture2D icon72 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_72.png");
-		Texture2D icon48 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_48.png");
-		Texture2D icon36 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_36.png");
-		
-		Texture2D[] icons = new Texture2D[]{icon192, icon144, icon96, icon72, icon48, icon36};
-		
-		PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, icons);
+//		Texture2D icon192 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_192.png");
+//		Texture2D icon144 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_144.png");
+//		Texture2D icon96 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_96.png");
+//		Texture2D icon72 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_72.png");
+//		Texture2D icon48 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_48.png");
+//		Texture2D icon36 = getTextureAtLocation(Application.dataPath + "/Icons/app_icon_36.png");
+//		
+//		Texture2D[] icons = new Texture2D[]{icon192, icon144, icon96, icon72, icon48, icon36};
+//		
+//		PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, icons);
 
 
 		//====+++==   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
