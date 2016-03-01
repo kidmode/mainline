@@ -23,9 +23,19 @@ public class DebugController : MonoBehaviour {
 
 	public bool showPanelOnAndroid = false;
 
+	[SerializeField]
+	private string currStateName;
+
+	private Game game;
+
 	void Awake(){
 
 		Instance = this;
+
+		//make sure the menu bar is visible whenever we enter the state
+		game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+
+		currStateName = game.gameController.stateName;
 
 	}
 
@@ -55,6 +65,8 @@ public class DebugController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		currStateName = game.gameController.state.ToString();
 	
 	}
 
