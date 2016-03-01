@@ -127,11 +127,6 @@ public class OverviewInfoState : GameState {
 			}
 		}
 
-
-		//===== == = = == =
-		//Set up recommended books
-		//
-
 		//Get the list
 		List<Book> l_list = SessionHandler.getInstance().bookList;
 
@@ -400,14 +395,7 @@ public class OverviewInfoState : GameState {
 
 	private void onConfiemButtonClick( UIButton p_button )
 	{
-		if(null != m_app && isAppDetailsScreen)
-		{
-			if(SessionHandler.getInstance().currentKid.gems >= m_app.gems)
-				sendBuyAppRequest();
-			else
-				setGemsOnNeedMoreAreaOfConfirmDialog(m_app.gems);
-		}
-		else if (null != m_wantedBook && null != m_clickedBuyButton)
+		if (null != m_wantedBook && null != m_clickedBuyButton)
 		{
 			if(SessionHandler.getInstance().currentKid.gems >= m_wantedBook.gems)
 				sendBuyBookRequest();
@@ -434,54 +422,6 @@ public class OverviewInfoState : GameState {
 		m_requestQueue.add (new BuyBookRequest (m_wantedBook, m_clickedBuyButton, m_confirmDialogCanvas ,m_selectedElement));
 		m_requestQueue.request ();
 		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
-	}
-
-	private void sendBuyAppRequest()
-	{
-		m_requestQueue.reset ();
-		m_requestQueue.add (new BuyRecommendAppRequest(m_app, onBuyAppComplete));
-		m_requestQueue.request ();
-	}
-
-	private void removeAppPriceAndBuyButton(UIElement p_element)
-	{
-		if(null != p_element)
-		{
-			UILabel l_costLabel = p_element.getView("appCostText") as UILabel;
-			UILabel l_freeLabel = p_element.getView("appFreeText") as UILabel;
-			UILabel l_sponsoredLabel = p_element.getView("sponsoredText") as UILabel;
-			
-			if(null != l_costLabel)
-				l_costLabel.active = false;
-
-			if(null != l_freeLabel)
-				l_freeLabel.active = false;
-
-			if(null != l_sponsoredLabel)
-				l_sponsoredLabel.active = false;
-		}
-	}
-
-	private void onBuyAppComplete(HttpsWWW p_response)
-	{
-		if(null == p_response.error)
-		{
-			m_app.own = true;
-			UILabel l_appCostText = m_appDetailsCanvas.getView("appCostText") as UILabel;
-			UIButton l_buyAppButton = m_appDetailsCanvas.getView("buyAppButton") as UIButton;
-			l_appCostText.active = false;
-			l_buyAppButton.active = false;
-			removeAppPriceAndBuyButton(m_appDetailsCanvas);
-			removeAppPriceAndBuyButton(m_topRecommendAppArea);
-			if(null != m_confirmDialogCanvas)
-			{
-				m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
-				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
-				m_confirmDialogCanvas.moveOutDialog();
-			}
-
-			installApp( SessionHandler.getInstance().currentKid.topRecommendedApp.packageName );
-		}
 	}
 
 	private void installApp( string p_packageName )
@@ -513,8 +453,6 @@ public class OverviewInfoState : GameState {
 
 	private void onExitConfiemDialogButtonClick( UIButton p_button )
 	{
-		if (isAppDetailsScreen)
-			m_uiManager.changeScreen(UIScreen.APP_DETAILS,true);
 		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG,false);
 		m_confirmDialogCanvas.moveOutDialog();
 	}
@@ -595,10 +533,6 @@ public class OverviewInfoState : GameState {
 		{
 			installApp(m_app.packageName);
 		}
-		else
-		{
-			confirmBuyApp(m_app);
-		}
 	}
 
 	private void resetSubjectColor()
@@ -623,15 +557,6 @@ public class OverviewInfoState : GameState {
 		
 		UIElement l_mathColor = m_appDetailsCanvas.getView ("mathColor") as UIElement;
 		l_mathColor.active = false;
-	}
-
-	public void confirmBuyApp(App p_app)
-	{
-		setGemsOnCostAreaOfConfirmDialog(p_app.name, p_app.gems);
-
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS, false);
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, true);
-		m_confirmDialogCanvas.moveInDialog();
 	}
 
 	private void iconRequestComplete(HttpsWWW p_response)

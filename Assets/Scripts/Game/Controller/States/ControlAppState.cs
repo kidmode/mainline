@@ -42,7 +42,6 @@ public class ControlAppState : GameState
 
 		m_uiManager.removeScreenImmediately( UIScreen.ADD_APPS );
 		m_uiManager.removeScreenImmediately( UIScreen.APP_DETAILS );
-		m_uiManager.removeScreenImmediately( UIScreen.CONFIRM_DIALOG );
 
 		GoogleInstallAutoAddController.OnNewAppAdded -= OnNewAppAdded;
 	}
@@ -51,7 +50,6 @@ public class ControlAppState : GameState
 	{
 		m_addAppCanvas = m_uiManager.createScreen( UIScreen.ADD_APPS, true, 1 ) as AddAppCanvas;
 		m_recommendedAppDetailsCanvas = m_uiManager.createScreen( UIScreen.APP_DETAILS, false, 14 ) as AppDetailsCanvas;
-		m_confirmDialogCanvas = m_uiManager.createScreen( UIScreen.CONFIRM_DIALOG, false, 15 ) as ConfirmDialogCanvas;
 	}
 
 	private void _setupElment()
@@ -86,16 +84,6 @@ public class ControlAppState : GameState
 		//recommended app detail part
 		m_exitAppDetailsButton = m_recommendedAppDetailsCanvas.getView( "exitButton" ) as UIButton;
 		m_exitAppDetailsButton.addClickCallback( onExitAppDetailsButtonClick );
-
-		//cofirm dialog to buy or install a recommended app
-		m_costArea = m_confirmDialogCanvas.getView("costArea");
-		m_needMoreArea = m_confirmDialogCanvas.getView("needMoreArea");
-		m_exitConfirmDialogButton = m_confirmDialogCanvas.getView ("exitButton") as UIButton;
-		m_exitConfirmDialogButton.addClickCallback (onExitConfiemDialogButtonClick);
-		m_cancelBuyButton = m_confirmDialogCanvas.getView ("cancelButton") as UIButton;
-		m_cancelBuyButton.addClickCallback (onExitConfiemDialogButtonClick);
-		m_confirmBuyButton = m_confirmDialogCanvas.getView ("confirmButton") as UIButton;
-		m_confirmBuyButton.addClickCallback (onConfiemButtonClick);
 	}
 
 	private void checkRequest()
@@ -606,7 +594,6 @@ public class ControlAppState : GameState
 
 	private void buyApp(UIButton p_button)
 	{
-		
 		//Auto Add Code
 		GoogleInstallAutoAddController.Instance.hasLuanchedGoogle = 1;
 		
@@ -619,11 +606,6 @@ public class ControlAppState : GameState
 		if( l_token.isPremium() || l_token.isCurrent() )
 		{
 			installApp(m_clickedRecommendedAppDetails.packageName);
-		}
-		else
-		{
-			m_buyAppButton = p_button;
-			confirmBuyApp (m_clickedRecommendedAppDetails);
 		}
 	}
 
@@ -655,120 +637,6 @@ public class ControlAppState : GameState
 	{
 		m_uiManager.changeScreen(UIScreen.APP_DETAILS, false);
 		m_recommendedAppDetailsCanvas.moveOutDialog();
-	}
-
-	public void confirmBuyApp(App p_app)
-	{
-		m_costArea.active = true;
-		m_needMoreArea.active = false;
-
-		UIElement l_newPanel = m_confirmDialogCanvas.getView ("mainPanel");
-		UILabel l_titleLabel = l_newPanel.getView("titleText") as UILabel;
-		l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_CONFIRM);
-		UILabel l_notice1label = l_newPanel.getView("noticeText1") as UILabel;
-		l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_PURCHASE);
-		UILabel l_notice1label2 = l_newPanel.getView("noticeText2") as UILabel;
-		l_notice1label2.text = p_app.name;
-		UILabel l_priceLabel = l_newPanel.getView("priceText") as UILabel;
-		l_priceLabel.text = p_app.gems.ToString ();
-
-		m_uiManager.changeScreen(UIScreen.APP_DETAILS, false);
-		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, true);
-		m_confirmDialogCanvas.moveInDialog();
-	}
-
-	private void onExitConfiemDialogButtonClick( UIButton p_button )
-	{
-		m_uiManager.changeScreen (UIScreen.APP_DETAILS, true);
-		m_uiManager.changeScreen (UIScreen.CONFIRM_DIALOG, false);
-		m_confirmDialogCanvas.moveOutDialog();
-	}
-
-	private void onConfiemButtonClick( UIButton p_button )
-	{
-		if(null != m_clickedRecommendedAppDetails)
-		{
-			if(SessionHandler.getInstance().currentKid.gems >= m_clickedRecommendedAppDetails.gems)
-				sendBuyAppRequest ();
-			else
-			{
-				UILabel l_costGems = m_confirmDialogCanvas.getView("costPriceText") as UILabel;
-				UILabel l_needGems = m_confirmDialogCanvas.getView("needPriceText") as UILabel;
-				l_costGems.text = m_clickedRecommendedAppDetails.gems.ToString ();
-				l_needGems.text = (m_clickedRecommendedAppDetails.gems - SessionHandler.getInstance().currentKid.gems).ToString ();
-				UILabel l_titleLabel = m_confirmDialogCanvas.getView("titleText") as UILabel;
-				l_titleLabel.text = Localization.getString(Localization.TXT_STATE_45_GEM_TITLE);
-				UILabel l_notice1label = m_confirmDialogCanvas.getView("noticeText1") as UILabel;
-				l_notice1label.text = Localization.getString(Localization.TXT_STATE_45_GEM_INFO);
-				m_costArea.active = false;
-				m_needMoreArea.active = true;
-			}
-		}
-	}
-
-	private void sendBuyAppRequest()
-	{
-		m_requestQueue.reset();
-		m_requestQueue.add(new BuyAppRequest(m_clickedRecommendedAppDetails.id, _buyAppComplete));
-		m_requestQueue.request();
-		m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
-	}
-
-	private void _buyAppComplete(HttpsWWW p_response)
-	{
-		if (null == p_response.error)
-		{
-			m_clickedRecommendedAppDetails.own = true;
-			UILabel l_appCostText = m_buyAppButton.parent.getView("appCostText") as UILabel;
-			UIButton l_buyAppButton = m_buyAppButton.parent.getView("buyAppButton") as UIButton;
-			l_appCostText.active = false;
-			l_buyAppButton.active = false;
-			
-			_updateAppState(m_buyedRecommendedApp);
-			
-			if (null != m_confirmDialogCanvas)
-			{
-				m_uiManager.changeScreen(UIScreen.APP_DETAILS, true);
-				m_uiManager.changeScreen(UIScreen.CONFIRM_DIALOG, false);
-				m_confirmDialogCanvas.moveOutDialog();
-			}
-			
-			Hashtable l_data = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
-			Hashtable l_appDate = null;
-			App l_app = null;
-			if(l_data.ContainsKey("jsonResponse"))
-			{
-				Hashtable l_response = l_data["jsonResponse"] as Hashtable;
-				if(l_response.ContainsKey("response"))
-					l_appDate = l_response["response"] as Hashtable;
-			}
-			if(null != l_appDate)
-			{
-				l_app = new App(l_appDate);
-			}
-			else
-			{
-				setErrorMessage(m_gameController,Localization.getString(Localization.TXT_STATE_50_FAIL),Localization.getString(Localization.TXT_STATE_50_CONTACT));
-			}
-			
-			installApp( l_app.packageName );
-		}
-	}
-
-	private void _updateAppState(UIElement p_element)
-	{
-		if (p_element == null)
-			return;
-		
-		UILabel l_costLabel = p_element.getView("appCostText") as UILabel;
-		UILabel l_freeLabel = p_element.getView("appFreeText") as UILabel;
-		UILabel l_sponsoredLabel = p_element.getView("sponsoredText") as UILabel;
-		
-		if (null != l_costLabel)
-			l_costLabel.active = false;
-		
-		l_freeLabel.active = false;
-		l_sponsoredLabel.active = false;
 	}
 
 	private void setRecommendedAppsTitle()
@@ -807,15 +675,6 @@ public class ControlAppState : GameState
 	private UIButton 			m_exitAppDetailsButton;
 	private UIButton			m_buyAppButton;
 	//end of recommended app detail part
-
-	//confirm dialog to buy or install a recommended app
-	private ConfirmDialogCanvas	m_confirmDialogCanvas;
-	private UIElement  			m_costArea;
-	private UIElement 			m_needMoreArea;
-	private UIButton 			m_exitConfirmDialogButton;
-	private UIButton 			m_cancelBuyButton;
-	private UIButton 			m_confirmBuyButton;
-	//end of confirm dialog to buy or install a recommended app
 }
 
 public class AppInfoData
