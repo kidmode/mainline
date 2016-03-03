@@ -1,1 +1,1 @@
-public static class CurrentBundleVersion{public static readonly string version = "6.0.5237(694)";}
+public static class CurrentBundleVersion{public static readonly string version = "6.0.5238(695)";}
