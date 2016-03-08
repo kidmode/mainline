@@ -2694,3 +2694,21 @@ public class GetForGotPasswordRequest : RequestQueue.Request
 	
 	private int m_bookId;
 }
+
+public class GetLockPinRequest : RequestQueue.Request
+{
+	public string userName;
+	
+	public GetLockPinRequest(string username, RequestQueue.RequestHandler p_handler = null) : base(p_handler)
+	{
+		userName = username;
+	}
+	
+	protected override void init()
+	{
+		m_call = ZoodlesConstants.REST_GET_LOCK_PIN;
+		m_params [ZoodlesConstants.PARAM_EMAIL] = userName;
+		m_params [ZoodlesConstants.PARAM_TOKEN] = SessionHandler.getInstance().token.getSecret();
+		m_method = CallMethod.POST;
+	}
+}
