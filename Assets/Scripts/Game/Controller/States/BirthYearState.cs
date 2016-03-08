@@ -171,19 +171,63 @@ public class BirthYearState : GameState
 	{
 		if (m_gameController.game.checkInternet()) 
 		{
+//			m_forgotButton.removeAllCallbacks ();
+//			m_closeDialog.addClickCallback (closeDialog);
+//			m_closeDialogButton.addClickCallback (closeDialog);
+//			m_requestQueue.reset ();
+//			SendPinRequest sendPinRequest = new SendPinRequest(sendPinRequestComplete);
+//			sendPinRequest.timeoutHandler = serverRequestTimeout;
+//			m_requestQueue.add(sendPinRequest);
+//			m_requestQueue.request();
+
+			m_birthCanvas.active = false;
+			m_gameController.getUI().createScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+
+			m_requestQueue.reset ();
+			GetLockPinRequest getLockPinRequest = new GetLockPinRequest(SessionHandler.getInstance().username, sendPinRequestComplete);//new SendPinRequest(sendPinRequestComplete);
+			getLockPinRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(getLockPinRequest);
+			m_requestQueue.request();
+
 			m_forgotButton.removeAllCallbacks ();
 			m_closeDialog.addClickCallback (closeDialog);
 			m_closeDialogButton.addClickCallback (closeDialog);
-			m_requestQueue.reset ();
-			SendPinRequest sendPinRequest = new SendPinRequest(sendPinRequestComplete);
-			sendPinRequest.timeoutHandler = serverRequestTimeout;
-			m_requestQueue.add(sendPinRequest);
-			m_requestQueue.request();
 		}
 	}
 
 	private void sendPinRequestComplete(HttpsWWW p_response)
 	{
+		Hashtable table = MiniJSON.MiniJSON.jsonDecode(p_response.text) as Hashtable;
+		bool hasError = (bool)table[ "error" ];
+		
+		if(!hasError)
+		{
+			m_dialogCanvas.setOriginalPosition();
+			m_birthCanvas.active = true;
+			m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		}
+		else
+		{
+			m_requestQueue.reset ();
+			SendPinRequest forgotMainPinRequest = new SendPinRequest(sendMainPinRequestComplete);//new SendPinRequest(sendPinRequestComplete);
+			forgotMainPinRequest.timeoutHandler = serverRequestTimeout;
+			m_requestQueue.add(forgotMainPinRequest);
+			m_requestQueue.request();
+		}
+	}
+
+	private void serverRequestTimeout()
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_birthCanvas.active = true;
+		m_forgotButton.addClickCallback(showDialog);
+	}
+
+	private void sendMainPinRequestComplete(HttpsWWW p_response)
+	{
+		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
+		m_birthCanvas.active = true;
+		
 		if(p_response.error == null)
 		{
 			m_gameController.getUI ().changeScreen (UIScreen.COMMON_DIALOG,true);
@@ -194,13 +238,6 @@ public class BirthYearState : GameState
 			m_forgotButton.addClickCallback(showDialog);
 			m_gameController.getUI().createScreen(UIScreen.ERROR_MESSAGE, false, 6);
 		}
-	}
-
-	private void serverRequestTimeout()
-	{
-		m_gameController.getUI().removeScreen(UIScreen.LOADING_SPINNER_ELEPHANT);
-		m_birthCanvas.active = true;
-		m_forgotButton.addClickCallback(showDialog);
 	}
 	
 	private void onTitleTweenFinish( UIElement p_element, Tweener.TargetVar p_targetVar )

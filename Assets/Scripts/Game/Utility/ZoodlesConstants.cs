@@ -125,7 +125,7 @@ public class ZoodlesConstants
 	//httpskeystore.p12 sh1 hash -> 645594c334480764443c8bcc6ad3f9ce4c8d3315
 	public const string CLIENT_CERT							= "/645594c334480764443c8bcc6ad3f9ce4c8d3315";
 
-	
+	public const string REST_GET_LOCK_PIN					= "/api/pin/send_forgot_lock_pin";	
 	//////////////////////////////////////////////////////////////////////
 	// REST API Form parameters
 	//////////////////////////////////////////////////////////////////////
