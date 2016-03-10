@@ -184,6 +184,7 @@ public class SessionHandler
 		set
 		{
 			m_pin = value;
+			m_hasPin = (m_pin > 0);
 			LocalSetting l_setting = LocalSetting.find( "User" );
 			l_setting.setInt( ZoodlesConstants.USER_PIN, m_pin );
 		}
