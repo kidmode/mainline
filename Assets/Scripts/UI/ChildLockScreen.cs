@@ -30,6 +30,7 @@ public class ChildLockScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
+		setupLocalization();
 	}
 	
 	// Update is called once per frame
@@ -46,7 +47,7 @@ public class ChildLockScreen : MonoBehaviour {
 
 		dialogChildLockChangeHelpTxt1.text =  Localization.getString(Localization.TXT_STATE_31_PIN);
 
-		dialogChildLockChangeHelpTxt1.text =  Localization.getString(Localization.TXT_STATE_31_PIN_LINE2);
+		dialogChildLockChangeHelpTxt2.text =  Localization.getString(Localization.TXT_STATE_31_PIN_LINE2);
 
 		childLockHelpButtonText.text = Localization.getString(Localization.TXT_STATE_31_PIN_CHANGE_HELP_BUTTON_TEXT);
 		//TXT_STATE_31_PIN_CHANGE_HELP_BUTTON_TEXT
