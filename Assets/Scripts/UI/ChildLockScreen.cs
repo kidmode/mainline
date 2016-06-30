@@ -27,6 +27,10 @@ public class ChildLockScreen : MonoBehaviour {
 
 	public Text[] childLockCloseButtonTexts;
 
+	public Text childLockScreenText1;
+	public Text childLockScreenText2;
+	public Text childLockScreenSaveButton;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -63,6 +67,9 @@ public class ChildLockScreen : MonoBehaviour {
 			childLockCloseButtonTexts[i].text =  Localization.getString(Localization.TXT_STATE_31_PIN_CHANGE_MSSG_CLOSE);
 		}
 
+		childLockScreenText1.text = Localization.getString(Localization.TXT_CHILD_LOCK_CODE_1);
+		childLockScreenText2.text = Localization.getString(Localization.TXT_CHILD_LOCK_CODE_2);
+		childLockScreenSaveButton.text = Localization.getString(Localization.TXT_CHILD_LOCK_CODE_SAVE);
 	}
 
 	public void closeDialogChildLockChangeOK(){

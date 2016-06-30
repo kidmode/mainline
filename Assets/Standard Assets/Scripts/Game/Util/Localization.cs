@@ -774,6 +774,11 @@ public class Localization : object
 
 	public const string TXT_BASELINE = "Baseline";
 
+	//honda: new text for child lock screen
+	public const string TXT_CHILD_LOCK_CODE_1 		= "TXT_CHILD_LOCK_CODE_1";
+	public const string TXT_CHILD_LOCK_CODE_2		= "TXT_CHILD_LOCK_CODE_2";
+	public const string TXT_CHILD_LOCK_CODE_SAVE	= "TXT_CHILD_LOCK_CODE_SAVE";
+
 	/**************************************************************************************/
 
 	private string m_currLanguage   = "EN";
